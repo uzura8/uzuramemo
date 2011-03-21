@@ -131,4 +131,3 @@ class Smarty_parser extends Smarty {
 		// not used for templates
 	}
 }
-?>

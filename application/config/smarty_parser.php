@@ -17,4 +17,3 @@ $config['caching']        = 0;
 // When deploying, change this value to 0
 $config['force_compile'] = 1;
 $config['compile_check'] = TRUE;
-?>
