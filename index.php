@@ -187,6 +187,10 @@
 		define('APPPATH', BASEPATH.$application_folder.'/');
 	}
 
+// 独自設定ファイルの読み込み
+$config_path = BASEPATH.'../config.php';
+if (file_exists($config_path)) require_once($config_path);
+
 /*
  * --------------------------------------------------------------------
  * LOAD THE BOOTSTRAP FILE

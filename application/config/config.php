@@ -15,6 +15,10 @@
 |
 */
 $config['base_url']	= '';
+if (defined('BASE_URL') && BASE_URL)
+{
+	$config['base_url'] = BASE_URL;
+}
 
 /*
 |--------------------------------------------------------------------------
@@ -225,6 +229,10 @@ $config['cache_path'] = '';
 |
 */
 $config['encryption_key'] = '';
+if (defined('ENCRYPTION_KEY') && ENCRYPTION_KEY)
+{
+	$config['encryption_key'] = ENCRYPTION_KEY;
+}
 
 /*
 |--------------------------------------------------------------------------

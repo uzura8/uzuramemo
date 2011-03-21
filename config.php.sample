@@ -1,0 +1,15 @@
+<?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+
+
+define('BASE_URL', 'http://example.com/');
+
+// DBサーバ設定
+$GLOBALS['_DSN_LIST']['main'] = array(
+	'dbdriver' => 'mysql',
+	'username' => '',
+	'password' => '',
+	'hostname' => 'localhost',
+	'database' => '',
+);
+
+define('ENCRYPTION_KEY', '');

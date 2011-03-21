@@ -57,6 +57,13 @@ $db['default']['swap_pre'] = '';
 $db['default']['autoinit'] = TRUE;
 $db['default']['stricton'] = FALSE;
 
+if (!empty($GLOBALS['_DSN_LIST']['main']))
+{
+	foreach ($GLOBALS['_DSN_LIST']['main'] as $key => $value)
+	{
+		$db['default'][$key] = $value;
+	}
+}
 
 /* End of file database.php */
 /* Location: ./application/config/database.php */
