@@ -1,9 +1,9 @@
 <?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-
+// サイトURL
 define('BASE_URL', 'http://example.com/');
 
-// DBサーバ設定
+// DBサーバ接続設定
 $GLOBALS['_DSN_LIST']['main'] = array(
 	'dbdriver' => 'mysql',
 	'username' => '',
@@ -12,4 +12,38 @@ $GLOBALS['_DSN_LIST']['main'] = array(
 	'database' => '',
 );
 
+// 暗号化キー(ASCII文字列)
 define('ENCRYPTION_KEY', '');
+
+
+// headr, footer 関連設定
+
+// サイト名
+define('SITE_TITLE', 'WebMemo');
+
+// Googleウェブマスター ツール
+//   https://www.google.com/support/webmasters/bin/answer.py?answer=35659&hl=ja
+define('GOOGLE_SITE_VERIFICATION_KEY', '');
+
+// copyright URL
+define('COPYRIGHT_URL', 'example.com');
+
+// copyright since
+define('COPYRIGHT_SINCE', '2008');
+
+
+// 動的設定項目
+
+// debugモード設定
+switch (ENVIRONMENT)
+{
+	case 'development':
+		$value = true;
+		break;
+	case 'testing':
+	case 'production':
+	default:
+		$value = false;
+		break;
+}
+define('DEV_MODE', $value);

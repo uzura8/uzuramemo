@@ -1,48 +1,24 @@
-<!DOCTYPE html>
-<html lang="ja">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-	<meta charset="utf-8">
-	<title>CodeIgniter縺ｸ繧医≧縺薙◎</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<title>{$smarty.const.SITE_TITLE}</title>
+<meta NAME="ROBOTS" CONTENT="{if $smarty.const.DEV_MODE}noindex,nofollow{else}index,follow{/if}">
+<meta name="description" content="{$site_dsc}">
+<meta name="keywords" content="{$site_kwd}">
+{if $smarty.const.GOOGLE_SITE_VERIFICATION_KEY}
+<meta name="google-site-verification" content="{$smarty.const.GOOGLE_SITE_VERIFICATION_KEY}" />
+{/if}
+<link rel="shortcut icon" href="/favicon.ico">
+<link title="RSS" href="{$smarty.const.BASE_URL}rss.xml" type="application/rss+xml" rel="alternate" />
+<link href="{$smarty.const.BASE_URL}css/filter.css" rel="stylesheet" type="text/css" />
 
-<style type="text/css">
-{literal}
+<link rel="openid.server" href="http://www.openid.ne.jp/index.php/serve">
+<link rel="openid.delegate" href="http://uzura8.openid.ne.jp/">
 
-body {
- background-color: #fff;
- margin: 40px;
- font-family: Lucida Grande, Verdana, Sans-serif;
- font-size: 14px;
- color: #4F5155;
-}
-
-a {
- color: #003399;
- background-color: transparent;
- font-weight: normal;
-}
-
-h1 {
- color: #444;
- background-color: transparent;
- border-bottom: 1px solid #D0D0D0;
- font-size: 16px;
- font-weight: bold;
- margin: 24px 0 2px 0;
- padding: 5px 0 6px 0;
-}
-
-code {
- font-family: Monaco, Verdana, Sans-serif;
- font-size: 12px;
- background-color: #f9f9f9;
- border: 1px solid #D0D0D0;
- color: #002166;
- display: block;
- margin: 14px 0 14px 0;
- padding: 12px 10px 12px 10px;
-}
-
-{/literal}
-</style>
+{$head_info}
 </head>
+
 <body>
+<div id="container"><!--コンテナー・STR-->
