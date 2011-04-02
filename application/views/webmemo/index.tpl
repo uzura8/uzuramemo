@@ -1,6 +1,8 @@
 {include file='ci:header.tpl'}
-
-<h1>CodeIgniter へようこそ!</h1>
+{include file='ci:topmenu.tpl'}
+{include file='ci:sidemenu.tpl'}
+<div id="mainbody">
+<h1>CodeIgniter へようこそ!!</h1>
 
 <p>今ご覧のこのページは、CodeIgniter によって動的に生成されました。</p>
 
@@ -12,4 +14,5 @@
 
 <p>CodeIgniterを使うのが初めてなら、<a href="user_guide_ja/">ユーザガイド</a>を読むことから始めてください。</p>
 
+</div><!-- mainbody -->
 {include file='ci:footer.tpl'}

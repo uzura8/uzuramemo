@@ -4,7 +4,7 @@
 define('BASE_URL', 'http://example.com/');
 
 // DBサーバ接続設定
-$GLOBALS['_DSN_LIST']['main'] = array(
+$GLOBALS['DSN']['default'] = array(
 	'dbdriver' => 'mysql',
 	'username' => '',
 	'password' => '',
@@ -20,6 +20,12 @@ define('ENCRYPTION_KEY', '');
 
 // サイト名
 define('SITE_TITLE', 'WebMemo');
+
+// RSSフィード機能使用設定
+define('UM_USE_RSS_FEED', false);
+
+// GoogleAnalytics使用設定
+define('UM_USE_GOOGLE_ANALYTICS', false);
 
 // Googleウェブマスター ツール
 //   https://www.google.com/support/webmasters/bin/answer.py?answer=35659&hl=ja

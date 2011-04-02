@@ -41,11 +41,11 @@
 $active_group = 'default';
 $active_record = TRUE;
 
-$db['default']['hostname'] = 'localhost';
-$db['default']['username'] = '';
-$db['default']['password'] = '';
-$db['default']['database'] = '';
-$db['default']['dbdriver'] = 'mysql';
+$db['default']['hostname'] = $GLOBALS['DSN']['default']['username'];
+$db['default']['username'] = $GLOBALS['DSN']['default']['username'];
+$db['default']['password'] = $GLOBALS['DSN']['default']['database'];
+$db['default']['database'] = $GLOBALS['DSN']['default']['database'];
+$db['default']['dbdriver'] = $GLOBALS['DSN']['default']['dbdriver'];
 $db['default']['dbprefix'] = '';
 $db['default']['pconnect'] = TRUE;
 $db['default']['db_debug'] = TRUE;
