@@ -109,10 +109,10 @@ p {
 
 /*■サイドメニュ----------------------------------------------------*/
 #sidebody {
-	padding-top: 10px;
-	padding-left:10px;
+	padding: 10px 5px 0 10px;
+	/* padding-left:10px; */
 	/*background-color: #E0FCE8;*/
-	width: 150px;
+	width: 160px;
 	float:left;
 }
 
@@ -144,9 +144,9 @@ p {
 #mainbody {
 	/*background-color: #E2FBFE;*/
 	font-size: 12px;
-	width: 740px;
+	width: 725px;
 	float:left;
-	padding-top: 10px;
+	padding: 10px 5px 0 10px;
 	padding-right: 10px;
 	padding-bottom: 0;
 	padding-left: 10px;
@@ -192,7 +192,7 @@ p {
 	display: block;
 	background-color:#2F2F2F;
 	text-align: center;
-	margin: 0;
+	margin: 10px 0  0;
 	padding: 4px 5px 4px 10px;
 }
 #foot_menu ul {

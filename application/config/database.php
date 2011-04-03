@@ -41,9 +41,9 @@
 $active_group = 'default';
 $active_record = TRUE;
 
-$db['default']['hostname'] = $GLOBALS['DSN']['default']['username'];
+$db['default']['hostname'] = $GLOBALS['DSN']['default']['hostname'];
 $db['default']['username'] = $GLOBALS['DSN']['default']['username'];
-$db['default']['password'] = $GLOBALS['DSN']['default']['database'];
+$db['default']['password'] = $GLOBALS['DSN']['default']['password'];
 $db['default']['database'] = $GLOBALS['DSN']['default']['database'];
 $db['default']['dbdriver'] = $GLOBALS['DSN']['default']['dbdriver'];
 $db['default']['dbprefix'] = '';
@@ -56,14 +56,6 @@ $db['default']['dbcollat'] = 'utf8_general_ci';
 $db['default']['swap_pre'] = '';
 $db['default']['autoinit'] = TRUE;
 $db['default']['stricton'] = FALSE;
-
-if (!empty($GLOBALS['_DSN_LIST']['main']))
-{
-	foreach ($GLOBALS['_DSN_LIST']['main'] as $key => $value)
-	{
-		$db['default'][$key] = $value;
-	}
-}
 
 /* End of file database.php */
 /* Location: ./application/config/database.php */

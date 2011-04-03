@@ -1,6 +1,6 @@
 {include file='ci:header.tpl'}
 {include file='ci:topmenu.tpl'}
-{include file='ci:sidemenu.tpl'}
+{if !$smarty.const.UM_SIDEMENU_VIEW_MODE}{include file='ci:sidemenu.tpl'}{/if}
 <div id="mainbody">
 <h1>CodeIgniter へようこそ!!</h1>
 
@@ -15,4 +15,5 @@
 <p>CodeIgniterを使うのが初めてなら、<a href="user_guide_ja/">ユーザガイド</a>を読むことから始めてください。</p>
 
 </div><!-- mainbody -->
+{if $smarty.const.UM_SIDEMENU_VIEW_MODE}{include file='ci:sidemenu.tpl'}{/if}
 {include file='ci:footer.tpl'}

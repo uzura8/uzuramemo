@@ -1,7 +1,18 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 //class Welcome extends CI_Controller {
-class Webmemo extends MY_Controller {
+class Webmemo extends MY_Controller
+{
+	private $nowurl_noqry = '';
+
+	function __construct()
+	{
+		parent::__construct();
+
+		// load models
+		$this->load->model('webmemo/category');
+		$this->load->model('webmemo/memo');
+	}
 
 	/**
 	 * Index Page for this controller.
@@ -20,8 +31,26 @@ class Webmemo extends MY_Controller {
 	 */
 	public function index()
 	{
-		// $this->load->view('welcome_message');
-		$this->smarty_parser->parse('ci:webmemo/index.tpl', array());
+		$now_category_id = 0;
+
+		$now_category = array();
+		if ($now_category_id) $now_category = $this->category->get_row4id($now_category_id);
+
+		$view_data = array(
+			'cate_list' => $this->category->get_list_all(),
+			'cate_id_list' => $this->category->get_id_list(true),
+			'now_category' => $now_category,
+			'now_category_id' => $now_category_id,
+			'cate_list_important_articles' => $this->memo->get_important_list(),
+			'foot_info' => $this->_set_footer_info(),
+		);
+
+		$this->smarty_parser->parse('ci:webmemo/index.tpl', $view_data);
+	}
+
+	protected function _set_footer_info()
+	{
+		return '';
 	}
 }
 
