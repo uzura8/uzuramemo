@@ -1,5 +1,5 @@
-{literal}
 <script language="JavaScript" src="{$smarty.const.BASE_URL}js/focus.js"></script>
+{literal}
 <script language="JavaScript" type="text/javascript">
 function selectjump(obj) {
 	var text = obj.options[obj.selectedIndex].value;
@@ -35,28 +35,30 @@ function toggleBox{$value}(){literal}{{/literal}
 <!-- prototype.js -->
 
 <!-- search word heighlighter -->
-{literal}
 <script src="{$smarty.const.BASE_URL}js/se_hilite.js"></script>
 <style type="text/css">
+{literal}
 .hilite1, .hilite4, .hilite7 { background-color: #ffa; }
 .hilite2, .hilite5, .hilite8 { background-color: #faf; }
 .hilite3, .hilite6, .hilite9 { background-color: #aff; }
+{/literal}
 </style>
 
 <script src="{$smarty.const.BASE_URL}js/lib/jquery.js" type="text/javascript"></script>
 <script>
+{literal}
 var j$ = jQuery.noConflict();
-</script>
 {/literal}
+</script>
 <!-- search word heighlighter -->
 
 <!-- auto_pager -->
-{literal}
 <script src="{$smarty.const.BASE_URL}js/jquery.autopager2.js" type="text/javascript"></script>
 <script type="text/javascript">
+{literal}
   j$(function() {
       j$.autopager();
   });
-</script>
 {/literal}
+</script>
 <!-- auto_pager -->
