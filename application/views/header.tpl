@@ -5,8 +5,8 @@
 <meta http-equiv="Content-Script-Type" content="text/javascript" />
 <title>{$smarty.const.SITE_TITLE}</title>
 <meta name="robots" content="{if $smarty.const.DEV_MODE}noindex,nofollow{else}index,follow{/if}" />
-<meta name="description" content="{$site_dsc}" />
-<meta name="keywords" content="{$site_kwd}" />
+<meta name="description" content="{$site_description}" />
+<meta name="keywords" content="{','|implode:$site_keywords}" />
 {if $smarty.const.GOOGLE_SITE_VERIFICATION_KEY}
 <meta name="google-site-verification" content="{$smarty.const.GOOGLE_SITE_VERIFICATION_KEY}" />
 {/if}

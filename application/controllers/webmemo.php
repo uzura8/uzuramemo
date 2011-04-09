@@ -3,6 +3,9 @@
 //class Welcome extends CI_Controller {
 class Webmemo extends MY_Controller
 {
+	private $site_keywords = array();
+	private $site_description = '';
+
 	private $private_config = array();
 	private $breadcrumbs    = array();
 	private $is_private     = false;
@@ -34,6 +37,9 @@ class Webmemo extends MY_Controller
 	{
 		$this->private_config = $this->config->item('webmemo');
 		$this->breadcrumbs['/'] = UM_TOPPAGE_NAME;
+
+		$this->site_keywords    = $GLOBALS['SITE_KEYWORDS'];
+		$this->site_description = SITE_DESCRIPTION;
 	}
 
 	/**
@@ -53,8 +59,14 @@ class Webmemo extends MY_Controller
 	 */
 	public function index()
 	{
+		$page_title = 'メモ一覧';
+
+		// page description
+		$this->site_keywords[]   = $page_title;
+		$this->site_description .= sprintf('このページは「%s」のページです。', $page_title);
+		$this->breadcrumbs[] = $page_title;
+
 		$now_category_id = 0;
-		$this->breadcrumbs[] = 'メモ一覧';
 
 		$is_private = true;
 		$this->_set_params();
@@ -66,6 +78,8 @@ class Webmemo extends MY_Controller
 
 		$cate_list_all = $this->category->get_list_all();
 		$view_data = array(
+			'site_keywords'    => $this->site_keywords,
+			'site_description' => $this->site_description,
 			'breadcrumbs' => $this->breadcrumbs,
 			'pagination' => $this->_get_pagination($count_all),
 			'count_all' => $count_all,

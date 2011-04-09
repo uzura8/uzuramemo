@@ -21,6 +21,13 @@ define('ENCRYPTION_KEY', '');
 // サイト名
 define('SITE_TITLE', 'WebMemo');
 
+// サイト説明
+define('SITE_DESC_MAIN', '');
+
+// SEO関連設定
+define('SITE_DESCRIPTION', '';
+$GLOBALS['SITE_KEYWORDS'] = array();
+
 // RSSフィード機能使用設定
 define('UM_USE_RSS_FEED', false);
 
