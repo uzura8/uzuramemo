@@ -20,7 +20,7 @@ $config['codeigniter_version'] = '2.x';
  * 
  * If TRUE than replacer can be set to another language. See Config: Replacer below.
  */
-$config['multilang'] = FALSE;
+$config['multilang'] = TRUE;
 
 /**
  * ------------------------
@@ -34,7 +34,7 @@ $config['multilang'] = FALSE;
  * then initial/home breadcrumb will disappear
  * 
  */
-$config['set_home'] = "Home";
+$config['set_home'] = "ホーム";
 
 /**
  * ------------------------

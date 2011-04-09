@@ -1,13 +1,13 @@
 <div id="header">
-<h1>
-<a href="{$smarty.const.BASE_URL}" style="">{$smarty.const.SITE_TITLE}</a>
+<div id="banner_box">
+<h1><a href="{$smarty.const.BASE_URL}" style="">{$smarty.const.SITE_TITLE}</a></h1>
 <div id="siteDesc">{$smarty.const.SITE_DESC_MAIN}</div>
 {if $smarty.const.IS_AUTH}
-<div style="width:80px;position:absolute; top:5px; right:20px;"><img src="{$smarty.const.BASE_URL}img/uzura.gif" alt="Login!" /></div>
+<div id="login_symbol"><img src="{$smarty.const.BASE_URL}img/uzura.gif" alt="Login!" /></div>
 {else}
 {if $smarty.const.UM_USE_GOOGLE_ADSENSE}{include file='ci:util/google_adsense_topmenu.tpl'}{/if}
 {/if}
-</h1>
+</div>
 </div><!--header-->
 
 <div id="top_menu">

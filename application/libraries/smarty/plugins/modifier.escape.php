@@ -21,6 +21,9 @@
  */
 function smarty_modifier_escape($string, $esc_type = 'html', $char_set = 'ISO-8859-1')
 {
+    // 配列が渡ってきたら何もせずにreturn
+    if (is_array($string)) return $string;
+
     switch ($esc_type) {
         case 'html':
             return htmlspecialchars($string, ENT_QUOTES, $char_set);

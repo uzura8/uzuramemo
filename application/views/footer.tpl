@@ -1,4 +1,4 @@
-<br class="clearfloat">
+<br class="clearfloat" />
 <div id="foot_menu">
 {include file='ci:util/main_menu.tpl'}
 </div><!--foot_menu-->

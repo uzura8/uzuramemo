@@ -5,6 +5,11 @@
 	word-break:break-all;
 }
 
+/*文字サイズ（8px）*/
+.f_8 {
+	font-size: 8px;
+}
+
 /*文字サイズ（9px）*/
 .f_9 {
 	font-size: 9px;
@@ -23,14 +28,17 @@
 }
 
 /*パンくずリスト*/
-.pan{
+#pan{
 	font-size: 11px;
-	text-align:left;
-	background-color:#D5D5D5;
-	margin-top:0;
-	margin-bottom:5px;
-	padding:3px 5px 3px 5px;
+	text-align: left;
+	background-color: #D5D5D5;
+	margin: 0 0 5px;
+	padding: 3px 20px;
 }
+#pan a:link {
+	font-size: 11px;
+}
+
 /*ページング*/
 .paging{
 	background-color: #FFCCFF;
@@ -136,14 +144,9 @@
 .va_mdl{
 	vertical-align: middle;
 }
-/*■----------------------------------------------------------------*/
-
 .l_right {
 	text-align:right;
 }
-
-
-
 .ta_cnt{
 	text-align: center;
 }
@@ -172,8 +175,11 @@
 	margin-bottom: 15px;
 }
 
-/*■----------------------------------------------------------------*/
-
+/*■List関連---------------------------------------------------------*/
+#box_btn {
+	margin:3px 0;
+	padding-left: 30px;
+}
 
 /*■title関連-------------------------------------------------------*/
 .ttl_01{
@@ -183,16 +189,15 @@
 	border-bottom-width: 0;
 	padding: 2px 8px 2px 5px;
 }
-
 .main_h2{
 	font-size:14px;
 	border-left-width: 6px;
 	border-left-style: solid;
-	border-left-color: #1E297B;
+	border-left-color: #030066;
 	border-bottom-width: 1px;
 	border-bottom-style: solid;
-	border-bottom-color: #1E297B;
-	padding: 2px 8px 2px 5px;
+	border-bottom-color: #B8B8B8;
+	padding: 3px 8px 3px 5px;
 	margin-bottom: 10px;
 }
 .main_h3{
@@ -206,16 +211,10 @@
 }
 
 
-/*■----------------------------------------------------------------*/
-
-
 /*■カテゴリリスト--------------------------------------------------*/
 #cate_list{
-	margin: 0px 0 10px 0;
-	padding-top: 0px;
-	padding-right: 15xt;
-	padding-bottom: 5xt;
-	padding-left: 15px;
+	margin: 0;
+	padding: 0;
 	border-bottom-width: 0;
 }
 #cate_list ul {
@@ -233,7 +232,6 @@
 #cate_list li a:hover {
 	color: #0518A4;
 }
-/*■----------------------------------------------------------------*/
 
 /*■サブサイド用リスト-----------------------------------------------*/
 p.s_list {
@@ -248,7 +246,6 @@ p.s_list a,a:visited {
 p.s_list a:hover {
 	color: #0518A4;
 }
-/*■----------------------------------------------------------------*/
 
 /*■情報ページ------------------------------------------------------*/
 #info_page{
@@ -306,7 +303,6 @@ p.s_list a:hover {
 	font-size:13px;
 	color: #0518A4;
 }
-/*■----------------------------------------------------------------*/
 
 /*■リンクボックス-----------------------------------------------*/
 .lb_01{
@@ -341,15 +337,15 @@ p.s_list a:hover {
 	border-color:#83AAFC;
 	border-left: #83AAFC 5px solid;
 }
-.lb_03 a,a:visited{
+.lb_03 a,a:visited {
 	color: #0066B3;
 }
-.lb_03 a:hover{
+.lb_03 a:hover {
 	color: #FFA54A;
 	text-decoration: underline;
 }
 
-.lb_04{
+.lb_04 {
 	font-weight:bold;
 	font-size:10px;
 	padding:2px 3px;
@@ -393,8 +389,12 @@ p.lb_05 a:hover {
 	font-size:10px;
 	text-decoration: underline;
 }
-/*■----------------------------------------------------------------*/
 
+/*■form関連----------------------------------------------------------*/
+form#order #order_sel {
+	width: 9em;
+	margin:0;
+}
 
 /*■その他----------------------------------------------------------*/
 .f_nm {
@@ -424,7 +424,6 @@ p.lb_05 a:hover {
 .f_wh {
 	color: #ffffff;
 }
-/*■----------------------------------------------------------------*/
 
 /*ボタン表示*/
 .btn {
@@ -436,15 +435,56 @@ p.lb_05 a:hover {
 	margin: 0px;
 	font-size:11px;
 }
+.btn_small {
+	border:1px solid #999;
+	padding-top: 1px;
+	padding-right: 0px;
+	padding-bottom: 1px;
+	padding-left: 0px;
+	margin: 0px;
+	font-size:9px;
+}
+
+.btn_private {
+	color: red;
+	font-weight: bold;
+}
+.btn_quote {
+	color: blue;
+	font-weight: bold;
+}
 
 /*検索テーブル*/
 .search td {
 	padding-top: 2px;
 	padding-bottom: 2px;
-	text-align:center;
-	vartical-align:middle;
+	text-align: center;
+	vertical-align: middle;
 }
 
-.bg_red{
+/* pagerテーブル */
+div#pager_box table {
+}
+div#pager_box td {
+	text-align: center;
+	font-size: 11px;
+}
+div#pager_box td a:link {
+	font-size: 11px;
+}
+div#pager_box td a:visited {
+	font-size: 11px;
+}
+div#pager_box td a:hover {
+	font-size: 11px;
+}
+div#pager_box td.count {
+	font-size: 12px;
+}
+div#pager_box td.form_td {
+	text-align: left;
+}
+
+.bg_red {
 	background-color: #FFE6EE;
 }

@@ -6,7 +6,7 @@ class Category extends CI_Model {
 		parent::__construct();
 	}
 
-	private function get_query_list($sub_id = 0, $colmns = array('mc_id', 'mc_name', 'mc_key', 'is_private'), $isCheckAuth = false)
+	private function get_query_list_old($sub_id = 0, $colmns = array('mc_id', 'mc_name', 'mc_key', 'is_private'), $isCheckAuth = false)
 	{
 		$this->db->select($colmns);
 		$this->db->where(array('mc_sub_id' => (int)$sub_id, 'mc_del_flg' => 0));
@@ -16,8 +16,23 @@ class Category extends CI_Model {
 		return $this->db->get('T_mn_cate');
 	}
 
+	private function get_query_list($sub_id = 0, $isCheckAuth = true)
+	{
+
+		$select = "SELECT mc_id, mc_name, mc_key, is_private FROM T_mn_cate";
+		$where = ' WHERE mc_del_flg  = 0'
+					 . ' AND mc_sub_id = ?';
+		if ($isCheckAuth && !IS_AUTH) $where .= ' AND is_private = 0';
+		$order = ' ORDER BY mc_turn';
+
+		$sql = $select.$where.$order;
+
+		return $this->db->query($sql, array($sub_id));
+	}
+
 	function get_list_all()
 	{
+		$cate_list = array();
 		foreach ($this->get_query_list()->result_array() as $row)
 		{
 			$sub_row = $this->get_list_sub($row['mc_id']);

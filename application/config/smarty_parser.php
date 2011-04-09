@@ -17,3 +17,10 @@ $config['caching']        = 0;
 // When deploying, change this value to 0
 $config['force_compile'] = 1;
 $config['compile_check'] = TRUE;
+
+// default escape setting
+$config['default_modifiers'] = 'escape:"html":"UTF-8"';
+$config['plugins_dir'] = array(
+	FCPATH.APPPATH.'libraries/smarty/plugins/',
+	FCPATH.APPPATH.'libraries/smarty_plugins/',
+);

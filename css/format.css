@@ -2,12 +2,12 @@
 html{
 /*
 	scrollbar-face-color: #E4DDD2;
-    scrollbar-track-color: #D1BFA5;
-    scrollbar-arrow-color: #5A3D1C;
-    scrollbar-3dlight-color: #5A3D1C;
-    scrollbar-highlight-color: #F3EFE8;
-    scrollbar-shadow-color: #F3EFE8;
-    scrollbar-darkshadow-color: #5A3D1C;
+	scrollbar-track-color: #D1BFA5;
+	scrollbar-arrow-color: #5A3D1C;
+	scrollbar-3dlight-color: #5A3D1C;
+	scrollbar-highlight-color: #F3EFE8;
+	scrollbar-shadow-color: #F3EFE8;
+	scrollbar-darkshadow-color: #5A3D1C;
 */
 }
 body{
@@ -18,15 +18,15 @@ body{
 	background-color: #E2E2E4;
 }
 a:link {
-	color: #4195C7;
+	color: #0E44B9;
 	text-decoration: none;
 }
 a:visited {
-	color: #4195C7;
+	color: #0466B1;
 	text-decoration: none;
 }
 a:hover {
-	color: #12CCE0;
+	color: #0466B1;
 	text-decoration: underline;
 }
 
@@ -36,14 +36,17 @@ p {
 }
 
 #container {
-	background:#FFFFFF;
+	background-color: #FFFFFF;
 	text-align:left;
 	width: 920px;
 	margin: 0px auto 5px auto;
 	padding: 0;
 }
 #header{
-	background:#FFFFFF;
+	background-color: #FFFFFF;
+}
+#header div#banner_box {
+  position: relative;
 }
 #header h1 {
 	padding:20px 15px;
@@ -72,6 +75,12 @@ p {
 	font-size:10px;
 	font-weight:bold;
 	color:#363636;
+}
+#header div#login_symbol {
+	width: 80px;
+	position: absolute;
+	top: 5px;
+	right: 20px;
 }
 
 /*■トップメニュ----------------------------------------------------*/
@@ -110,60 +119,30 @@ p {
 /*■サイドメニュ----------------------------------------------------*/
 #sidebody {
 	padding: 10px 5px 0 10px;
-	/* padding-left:10px; */
-	/*background-color: #E0FCE8;*/
+	background-color: #FFFFFF;
 	width: 160px;
 	float:left;
 }
 
-/*
-#sidebody ul {
-	padding: 0;
-	margin: 0;
-	list-style:none;
-}
-#sidebody li {
-	border-color:#cccccc;
-	border-width:0px;
-	border-style:solid;
-	margin: 0px 0px 2px 0px;
-}
-#sidebody li a {
-	padding:5px 0px 5px 5px;
-	margin: 1px;
-	border-left: #0518A4 2px solid;
-	color: #0066B3;
-	text-decoration: none
-}
-#sidebody li a:hover {
-	border-left: #057DA4 2px solid;
-	color: #FFA54A;
-}
-*/
-
+/*■メインボディ----------------------------------------------------*/
 #mainbody {
-	/*background-color: #E2FBFE;*/
+	background: #FFFFFF;
 	font-size: 12px;
 	width: 725px;
 	float:left;
-	padding: 10px 5px 0 10px;
-	padding-right: 10px;
-	padding-bottom: 0;
-	padding-left: 10px;
+	padding: 10px 5px 0 12px;
+	overflow: hidden;
 }
 #mainbody a:link {
 	font-size: 13px;
-	color: #2839B5;
 	text-decoration: none;
 }
 #mainbody a:visited {
 	font-size: 13px;
-	color: #2839B5E;
 	text-decoration: none;
 }
 #mainbody a:hover {
 	font-size: 13px;
-	color: #FF0000;
 	text-decoration: underline;
 }
 
@@ -172,19 +151,34 @@ p {
 	padding-left: 5px;
 	padding-bottom: 0;
 	padding-right:5px;
-	/*background-color: #E0FCE8;*/
 	width: 90px;
 	float:left;
 }
 
 #sub_main {
-	/*background-color: #E2FBFE;*/
 	width: 470px;
 	float:left;
 	padding-top: 0px;
 	padding-right: 0px;
 	padding-bottom: 0;
 	padding-left: 0px;
+}
+
+ul#summary_list {
+	margin: 0;
+	padding: 5px 10px 5px 30px;
+}
+
+/* 各記事 */
+.article_footer {
+	text-align: right;
+	line-height: 1.5em;
+	margin-top: 10px;
+	padding: 0 5px;
+}
+.quate_box {
+	padding-left: 10px;
+	margin-bottom: 10px;
 }
 
 /*■フットメニュ----------------------------------------------------*/
