@@ -1,10 +1,10 @@
 <p id="pan">
-{foreach from=$breadcrumbs key=uri item=value name=breadcrumbs}
+{foreach from=$breadcrumbs item=value name=breadcrumbs}
 {if !$smarty.foreach.breadcrumbs.first}&nbsp;&nbsp;&gt;&nbsp;&nbsp;{/if}
-{if $uri}
-<a href="{$smarty.const.BASE_URL}{$uri}">{$value}</a>
+{if $value.uri}
+<a href="{$smarty.const.BASE_URL}{$value.uri}">{$value.name}</a>
 {else}
-{$value}
+{$value.name}
 {/if}
 {/foreach}
 </p>

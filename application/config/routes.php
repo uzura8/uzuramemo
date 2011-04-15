@@ -38,9 +38,14 @@
 |
 */
 
-$route['default_controller'] = "webmemo";
+$route['default_controller'] = 'webmemo';
 $route['404_override'] = '';
 
+$route['list/search/(:any)'] = 'webmemo/memolist/search/$2';
+$route['list'] = 'webmemo/memolist';
+$route['article/:num'] = 'webmemo/article';
+
+$route['search'] = 'webmemo/search';
 
 /* End of file routes.php */
 /* Location: ./application/config/routes.php */

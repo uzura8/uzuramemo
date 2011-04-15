@@ -28,14 +28,23 @@
 }
 
 /*パンくずリスト*/
-#pan{
+#pan {
 	font-size: 11px;
 	text-align: left;
 	background-color: #D5D5D5;
 	margin: 0 0 5px;
 	padding: 3px 20px;
 }
+#pan p {
+	line-height: 0.5;
+}
 #pan a:link {
+	font-size: 11px;
+}
+#pan a:hover {
+	font-size: 11px;
+}
+#pan a:visited {
 	font-size: 11px;
 }
 
@@ -463,7 +472,8 @@ form#order #order_sel {
 }
 
 /* pagerテーブル */
-div#pager_box table {
+div#pager_box {
+	padding: 3px 0;
 }
 div#pager_box td {
 	text-align: center;

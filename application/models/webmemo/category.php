@@ -18,7 +18,6 @@ class Category extends CI_Model {
 
 	private function get_query_list($sub_id = 0, $isCheckAuth = true)
 	{
-
 		$select = "SELECT mc_id, mc_name, mc_key, is_private FROM T_mn_cate";
 		$where = ' WHERE mc_del_flg  = 0'
 					 . ' AND mc_sub_id = ?';
@@ -69,6 +68,66 @@ class Category extends CI_Model {
 
 		if (!$query->num_rows()) return array();
 
-		return $query->row();
+		return $query->row_array(0);
+	}
+
+	function get_name4id($id)
+	{
+		$row = $this->category->get_row4id($id, array('mc_name'));
+		if (empty($row)) return '';
+
+		return $row['mc_name'];
+	}
+
+	function get_private_category_id_list()
+	{
+		$private_parent_category_id_list = array();
+		$sql = 'SELECT mc_id FROM T_mn_cate'
+				 . ' WHERE mc_del_flg  = 0'
+				 . ' AND mc_sub_id = 0'
+				 . ' AND is_private = 1';
+		foreach ($this->db->query($sql)->result_array() as $row)
+		{
+			$private_parent_category_id_list[] = (int)$row['mc_id'];
+		}
+
+		$private_category_id_list = array();
+		$sql = 'SELECT mc_id FROM T_mn_cate'
+				 . ' WHERE mc_del_flg  = 0'
+				 . sprintf(' AND (is_private = 1 OR mc_sub_id IN (%s))', implode(',', $private_parent_category_id_list));
+		foreach ($this->db->query($sql)->result_array() as $row)
+		{
+			$private_category_id_list[] = $row['mc_id'];
+		}
+
+		return $private_category_id_list;
+	}
+
+	function category_id_list4name($name)
+	{
+		$name = $this->db->escape_like_str($name);
+		$params = array('%'.$name.'%');
+
+		$category_id_list = array();
+		$sql = 'SELECT mc_id FROM T_mn_cate'
+				 . ' WHERE mc_name LIKE ?';
+		foreach ($this->db->query($sql, $params)->result_array() as $row)
+		{
+			$category_id_list[] = (int)$row['mc_id'];
+		}
+
+		return $category_id_list;
+	}
+
+	function get_id4key($key)
+	{
+		$this->db->select('mc_id');
+		$this->db->where(array('mc_key' => $key));
+		$query = $this->db->get('T_mn_cate');
+		if (!$query->num_rows()) return 0;
+
+		$row = $query->row_array(0);
+
+		return $row['mc_id'];
 	}
 }

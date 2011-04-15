@@ -9,7 +9,7 @@
 </p>
 <div id="menu_box{$row.mc_id}">
 {foreach from=$row.sc_ary item=sub_row}
-{if $sub_row.mc_id == $side_chk_sub_cate}
+{if $sub_row.mc_id == $now_category_id}
 <p class="lb_04" style="background-color:#fcd5e7;">
 <a href="{$smarty.const.BASE_URL}category/{$sub_row.mc_id}">{$sub_row.mc_name}</a>
 {if $smarty.const.IS_AUTH && $sub_row.mc_key}<span style="font-weight:lighter;">({$sub_row.mc_key})</span>{/if}

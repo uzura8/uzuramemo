@@ -15,62 +15,106 @@ class Memo extends CI_Model {
 		return $this->db->get('T_manual')->result_array();
 	}
 
+	function get_each_article($id, $is_private = false)
+	{
+		if (!$id) return array();
+
+		$sql  = $this->get_main_query($is_private);
+		$sql .= " AND A.mn_id = ?";
+
+		return $this->db->query($sql, array((int)$id))->result_array();
+	}
+
 	function get_main_list($is_private = false, $search = '', $order = 'lastdate', $offset = 0, $limit = 10)
 	{
-		if (!$order) $order = 'lastdate';
-		$this->db->order_by('T_manual.'.$order, 'desc');
+		if (!$order) $order = 'lastdate desc';
 
-		$sql = "SELECT A.*, B.mc_name FROM T_manual A"
-				 . " LEFT JOIN T_mn_cate B ON A.mc_id = B.mc_id"
-				 . " WHERE A.mn_del_flg=0"
-				 . sprintf(" ORDER BY A.%s desc", $order)
-				 . sprintf(" LIMIT %d, %d", $offset, $limit);
+		$sql  = $this->get_main_query($is_private, $search);
+		$sql .= sprintf(" ORDER BY A.%s", $order)
+				 .  sprintf(" LIMIT %d, %d", $offset, $limit);
 
 		return $this->db->query($sql)->result_array();
 	}
 
-	function get_main_list_old($is_private = false, $search = '', $order = 'lastdate', $offset = 0, $limit = 10)
-	{
-		$this->db->select('T_manual.*, T_mn_cate.mc_name');
-		$this->db->from('T_manual');
-		$this->db->join('T_mn_cate', 'T_mn_cate.mc_id = T_manual.mc_id');
-		$this->db->where(array('T_manual.mn_del_flg' => 0, 'T_manual.private_flg' => (int)$is_private));
-		if (!$order) $order = 'lastdate';
-		$this->db->order_by('T_manual.'.$order, 'desc');
-		$this->db->limit($offset, $limit);
-
-		return $this->db->get()->result_array();
-/*
-		foreach ( as $row)
-		{
-			$mn_exp_v = _getBodyHtml($mn_exp_v, 1);
-			$mn_exp_v = nl2br($mn_exp_v);//HTMLタグの除去
-			$row['mn_exp_v'] = $mn_exp_v;
-			if (strlen($mn_exp_v)) {
-					$row['exp_flg'] = 1;
-			} else {
-					$row['exp_flg'] = 0;
-			}
-			$sql_list[] = $row;
-		}
-*/
-	}
-
 	function get_count_all($is_private = false, $search = '')
 	{
-		$sql = "SELECT count(mn_id) as count FROM T_manual"
-				 . " WHERE mn_del_flg=0";
+		$sql  = $this->get_main_query($is_private, $search, true);
 		$row = $this->db->query($sql)->first_row('array');
 
 		return (int)$row['count'];
 	}
 
-	function get_main_list_query($limit, $offset = 0, $order = 'lastdate', $is_private = false, $search = '')
+	private static function get_main_query($is_private = false, $search = '', $is_count = false)
 	{
-		$sql = "SELECT A.*, B.mc_name FROM T_manual A"
+		$select = "SELECT A.*, B.mc_name, B.mc_sub_id FROM T_manual A";
+		if ($is_count) $select = "SELECT COUNT(A.mn_id) as count FROM T_manual A";
+
+		$sql = $select
 				 . " LEFT JOIN T_mn_cate B ON A.mc_id = B.mc_id"
-				 . " WHERE A.mn_del_flg=0"
-				 . sprintf(" ORDER BY A.%s desc", $order)
-				 . sprintf(" LIMIT %d, %d", $offset, $limit);
+				 . " WHERE A.mn_del_flg = 0";
+		if (!$is_private)
+		{
+			$CI =& get_instance();
+			$CI->load->model('webmemo/category');
+
+			$sql .= " AND A.private_flg = 0"
+					 .  sprintf(" AND B.mc_id NOT IN (%s)", implode(',', $CI->category->get_private_category_id_list()));
+		}
+
+		if ($add_where = self::get_like_where_clause($search))
+		{
+			$sql .= sprintf(' AND %s', $add_where);
+			unset($add_where);
+		}
+
+		return $sql;
+	}
+
+	private static function get_like_where_clause($search)
+	{
+		if (!$search) return '';
+
+		$search_target_columns = array(
+			'mn_id',
+			'mn_title',
+			'mn_exp',
+			'mn_value',
+			'keyword',
+		);
+
+		//全角空白を半角に統一
+		$search = str_replace('　', ' ', $search);
+
+		$add_where_list = array();
+		$keyword_list = explode(' ', $search);
+
+		// 検索ワード数を制限
+		if (count($keyword_list) > 20) return '';
+
+		$CI =& get_instance();
+		foreach ($keyword_list as $word)
+		{
+			$like_list = array();
+			foreach ($search_target_columns as $column)
+			{
+				$like_list[] = 'A.'.$column." LIKE '%".$CI->db->escape_like_str($word)."%'";
+			}
+
+			// category
+			$where_clause_category_id = '';
+			if ($category_id_list = $CI->category->category_id_list4name($word))
+			{
+				$where_clause_category_id = sprintf('B.mc_id IN (%s)', implode(',', $category_id_list));
+			}
+			$where_clause = '('.implode(' OR ', $like_list);
+			if ($where_clause_category_id) $where_clause .= ' OR '.$where_clause_category_id;
+			$where_clause .= ')';
+			$add_where_list[] = $where_clause;
+		}
+		$add_where = sprintf('(%s)', implode(' AND ', $add_where_list));
+		unset($like_list);
+		unset($add_where_list);
+
+		return $add_where;
 	}
 }

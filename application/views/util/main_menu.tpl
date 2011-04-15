@@ -8,7 +8,7 @@
 <li><a href="{$smarty.const.BASE_URL}admin/task.php" target="_blank">{$smarty.const.TASK_MANAGER_SITE_NAME}</a></li>
 {/if}
 {if $smarty.const.DEV_MODE}
-<li><a href="user_guide_ja/">ユーザガイド</a></li>
+<li><a href="{$smarty.const.BASE_URL}user_guide_ja/" target="_blank">ユーザガイド</a></li>
 {/if}
 {if $smarty.const.IS_AUTH}
 <li><a href="{$smarty.const.BASE_URL}admin/manual.php" target="_blank">管理画面</a></li>

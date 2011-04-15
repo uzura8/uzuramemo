@@ -3,7 +3,7 @@
 <script language="JavaScript" type="text/javascript">
 {literal}function selectjump(obj) {{/literal}
 	var text = obj.options[obj.selectedIndex].value;
-	var url = "{$current_url}?from=0&amp;order=" + text + "&amp;search={$search}&amp;opt={$opt}";
+	var url = "{$smarty.const.BASE_URL}?search={$search|urlencode}&from=0&order=" + text + "&opt={$opt}";
 	location.href = url;
 {literal}}{/literal}
 </script>
@@ -13,8 +13,7 @@
 <script type="text/javascript">
 window.onload = function hideText(){literal}{{/literal}
 {foreach from=$cate_id_list item=value}
-{* {if ($now_category && $now_category['mc_sub_id'] != $value) && $now_now_category_id != $value} *}
-{if $now_now_category_id != $value}
+{if $now_category.mc_sub_id != $value}
 	Element.hide("menu_box{$value}");
 {/if}
 {/foreach}

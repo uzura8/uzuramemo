@@ -170,12 +170,29 @@ ul#summary_list {
 }
 
 /* Še‹LŽ– */
-.article_footer {
+div#article_box {
+	padding: 10px 0;
+}
+div#article_footer {
 	text-align: right;
 	line-height: 1.5em;
 	margin-top: 10px;
 	padding: 0 5px;
+	font-size: 11px;
 }
+div#article_footer span.link_parts {
+	margin-left: 20px;
+}
+div#article_footer a:link {
+	font-size: 11px;
+}
+div#article_footer a:visited {
+	font-size: 11px;
+}
+div#article_footer a:hover {
+	font-size: 11px;
+}
+
 .quate_box {
 	padding-left: 10px;
 	margin-bottom: 10px;
