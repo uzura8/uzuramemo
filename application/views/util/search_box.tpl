@@ -9,7 +9,7 @@
 <input type="checkbox" name="opt" value="1"{if $opt} checked="checked"{/if} />カテゴリ</td>
 </tr>
 </table>
-<input type="hidden" name="category_id" value="{$now_category_id}" />
-<input type="hidden" name="article_id" value="{$article_id}" />
+<input type="hidden" name="category" value="{$now_category_id}" />
+<input type="hidden" name="article" value="{$article_id}" />
 </form>
 </div>

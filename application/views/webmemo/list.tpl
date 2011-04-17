@@ -65,7 +65,7 @@
 <div id="article_box">{$row.mn_value|smarty:nodefaults}</div>
 {if $row.mn_exp}
 <h3 class="main_h3">引用元</h3>
-<div class="quate_box">{$row.mn_exp|nl2br|t_url}</div>
+<div class="quate_box">{$row.mn_exp|nl2br|auto_link}</div>
 {/if}
 <div id="article_footer">
 {if $smarty.const.IS_AUTH}

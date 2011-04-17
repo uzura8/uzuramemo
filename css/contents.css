@@ -223,19 +223,19 @@
 /*■カテゴリリスト--------------------------------------------------*/
 #cate_list{
 	margin: 0;
-	padding: 0;
+	padding: 0 0 0 20px;
 	border-bottom-width: 0;
 }
 #cate_list ul {
-	padding: 0px 0px 0px 0px;
-	margin:  0px 0px 2px 20px;
+	padding: 0;
+	margin:  0px 0px 2px 40px;
 	/*list-style:square;*/
 }
 #cate_list li {
-	padding: 2px 0px 3px 0px;
+	padding: 2px 0px 3px 5px;
 }
 #cate_list li a,a:visited {
-	padding: 0px 0px 0px 0px;
+	padding: 0;
 	color: #0066B3;
 }
 #cate_list li a:hover {

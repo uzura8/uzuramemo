@@ -12,12 +12,12 @@
 {/if}
 <link rel="shortcut icon" href="/favicon.ico" />
 {if $smarty.const.UM_USE_RSS_FEED}
-<link title="RSS" href="{$smarty.const.BASE_URL}rss.xml" type="application/rss+xml" rel="alternate" />
+<link title="RSS" href="{site_url}rss.xml" type="application/rss+xml" rel="alternate" />
 {/if}
-<link href="{$smarty.const.BASE_URL}css/filter.css" rel="stylesheet" type="text/css" />
+<link href="{site_url}css/filter.css" rel="stylesheet" type="text/css" />
 
 <!-- search word heighlighter -->
-<script type="text/javascript" src="{$smarty.const.BASE_URL}js/se_hilite.js"></script>
+<script type="text/javascript" src="{site_url}js/se_hilite.js"></script>
 <style type="text/css">
 {literal}
 .hilite1, .hilite4, .hilite7 { background-color: #ffa; }
@@ -26,9 +26,7 @@
 {/literal}
 </style>
 
-<!-- syntaxhighlighter -->
-<link type="text/css" rel="stylesheet" href="{$smarty.const.BASE_URL}js/syntaxhighlighter/styles/shCore.css" />
-<link type="text/css" rel="stylesheet" href="{$smarty.const.BASE_URL}js/syntaxhighlighter/styles/shThemeDefault.css" />
+{include file='ci:util/syntaxhighlighter.tpl'}
 
 {$head_info}
 </head>

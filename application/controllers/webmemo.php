@@ -13,9 +13,10 @@ class Webmemo extends MY_Controller
 	private $search = '';
 	private $offset = 0;
 	private $order  = 0;
-	private $search_category_id  = 0;
+	private $category_id  = 0;
 	private $search_option  = false;
 	private $next_url;
+	private $category_list_all = array();
 
 	function __construct()
 	{
@@ -28,8 +29,10 @@ class Webmemo extends MY_Controller
 		$this->load->model('webmemo/category');
 		$this->load->model('webmemo/memo');
 
+		// library
+		$this->load->library('security');
+
 		// load helpers
-		$this->load->helper('url');
 		$this->load->helper('webmemo');
 
 		$this->_configure();
@@ -47,6 +50,9 @@ class Webmemo extends MY_Controller
 
 		$this->is_private = false;
 		if (IS_AUTH) $this->is_private = true;
+
+		// side_menu用カテゴリリスト
+		$this->category_list_all = $this->category->get_list_all();
 	}
 
 	public function index()
@@ -58,57 +64,45 @@ class Webmemo extends MY_Controller
 	{
 		$page_title = 'メモ一覧';
 
-		// 検索語対応
-		$search = '';
-		if ($this->uri->segment(2) == 'search')
+		// uriからparamsを取得
+		list($search, $now_category_id) = $this->_get_uri_params($this->uri->segment(2, ''), $this->uri->segment(3, ''));
+		if ($search)
 		{
-			$search = $this->uri->segment(3, '');
+			$this->search = $search;
+			$this->_format_search_param();
+			$this->_decode_search_params();
 		}
-		if ($search) $this->search = $search;
-		$this->_format_search_param();
+		if ($now_category_id) $this->category_id = $now_category_id;
+		list($now_category, $search_category_id_list) = $this->_get_category_lists($now_category_id);
 
-		// page description
-		$this->site_keywords[]   = $page_title;
-		$this->site_description .= sprintf('このページは「%s」のページです。', $page_title);
+		// 記事件数を取得
+		$count_all = $this->memo->get_count_all($this->is_private, $this->search, $search_category_id_list);
 
-		$now_category_id = 0;
-		$now_category = array();
-		if ($now_category_id) $now_category = $this->category->get_row4id($now_category_id);
+		// SEO用 metaデータをセット
+		$this->_set_site_keywords_and_description($page_title, $this->search, $now_category);
 
-		$this->_decode_search_params();
-		$count_all = $this->memo->get_count_all($this->is_private, $this->search);
+		// パンくずリスト用のデータをセット
+		$this->_set_breadcrumbs($page_title, $this->search, $now_category, $count_all);
 
-		$this->breadcrumbs[] = array('uri' => '', 'name' =>  $page_title);
-		if ($this->search)
-		{
-			$this->breadcrumbs[] = array('uri' => '', 'name' => sprintf('「%s」の検索結果: %d件', $this->search, $count_all));
-		}
-
-		$cate_list_all = $this->category->get_list_all();
-		$view_data = array(
-			'site_keywords'    => $this->site_keywords,
-			'site_description' => $this->site_description,
-			'breadcrumbs' => $this->breadcrumbs,
-			'article_id' => 0,
-			'pagination' => $this->_get_pagination($count_all),
-			'count_all' => $count_all,
-			'cate_list' => $cate_list_all,
-			'memo_list' => $this->memo->get_main_list($this->is_private, $this->search, $this->_get_order_column_name($this->order), $this->offset, $this->limit),
-			'cate_id_list' => $this->_get_category_id_list($cate_list_all),
-			'cate_name_list' => $this->_get_category_name_list($cate_list_all),
-			'search' => $this->search,
-			'order' => $this->order,
-			'order_list' => $this->_get_order_list(),
-			'now_category' => $now_category,
-			'now_category_id' => $now_category_id,
-			'cate_list_important_articles' => $this->memo->get_important_list(),
-			'foot_info' => $this->_set_footer_info(),
-			'search' => $this->search,
-			'opt' => $this->search_option,
-			'current_url' => current_url(),
-			'next_url' => $this->next_url,
-		);
-
+		// template
+		$view_data = $this->_get_default_view_data();
+		$view_data['pagination'] = $this->_get_pagination($count_all);
+		$view_data['count_all'] = $count_all;
+		$view_data['memo_list'] =  $this->memo->get_main_list($this->is_private,
+																													$this->search,
+																													$search_category_id_list,
+																													$this->_get_order_column_name($this->order),
+																													$this->offset,
+																													$this->limit);
+		$view_data['cate_name_list'] = $this->_get_category_name_list($this->category_list_all);
+		$view_data['search'] = $this->search;
+		$view_data['order'] = $this->order;
+		$view_data['order_list'] = $this->_get_order_list();
+		$view_data['now_category'] = $now_category;
+		$view_data['now_category_id'] = $now_category_id;
+		$view_data['search_category_id'] = $this->category_id;
+		$view_data['opt'] = $this->search_option;
+		$view_data['next_url'] = $this->next_url;
 		$this->smarty_parser->parse('ci:webmemo/list.tpl', $view_data);
 	}
 
@@ -154,28 +148,40 @@ class Webmemo extends MY_Controller
 			$this->breadcrumbs[] = array('uri' => '', 'name' => '記事');
 		}
 
-		$cate_list_all = $this->category->get_list_all();
-		$view_data = array(
-			'site_keywords'    => $this->site_keywords,
-			'site_description' => $this->site_description,
-			'breadcrumbs' => $this->breadcrumbs,
-			'article_id' => $id,
-			'search' => '',
-			'pagination' => array(),
-			'opt' => 0,
-			'count_all' => $count_all,
-			'cate_list' => $cate_list_all,
-			'memo_list' => $memo_list,
-			'cate_id_list' => $this->_get_category_id_list($cate_list_all),
-			'cate_name_list' => $cate_name_list,
-			'now_category' => $now_category,
-			'now_category_id' => $now_category_id,
-			'cate_list_important_articles' => $this->memo->get_important_list(),
-			'foot_info' => $this->_set_footer_info(),
-			'current_url' => current_url(),
-		);
-
+		// template
+		$view_data = $this->_get_default_view_data();
+		$view_data['article_id'] = $id;
+		$view_data['count_all']  = $count_all;
+		$view_data['memo_list']  = $memo_list;
+		$view_data['cate_name_list']  = $cate_name_list;
+		$view_data['now_category_id'] = $now_category_id;
 		$this->smarty_parser->parse('ci:webmemo/list.tpl', $view_data);
+	}
+
+	public function category()
+	{
+		$id = (int)$this->uri->segment(2, 0);
+		$main_list = array();
+		if ($id && $this->category_list_all)
+		{
+			list($main_list, $id) = $this->_get_now_category_and_id($this->category_list_all, $id);
+		}
+		if (!$main_list) redirect();
+
+		$now_category_name = $main_list[0]['mc_name'];
+
+		// page description
+		$this->site_keywords[]   = $now_category_name;
+		$this->site_description .= sprintf('このページはカテゴリ「%s」についての記事一覧です。', $now_category_name);
+
+		// パンくずリスト
+		$this->breadcrumbs[] = array('uri' => '', 'name' => $now_category_name);
+
+		// template
+		$view_data = $this->_get_default_view_data();
+		$view_data['now_category_id'] = $id;
+		$view_data['main_list'] = $main_list;
+		$this->smarty_parser->parse('ci:webmemo/category.tpl', $view_data);
 	}
 
 	public function search()
@@ -185,26 +191,156 @@ class Webmemo extends MY_Controller
 			redirect();
 		}
 
-		$article_id  = $this->_get_params('article_id', 0);
-		$category_id = $this->_get_params('category_id', 0);
+		$article_id  = $this->_get_params('article', 0);
 
 		$redirect_url = site_url('list');
 		if ($article_id)
 		{
 			$redirect_url = site_url('article/'.$article_id);
 		}
-		elseif ($category_id)
+		elseif ($this->category_id)
 		{
-			$redirect_url = site_url('category/'.$category_id);
+			$redirect_url = site_url('category/'.$this->category_id);
 		}
 
 		if ($this->search)
 		{
 			$this->_format_search_param(true);
-			$redirect_url = $this->_get_list_url(true);
+
+			if ($this->category_id && $this->search_option)
+			{
+				$redirect_url = $this->_get_list_url('category');
+			}
+			else
+			{
+				$redirect_url = $this->_get_list_url('search');
+			}
 		}	
 
 		redirect($redirect_url);
+	}
+
+	private function _get_default_view_data()
+	{
+		return array(
+			'site_keywords'    => $this->site_keywords,
+			'site_description' => $this->site_description,
+			'breadcrumbs' => $this->breadcrumbs,
+			'search' => '',
+			'pagination' => array(),
+			'opt' => 0,
+			'cate_list' => $this->category_list_all,
+			'cate_id_list' => $this->_get_category_id_list($this->category_list_all),
+			'cate_list_important_articles' => $this->memo->get_important_list(),
+			'foot_info' => $this->_set_footer_info(),
+			'current_url' => current_url(),
+			'list_url' => $this->_get_list_url($this->uri->segment(2), array(), true),
+		);
+	}
+
+	private function _get_now_category_and_id($all_list, $id)
+	{
+		$ret = array();
+		if (!$all_list) return array($ret, $id);
+		if (!$id) return array($all_list, 0);
+
+		foreach ($all_list as $row)
+		{
+			if ($row['mc_id'] != $id) continue;
+			$sub_category_list = array();
+			foreach ($row['sc_ary'] as $sub_row)
+			{
+				$sub_row['each_ary'] = $this->memo->get_main_list($this->is_private, '', array($sub_row['mc_id']), 'mn_id', 0, 0, 'A.mn_id, A.mn_title');
+				$sub_category_list[] = $sub_row;
+			}
+			$row['sc_ary'] = $sub_category_list;
+			$ret[] = $row;
+			break;
+		}
+		if ($ret) return array($ret, $id);
+
+		return array($all_list, 0);
+	}
+
+	private function _get_uri_params($key, $value)
+	{
+		$search = '';
+		$now_category_id = 0;
+		if (!$key || !$value) return array($search, $now_category_id);
+
+		switch ($key)
+		{
+			case 'search':
+				$search = $value;
+				break;
+			case 'category':
+				$value = (int)$value;
+				$now_category_id = $value;
+				break;
+		}
+
+		return array($search, $now_category_id);
+	}
+
+	private function _get_category_lists($category_id)
+	{
+		$category = array();
+		$category_id_list = array();
+		if (!$category_id) return array($category, $category_id_list);
+
+		$category = $this->category->get_row4id($category_id);
+		$cate_sub_id = $category['mc_sub_id'];
+		$category_id_list = array($category_id);
+		if ($cate_sub_id)
+		{
+			$category['mc_sub_name'] = $this->category->get_name4id($cate_sub_id);
+		}
+		else
+		{
+			$category_id_list = $this->category->get_id_list($category_id);
+		}
+
+		return array($category, $category_id_list);
+	}
+
+	private function _set_site_keywords_and_description($page_title, $search, $category)
+	{
+		$this->site_keywords[]   = $page_title;
+		if (!empty($category['mc_sub_name'])) $this->site_keywords[] = $category['mc_sub_name'];
+		if (!empty($category['mc_name']))     $this->site_keywords[] = $category['mc_name'];
+
+		$site_description = sprintf('このページは「%s」のページです。', $page_title);
+		if ($category && $search)
+		{
+			$site_description = sprintf('このページは、カテゴリ「%s」の「%s」検索結果の%sです。', $category['mc_name'], $search, $page_title);
+		}
+		elseif ($search)
+		{
+			$site_description = sprintf('このページは「%s」検索結果の%sです。', $search, $page_title);
+		}
+		elseif ($category)
+		{
+			$site_description = sprintf('このページはカテゴリ「%s」の%sです。', $category['mc_name'], $page_title);
+		}
+		$this->site_description .= $site_description;
+	}
+
+	private function _set_breadcrumbs($page_title, $search, $category, $count_all)
+	{
+		$this->breadcrumbs[] = array('uri' => '', 'name' =>  $page_title);
+		if ($category && $search)
+		{
+			$this->breadcrumbs[] = array('uri' => 'list/category/'.$category['mc_id'], 'name' => sprintf('カテゴリ「%s」', $category['mc_name']));
+			$this->breadcrumbs[] = array('uri' => '', 'name' => sprintf('「%s」の検索結果: %d件', $this->search, $count_all));
+		}
+		elseif ($search)
+		{
+			$this->breadcrumbs[] = array('uri' => '', 'name' => sprintf('「%s」の検索結果: %d件', $this->search, $count_all));
+		}
+		elseif ($category)
+		{
+			$this->breadcrumbs[] = array('uri' => '', 'name' => sprintf('カテゴリ「%s」の絞り込み結果: %d件', $category['mc_name'], $count_all));
+		}
 	}
 
 	private function _get_category_id_list($cate_list)
@@ -231,7 +367,7 @@ class Webmemo extends MY_Controller
 	{
 		$config = array();
 
-		$config['base_url'] = $this->_get_list_url();
+		$config['base_url'] = $this->_get_list_url($this->uri->segment(2));
 		$config['offset']   = (int)$this->offset;
 		$config['query_string_segment'] = 'from';
 		$config['total_rows'] = $count_all;
@@ -256,33 +392,41 @@ class Webmemo extends MY_Controller
 
 		$this->search = trim(preg_replace('/[ 　]+/u', ' ', $this->search));
 		if ($urlencode) $this->search = urlencode($this->search);
-		list($this->search, $this->search_category_id) = get_category_from_search_word($this->search);
-		if ($this->search_category_id) $this->search_option = true;
+		list($this->search, $category_id) = get_category_from_search_word($this->search);
+		if ($category_id) $this->category_id = $category_id;
+		if ($category_id) $this->search_option = true;
 	}
 
 	public function _decode_search_params()
 	{
 		if (!$this->search) return;
 
-		$this->search = preg_replace('/[+]+/', ' ', $this->search);
+//		$this->search = preg_replace('/[+]+/', ' ', $this->search);
 		$this->search = urldecode($this->search);
 	}
 
-	public function _get_list_url($is_search_path = false)
+	public function _get_list_url($second_path = '', $add_params = array(), $xss_clean_search_word = false)
 	{
 		$uri = 'list';
 		$params = array(
 			'opt'    => (int)$this->search_option,
 			'order'  => $this->order,
 		);
+		if ($add_params) $params += $add_params();
 
-		if ($is_search_path)
+		$search = $this->search;
+		if ($xss_clean_search_word) $search = $this->security->xss_clean($search);
+
+		switch ($second_path)
 		{
-			$uri = 'list/search/'.$this->search;
-		}
-		else
-		{
-			$params['search'] = $this->search;
+			case 'search':
+				$uri .= sprintf('/%s/%s', $second_path, $this->search);
+				$params['category'] = $this->category_id;
+				break;
+			case 'category':
+				$uri .= sprintf('/%s/%d', $second_path, $this->category_id);
+				$params['search'] = $this->search;
+				break;
 		}
 
 		return  sprintf('%s%s?%s', base_url(), $uri, http_build_query($params));
@@ -317,6 +461,7 @@ class Webmemo extends MY_Controller
 		$this->offset = $this->_get_params('from');
 		$this->order  = $this->_get_params('order');
 		$this->search_option = $this->_get_params('opt');
+		$this->category_id = $this->_get_params('category');
 	}
 
 	private function _get_params($key, $default = NULL, $xss_clean = FALSE)

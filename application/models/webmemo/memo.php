@@ -25,28 +25,31 @@ class Memo extends CI_Model {
 		return $this->db->query($sql, array((int)$id))->result_array();
 	}
 
-	function get_main_list($is_private = false, $search = '', $order = 'lastdate', $offset = 0, $limit = 10)
+	function get_main_list($is_private = false, $search = '', $category_id_list = array(), $order = 'lastdate', $offset = 0, $limit = 10, $columns = 'A.*, B.mc_name, B.mc_sub_id')
 	{
 		if (!$order) $order = 'lastdate desc';
 
-		$sql  = $this->get_main_query($is_private, $search);
-		$sql .= sprintf(" ORDER BY A.%s", $order)
-				 .  sprintf(" LIMIT %d, %d", $offset, $limit);
+		$sql  = $this->get_main_query($is_private, $search, $category_id_list, false, $columns);
+		$sql .= sprintf(" ORDER BY A.%s", $order);
+		if ($limit) $sql .= sprintf(" LIMIT %d, %d", $offset, $limit);
 
 		return $this->db->query($sql)->result_array();
 	}
 
-	function get_count_all($is_private = false, $search = '')
+	function get_count_all($is_private = false, $search = '', $category_id_list = array())
 	{
-		$sql  = $this->get_main_query($is_private, $search, true);
+		$sql  = $this->get_main_query($is_private, $search, $category_id_list, true);
 		$row = $this->db->query($sql)->first_row('array');
 
 		return (int)$row['count'];
 	}
 
-	private static function get_main_query($is_private = false, $search = '', $is_count = false)
+	private static function get_main_query($is_private = false, $search = '', $category_id_list = array(), $is_count = false, $columns = 'A.*, B.mc_name, B.mc_sub_id')
 	{
-		$select = "SELECT A.*, B.mc_name, B.mc_sub_id FROM T_manual A";
+		if (is_array($columns)) $columns = implode(',', $columns);
+		if (!$columns) $columns = 'A.*, B.*';
+
+		$select = sprintf("SELECT %s FROM T_manual A", $columns);
 		if ($is_count) $select = "SELECT COUNT(A.mn_id) as count FROM T_manual A";
 
 		$sql = $select
@@ -65,6 +68,11 @@ class Memo extends CI_Model {
 		{
 			$sql .= sprintf(' AND %s', $add_where);
 			unset($add_where);
+		}
+
+		if ($category_id_list)
+		{
+			$sql .= sprintf(" AND B.mc_id IN (%s)", implode(',', $category_id_list));
 		}
 
 		return $sql;

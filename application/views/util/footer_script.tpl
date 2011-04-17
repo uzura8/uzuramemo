@@ -1,15 +1,15 @@
-<script language="JavaScript" type="text/javascript" src="{$smarty.const.BASE_URL}js/focus.js"></script>
+<script language="JavaScript" type="text/javascript" src="{site_url}js/focus.js"></script>
 
 <script language="JavaScript" type="text/javascript">
 {literal}function selectjump(obj) {{/literal}
 	var text = obj.options[obj.selectedIndex].value;
-	var url = "{$smarty.const.BASE_URL}?search={$search|urlencode}&from=0&order=" + text + "&opt={$opt}";
+	var url = "{$list_url|smarty:nodefaults}&order=" + text;
 	location.href = url;
 {literal}}{/literal}
 </script>
 
 <!-- prototype.js -->
-<script type="text/javascript" src="{$smarty.const.BASE_URL}js/prototype.js"></script>
+<script type="text/javascript" src="{site_url}js/prototype.js"></script>
 <script type="text/javascript">
 window.onload = function hideText(){literal}{{/literal}
 {foreach from=$cate_id_list item=value}
@@ -32,14 +32,14 @@ function toggleBox{$value}(){literal}{{/literal}
 </script>
 <!-- prototype.js -->
 
-<script type="text/javascript" src="{$smarty.const.BASE_URL}js/lib/jquery.js"></script>
+<script type="text/javascript" src="{site_url}js/lib/jquery.js"></script>
 <script type="text/javascript">
 {literal}var j$ = jQuery.noConflict();{/literal}
 </script>
 <!-- search word heighlighter -->
 
 <!-- auto_pager -->
-<script src="{$smarty.const.BASE_URL}js/jquery.autopager2.js" type="text/javascript"></script>
+<script src="{site_url}js/jquery.autopager2.js" type="text/javascript"></script>
 <script type="text/javascript">
 {literal}
 j$(function() {

@@ -7,7 +7,6 @@ Copyright : {$smarty.const.COPYRIGHT_SINCE} - {$smarty.now|date_format:"%Y"} {$s
 </div><!--footer-->
 </div><!--container-->
 {$foot_info}
-{include file='ci:util/syntaxhighlighter.tpl'}
 {include file='ci:util/footer_script.tpl'}
 {if $smarty.const.UM_USE_GOOGLE_ANALYTICS}{include file='ci:util/google_analytics.tpl'}{/if}
 </body>

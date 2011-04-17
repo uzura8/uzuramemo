@@ -42,8 +42,10 @@ $route['default_controller'] = 'webmemo';
 $route['404_override'] = '';
 
 $route['list/search/(:any)'] = 'webmemo/memolist/search/$2';
+$route['list/category/:num'] = 'webmemo/memolist/category/$2';
 $route['list'] = 'webmemo/memolist';
 $route['article/:num'] = 'webmemo/article';
+$route['category/:num'] = 'webmemo/category';
 
 $route['search'] = 'webmemo/search';
 

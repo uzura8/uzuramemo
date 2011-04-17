@@ -13,7 +13,6 @@
 <script type="text/javascript" src="{$smarty.const.BASE_URL}js/syntaxhighlighter/scripts/shBrushScala.js"></script>
 <script type="text/javascript" src="{$smarty.const.BASE_URL}js/syntaxhighlighter/scripts/shBrushSql.js"></script>
 <script type="text/javascript" src="{$smarty.const.BASE_URL}js/syntaxhighlighter/scripts/shBrushXml.js"></script>
-<link type="text/css" rel="stylesheet" href="{$smarty.const.BASE_URL}js/syntaxhighlighter/styles/shCoreDefault.css"/>
 <script type="text/javascript">
 SyntaxHighlighter.config.clipboardSwf = '{$smarty.const.BASE_URL}js/syntaxhighlighter/scripts/clipboard.swf';
 SyntaxHighlighter.all();

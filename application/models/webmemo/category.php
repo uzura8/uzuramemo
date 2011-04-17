@@ -6,19 +6,12 @@ class Category extends CI_Model {
 		parent::__construct();
 	}
 
-	private function get_query_list_old($sub_id = 0, $colmns = array('mc_id', 'mc_name', 'mc_key', 'is_private'), $isCheckAuth = false)
+	private function get_query_list($sub_id = 0, $columns = array('mc_id', 'mc_name', 'mc_key', 'is_private'), $isCheckAuth = true)
 	{
-		$this->db->select($colmns);
-		$this->db->where(array('mc_sub_id' => (int)$sub_id, 'mc_del_flg' => 0));
-		if ($isCheckAuth && !IS_AUTH) $this->db->where(array('is_private' =>  0));
-		$this->db->order_by('mc_turn');
+		if ($columns && is_array($columns)) $columns = implode(',', $columns);
+		if (!$columns) $columns = '*';
+		$select = sprintf("SELECT %s FROM T_mn_cate", $columns);
 
-		return $this->db->get('T_mn_cate');
-	}
-
-	private function get_query_list($sub_id = 0, $isCheckAuth = true)
-	{
-		$select = "SELECT mc_id, mc_name, mc_key, is_private FROM T_mn_cate";
 		$where = ' WHERE mc_del_flg  = 0'
 					 . ' AND mc_sub_id = ?';
 		if ($isCheckAuth && !IS_AUTH) $where .= ' AND is_private = 0';
@@ -49,10 +42,10 @@ class Category extends CI_Model {
 		return $this->get_query_list($sub_id)->result_array();
 	}
 
-	function get_id_list($isCheckAuth = false)
+	function get_id_list($sub_id = 0, $isCheckAuth = true)
 	{
 		$id_list = array();
-		foreach ($this->get_query_list(0, 'mc_id', $isCheckAuth)->result_array() as $row)
+		foreach ($this->get_query_list($sub_id, 'mc_id', $isCheckAuth)->result_array() as $row)
 		{
 			$id_list[] = (int)$row['mc_id'];
 		}
