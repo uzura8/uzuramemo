@@ -29,9 +29,6 @@ class Webmemo extends MY_Controller
 		$this->load->model('webmemo/category');
 		$this->load->model('webmemo/memo');
 
-		// library
-		$this->load->library('security');
-
 		// load helpers
 		$this->load->helper('webmemo');
 
@@ -65,15 +62,13 @@ class Webmemo extends MY_Controller
 		$page_title = 'メモ一覧';
 
 		// uriからparamsを取得
-		list($search, $now_category_id) = $this->_get_uri_params($this->uri->segment(2, ''), $this->uri->segment(3, ''));
-		if ($search)
+		if ($this->uri->segment(2) == 'category') $this->category_id = $this->uri->segment(3, 0);
+		if ($this->search)
 		{
-			$this->search = $search;
 			$this->_format_search_param();
-			$this->_decode_search_params();
+			$this->_decode_search_param();
 		}
-		if ($now_category_id) $this->category_id = $now_category_id;
-		list($now_category, $search_category_id_list) = $this->_get_category_lists($now_category_id);
+		list($now_category, $search_category_id_list) = $this->_get_category_lists($this->category_id);
 
 		// 記事件数を取得
 		$count_all = $this->memo->get_count_all($this->is_private, $this->search, $search_category_id_list);
@@ -99,7 +94,7 @@ class Webmemo extends MY_Controller
 		$view_data['order'] = $this->order;
 		$view_data['order_list'] = $this->_get_order_list();
 		$view_data['now_category'] = $now_category;
-		$view_data['now_category_id'] = $now_category_id;
+		$view_data['now_category_id'] = $this->category_id;
 		$view_data['search_category_id'] = $this->category_id;
 		$view_data['opt'] = $this->search_option;
 		$view_data['next_url'] = $this->next_url;
@@ -211,14 +206,11 @@ class Webmemo extends MY_Controller
 		if ($this->search)
 		{
 			$this->_format_search_param(true);
+			$redirect_url = $this->_get_list_url();
 
 			if ($this->category_id && $this->search_option)
 			{
-				$redirect_url = $this->_get_list_url('category');
-			}
-			else
-			{
-				$redirect_url = $this->_get_list_url('search');
+				$redirect_url = $this->_get_list_url(true);
 			}
 		}	
 
@@ -239,7 +231,7 @@ class Webmemo extends MY_Controller
 			'cate_list_important_articles' => $this->memo->get_important_list(),
 			'foot_info' => $this->_set_footer_info(),
 			'current_url' => current_url(),
-			'list_url' => $this->_get_list_url($this->uri->segment(2), array(), true),
+			'list_url' => $this->_get_list_url($this->uri->segment(2) == 'category' ? true : false),
 		);
 	}
 
@@ -265,26 +257,6 @@ class Webmemo extends MY_Controller
 		if ($ret) return array($ret, $id);
 
 		return array(array(), $id);
-	}
-
-	private function _get_uri_params($key, $value)
-	{
-		$search = '';
-		$now_category_id = 0;
-		if (!$key || !$value) return array($search, $now_category_id);
-
-		switch ($key)
-		{
-			case 'search':
-				$search = $value;
-				break;
-			case 'category':
-				$value = (int)$value;
-				$now_category_id = $value;
-				break;
-		}
-
-		return array($search, $now_category_id);
 	}
 
 	private function _get_category_lists($category_id)
@@ -372,7 +344,7 @@ class Webmemo extends MY_Controller
 	{
 		$config = array();
 
-		$config['base_url'] = $this->_get_list_url($this->uri->segment(2));
+		$config['base_url'] = $this->_get_list_url($this->uri->segment(2) == 'category' ? true : false);
 		$config['offset']   = (int)$this->offset;
 		$config['query_string_segment'] = 'from';
 		$config['total_rows'] = $count_all;
@@ -403,36 +375,25 @@ class Webmemo extends MY_Controller
 		if ($urlencode) $this->search = urlencode($this->search);
 	}
 
-	public function _decode_search_params()
+	public function _decode_search_param()
 	{
 		if (!$this->search) return;
 
-//		$this->search = preg_replace('/[+]+/', ' ', $this->search);
 		$this->search = urldecode($this->search);
 	}
 
-	public function _get_list_url($second_path = '', $add_params = array(), $xss_clean_search_word = false)
+	public function _get_list_url($is_category = false)
 	{
 		$uri = 'list';
 		$params = array(
+			'search' => $this->search,
 			'opt'    => (int)$this->search_option,
 			'order'  => $this->order,
 		);
-		if ($add_params) $params += $add_params();
 
-		$search = $this->search;
-		if ($xss_clean_search_word) $search = $this->security->xss_clean($search);
-
-		switch ($second_path)
+		if ($is_category)
 		{
-			case 'search':
-				$uri .= sprintf('/%s/%s', $second_path, $this->search);
-				$params['category'] = $this->category_id;
-				break;
-			case 'category':
-				$uri .= sprintf('/%s/%d', $second_path, $this->category_id);
-				$params['search'] = $this->search;
-				break;
+			$uri .= sprintf('/category/%d', $this->category_id);
 		}
 
 		return  sprintf('%s%s?%s', base_url(), $uri, http_build_query($params));
