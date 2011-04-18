@@ -9,7 +9,6 @@
 // search_word から検索対象カテゴリを取得
 function get_category_from_search_word($search_word, $is_task = false)
 {
-	$search_word = urldecode($search_word);
 	$search_cate_id = 0;
 	if (preg_match('/^([a-zA-Z0-9０-９ａ-ｚＡ-Ｚ_＿\-ー]+)[:：]{1}(.+)?$/u', $search_word, $matches))
 	{

@@ -396,10 +396,11 @@ class Webmemo extends MY_Controller
 		if (!$this->search) return;
 
 		$this->search = trim(preg_replace('/[ 　]+/u', ' ', $this->search));
-		if ($urlencode) $this->search = urlencode($this->search);
 		list($this->search, $category_id) = get_category_from_search_word($this->search);
 		if ($category_id) $this->category_id = $category_id;
 		if ($category_id) $this->search_option = true;
+
+		if ($urlencode) $this->search = urlencode($this->search);
 	}
 
 	public function _decode_search_params()
