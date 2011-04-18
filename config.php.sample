@@ -1,5 +1,7 @@
 <?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
+define('IS_AUTH', false);
+
 // サイトURL
 define('BASE_URL', 'http://example.com/');
 
@@ -18,6 +20,8 @@ define('ENCRYPTION_KEY', '');
 
 // headr, footer 関連設定
 
+// 表示文言設定
+
 // サイト名
 define('SITE_TITLE', 'WebMemo');
 
@@ -28,21 +32,54 @@ define('SITE_DESC_MAIN', '');
 define('SITE_DESCRIPTION', '';
 $GLOBALS['SITE_KEYWORDS'] = array();
 
-// RSSフィード機能使用設定
-define('UM_USE_RSS_FEED', false);
-
-// GoogleAnalytics使用設定
-define('UM_USE_GOOGLE_ANALYTICS', false);
-
-// Googleウェブマスター ツール
-//   https://www.google.com/support/webmasters/bin/answer.py?answer=35659&hl=ja
-define('GOOGLE_SITE_VERIFICATION_KEY', '');
-
 // copyright URL
 define('COPYRIGHT_URL', 'example.com');
 
 // copyright since
 define('COPYRIGHT_SINCE', '2008');
+
+
+// 外部サービス関連設定
+
+// GoogleAnalytics使用設定
+define('UM_USE_GOOGLE_ANALYTICS', false);
+
+// GoogleAdsense使用設定
+define('UM_USE_GOOGLE_ADSENSE', false);
+
+// 他のアフィリエイト使用設定
+define('UM_USE_AFFILIATE_OTHER', false);
+
+// Googleウェブマスター ツール
+//   https://www.google.com/support/webmasters/bin/answer.py?answer=35659&hl=ja
+define('GOOGLE_SITE_VERIFICATION_KEY', '');
+
+
+// 機能設定
+
+// RSSフィード機能使用設定
+define('UM_USE_RSS_FEED', false);
+
+// お問い合わせ機能使用設定
+define('UM_USE_CONTACT', false);
+
+// 「メモ」名称設定
+define('UM_WEBMEMO_NAME', 'webメモ');
+
+// 検索機能使用設定
+define('UM_USE_SEARCH_MEMO', true);
+
+// タスク管理機能使用設定
+define('USE_TASK_MANAGER', false);
+
+
+// 表示関連設定
+
+// サイドメニューの表示位置設定 (0:left  1:right)
+define('UM_SIDEMENU_VIEW_MODE', 1);
+
+// トップページの名称
+define('UM_TOPPAGE_NAME', 'トップ');
 
 
 // 動的設定項目
@@ -52,11 +89,15 @@ switch (ENVIRONMENT)
 {
 	case 'development':
 		$value = true;
+		$display_errors = true;
 		break;
 	case 'testing':
 	case 'production':
 	default:
 		$value = false;
+		$display_errors = false;
 		break;
 }
 define('DEV_MODE', $value);
+ini_set('display_errors', $display_errors);
+ini_set('display_startup_errors', $display_errors);
