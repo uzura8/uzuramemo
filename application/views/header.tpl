@@ -6,7 +6,7 @@
 <title>{$smarty.const.SITE_TITLE}</title>
 <meta name="robots" content="{if $smarty.const.DEV_MODE}noindex,nofollow{else}index,follow{/if}" />
 <meta name="description" content="{$site_description}" />
-<meta name="keywords" content="{','|implode:$site_keywords}" />
+{if $site_keywords}<meta name="keywords" content="{','|implode:$site_keywords}" />{/if}
 {if $smarty.const.GOOGLE_SITE_VERIFICATION_KEY}
 <meta name="google-site-verification" content="{$smarty.const.GOOGLE_SITE_VERIFICATION_KEY}" />
 {/if}
@@ -25,7 +25,6 @@
 .hilite3, .hilite6, .hilite9 { background-color: #aff; }
 {/literal}
 </style>
-
 {include file='ci:util/syntaxhighlighter.tpl'}
 
 {$head_info}
