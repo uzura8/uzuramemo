@@ -1,5 +1,5 @@
 <div class="box_02">
-<form method="post" action="{$smarty.const.BASE_URL}search">
+{form_open action=search}
 <table border="0" cellspacing="0" cellpadding="0" class="search">
 <tr>
 <td><input type="text" name="search" value="{$search}" size="17" id="focus" /></td>
@@ -11,5 +11,5 @@
 </table>
 <input type="hidden" name="category" value="{$now_category_id}" />
 <input type="hidden" name="article" value="{$article_id}" />
-</form>
+{form_close}
 </div>
