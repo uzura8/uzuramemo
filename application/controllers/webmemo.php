@@ -117,9 +117,9 @@ class Webmemo extends MY_Controller
 		{
 			$count_all = 1;
 			$title = $memo_list[0]['mn_title'];
-			$cate_sub_id = $memo_list[0]['mc_sub_id'];
-			$now_category_name = $memo_list[0]['mc_name'];
-			$now_category_id = (int)$memo_list[0]['mc_id'];
+			$cate_sub_id = $memo_list[0]['sub_id'];
+			$now_category_name = $memo_list[0]['name'];
+			$now_category_id = (int)$memo_list[0]['memo_category_id'];
 		}
 
 		$now_category = array();
@@ -167,9 +167,13 @@ class Webmemo extends MY_Controller
 		{
 			list($main_list, $id) = $this->_get_now_category_and_id($this->category_list_all, $id);
 		}
-		if (!$main_list) redirect();
+		if (!$main_list)
+		{
+			if ($id) redirect('list/category/'.$id);
+			redirect();
+		}
 
-		$now_category_name = $main_list[0]['mc_name'];
+		$now_category_name = $main_list[0]['name'];
 
 		// page description
 		$this->site_keywords[]   = $now_category_name;
@@ -247,11 +251,11 @@ class Webmemo extends MY_Controller
 
 		foreach ($all_list as $row)
 		{
-			if ($row['mc_id'] != $id) continue;
+			if ($row['id'] != $id) continue;
 			$sub_category_list = array();
 			foreach ($row['sc_ary'] as $sub_row)
 			{
-				$sub_row['each_ary'] = $this->memo->get_main_list($this->is_private, '', array($sub_row['mc_id']), 'mn_id', 0, 0, 'A.mn_id, A.mn_title');
+				$sub_row['each_ary'] = $this->memo->get_main_list($this->is_private, '', array($sub_row['id']), 'mn_id', 0, 0, 'A.mn_id, A.mn_title');
 				$sub_category_list[] = $sub_row;
 			}
 			$row['sc_ary'] = $sub_category_list;
@@ -260,7 +264,7 @@ class Webmemo extends MY_Controller
 		}
 		if ($ret) return array($ret, $id);
 
-		return array($all_list, 0);
+		return array(array(), $id);
 	}
 
 	private function _get_uri_params($key, $value)
@@ -290,11 +294,11 @@ class Webmemo extends MY_Controller
 		if (!$category_id) return array($category, $category_id_list);
 
 		$category = $this->category->get_row4id($category_id);
-		$cate_sub_id = $category['mc_sub_id'];
+		$cate_sub_id = $category['sub_id'];
 		$category_id_list = array($category_id);
 		if ($cate_sub_id)
 		{
-			$category['mc_sub_name'] = $this->category->get_name4id($cate_sub_id);
+			$category['sub_category_name'] = $this->category->get_name4id($cate_sub_id);
 		}
 		else
 		{
@@ -307,13 +311,13 @@ class Webmemo extends MY_Controller
 	private function _set_site_keywords_and_description($page_title, $search, $category)
 	{
 		$this->site_keywords[]   = $page_title;
-		if (!empty($category['mc_sub_name'])) $this->site_keywords[] = $category['mc_sub_name'];
-		if (!empty($category['mc_name']))     $this->site_keywords[] = $category['mc_name'];
+		if (!empty($category['sub_category_name'])) $this->site_keywords[] = $category['sub_category_name'];
+		if (!empty($category['name']))     $this->site_keywords[] = $category['name'];
 
 		$site_description = sprintf('このページは「%s」のページです。', $page_title);
 		if ($category && $search)
 		{
-			$site_description = sprintf('このページは、カテゴリ「%s」の「%s」検索結果の%sです。', $category['mc_name'], $search, $page_title);
+			$site_description = sprintf('このページは、カテゴリ「%s」の「%s」検索結果の%sです。', $category['name'], $search, $page_title);
 		}
 		elseif ($search)
 		{
@@ -321,7 +325,7 @@ class Webmemo extends MY_Controller
 		}
 		elseif ($category)
 		{
-			$site_description = sprintf('このページはカテゴリ「%s」の%sです。', $category['mc_name'], $page_title);
+			$site_description = sprintf('このページはカテゴリ「%s」の%sです。', $category['name'], $page_title);
 		}
 		$this->site_description .= $site_description;
 	}
@@ -331,7 +335,7 @@ class Webmemo extends MY_Controller
 		$this->breadcrumbs[] = array('uri' => '', 'name' =>  $page_title);
 		if ($category && $search)
 		{
-			$this->breadcrumbs[] = array('uri' => 'list/category/'.$category['mc_id'], 'name' => sprintf('カテゴリ「%s」', $category['mc_name']));
+			$this->breadcrumbs[] = array('uri' => 'list/category/'.$category['id'], 'name' => sprintf('カテゴリ「%s」', $category['name']));
 			$this->breadcrumbs[] = array('uri' => '', 'name' => sprintf('「%s」の検索結果: %d件', $this->search, $count_all));
 		}
 		elseif ($search)
@@ -340,14 +344,14 @@ class Webmemo extends MY_Controller
 		}
 		elseif ($category)
 		{
-			$this->breadcrumbs[] = array('uri' => '', 'name' => sprintf('カテゴリ「%s」の絞り込み結果: %d件', $category['mc_name'], $count_all));
+			$this->breadcrumbs[] = array('uri' => '', 'name' => sprintf('カテゴリ「%s」の絞り込み結果: %d件', $category['name'], $count_all));
 		}
 	}
 
 	private function _get_category_id_list($cate_list)
 	{
 		$cate_ids = array();
-		foreach ($cate_list as $row) $cate_ids[] = (int)$row['mc_id'];
+		foreach ($cate_list as $row) $cate_ids[] = (int)$row['id'];
 
 		return $cate_ids;
 	}
@@ -357,8 +361,8 @@ class Webmemo extends MY_Controller
 		$cate_name_list = array();
 		foreach ($cate_list as $row)
 		{
-			$id = $row['mc_id'];
-			$cate_name_list[$id] = $row['mc_name'];
+			$id = $row['id'];
+			$cate_name_list[$id] = $row['name'];
 		}
 
 		return $cate_name_list;
@@ -445,7 +449,7 @@ class Webmemo extends MY_Controller
 	{
 		return array(
 			'0' => array('column' => 'lastdate DESC', 'ja_name' => '更新日順'),
-			'1' => array('column' => 'mc_id', 'ja_name' => '登録順'),
+			'1' => array('column' => 'id', 'ja_name' => '登録順'),
 			'2' => array('column' => 'inportant_level', 'ja_name' => '重要度順'),
 		);
 	}

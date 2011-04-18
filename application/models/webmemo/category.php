@@ -6,16 +6,16 @@ class Category extends CI_Model {
 		parent::__construct();
 	}
 
-	private function get_query_list($sub_id = 0, $columns = array('mc_id', 'mc_name', 'mc_key', 'is_private'), $isCheckAuth = true)
+	private function get_query_list($sub_id = 0, $columns = array('id', 'name', 'key_name', 'is_private'), $isCheckAuth = true)
 	{
 		if ($columns && is_array($columns)) $columns = implode(',', $columns);
 		if (!$columns) $columns = '*';
-		$select = sprintf("SELECT %s FROM T_mn_cate", $columns);
+		$select = sprintf("SELECT %s FROM memo_category", $columns);
 
-		$where = ' WHERE mc_del_flg  = 0'
-					 . ' AND mc_sub_id = ?';
+		$where = ' WHERE del_flg  = 0'
+					 . ' AND sub_id = ?';
 		if ($isCheckAuth && !IS_AUTH) $where .= ' AND is_private = 0';
-		$order = ' ORDER BY mc_turn';
+		$order = ' ORDER BY sort';
 
 		$sql = $select.$where.$order;
 
@@ -27,7 +27,7 @@ class Category extends CI_Model {
 		$cate_list = array();
 		foreach ($this->get_query_list()->result_array() as $row)
 		{
-			$sub_row = $this->get_list_sub($row['mc_id']);
+			$sub_row = $this->get_list_sub($row['id']);
 			$row['cnt_sc_ary'] = count($sub_row);
 			$row['sc_ary'] = $sub_row;
 
@@ -45,19 +45,19 @@ class Category extends CI_Model {
 	function get_id_list($sub_id = 0, $isCheckAuth = true)
 	{
 		$id_list = array();
-		foreach ($this->get_query_list($sub_id, 'mc_id', $isCheckAuth)->result_array() as $row)
+		foreach ($this->get_query_list($sub_id, 'id', $isCheckAuth)->result_array() as $row)
 		{
-			$id_list[] = (int)$row['mc_id'];
+			$id_list[] = (int)$row['id'];
 		}
 
 		return $id_list;
 	}
 
-	function get_row4id($id, $columns = array('mc_name', 'mc_id', 'mc_sub_id'))
+	function get_row4id($id, $columns = array('name', 'id', 'sub_id'))
 	{
 		$this->db->select($columns);
-		$this->db->where(array('mc_id' => (int)$id));
-		$query = $this->db->get('T_mn_cate');
+		$this->db->where(array('id' => (int)$id));
+		$query = $this->db->get('memo_category');
 
 		if (!$query->num_rows()) return array();
 
@@ -66,31 +66,31 @@ class Category extends CI_Model {
 
 	function get_name4id($id)
 	{
-		$row = $this->category->get_row4id($id, array('mc_name'));
+		$row = $this->category->get_row4id($id, array('name'));
 		if (empty($row)) return '';
 
-		return $row['mc_name'];
+		return $row['name'];
 	}
 
 	function get_private_category_id_list()
 	{
 		$private_parent_category_id_list = array();
-		$sql = 'SELECT mc_id FROM T_mn_cate'
-				 . ' WHERE mc_del_flg  = 0'
-				 . ' AND mc_sub_id = 0'
+		$sql = 'SELECT id FROM memo_category'
+				 . ' WHERE del_flg  = 0'
+				 . ' AND sub_id = 0'
 				 . ' AND is_private = 1';
 		foreach ($this->db->query($sql)->result_array() as $row)
 		{
-			$private_parent_category_id_list[] = (int)$row['mc_id'];
+			$private_parent_category_id_list[] = (int)$row['id'];
 		}
 
 		$private_category_id_list = array();
-		$sql = 'SELECT mc_id FROM T_mn_cate'
-				 . ' WHERE mc_del_flg  = 0'
-				 . sprintf(' AND (is_private = 1 OR mc_sub_id IN (%s))', implode(',', $private_parent_category_id_list));
+		$sql = 'SELECT id FROM memo_category'
+				 . ' WHERE del_flg  = 0'
+				 . sprintf(' AND (is_private = 1 OR sub_id IN (%s))', implode(',', $private_parent_category_id_list));
 		foreach ($this->db->query($sql)->result_array() as $row)
 		{
-			$private_category_id_list[] = $row['mc_id'];
+			$private_category_id_list[] = $row['id'];
 		}
 
 		return $private_category_id_list;
@@ -102,11 +102,11 @@ class Category extends CI_Model {
 		$params = array('%'.$name.'%');
 
 		$category_id_list = array();
-		$sql = 'SELECT mc_id FROM T_mn_cate'
-				 . ' WHERE mc_name LIKE ?';
+		$sql = 'SELECT id FROM memo_category'
+				 . ' WHERE name LIKE ?';
 		foreach ($this->db->query($sql, $params)->result_array() as $row)
 		{
-			$category_id_list[] = (int)$row['mc_id'];
+			$category_id_list[] = (int)$row['id'];
 		}
 
 		return $category_id_list;
@@ -114,13 +114,13 @@ class Category extends CI_Model {
 
 	function get_id4key($key)
 	{
-		$this->db->select('mc_id');
-		$this->db->where(array('mc_key' => $key));
-		$query = $this->db->get('T_mn_cate');
+		$this->db->select('id');
+		$this->db->where(array('key_name' => $key));
+		$query = $this->db->get('memo_category');
 		if (!$query->num_rows()) return 0;
 
 		$row = $query->row_array(0);
 
-		return $row['mc_id'];
+		return $row['id'];
 	}
 }

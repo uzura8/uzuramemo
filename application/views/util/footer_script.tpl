@@ -13,7 +13,7 @@
 <script type="text/javascript">
 window.onload = function hideText(){literal}{{/literal}
 {foreach from=$cate_id_list item=value}
-{if $now_category.mc_sub_id != $value}
+{if $now_category.sub_id != $value}
 	Element.hide("menu_box{$value}");
 {/if}
 {/foreach}

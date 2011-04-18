@@ -82,8 +82,8 @@
 </form>
 {/if}
 <span>更新：{$row.lastdate|date_format:"%Y/%m/%d %H:%M"}</span>
-<span class="link_parts">カテゴリ：&nbsp;<a href="{$smarty.const.BASE_URL}category/{$row.mc_sub_id}">{$cate_name_list[$row.mc_sub_id]}</a>
-&nbsp;&gt;&nbsp;<a href="{$smarty.const.BASE_URL}category/{$row.mc_id}">{$row.mc_name}</a></span>
+<span class="link_parts">カテゴリ：&nbsp;<a href="{$smarty.const.BASE_URL}category/{$row.sub_id}">{$cate_name_list[$row.sub_id]}</a>
+&nbsp;&gt;&nbsp;<a href="{$smarty.const.BASE_URL}category/{$row.memo_category_id}">{$row.name}</a></span>
 <span class="link_parts"><a href="#">▲{$smarty.const.UM_TOPPAGE_NAME}</a></span>
 </div>
 </div>

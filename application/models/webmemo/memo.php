@@ -12,7 +12,7 @@ class Memo extends CI_Model {
 		$this->db->where(array('inportant_level >=' => 5));
 		$this->db->order_by('mn_turn');
 
-		return $this->db->get('T_manual')->result_array();
+		return $this->db->get('memo')->result_array();
 	}
 
 	function get_each_article($id, $is_private = false)
@@ -25,7 +25,7 @@ class Memo extends CI_Model {
 		return $this->db->query($sql, array((int)$id))->result_array();
 	}
 
-	function get_main_list($is_private = false, $search = '', $category_id_list = array(), $order = 'lastdate', $offset = 0, $limit = 10, $columns = 'A.*, B.mc_name, B.mc_sub_id')
+	function get_main_list($is_private = false, $search = '', $category_id_list = array(), $order = 'lastdate', $offset = 0, $limit = 10, $columns = 'A.*, B.name, B.sub_id')
 	{
 		if (!$order) $order = 'lastdate desc';
 
@@ -44,16 +44,16 @@ class Memo extends CI_Model {
 		return (int)$row['count'];
 	}
 
-	private static function get_main_query($is_private = false, $search = '', $category_id_list = array(), $is_count = false, $columns = 'A.*, B.mc_name, B.mc_sub_id')
+	private static function get_main_query($is_private = false, $search = '', $category_id_list = array(), $is_count = false, $columns = 'A.*, B.name, B.sub_id')
 	{
 		if (is_array($columns)) $columns = implode(',', $columns);
 		if (!$columns) $columns = 'A.*, B.*';
 
-		$select = sprintf("SELECT %s FROM T_manual A", $columns);
-		if ($is_count) $select = "SELECT COUNT(A.mn_id) as count FROM T_manual A";
+		$select = sprintf("SELECT %s FROM memo A", $columns);
+		if ($is_count) $select = "SELECT COUNT(A.mn_id) as count FROM memo A";
 
 		$sql = $select
-				 . " LEFT JOIN T_mn_cate B ON A.mc_id = B.mc_id"
+				 . " LEFT JOIN memo_category B ON A.memo_category_id = B.id"
 				 . " WHERE A.mn_del_flg = 0";
 		if (!$is_private)
 		{
@@ -61,7 +61,7 @@ class Memo extends CI_Model {
 			$CI->load->model('webmemo/category');
 
 			$sql .= " AND A.private_flg = 0"
-					 .  sprintf(" AND B.mc_id NOT IN (%s)", implode(',', $CI->category->get_private_category_id_list()));
+					 .  sprintf(" AND B.id NOT IN (%s)", implode(',', $CI->category->get_private_category_id_list()));
 		}
 
 		if ($add_where = self::get_like_where_clause($search))
@@ -72,7 +72,7 @@ class Memo extends CI_Model {
 
 		if ($category_id_list)
 		{
-			$sql .= sprintf(" AND B.mc_id IN (%s)", implode(',', $category_id_list));
+			$sql .= sprintf(" AND B.id IN (%s)", implode(',', $category_id_list));
 		}
 
 		return $sql;
@@ -112,7 +112,7 @@ class Memo extends CI_Model {
 			$where_clause_category_id = '';
 			if ($category_id_list = $CI->category->category_id_list4name($word))
 			{
-				$where_clause_category_id = sprintf('B.mc_id IN (%s)', implode(',', $category_id_list));
+				$where_clause_category_id = sprintf('B.id IN (%s)', implode(',', $category_id_list));
 			}
 			$where_clause = '('.implode(' OR ', $like_list);
 			if ($where_clause_category_id) $where_clause .= ' OR '.$where_clause_category_id;

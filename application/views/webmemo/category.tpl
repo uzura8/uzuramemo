@@ -9,9 +9,9 @@
 <div style="padding:0 10px 0 5px;">{$pagename}カテゴリの登録がありません。</div>
 {else}
 {foreach from=$main_list item=parent_category}
-<h3 class="main_h3"><a href="{site_url uri=list/category}/{$parent_category.mc_id}">{$parent_category.mc_name}</a></h3>
+<h3 class="main_h3"><a href="{site_url uri=list/category}/{$parent_category.id}">{$parent_category.name}</a></h3>
 {foreach from=$parent_category.sc_ary item=category}
-<h4><a href="{site_url uri=list/category}/{$category.mc_id}">{$category.mc_name}</a></h4>
+<h4><a href="{site_url uri=list/category}/{$category.id}">{$category.name}</a></h4>
 <ul>
 {foreach from=$category.each_ary item=article}
 <li><a href="{site_url uri=article}/{$article.mn_id}">{$article.mn_title}</a></li>
