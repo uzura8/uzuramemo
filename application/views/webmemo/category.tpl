@@ -14,7 +14,7 @@
 <h4><a href="{site_url uri=list/category}/{$category.id}">{$category.name}</a></h4>
 <ul>
 {foreach from=$category.each_ary item=article}
-<li><a href="{site_url uri=article}/{$article.mn_id}">{$article.mn_title}</a></li>
+<li><a href="{site_url uri=article}/{$article.id}">{$article.title}</a></li>
 {/foreach}
 </ul>
 {/foreach}

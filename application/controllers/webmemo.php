@@ -111,7 +111,7 @@ class Webmemo extends MY_Controller
 		if ($memo_list)
 		{
 			$count_all = 1;
-			$title = $memo_list[0]['mn_title'];
+			$title = $memo_list[0]['title'];
 			$cate_sub_id = $memo_list[0]['sub_id'];
 			$now_category_name = $memo_list[0]['name'];
 			$now_category_id = (int)$memo_list[0]['memo_category_id'];
@@ -247,7 +247,7 @@ class Webmemo extends MY_Controller
 			$sub_category_list = array();
 			foreach ($row['sc_ary'] as $sub_row)
 			{
-				$sub_row['each_ary'] = $this->memo->get_main_list($this->is_private, '', array($sub_row['id']), 'mn_id', 0, 0, 'A.mn_id, A.mn_title');
+				$sub_row['each_ary'] = $this->memo->get_main_list($this->is_private, '', array($sub_row['id']), 'id', 0, 0, 'A.id, A.title');
 				$sub_category_list[] = $sub_row;
 			}
 			$row['sc_ary'] = $sub_category_list;
@@ -410,9 +410,9 @@ class Webmemo extends MY_Controller
 	private function _get_order_list()
 	{
 		return array(
-			'0' => array('column' => 'lastdate DESC', 'ja_name' => '更新日順'),
+			'0' => array('column' => 'updated_at DESC', 'ja_name' => '更新日順'),
 			'1' => array('column' => 'id', 'ja_name' => '登録順'),
-			'2' => array('column' => 'inportant_level', 'ja_name' => '重要度順'),
+			'2' => array('column' => 'important_level', 'ja_name' => '重要度順'),
 		);
 	}
 

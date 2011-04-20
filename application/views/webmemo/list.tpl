@@ -10,7 +10,7 @@
 <h3 style="margin:0;">{$child_cate_name}</h3>
 <ul id="summary_list">
 {foreach from=$memo_list item=row}
-<li><a href="#id_{$row.mn_id}">{$row.mn_title|trim}</a></li>
+<li><a href="#id_{$row.id}">{$row.title|trim}</a></li>
 {/foreach}
 </ul>
 </div>
@@ -57,31 +57,31 @@
 {/if}
 <!-- main_list -->
 {foreach from=$memo_list item=row}
-<a name="id_{$row.mn_id}"></a>
+<a name="id_{$row.id}"></a>
 <div class="content">
-<h2 class="main_h2{if $row.private_flg} bg_red{/if}"><span style="font-size:small; font-weight:normal;">No.{$row.mn_id}</span>&nbsp;<a href="{$smarty.const.BASE_URL}article/{$row.mn_id}">{$row.mn_title}</a></h2>
+<h2 class="main_h2{if $row.private_flg} bg_red{/if}"><span style="font-size:small; font-weight:normal;">No.{$row.id}</span>&nbsp;<a href="{$smarty.const.BASE_URL}article/{$row.id}">{$row.title}</a></h2>
 <div class="box_01">
 <!--<h3 class="main_h3">内容</h3>-->
-<div id="article_box">{$row.mn_value|smarty:nodefaults}</div>
-{if $row.mn_exp}
+<div id="article_box">{$row.body|smarty:nodefaults}</div>
+{if $row.explain}
 <h3 class="main_h3">引用元</h3>
-<div class="quate_box">{$row.mn_exp|nl2br|auto_link}</div>
+<div class="quate_box">{$row.explain|nl2br|auto_link}</div>
 {/if}
 <div id="article_footer">
 {if $smarty.const.IS_AUTH}
 <form style="float:left; width:100px;text-align:left;" method="post" action="/admin/manual.php">
-<input type="submit" name="fix_sub[{$row.mn_id}]" value=" edit " class="btn_small" />
+<input type="submit" name="fix_sub[{$row.id}]" value=" edit " class="btn_small" />
 {if $row.private_flg == 1}
-<input type="submit" name="private_sub[{$row.mn_id}]" value=" 非公開 " class="btn_small btn_private" />
+<input type="submit" name="private_sub[{$row.id}]" value=" 非公開 " class="btn_small btn_private" />
 {elseif $row.private_flg == 2}
-<input type="submit" name="private_sub[{$row.mn_id}]" value="引用公開" class="btn_small btn_quote" />
+<input type="submit" name="private_sub[{$row.id}]" value="引用公開" class="btn_small btn_quote" />
 {else}
-<input type="submit" name="private_sub[{$row.mn_id}]" value=" 公開 " class="btn_small" />
+<input type="submit" name="private_sub[{$row.id}]" value=" 公開 " class="btn_small" />
 {/if}
 <input type="hidden" name="ref_url" value="{$smarty.server.REQUEST_URI}" />
 </form>
 {/if}
-<span>更新：{$row.lastdate|date_format:"%Y/%m/%d %H:%M"}</span>
+<span>更新：{$row.updated_at|date_format:"%Y/%m/%d %H:%M"}</span>
 <span class="link_parts">カテゴリ：&nbsp;<a href="{$smarty.const.BASE_URL}category/{$row.sub_id}">{$cate_name_list[$row.sub_id]}</a>
 &nbsp;&gt;&nbsp;<a href="{$smarty.const.BASE_URL}category/{$row.memo_category_id}">{$row.name}</a></span>
 <span class="link_parts"><a href="#">▲{$smarty.const.UM_TOPPAGE_NAME}</a></span>

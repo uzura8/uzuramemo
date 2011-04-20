@@ -8,9 +8,9 @@ class Memo extends CI_Model {
 
 	function get_important_list()
 	{
-		$this->db->select('mn_id, mn_title');
-		$this->db->where(array('inportant_level >=' => 5));
-		$this->db->order_by('mn_turn');
+		$this->db->select('id, title');
+		$this->db->where(array('important_level >=' => 5));
+		$this->db->order_by('sort');
 
 		return $this->db->get('memo')->result_array();
 	}
@@ -20,14 +20,14 @@ class Memo extends CI_Model {
 		if (!$id) return array();
 
 		$sql  = $this->get_main_query($is_private);
-		$sql .= " AND A.mn_id = ?";
+		$sql .= " AND A.id = ?";
 
 		return $this->db->query($sql, array((int)$id))->result_array();
 	}
 
-	function get_main_list($is_private = false, $search = '', $category_id_list = array(), $order = 'lastdate', $offset = 0, $limit = 10, $columns = 'A.*, B.name, B.sub_id')
+	function get_main_list($is_private = false, $search = '', $category_id_list = array(), $order = 'updated_at', $offset = 0, $limit = 10, $columns = 'A.*, B.name, B.sub_id')
 	{
-		if (!$order) $order = 'lastdate desc';
+		if (!$order) $order = 'updated_at desc';
 
 		$sql  = $this->get_main_query($is_private, $search, $category_id_list, false, $columns);
 		$sql .= sprintf(" ORDER BY A.%s", $order);
@@ -50,11 +50,11 @@ class Memo extends CI_Model {
 		if (!$columns) $columns = 'A.*, B.*';
 
 		$select = sprintf("SELECT %s FROM memo A", $columns);
-		if ($is_count) $select = "SELECT COUNT(A.mn_id) as count FROM memo A";
+		if ($is_count) $select = "SELECT COUNT(A.id) as count FROM memo A";
 
 		$sql = $select
 				 . " LEFT JOIN memo_category B ON A.memo_category_id = B.id"
-				 . " WHERE A.mn_del_flg = 0";
+				 . " WHERE A.del_flg = 0";
 		if (!$is_private)
 		{
 			$CI =& get_instance();
@@ -83,10 +83,10 @@ class Memo extends CI_Model {
 		if (!$search) return '';
 
 		$search_target_columns = array(
-			'mn_id',
-			'mn_title',
-			'mn_exp',
-			'mn_value',
+			'id',
+			'title',
+			'explain',
+			'body',
 			'keyword',
 		);
 
