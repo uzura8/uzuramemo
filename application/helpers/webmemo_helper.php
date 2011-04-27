@@ -25,5 +25,5 @@ function get_category_from_search_word($search_word, $is_task = false)
 	return array($search_word, $search_cate_id);
 }
 
-/* End of file Webmemo.php */
+/* End of file webmemo_helper.php */
 /* Location: ./application/helpers/webmemo_helper.php */
