@@ -24,12 +24,18 @@ class MY_Controller extends CI_Controller
 		if (CURRENT_MODULE != $admin_path) return;
 
 		// 以下、管理画面の処理
-		if ($this->session->get('logged_in', 'admin_user') === true) return;
+		$is_auth = false;
+		if ($this->session->get('logged_in', 'admin_user') === true) $is_auth = true;
 		if (CURRENT_ACTION)
 		{
-			if (in_array(CURRENT_ACTION, $this->config->item('admin_inseccure_actions'))) return;
+			if (in_array(CURRENT_ACTION, $this->config->item('admin_inseccure_actions')))
+			{
+				if ($is_auth) redirect($admin_path);
+				return;
+			}
 		}
+		if ($is_auth) return;
 
-		redirect(sprintf('/%s/login', $admin_path));
+		redirect($admin_path.'/login');
 	}	
 }

@@ -384,11 +384,16 @@ class Session {
 		}
 	}
 
-	public function all_userdata()
+	public function all_userdata($namespace = 'default')
 	{
-		if (empty($_SESSION['default'])) return array();
+		return $this->get_all($namespace);
+	}
 
-		return $_SESSION['default'];
+	public function get_all($namespace = 'default')
+	{
+		if (empty($_SESSION[$namespace])) return array();
+
+		return $_SESSION[$namespace];
 	}
 
 	// ------------------------------------------------------------------------

@@ -6,9 +6,9 @@
  * @author uzuranoie@gmail.com
  */
 
-function admin_url($uri = '')
+function admin_redirect($uri = '', $message = '')
 {
-	return site_url('admin/'.$uri);
+	site_redirect(admin_url($uri), $message);
 }
 
 /* End of file admin_helper.php */
