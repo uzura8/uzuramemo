@@ -17,7 +17,7 @@
 <div class="box_002">
 {$sub_title}を行います。<br />
 アカウント名には、半角英数字で重複のない値を入力してください。<br />
-下記のフォームに内容を入力後、【{$edit_button}】ボタンをクリックしてください。<br>
+下記のフォームに内容を入力後、【{$edit_button}】ボタンをクリックしてください。<br />
 </div>
 <table border="1" cellspacing="1" cellpadding="0" width="100%" class="frm_form">
 <tr>

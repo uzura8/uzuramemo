@@ -10,7 +10,7 @@
 <p class="ttl"><a href="{admin_url uri=webmemo}">{$smarty.const.UM_WEBMEMO_NAME}</a></p>
 <p>{$smarty.const.UM_WEBMEMO_NAME}の管理が行えます。</p>
 <br />
-<p class="ttl"><a href="{admin_url uri=webmemo_category}">{$smarty.const.UM_WEBMEMO_NAME}カテゴリ</a></p>
+<p class="ttl"><a href="{admin_url uri=webmemo/category}">{$smarty.const.UM_WEBMEMO_NAME}カテゴリ</a></p>
 <p>{$smarty.const.UM_WEBMEMO_NAME}カテゴリの管理が行えます。</p>
 <br />
 <p class="ttl"><a href="{admin_url uri=edit_user}">アカウント管理</a></p>

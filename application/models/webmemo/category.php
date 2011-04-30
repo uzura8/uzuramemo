@@ -27,7 +27,7 @@ class Category extends CI_Model {
 		$cate_list = array();
 		foreach ($this->get_query_list()->result_array() as $row)
 		{
-			$sub_row = $this->get_list_sub($row['id']);
+			$sub_row = $this->get_list($row['id']);
 			$row['cnt_sc_ary'] = count($sub_row);
 			$row['sc_ary'] = $sub_row;
 
@@ -37,9 +37,9 @@ class Category extends CI_Model {
 		return $cate_list;
 	}
 
-	function get_list_sub($sub_id)
+	function get_list($sub_id = 0, $columns = array('id', 'name', 'key_name', 'is_private', 'updated_at'), $isCheckAuth = true)
 	{
-		return $this->get_query_list($sub_id)->result_array();
+		return $this->get_query_list($sub_id, $columns, $isCheckAuth)->result_array();
 	}
 
 	function get_id_list($sub_id = 0, $isCheckAuth = true)

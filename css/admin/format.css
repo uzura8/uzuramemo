@@ -845,3 +845,12 @@ tr.edit td, td.edit {
 .space_left{
 	margin-left: 10px;
 }
+.space_left_5{
+	margin-left: 5px;
+}
+.space_left_10{
+	margin-left: 10px;
+}
+.space_left_20{
+	margin-left: 20px;
+}

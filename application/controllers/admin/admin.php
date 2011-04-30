@@ -6,21 +6,6 @@ class Admin extends MY_Controller
 	private $private_config = array();
 	private $admin_username = '';
 
-	private $site_keywords = array();
-	private $site_description = '';
-	private $menu_list = array();
-
-	private $breadcrumbs    = array();
-	private $is_private     = false;
-	private $limit  = 10;
-	private $search = '';
-	private $offset = 0;
-	private $order  = 0;
-	private $category_id  = 0;
-	private $search_option  = false;
-	private $next_url;
-	private $category_list_all = array();
-
 	function __construct()
 	{
 		parent::__construct();
@@ -42,6 +27,7 @@ class Admin extends MY_Controller
 		$this->private_config = $this->config->item('admin');
 		$this->admin_username = $this->session->get('username', 'admin_user');
 	}
+
 	private function _get_default_view_data()
 	{
 		return array('auth_session' => $this->session->get_all('admin_user'));
@@ -51,12 +37,6 @@ class Admin extends MY_Controller
 	{
 		$view_data = $this->_get_default_view_data();
 		$this->smarty_parser->parse('ci:admin/index.tpl', $view_data);
-	}
-
-	public function webmemo()
-	{
-		$view_data = $this->_get_default_view_data();
-		$this->smarty_parser->parse('ci:admin/webmemo.tpl', $view_data);
 	}
 
 	function edit_user()
@@ -112,6 +92,12 @@ class Admin extends MY_Controller
 		}
 
 		$this->_forword('login', $message);
+	}
+
+	function execute_logout()
+	{
+		$this->simplelogin->logout();
+		admin_redirect('login');
 	}
 
 	function execute_create_user()
@@ -196,12 +182,6 @@ class Admin extends MY_Controller
 		}
 
 		return true;
-	}
-
-	function execute_logout()
-	{
-		$this->simplelogin->logout();
-		admin_redirect('login');
 	}
 }
 

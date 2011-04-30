@@ -41,6 +41,12 @@
 $route['default_controller'] = 'webmemo';
 $route['404_override'] = '';
 
+// admin module
+$route['admin/webmemo/(:any)'] = 'admin/admin_webmemo/$1';
+$route['admin/webmemo'] = 'admin/admin_webmemo/index';
+$route['admin/(:any)'] = 'admin/admin/$1';
+$route['admin'] = 'admin/admin';
+
 $route['list/category/:num'] = 'webmemo/memolist/category/$2';
 $route['list'] = 'webmemo/memolist';
 $route['article/:num'] = 'webmemo/article';
