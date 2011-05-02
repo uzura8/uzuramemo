@@ -38,10 +38,10 @@ CREATE TABLE `memo` (
   `important_level` tinyint(1) NOT NULL DEFAULT '2',
   `keyword` text,
   PRIMARY KEY (`id`),
-  KEY `mn_del_flg_private_flg_lastdate` (`del_flg`,`private_flg`,`updated_at`),
+  KEY `del_flg_private_flg_updated_at` (`del_flg`,`private_flg`,`updated_at`),
   KEY `mc_id` (`memo_category_id`),
-  KEY `inportant_level_mn_turn` (`important_level`,`sort`)
-) ENGINE=MyISAM AUTO_INCREMENT=3533 DEFAULT CHARSET=utf8 PACK_KEYS=0;
+  KEY `important_level_sort` (`important_level`,`sort`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -63,9 +63,9 @@ CREATE TABLE `memo_category` (
   `key_name` varchar(20) DEFAULT NULL,
   `is_private` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
-  KEY `mc_sub_id_mc_del_flg_mc_turn` (`sub_id`,`del_flg`,`sort`),
-  KEY `mc_key` (`key_name`)
-) ENGINE=MyISAM AUTO_INCREMENT=456 DEFAULT CHARSET=utf8;
+  KEY `sub_id_del_flg_sort` (`sub_id`,`del_flg`,`sort`),
+  KEY `key_name` (`key_name`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
