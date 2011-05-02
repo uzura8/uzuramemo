@@ -125,4 +125,12 @@ class Memo extends CI_Model {
 
 		return $add_where;
 	}
+
+	public function update($values, $wheres, $update_datetime = true)
+	{
+		if (!$values || !$wheres) return false;
+		if ($update_datetime) $values['updated_at'] = date('Y-m-d H:i:s');
+
+		return $this->db->update('memo', $values, $wheres);
+	}
 }

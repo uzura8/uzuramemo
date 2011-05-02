@@ -8,6 +8,10 @@
 <meta http-equiv="Content-Script-Type" content="text/javascript">
 <link href="{site_url uri=css/admin/format.css}" rel="stylesheet" type="text/css" />
 <link href="{admin_url uri=favicon.ico}" rel="shortcut icon" type="image/ico" />
+{if $set_js_libraries}
+<script type="text/javascript" src="{site_url}js/common.js"></script>
+<script type="text/javascript" src="{site_url}js/prototype.js"></script>
+{/if}
 {$head}
 </head>
 <body>

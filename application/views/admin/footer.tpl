@@ -1,6 +1,6 @@
 <br class="clearfloat" />
 </div>
 </body>
-{include file='ci:util/category_menu_script.tpl'}
+{if $smarty.const.CURRENT_ACTION == 'category'}{include file='ci:util/category_menu_script.tpl'}{/if}
 {$foot}
 </html>

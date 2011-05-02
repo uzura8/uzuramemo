@@ -25,10 +25,6 @@
 {/if}
 {/foreach}
 {/if}
-
-{if $smarty.const.USE_TASK_MANAGER && $smarty.const.IS_AUTH}
-<p class="lb_01"><a href="{site_url uri=admin}task.php" target="_blank">{$smarty.const.TASK_MANAGER_SITE_NAME}</a></p>
-{/if}
 <p class="lb_01"><a href="http://torilife.net/" target="_blank">とりらいふ</a></p>
 {if $smarty.const.IS_AUTH}
 <p class="lb_01"><a href="{site_url uri=admin}manual.php" target="_blank">管理画面</a></p>
