@@ -15,6 +15,14 @@ class Memo extends CI_Model {
 		return $this->db->get('memo')->result_array();
 	}
 
+	function get_count($params)
+	{
+		$this->db->where($params);
+		$this->db->from('memo');
+
+		return (int)$this->db->count_all_results();
+	}
+
 	function get_each_article($id, $is_private = false)
 	{
 		if (!$id) return array();
@@ -25,11 +33,9 @@ class Memo extends CI_Model {
 		return $this->db->query($sql, array((int)$id))->result_array();
 	}
 
-	function get_main_list($is_private = false, $search = '', $category_id_list = array(), $order = 'updated_at', $offset = 0, $limit = 10, $columns = 'A.*, B.name, B.sub_id')
+	function get_main_list($is_private = false, $search = '', $category_id_list = array(), $order = 'updated_at desc', $offset = 0, $limit = 10, $with_logical_deleted = false, $columns = 'A.*, B.name, B.sub_id')
 	{
-		if (!$order) $order = 'updated_at desc';
-
-		$sql  = $this->get_main_query($is_private, $search, $category_id_list, false, $columns);
+		$sql  = $this->get_main_query($is_private, $search, $category_id_list, false, $with_logical_deleted, $columns);
 		$sql .= sprintf(" ORDER BY A.%s", $order);
 		if ($limit) $sql .= sprintf(" LIMIT %d, %d", $offset, $limit);
 
@@ -44,7 +50,7 @@ class Memo extends CI_Model {
 		return (int)$row['count'];
 	}
 
-	private static function get_main_query($is_private = false, $search = '', $category_id_list = array(), $is_count = false, $columns = 'A.*, B.name, B.sub_id')
+	private static function get_main_query($is_private = false, $search = '', $category_id_list = array(), $is_count = false, $with_logical_deleted = false, $columns = 'A.*, B.name, B.sub_id')
 	{
 		if (is_array($columns)) $columns = implode(',', $columns);
 		if (!$columns) $columns = 'A.*, B.*';
@@ -52,30 +58,30 @@ class Memo extends CI_Model {
 		$select = sprintf("SELECT %s FROM memo A", $columns);
 		if ($is_count) $select = "SELECT COUNT(A.id) as count FROM memo A";
 
-		$sql = $select
-				 . " LEFT JOIN memo_category B ON A.memo_category_id = B.id"
-				 . " WHERE A.del_flg = 0";
+		$sql = $select." LEFT JOIN memo_category B ON A.memo_category_id = B.id";
+
+		$where  = '';
+		$wheres = array();
+		if (!$with_logical_deleted) $wheres[] = "A.del_flg = 0";
 		if (!$is_private)
 		{
+			$wheres[] = "A.private_flg = 0";
 			$CI =& get_instance();
 			$CI->load->model('webmemo/category');
-
-			$sql .= " AND A.private_flg = 0"
-					 .  sprintf(" AND B.id NOT IN (%s)", implode(',', $CI->category->get_private_category_id_list()));
+			$wheres[] = sprintf("B.id NOT IN (%s)", implode(',', $CI->category->get_private_category_id_list()));
 		}
-
 		if ($add_where = self::get_like_where_clause($search))
 		{
-			$sql .= sprintf(' AND %s', $add_where);
+			$wheres[] = $add_where;
 			unset($add_where);
 		}
-
 		if ($category_id_list)
 		{
-			$sql .= sprintf(" AND B.id IN (%s)", implode(',', $category_id_list));
+			$wheres[] = sprintf("B.id IN (%s)", implode(',', $category_id_list));
 		}
+		if ($wheres) $where = ' WHERE '.implode(' AND ', $wheres);
 
-		return $sql;
+		return $sql.$where;
 	}
 
 	private static function get_like_where_clause($search)
@@ -126,11 +132,60 @@ class Memo extends CI_Model {
 		return $add_where;
 	}
 
+	public function get_sort_max_next()
+	{
+		$this->db->select_max('sort', 'max');
+		$query = $this->db->get('memo');
+		if (!$query->num_rows()) return 1;
+
+		$row = $query->row_array(0);
+		$sort = $row['max'] + 1;
+		if ($sort > 999999) $sort = 999999;
+
+		return $sort;
+	}
+
+	function get_del_flg4id($id)
+	{
+		$CI =& get_instance();
+		$row = $CI->db_util->get_row4id('memo', $id, array('del_flg'), 'webmemo');
+		if (empty($row)) return 0;
+
+		return (int)$row['del_flg'];
+	}
+
 	public function update($values, $wheres, $update_datetime = true)
 	{
 		if (!$values || !$wheres) return false;
 		if ($update_datetime) $values['updated_at'] = date('Y-m-d H:i:s');
 
 		return $this->db->update('memo', $values, $wheres);
+	}
+
+	public function update4id($values, $id, $update_datetime = true)
+	{
+		return $this->update($values, array('id' => $id), $update_datetime);
+	}
+
+	public function insert($values)
+	{
+		$values['sort'] = $this->get_sort_max_next();
+		$values['del_flg'] = 0;
+		$values['html_flg'] = 1;
+		$values['created_at'] = date('Y-m-d H:i:s');
+		$values['updated_at'] = date('Y-m-d H:i:s');
+
+		return $this->db->insert('memo', $values);
+	}
+
+	public function delete4id($id)
+	{
+		if (!$id) return false;
+//		if (!$row = $this->get_row4id($id)) return false;
+
+		$this->db->where('id', $id);
+		$this->db->delete('memo');
+
+		return $this->db->affected_rows();
 	}
 }

@@ -52,7 +52,7 @@ $autoload['packages'] = array(APPPATH.'third_party');
 |	$autoload['libraries'] = array('database', 'session', 'xmlrpc');
 */
 
-$autoload['libraries'] = array('database', 'session', 'smarty_parser', 'simplelogin', 'site_util');
+$autoload['libraries'] = array('database', 'session', 'smarty_parser', 'simplelogin', 'site_util', 'db_util');
 
 
 /*
@@ -64,7 +64,7 @@ $autoload['libraries'] = array('database', 'session', 'smarty_parser', 'simplelo
 |	$autoload['helper'] = array('url', 'file');
 */
 
-$autoload['helper'] = array('url', 'html', 'form', 'site');
+$autoload['helper'] = array('url', 'html', 'form', 'site', 'webmemo');
 
 
 /*

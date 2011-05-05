@@ -8,7 +8,6 @@
 {assign var="edit_button" value="新規追加"}
 {assign var="sub_title" value="カテゴリの新規追加"}
 {/if}
-
 <div id="mainbody">
 <p class="ttl_01">{$title} 編集画面</p>
 
@@ -17,10 +16,7 @@
 <a name="frm"></a>
 <div class="box_001">
 <p class="ttl_02">{$sub_title}</p>
-<div class="box_006 f_red">
-{validation_errors}
-{if flashdata}{flashdata}{/if}
-</div>
+{include file='ci:admin/util/message_box.tpl'}
 <div class="box_002">
 {$sub_title}を行います。<br />
 下記のフォームに内容を入力後、【{$edit_button}】ボタンをクリックしてください。<br />
@@ -33,7 +29,7 @@
 	<input type="text" name="name" value="{$session_category.name}" size="30" maxlength="50" />
 	<span class="f_exp_s space_left_5">※100文字以内</span>
 	<span class="f_bld space_left_20">key名</span>
-	<input type="text" name="key_name" value="{$session_category.key_name}" size="10" maxlength="20" />
+	<input type="text" name="key_name" value="{$session_category.key_name|smarty:nodefaults}" size="10" maxlength="20" />
 	<span class="f_exp_s space_left_5">※20文字以内</span>
 	</td>
 </tr>
@@ -89,17 +85,7 @@
 </div>
 {/capture}
 {$smarty.capture.util_form_parts|smarty:nodefaults}
-<div class="box_003">
-	<table border="0" cellspacing="0" cellpadding="0" style="margin-top:11px; ">
-	<tr>
-	<td>リストの色分けについて</td>
-	<td width="10">&nbsp;</td>
-	<td width="50" align="center" class="del bd">非表示</td>
-	<td width="10">&nbsp;</td>
-	<td width="50" align="center" class="edit bd">編集中</td>
-	</tr>
-	</table>
-</div>
+{include file='ci:admin/util/main_list_explain_box.tpl'}
 
 <table border="1" cellspacing="1" cellpadding="0" class="frm_list" width="100%">
 {capture name="main_table_title"}
@@ -124,10 +110,10 @@
 		<input type="checkbox" name="check_{$row.id}" value="1">
 	</td>
 	<td width="30" align="center">
-		<input type="submit" name="change_display[{$row.id}]" value="{if $row.del_flg}×{else}◯{/if}" class="btn" />
+		<input type="submit" name="change_display[{$row.id}]" value="{$row.del_flg|site_get_symbols_for_display}" class="btn" />
 	</td>
 	<td width="30" align="center">
-		<input type="submit" name="choose[{$row.id}]" value="⇔" class="btn">
+		<input type="submit" name="choose[{$row.id}]" value="{site_get_symbol key="edit"}" class="btn">
 	</td>
 	<td width="25" align="center">{$row.id}</td>
 	<td class="td_w_break f_bld" onclick="toggleBox{$row.id}()">{$row.name}{if $row.key_name}<span class="f_nm space_left_5">( {$row.key_name} ){/if}</span></td>
@@ -147,7 +133,7 @@
 		<input type="checkbox" name="check_{$row_sub.id}" value="1" />
 	</td>
 	<td width="30" align="center">
-		<input type="submit" name="change_display[{$row_sub.id}]" value="{if $row_sub.del_flg}×{else}◯{/if}" class="btn" />
+		<input type="submit" name="change_display[{$row_sub.id}]" value="{$row_sub.del_flg|site_get_symbols_for_display}" class="btn" />
 	</td>
 	<td width="30" align="center">
 		<input type="submit" name="choose[{$row_sub.id}]" value="⇔" class="btn" />

@@ -77,7 +77,7 @@ CREATE TABLE admin_user (
   UNIQUE key username (username)
 ) ENGINE=MYISAM DEFAULT CHARSET=UTF8;
 
-INSERT INTO admin_user VALUES (0, 'admin', MD5('password'));
+INSERT INTO admin_user VALUES (NULL, 'admin', MD5('password'));
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;

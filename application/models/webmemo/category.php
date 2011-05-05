@@ -161,7 +161,7 @@ class Category extends CI_Model {
 
 		$row = $query->row_array(0);
 		$sort = $row['max'] + 1;
-		if ($sort > 9999) $sort = 9999;
+		if ($sort > 999) $sort = 999;
 
 		return $sort;
 	}

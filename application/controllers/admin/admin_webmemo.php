@@ -52,13 +52,225 @@ class Admin_webmemo extends MY_Controller
 
 	public function webmemo()
 	{
+		$limit = 1;
+		if ($this->input->get_post('result')) $limit = 10;
+
+		$category_list_all = $this->category->get_list_all(0, array('id', 'name', 'sub_id'), false);
+		$this->_set_default_form_session_data('memo');
 		$view_data = $this->_get_default_view_data();
-		$view_data['session_memo'] = $this->session->get(null, 'memo');
-		$view_data['select_category_list'] = $this->category->get_list_all(0, array('id', 'name', 'sub_id'), false);
-//		$view_data['main_list'] = $this->memo->get_list_all(0, array(), false, true);
+		$view_data['session'] = $this->session->get(null, 'memo');
+		$view_data['select_category_list'] = $category_list_all;
+		$view_data['main_list'] = $this->memo->get_main_list(true, '', array(), 'updated_at desc', 0, $limit, true);
+		$view_data['cate_name_list'] = $this->site_util->convert_category_name_list($category_list_all, true);
 		$view_data['form_textarea_fckeditor'] = $this->_get_form_textarea_fckeditor($this->session->get('body', 'memo'));
 		$view_data['set_js_libraries'] = true;
 		$this->smarty_parser->parse('ci:admin/webmemo.tpl', $view_data);
+	}
+
+	public function execute_edit_memo()
+	{
+		$this->input->check_is_post();
+		$this->_setup_validation('memo');
+
+		// reset button
+		if ($this->input->post('reset'))
+		{
+			$this->_remove_validation_sessions('memo');
+			admin_redirect('webmemo/index#frm');
+		}
+	
+		// cancel
+		if ($this->input->post('cancel'))
+		{
+			$this->session->remove(null, 'memo');
+			admin_redirect('webmemo/index#lst_top');
+		}
+
+		if (!$this->input->post('preview') && !$this->input->post('edit')) show_404();
+		// 以下、preview か edit 処理
+
+
+		// 入力補助機能
+		$this->_input_support4memo();
+
+		// validate and set sessions
+		if (!$this->_set_validation_and_sessions('memo'))
+		{
+			admin_redirect('webmemo/index', validation_errors());
+		}
+
+		// preview button
+		if ($this->input->post('preview'))
+		{
+			admin_redirect('webmemo/index#frm');
+		}
+
+		// 以下、edit 処理
+		$edit_id = (int)$this->session->get('target_id', 'memo');
+		$row_old = array();
+		if ($edit_id) $row_old = $this->db_util->get_row4id('memo', $edit_id, $this->_get_save_target_colums('memo'));
+
+		// 重複登録チェック
+		if ($this->_check_duplicate_registration_memo((bool)$edit_id))
+		{
+			admin_redirect('webmemo/index#frm', '登録済みです');
+		}
+
+		$values = $this->_convert_values_to_save_memo($this->_get_edit_data_from_sessions('memo'));
+		if ($edit_id)
+		{
+			// 変更時
+			$this->memo->update4id($values, $edit_id);
+			$message = '変更しました';
+		}
+		else
+		{
+			// 新規登録時
+			$this->memo->insert($values);
+			$message = '登録しました';
+		}
+
+		$this->session->remove(null, 'memo');
+		admin_redirect('webmemo/index#frm', $message);
+	}
+
+	private function _validation_rules_memo()
+	{
+		return array(
+			'title' => array(
+				'label' => 'タイトル',
+				'rules' => 'trim|required|max_length[140]',
+			),
+			'memo_category_id' => array(
+				'label' => 'カテゴリ',
+				'rules' => 'trim|required|is_natural|callback__memo_category_id_check',
+			),
+			'important_level' => array(
+				'label' => '重要度',
+				'rules' => 'trim|required|is_natural|less_than[6]',
+				'default' => 2,
+			),
+			'private_quote_flg' => array(
+				'label' => '非公開フラグ',
+				'rules' => 'trim|required|is_natural|less_than[3]',
+				'default' => 0,
+			),
+			'body' => array(
+				'label' => '本文',
+				'rules' => 'trim',
+			),
+			'explain' => array(
+				'label' => '備考',
+				'rules' => 'trim',
+			),
+			'keyword' => array(
+				'label' => 'キーワード',
+				'rules' => 'trim',
+			),
+		);
+	}
+
+	public function execute_edit_memo_list()
+	{
+		$this->input->check_is_post();
+		$this->_setup_validation('memo');
+
+		// submit choose
+		if ($this->input->post('choose'))
+		{
+			$id = $this->_get_post_data_from_submit_key('choose', 'id');
+			$this->session->remove(null, 'memo');
+			$this->session->set('target_id', $id, 'memo');
+			$values = $this->_convert_values_to_form_memo($this->db_util->get_row4id('memo', $id, $this->_get_save_target_colums('memo'), 'webmemo'));
+			$this->_set_validation_sessions('memo', $values);
+
+			admin_redirect('webmemo/index#frm');
+		}
+
+		// submit change_display
+		if ($this->input->post('change_display'))
+		{
+			$id = $this->_get_post_data_from_submit_key('change_display', 'id');
+			$this->session->remove(null, 'memo');
+			$del_flg_after = 1;
+			if ($this->memo->get_del_flg4id($id)) $del_flg_after = 0;
+			$this->memo->update4id(array('del_flg' => $del_flg_after), $id, false);
+
+			//$message = sprintf('表示状態を変更しました (ID: %d)', $id);
+			admin_redirect('webmemo/index#lst_top');
+		}
+
+		// submit change_sort
+		if ($this->input->post('change_sort'))
+		{
+			$id = $this->site_util->set_post_data_from_submit_key('change_sort', 'id', true);
+			$this->form_validation->set_rules('id', 'id', 'required|max_length[12]|is_natural_no_zero');
+			$this->form_validation->set_rules('sort_'.$id, sprintf('並び順(id:%d)', $id), 'trim|is_natural');
+			if (!$this->form_validation->run()) show_404();
+
+			$id = set_value('id');
+			$sort = set_value('sort_'.$id);
+			if ($sort > 999999) $sort = 999999;
+
+			$this->session->remove(null, 'memo');
+			$this->memo->update4id(array('sort' => $sort), $id, false);
+
+			//$message = sprintf('表示順を変更しました (ID: %d)', $id);
+			admin_redirect('webmemo/index#lst_top');
+		}
+
+		// submit delete
+		if ($this->input->post('delete'))
+		{
+			$id = $this->_get_post_data_from_submit_key('delete', 'id');
+			$this->session->remove(null, 'memo');
+			if (!$this->memo->delete4id($id))
+			{
+				$message = sprintf('削除に失敗しました (ID: %d)', $id);
+				admin_redirect('webmemo/index#frm', $message);
+			}
+
+			$message = sprintf('削除しました (ID: %d)', $id);
+			admin_redirect('webmemo/index#frm', $message);
+		}
+
+		// submit change_private_quote_flg
+		if ($this->input->post('change_private_quote_flg'))
+		{
+			$id = $this->_get_post_data_from_submit_key('change_private_quote_flg', 'id');
+			$this->session->remove(null, 'memo');
+			list($private_flg, $quote_flg) = $this->_get_new_private_flg_and_quote_flg($id);
+			$this->memo->update4id(array('private_flg' => $private_flg, 'quote_flg' => $quote_flg), $id);
+
+			//$message = sprintf('表示状態を変更しました (ID: %d)', $id);
+			admin_redirect('webmemo/index#lst_top');
+		}
+
+		show_404();
+	}
+
+	public function _convert_values_to_save_memo($session_values)
+	{
+		$save_values = $session_values;
+		$save_values['private_flg'] = 1;
+		$save_values['quote_flg']   = 0;
+
+		$divided_private_quote_flgs = site_divide2private_quote_flg($session_values['private_quote_flg']);
+		unset($save_values['private_quote_flg']);
+
+		if (isset($divided_private_quote_flgs['private_flg'])) $save_values['private_flg'] = $divided_private_quote_flgs['private_flg'];
+		if (isset($divided_private_quote_flgs['quote_flg']))   $save_values['quote_flg']   = $divided_private_quote_flgs['quote_flg'];
+
+		return $save_values;
+	}
+
+	public function _convert_values_to_form_memo($saved_values)
+	{
+		$form_value = $saved_values;
+		$form_value['private_quote_flg'] = site_synthesize2private_quote_flg($saved_values['private_flg'], $saved_values['quote_flg']);
+		unset($form_value['private_flg'], $form_value['quote_flg']);
+
+		return $form_value;
 	}
 
 	public function category()
@@ -114,7 +326,7 @@ class Admin_webmemo extends MY_Controller
 		}
 
 		// 重複登録チェック
-		if (!$this->_check_duplicate_registration_category(set_value('name'), set_value('sub_id'), (bool)$edit_id))
+		if ($this->_check_duplicate_registration_category(set_value('name'), set_value('sub_id'), (bool)$edit_id))
 		{
 			admin_redirect('webmemo/category#frm', '登録済みです');
 		}
@@ -144,11 +356,7 @@ class Admin_webmemo extends MY_Controller
 		// submit choose
 		if ($this->input->post('choose'))
 		{
-			$this->site_util->set_post_data_from_submit_key('choose', 'id');
-			$this->form_validation->set_rules('id', 'id', 'required|max_length[12]|is_natural_no_zero');
-			if (!$this->form_validation->run()) show_404();
-
-			$id = set_value('id');
+			$id = $this->_get_post_data_from_submit_key('choose', 'id');
 			$this->session->remove(null, 'category');
 			$this->_set_validation_sessions('category', $this->category->get_row4id($id, array('name', 'sub_id', 'key_name', 'is_private', 'explain')));
 			$this->session->set('target_id', $id, 'category');
@@ -159,11 +367,7 @@ class Admin_webmemo extends MY_Controller
 		// submit change_display
 		if ($this->input->post('change_display'))
 		{
-			$this->site_util->set_post_data_from_submit_key('change_display', 'id');
-			$this->form_validation->set_rules('id', 'id', 'required|max_length[12]|is_natural_no_zero');
-			if (!$this->form_validation->run()) show_404();
-
-			$id = set_value('id');
+			$id = $this->_get_post_data_from_submit_key('change_display', 'id');
 			$this->session->remove(null, 'category');
 			$del_flg_after = 1;
 			if ($this->category->get_del_flg4id($id)) $del_flg_after = 0;
@@ -217,6 +421,7 @@ class Admin_webmemo extends MY_Controller
 			'is_private' => array(
 				'label' => '非公開フラグ',
 				'rules' => 'is_int_bool',
+				'default' => 0,
 			),
 			'explain' => array(
 				'label' => '備考',
@@ -291,13 +496,27 @@ class Admin_webmemo extends MY_Controller
 		return 0;
 	}
 
+	private function _check_duplicate_registration_memo($is_edit)
+	{
+		$params = array(
+			'title'            => $this->session->get('title', 'memo'),
+			'memo_category_id' => $this->session->get('memo_category_id', 'memo'),
+			'body'             => $this->session->get('body', 'memo'),
+		);
+		$count = $this->memo->get_count($params);
+		if (!$count) return false;
+		if ($is_edit && $count == 1) return false;
+
+		return true;
+	}
+
 	private function _check_duplicate_registration_category($name, $sub_id, $is_edit)
 	{
 		$count = $this->category->get_count4name_and_sub_id($name, $sub_id);
-		if (!$count) return true;
-		if ($is_edit && $count == 1) return true;
+		if (!$count) return false;
+		if ($is_edit && $count == 1) return false;
 
-		return false;
+		return true;
 	}
 
 	private function _get_category_id_list($cate_list)
@@ -338,12 +557,15 @@ class Admin_webmemo extends MY_Controller
 		{
 			if ($values)
 			{
-				$this->session->set($field, $values[$field], $action);
+				$value = $values[$field];
 			}
 			else
 			{
-				$this->session->set($field, set_value($field), $action);
+				$value = set_value($field);
 			}
+			if (is_null($value) && isset($row['default'])) $value = $row['default'];
+
+			$this->session->set($field, $value, $action);
 		}
 	}
 
@@ -359,6 +581,18 @@ class Admin_webmemo extends MY_Controller
 	{
 		$this->load->library('form_validation');
 		$this->validation_rules = $this->_get_validation_rules($action);
+	}
+
+	private function _set_default_form_session_data($action)
+	{
+		$validation_rules = $this->_get_validation_rules($action);
+		foreach ($validation_rules as $field => $row)
+		{
+			if (!is_null($this->session->get($field, $action))) continue;
+			if (!isset($row['default'])) continue;
+
+			$this->session->set($field, $row['default'], $action);
+		}
 	}
 
 	private function _set_validation_and_sessions($action)
@@ -384,7 +618,6 @@ class Admin_webmemo extends MY_Controller
 	private function _get_form_textarea_fckeditor($body)
 	{
 		require_once(UM_PUBLIB_DIR.'/fckeditor/fckeditor.php') ;//FckEditor読み込み
-
 		$oFCKeditor = new FCKeditor('body') ;//name属性
 		$oFCKeditor->Config['CustomConfigurationsPath'] = '/lib/fckeditor/myconfig.js';
 		$oFCKeditor->BasePath = '/lib/fckeditor/';
@@ -402,6 +635,90 @@ class Admin_webmemo extends MY_Controller
 		//$oFCKeditor->Create();
 
 		return $oFCKeditor->CreateHtml();
+	}
+
+	private function _get_save_target_colums($target_table)
+	{
+		$columns = $this->validation_rules;
+
+		if ($target_table == 'memo')
+		{
+			$columns['private_flg'] = '';
+			$columns['quote_flg']   = '';
+			unset($columns['private_quote_flg']);
+		}
+
+		return array_keys($columns);
+	}
+
+	private function _get_post_data_from_submit_key($submit_key, $post_key)
+	{
+		$this->site_util->set_post_data_from_submit_key($submit_key, $post_key);
+		$this->form_validation->set_rules('id', 'id', 'required|max_length[12]|is_natural_no_zero');
+		if (!$this->form_validation->run()) show_404();
+
+		return set_value('id');
+	}
+
+	private function _get_new_private_flg_and_quote_flg($id)
+	{
+		$row = $this->db_util->get_row4id('memo', $id, array('private_flg', 'quote_flg'), 'webmemo');
+		$private_quote_flg_now = site_synthesize2private_quote_flg($row['private_flg'], $row['quote_flg']);
+		$private_quote_flg_new = $private_quote_flg_now + 1;
+		if ($private_quote_flg_new > 2) $private_quote_flg_new = 0;
+		$values = site_divide2private_quote_flg($private_quote_flg_new);
+
+		return array($values['private_flg'], $values['quote_flg']);
+	}
+
+	// 入力補助機能
+	private function _input_support4memo()
+	{
+		// タイトルを本文から補う処理
+		if (!$this->input->post('title') && $this->input->post('body'))
+		{
+			$title = $this->_get_title_from_body($this->input->post('body'));
+			if ($title) $this->input->set_post('title', $title);
+		}
+
+		// タイトルよりカテゴリを抜きだす
+		if ($this->input->post('title') && !$this->input->post('memo_category_id'))
+		{
+			list($title, $memo_category_id) = get_category_from_search_word($this->input->post('title'));
+			if ($memo_category_id)
+			{
+				$this->input->set_post('title', $title);
+				$this->input->set_post('memo_category_id', $memo_category_id);
+			}
+		}
+
+		// 本文よりURLのみ抜き出す
+		if(!$this->input->post('explain'))
+		{
+			$explain = $this->site_util->get_url_from_body($this->input->post('body'));
+			if ($explain) $this->input->set_post('explain', $explain);
+		}
+	}
+
+	// タイトルを本文から補う処理
+	private function _get_title_from_body($body)
+	{
+		$title = '';
+		$pre_title = $body;
+		$pre_title = strip_tags($pre_title);
+		$lines = explode("\n", $pre_title);
+		foreach ($lines as $line)
+		{
+			$line = str_replace(array('&nbsp;', ' ', '　', "'"), '', $line);
+			if (strlen($line) > 1)
+			{
+				if (mb_strlen($line) > 140) $line = mb_strimwidth($line, 0, 135, "...");
+				$title = $line;
+				break;
+			}
+		}
+
+		return $title;
 	}
 }
 

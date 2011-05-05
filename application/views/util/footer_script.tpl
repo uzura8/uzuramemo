@@ -3,7 +3,7 @@
 <script language="JavaScript" type="text/javascript">
 {literal}function selectjump(obj) {{/literal}
 	var text = obj.options[obj.selectedIndex].value;
-	var url = "{$list_url|smarty:nodefaults}&order=" + text;
+	var url = "{$list_url_without_order|smarty:nodefaults}&order=" + text;
 	location.href = url;
 {literal}}{/literal}
 </script>

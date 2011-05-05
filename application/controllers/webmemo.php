@@ -89,7 +89,7 @@ class Webmemo extends MY_Controller
 																													$this->_get_order_column_name($this->order),
 																													$this->offset,
 																													$this->limit);
-		$view_data['cate_name_list'] = $this->_get_category_name_list($this->category_list_all);
+		$view_data['cate_name_list'] = $this->site_util->convert_category_name_list($this->category_list_all);
 		$view_data['search'] = $this->search;
 		$view_data['order'] = $this->order;
 		$view_data['order_list'] = $this->_get_order_list();
@@ -232,6 +232,7 @@ class Webmemo extends MY_Controller
 			'foot_info' => $this->_set_footer_info(),
 			'current_url' => current_url(),
 			'list_url' => $this->_get_list_url($this->uri->segment(2) == 'category' ? true : false),
+			'list_url_without_order' => $this->_get_list_url($this->uri->segment(2) == 'category' ? true : false, array('search', 'opt')),
 		);
 	}
 
@@ -328,18 +329,6 @@ class Webmemo extends MY_Controller
 		return $cate_ids;
 	}
 
-	private function _get_category_name_list($cate_list)
-	{
-		$cate_name_list = array();
-		foreach ($cate_list as $row)
-		{
-			$id = $row['id'];
-			$cate_name_list[$id] = $row['name'];
-		}
-
-		return $cate_name_list;
-	}
-
 	private function _get_pagination($count_all)
 	{
 		$config = array();
@@ -382,14 +371,13 @@ class Webmemo extends MY_Controller
 		$this->search = urldecode($this->search);
 	}
 
-	public function _get_list_url($is_category = false)
+	public function _get_list_url($is_category = false, $keys = array('search', 'opt', 'order'))
 	{
 		$uri = 'list';
-		$params = array(
-			'search' => $this->search,
-			'opt'    => (int)$this->search_option,
-			'order'  => $this->order,
-		);
+		$params = array();
+		if (in_array('search', $keys)) $params['search'] = $this->search;
+		if (in_array('opt', $keys))    $params['opt']    = (int)$this->search_option;
+		if (in_array('order', $keys))  $params['order']  = $this->order;
 
 		if ($is_category)
 		{

@@ -25,9 +25,8 @@
 {/if}
 {/foreach}
 {/if}
-<p class="lb_01"><a href="http://torilife.net/" target="_blank">とりらいふ</a></p>
 {if $smarty.const.IS_AUTH}
-<p class="lb_01"><a href="{site_url uri=admin}manual.php" target="_blank">管理画面</a></p>
+<p class="lb_01"><a href="{site_url uri=admin}" target="_blank">管理画面</a></p>
 <p class="lb_01" onclick="toggleBoxSP001()"><a href="{site_url uri=list}?from=0&amp;order=3">ブックマーク記事</a></p>
 <div id="menu_boxSP001">
 {foreach from=$cate_list_important_articles item=item}

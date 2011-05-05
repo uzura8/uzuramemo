@@ -1,4 +1,4 @@
-{if $session_memo.memo_category_id}
+{if $session.memo_category_id}
 <select name="memo_category_id" size="10" style="width:20em;">
 {if !$select_category_list}
 <option value="">登録がありません</option>
@@ -6,7 +6,7 @@
 <option value="">選択してください</option>
 {foreach from=$select_category_list item=row_parent}
 {foreach from=$row_parent.sc_ary item=row}
-<option value="{$row.id}"{if $row.id == $session_memo.sub_id} selected="selected"{/if}>({$row_parent.name})-{$row.name}</option>
+<option value="{$row.id}"{if $row.id == $session.memo_category_id} selected="selected"{/if}>({$row_parent.name})-{$row.name}</option>
 {/foreach}
 {/foreach}
 {/if}

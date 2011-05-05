@@ -65,7 +65,7 @@
 <div id="article_box">{$row.body|smarty:nodefaults}</div>
 {if $row.explain}
 <h3 class="main_h3">引用元</h3>
-<div class="quate_box">{$row.explain|nl2br|auto_link}</div>
+<div class="quote_box">{$row.explain|nl2br|auto_link}</div>
 {/if}
 <div id="article_footer">
 {if $smarty.const.IS_AUTH}
@@ -82,8 +82,8 @@
 </form>
 {/if}
 <span>更新：{$row.updated_at|date_format:"%Y/%m/%d %H:%M"}</span>
-<span class="link_parts">カテゴリ：&nbsp;<a href="{$smarty.const.BASE_URL}category/{$row.sub_id}">{$cate_name_list[$row.sub_id]}</a>
-&nbsp;&gt;&nbsp;<a href="{$smarty.const.BASE_URL}category/{$row.memo_category_id}">{$row.name}</a></span>
+<span class="link_parts">カテゴリ：&nbsp;<a href="{site_url uri=category}/{$row.sub_id}">{$cate_name_list[$row.sub_id]}</a>
+&nbsp;&gt;&nbsp;<a href="{site_url uri=category}/{$row.memo_category_id}">{$row.name}</a></span>
 <span class="link_parts"><a href="#">▲{$smarty.const.UM_TOPPAGE_NAME}</a></span>
 </div>
 </div>

@@ -11,4 +11,9 @@ class MY_Input extends CI_Input
 	{
 		if ($this->server('REQUEST_METHOD') != 'POST') show_404();
 	}
+
+	public function set_post($key, $value)
+	{
+		$_POST[$key] = $value;
+	}
 }
