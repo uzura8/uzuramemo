@@ -8,6 +8,7 @@ class Webmemo extends MY_Controller
 
 	private $private_config = array();
 	private $breadcrumbs    = array();
+	private $validation_rules = array();
 	private $is_private     = false;
 	private $limit  = 10;
 	private $search = '';
@@ -45,8 +46,7 @@ class Webmemo extends MY_Controller
 		$this->site_keywords    = $GLOBALS['SITE_KEYWORDS'];
 		$this->site_description = SITE_DESCRIPTION;
 
-		$this->is_private = false;
-		if (IS_AUTH) $this->is_private = true;
+		$this->is_private = IS_AUTH;
 
 		// side_menu用カテゴリリスト
 		$this->category_list_all = $this->category->get_list_all();
@@ -69,6 +69,7 @@ class Webmemo extends MY_Controller
 			$this->_decode_search_param();
 		}
 		list($now_category, $search_category_id_list) = $this->_get_category_lists($this->category_id);
+		if ($this->category_id && !$search_category_id_list) redirect('webmemo');
 
 		// 記事件数を取得
 		$count_all = $this->memo->get_count_all($this->is_private, $this->search, $search_category_id_list);
@@ -186,12 +187,9 @@ class Webmemo extends MY_Controller
 
 	public function search()
 	{
-		if ($this->input->server('REQUEST_METHOD') != 'POST')
-		{
-			redirect();
-		}
+		$this->input->check_is_post();
 
-		$article_id  = $this->_get_params('article', 0);
+		$article_id  = $this->_get_params('article', 0, 'intval|less_than[999999]');
 
 		$redirect_url = site_url('list');
 		if ($article_id)
@@ -267,6 +265,7 @@ class Webmemo extends MY_Controller
 		if (!$category_id) return array($category, $category_id_list);
 
 		$category = $this->category->get_row4id($category_id);
+		if (!$category) return array($category, $category_id_list);
 		$cate_sub_id = $category['sub_id'];
 		$category_id_list = array($category_id);
 		if ($cate_sub_id)
@@ -390,7 +389,7 @@ class Webmemo extends MY_Controller
 	private function _get_order_column_name()
 	{
 		$order_list = $this->_get_order_list();
-		if (empty($order_list[$this->order]['column'])) return '';
+		if (empty($order_list[$this->order]['column'])) return 'updated_at DESC';
 
 		return $order_list[$this->order]['column'];
 	}
@@ -411,20 +410,22 @@ class Webmemo extends MY_Controller
 
 	private function _set_params()
 	{
+		$this->load->library('form_validation');
+
 		$this->limit  = $this->private_config['article_nums'];
-		$this->search = $this->_get_params('search');
-		$this->offset = $this->_get_params('from');
-		$this->order  = $this->_get_params('order');
-		$this->search_option = $this->_get_params('opt');
-		$this->category_id = $this->_get_params('category');
+		$this->search = $this->_get_params('search', '', 'trim|max_length[300]');
+		$this->offset = $this->_get_params('from', 0, 'intval|less_than[9999999]');
+		$this->order  = $this->_get_params('order', 0, 'intval|less_than[2]');
+		$this->search_option = $this->_get_params('opt', 0, 'intval|less_than[1]');
+		$this->category_id = $this->_get_params('category', 0, 'intval|less_than[999999]');
 	}
 
-	private function _get_params($key, $default = NULL, $xss_clean = FALSE)
+	private function _get_params($key, $default = NULL, $rules, $xss_clean = FALSE)
 	{
-		if ($this->input->get_post($key, $xss_clean)) return $this->input->get_post($key);
-		if (!is_null($default)) return $default;
+		$value = $this->input->get_post($key, $xss_clean);
+		if ($value === false) return $default;
 
-		return false;
+		return $valid_value = $this->site_util->simple_validation($value, $default, $rules);
 	}
 }
 

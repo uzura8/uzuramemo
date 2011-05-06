@@ -98,12 +98,14 @@ function site_synthesize2private_quote_flg($private_flg, $quote_flg)
 	{
 		$return = 1;
 	}
+	if (!UM_USE_QUOTE_ARTICLE_VIEW && $return == 1) $return = 0;
 
 	return $return;
 }
 
 function site_divide2private_quote_flg($private_quote_flg)
 {
+	if (!UM_USE_QUOTE_ARTICLE_VIEW && $private_quote_flg == 1) $private_quote_flg = 0;
 	$return = array();
 	switch ($private_quote_flg)
 	{

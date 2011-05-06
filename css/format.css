@@ -198,6 +198,12 @@ div#article_footer a:hover {
 	margin-bottom: 10px;
 }
 
+form.momo_footer_form {
+	float: left;
+	width: 100px;
+	text-align: left;
+}
+
 /*■フットメニュ----------------------------------------------------*/
 #foot_menu {
 	display: block;

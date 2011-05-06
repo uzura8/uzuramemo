@@ -82,7 +82,12 @@ class Admin_webmemo extends MY_Controller
 		// cancel
 		if ($this->input->post('cancel'))
 		{
+			$redirect_to = '';
+			if ($this->session->get('redirect_to', 'memo')) $redirect_to = $this->session->get('redirect_to', 'memo');
+
 			$this->session->remove(null, 'memo');
+
+			if ($redirect_to) redirect($redirect_to);
 			admin_redirect('webmemo/index#lst_top');
 		}
 
@@ -130,7 +135,12 @@ class Admin_webmemo extends MY_Controller
 			$message = '登録しました';
 		}
 
+		$redirect_to = '';
+		if ($this->session->get('redirect_to', 'memo')) $redirect_to = $this->session->get('redirect_to', 'memo');
+
 		$this->session->remove(null, 'memo');
+
+		if ($redirect_to) redirect($redirect_to);
 		admin_redirect('webmemo/index#frm', $message);
 	}
 
@@ -175,12 +185,22 @@ class Admin_webmemo extends MY_Controller
 		$this->input->check_is_post();
 		$this->_setup_validation('memo');
 
+		// 管理画面外からのPOSTの場合は、戻りURLを確認しておく
+		if ($redirect_to = $this->input->post('redirect_to'))
+		{
+			if (!is_site_url($redirect_to)) show_404();
+		}
+
 		// submit choose
 		if ($this->input->post('choose'))
 		{
 			$id = $this->_get_post_data_from_submit_key('choose', 'id');
 			$this->session->remove(null, 'memo');
 			$this->session->set('target_id', $id, 'memo');
+
+			// 管理画面以外へのリダイレクトURLをsessionに保存
+			if ($redirect_to) $this->session->set('redirect_to', $redirect_to, 'memo');
+
 			$values = $this->_convert_values_to_form_memo($this->db_util->get_row4id('memo', $id, $this->_get_save_target_colums('memo'), 'webmemo'));
 			$this->_set_validation_sessions('memo', $values);
 
@@ -237,11 +257,16 @@ class Admin_webmemo extends MY_Controller
 		// submit change_private_quote_flg
 		if ($this->input->post('change_private_quote_flg'))
 		{
+			// 公開範囲変更処理
 			$id = $this->_get_post_data_from_submit_key('change_private_quote_flg', 'id');
 			$this->session->remove(null, 'memo');
 			list($private_flg, $quote_flg) = $this->_get_new_private_flg_and_quote_flg($id);
-			$this->memo->update4id(array('private_flg' => $private_flg, 'quote_flg' => $quote_flg), $id);
+			$this->memo->update4id(array('private_flg' => $private_flg, 'quote_flg' => $quote_flg), $id, false);
 
+			// 管理画面以外へリダイレクト
+			if ($redirect_to) redirect($redirect_to);
+
+			// 管理画面内のリダイレクト
 			//$message = sprintf('表示状態を変更しました (ID: %d)', $id);
 			admin_redirect('webmemo/index#lst_top');
 		}
@@ -655,7 +680,7 @@ class Admin_webmemo extends MY_Controller
 	{
 		$this->site_util->set_post_data_from_submit_key($submit_key, $post_key);
 		$this->form_validation->set_rules('id', 'id', 'required|max_length[12]|is_natural_no_zero');
-		if (!$this->form_validation->run()) show_404();
+		if (!$this->form_validation->run()) common_error(validation_errors());
 
 		return set_value('id');
 	}
@@ -665,6 +690,7 @@ class Admin_webmemo extends MY_Controller
 		$row = $this->db_util->get_row4id('memo', $id, array('private_flg', 'quote_flg'), 'webmemo');
 		$private_quote_flg_now = site_synthesize2private_quote_flg($row['private_flg'], $row['quote_flg']);
 		$private_quote_flg_new = $private_quote_flg_now + 1;
+		if (!UM_USE_QUOTE_ARTICLE_VIEW && $private_quote_flg_new == 1) $private_quote_flg_new = 2;
 		if ($private_quote_flg_new > 2) $private_quote_flg_new = 0;
 		$values = site_divide2private_quote_flg($private_quote_flg_new);
 

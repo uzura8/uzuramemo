@@ -57,29 +57,32 @@
 {/if}
 <!-- main_list -->
 {foreach from=$memo_list item=row}
+{assign var="is_quote" value=false}
+{if !$smarty.const.IS_AUTH && UM_USE_QUOTE_ARTICLE_VIEW && $row.quote_flg && $row.explain && $row.explain|is_url}
+{assign var="is_quote" value=true}
+{/if}
 <a name="id_{$row.id}"></a>
 <div class="content">
-<h2 class="main_h2{if $row.private_flg} bg_red{/if}"><span style="font-size:small; font-weight:normal;">No.{$row.id}</span>&nbsp;<a href="{$smarty.const.BASE_URL}article/{$row.id}">{$row.title}</a></h2>
+<h2 class="main_h2{if $row.private_flg} bg_red{/if}"><span style="font-size:small; font-weight:normal;">No.{$row.id}</span>{if $is_quote}【引用】{else}&nbsp;{/if}<a href="{if $is_quote}{$row.explain}{else}{site_url uri=article}/{$row.id}{/if}">{$row.title}</a></h2>
 <div class="box_01">
 <!--<h3 class="main_h3">内容</h3>-->
+{if $is_quote}
+<div id="article_box">{$row.body|strip_tags|nl2br|mb_strimwidth:0:$smarty.const.UM_QUOTE_TRIM_WIDTH:"..."|smarty:nodefaults}</div>
+<div class="f_bld">→&nbsp;<a href="{$row.explain}" target="_blank">続きを見る</a></div>
+{else}
 <div id="article_box">{$row.body|smarty:nodefaults}</div>
+{/if}
 {if $row.explain}
 <h3 class="main_h3">引用元</h3>
 <div class="quote_box">{$row.explain|nl2br|auto_link}</div>
 {/if}
 <div id="article_footer">
 {if $smarty.const.IS_AUTH}
-<form style="float:left; width:100px;text-align:left;" method="post" action="/admin/manual.php">
-<input type="submit" name="fix_sub[{$row.id}]" value=" edit " class="btn_small" />
-{if $row.private_flg == 1}
-<input type="submit" name="private_sub[{$row.id}]" value=" 非公開 " class="btn_small btn_private" />
-{elseif $row.private_flg == 2}
-<input type="submit" name="private_sub[{$row.id}]" value="引用公開" class="btn_small btn_quote" />
-{else}
-<input type="submit" name="private_sub[{$row.id}]" value=" 公開 " class="btn_small" />
-{/if}
-<input type="hidden" name="ref_url" value="{$smarty.server.REQUEST_URI}" />
-</form>
+{form_open action=admin/webmemo/execute_edit_memo_list class=memo_footer_form}
+<input type="submit" name="choose[{$row.id}]" value=" edit " class="btn_small" />
+<input type="submit" name="change_private_quote_flg[{$row.id}]" value="{$row.private_flg|site_output_private_quote_flg_views:$row.quote_flg}" class="btn_small{$row.private_flg|site_output_private_quote_flg_views:$row.quote_flg:"style":true}"{if $row.private_flg} onclick="return confirm('ID:{$row.id}の記事を公開しますか?');"{/if} />
+<input type="hidden" name="redirect_to" value="{$list_url}" />
+{form_close}
 {/if}
 <span>更新：{$row.updated_at|date_format:"%Y/%m/%d %H:%M"}</span>
 <span class="link_parts">カテゴリ：&nbsp;<a href="{site_url uri=category}/{$row.sub_id}">{$cate_name_list[$row.sub_id]}</a>

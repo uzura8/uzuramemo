@@ -52,4 +52,41 @@ class Site_util
 
 		return $cate_name_list;
 	}
+
+	public function simple_validation($value, $default = '', $rules = array())
+	{
+		if (is_null($value)) return $default;
+
+		$CI =& get_instance();
+		$CI->load->library('form_validation');
+		$form_validation = $CI->form_validation;
+
+		if (!is_array($rules)) $rules = explode('|', $rules);
+		foreach ($rules as $rule)
+		{
+			$param = FALSE;
+			if (preg_match("/(.*?)\[(.*)\]/", $rule, $match))
+			{
+				$rule	= $match[1];
+				$param	= $match[2];
+			}
+			if (!method_exists($form_validation, $rule))
+			{
+				if (function_exists($rule))
+				{
+					$result = $rule($value);
+					if ($result === false) return $default;
+					if ($result !== true)  $value = $result;
+				}
+
+				continue;
+			}
+
+			$result = $form_validation->$rule($value, $param);
+			if ($result === false) return $default;
+			if ($result !== true)  $value = $result;
+		}
+
+		return $value;
+	}
 }

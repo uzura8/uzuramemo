@@ -50,7 +50,9 @@
 	<td>
 		<ul class="simple_list">
 			<li><input type="radio" name="private_quote_flg" value="0" id="pf_0"{if !$session.private_quote_flg} checked="checked"{/if} /><label for="pf_0" class="space_left_5{0|site_output_views4private_quote_flg:"style":true}">{0|site_output_views4private_quote_flg}</label></li>
+{if $smarty.const.UM_USE_QUOTE_ARTICLE_VIEW}
 			<li><input type="radio" name="private_quote_flg" value="1" id="pf_1"{if $session.private_quote_flg == 1} checked="checked"{/if} /><label for="pf_1" class="space_left_5{1|site_output_views4private_quote_flg:"style":true}">{1|site_output_views4private_quote_flg}</label></li>
+{/if}
 			<li><input type="radio" name="private_quote_flg" value="2" id="pf_2"{if $session.private_quote_flg == 2} checked="checked"{/if} /><label class="space_left_5{2|site_output_views4private_quote_flg:"style":true}" for="pf_2">{2|site_output_views4private_quote_flg}</label></li>
 		</ul>
 	</td>

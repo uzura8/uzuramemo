@@ -27,6 +27,11 @@
 	font-size: 12px;
 }
 
+/* •¶Žš‚Ì‘¾‚³ */
+.f_bld {
+	font-weight: bold;
+}
+
 /*ƒpƒ“‚­‚¸ƒŠƒXƒg*/
 #pan {
 	font-size: 11px;
@@ -217,6 +222,9 @@
 	border-bottom-width: 0;
 	padding: 2px 8px 2px 5px;
 	margin-bottom: 10px;
+}
+.main_h4{
+	padding-left: 20px;
 }
 
 

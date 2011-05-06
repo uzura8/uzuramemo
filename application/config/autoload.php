@@ -64,7 +64,7 @@ $autoload['libraries'] = array('database', 'session', 'smarty_parser', 'simplelo
 |	$autoload['helper'] = array('url', 'file');
 */
 
-$autoload['helper'] = array('url', 'html', 'form', 'site', 'webmemo');
+$autoload['helper'] = array('url', 'html', 'form', 'common', 'site', 'webmemo');
 
 
 /*

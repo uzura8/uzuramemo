@@ -1,11 +1,11 @@
 <ul>
 <li><a href="{site_url uri=list}">{$smarty.const.UM_WEBMEMO_NAME}</a></li>
-{if $smarty.const.UM_USE_CONTACT}
+{*{if $smarty.const.UM_USE_CONTACT}
 <li><a href="{site_url uri=contact}">お問い合わせ</a></li>
-{/if}
+{/if}*}
 <li><a href="{site_url uri=sitemap}">サイトマップ</a></li>
 {if $smarty.const.DEV_MODE}
-<li><a href="{site_url uri=user_guide_ja}" target="_blank">ユーザガイド</a></li>
+<li><a href="{site_url uri=user_guide_ja}" target="_blank">開発者情報</a></li>
 {/if}
 {if $smarty.const.IS_AUTH}
 <li><a href="{admin_url}" target="_blank">管理画面</a></li>
