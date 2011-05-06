@@ -30,7 +30,7 @@ a:hover {
 	text-decoration: underline;
 }
 
-/*ƒeƒLƒXƒg*/
+/*ãƒ†ã‚­ã‚¹ãƒˆ*/
 p {
 	line-height: 1.3;
 }
@@ -83,7 +83,7 @@ p {
 	right: 20px;
 }
 
-/*¡ƒgƒbƒvƒƒjƒ…----------------------------------------------------*/
+/*â– ãƒˆãƒƒãƒ—ãƒ¡ãƒ‹ãƒ¥----------------------------------------------------*/
 #top_menu {
 	display: block;
 	background-color:#2F2F2F;
@@ -116,7 +116,7 @@ p {
 	border-right-style: none;	
 }
 
-/*¡ƒTƒCƒhƒƒjƒ…----------------------------------------------------*/
+/*â– ã‚µã‚¤ãƒ‰ãƒ¡ãƒ‹ãƒ¥----------------------------------------------------*/
 #sidebody {
 	padding: 10px 5px 0 10px;
 	background-color: #FFFFFF;
@@ -124,7 +124,7 @@ p {
 	float:left;
 }
 
-/*¡ƒƒCƒ“ƒ{ƒfƒB----------------------------------------------------*/
+/*â– ãƒ¡ã‚¤ãƒ³ãƒœãƒ‡ã‚£----------------------------------------------------*/
 #mainbody {
 	background: #FFFFFF;
 	font-size: 12px;
@@ -169,7 +169,7 @@ ul#summary_list {
 	padding: 5px 10px 5px 30px;
 }
 
-/* Še‹L– */
+/* å„è¨˜äº‹ */
 div#article_box {
 	padding: 10px 0;
 }
@@ -204,7 +204,7 @@ form.momo_footer_form {
 	text-align: left;
 }
 
-/*¡ƒtƒbƒgƒƒjƒ…----------------------------------------------------*/
+/*â– ãƒ•ãƒƒãƒˆãƒ¡ãƒ‹ãƒ¥----------------------------------------------------*/
 #foot_menu {
 	display: block;
 	background-color:#2F2F2F;
@@ -243,7 +243,7 @@ form.momo_footer_form {
 	padding-bottom: 5px;
 }
 
-/*ƒtƒ[ƒg*/
+/*ãƒ•ãƒ­ãƒ¼ãƒˆ*/
 .f_left {
 	float:left;
 }
@@ -251,7 +251,7 @@ form.momo_footer_form {
 	float:right;
 }
 
-/*ƒNƒŠƒA*/
+/*ã‚¯ãƒªã‚¢*/
 .clearfloat {
 	clear:both;
     height:0;
@@ -259,7 +259,7 @@ form.momo_footer_form {
     line-height: 0px;
 }
 
-/*ƒeƒLƒXƒg‰EŠñ‚¹*/
+/*ãƒ†ã‚­ã‚¹ãƒˆå³å¯„ã›*/
 .al_r {
 	text-align: right;
 }
