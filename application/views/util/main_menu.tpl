@@ -5,10 +5,10 @@
 {/if}*}
 <li><a href="{site_url uri=sitemap}">サイトマップ</a></li>
 {if $smarty.const.DEV_MODE}
-<li><a href="{site_url uri=user_guide_ja}" target="_blank">開発者情報</a></li>
+<li><a href="{site_url uri=user_guide_ja}" target="_blank">開発者向けマニュアル</a></li>
 {/if}
 {if $smarty.const.IS_AUTH}
 <li><a href="{admin_url}" target="_blank">管理画面</a></li>
 {/if}
-<li class="bone"><a href="{site_url}">トップページ</a></li>
+<li class="bone"><a href="{site_url}">{$smarty.const.UM_TOPPAGE_NAME}</a></li>
 </ul>
