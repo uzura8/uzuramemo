@@ -226,7 +226,7 @@ class Webmemo extends MY_Controller
 			'opt' => 0,
 			'cate_list' => $this->category_list_all,
 			'cate_id_list' => $this->_get_category_id_list($this->category_list_all),
-			'cate_list_important_articles' => $this->memo->get_important_list(),
+			'cate_list_important_articles' => $this->memo->get_important_list($this->is_private),
 			'foot_info' => $this->_set_footer_info(),
 			'current_url' => current_url(),
 			'list_url' => $this->_get_list_url($this->uri->segment(2) == 'category' ? true : false),
@@ -413,11 +413,11 @@ class Webmemo extends MY_Controller
 		$this->load->library('form_validation');
 
 		$this->limit  = $this->private_config['article_nums'];
-		$this->search = $this->_get_params('search', '', 'trim|max_length[300]');
-		$this->offset = $this->_get_params('from', 0, 'intval|less_than[9999999]');
-		$this->order  = $this->_get_params('order', 0, 'intval|less_than[2]');
-		$this->search_option = $this->_get_params('opt', 0, 'intval|less_than[1]');
-		$this->category_id = $this->_get_params('category', 0, 'intval|less_than[999999]');
+		$this->search = $this->_get_params('search', '', 'trim|max_length[301]');
+		$this->offset = $this->_get_params('from', 0, 'intval|less_than[10000000]');
+		$this->order  = $this->_get_params('order', 0, 'intval|less_than[3]');
+		$this->search_option = $this->_get_params('opt', 0, 'intval|less_than[2]');
+		$this->category_id = $this->_get_params('category', 0, 'intval|less_than[1000000]');
 	}
 
 	private function _get_params($key, $default = NULL, $rules, $xss_clean = FALSE)

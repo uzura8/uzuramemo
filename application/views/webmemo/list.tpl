@@ -36,7 +36,7 @@
 <form id="order" name="order" action="">
 <select name="order_sel" id="order_sel" onchange="selectjump(this)">
 {foreach from=$order_list key=key item=values}
-<option value="{$key}"{if $order == $key} selected{/if}>{$values.ja_name}</option>
+<option value="{$key}"{if $order == $key} selected="selected"{/if}>{$values.ja_name}</option>
 {/foreach}
 </select>
 </form>

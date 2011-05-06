@@ -6,10 +6,17 @@ class Memo extends CI_Model {
 		parent::__construct();
 	}
 
-	function get_important_list()
+	function get_important_list($is_private = false)
 	{
 		$this->db->select('id, title');
 		$this->db->where(array('important_level >=' => 5));
+		if (!$is_private)
+		{
+			$this->db->where('private_flg', 0);
+			$CI =& get_instance();
+			$CI->load->model('webmemo/category');
+			$this->db->where(sprintf("memo_category_id NOT IN (%s)", implode(',', $CI->category->get_private_category_id_list())));
+		}
 		$this->db->order_by('sort');
 
 		return $this->db->get('memo')->result_array();

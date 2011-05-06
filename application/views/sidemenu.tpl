@@ -28,7 +28,7 @@
 {if $smarty.const.IS_AUTH}
 <p class="lb_01"><a href="{site_url uri=admin}" target="_blank">管理画面</a></p>
 {if $cate_list_important_articles}
-<p class="lb_01" onclick="toggleBoxSP001()"><a href="{site_url uri=list}?from=0&amp;order=3">ブックマーク記事</a></p>
+<p class="lb_01" onclick="toggleBoxSP001()"><a href="{site_url uri=list}?from=0&amp;order=2">ブックマーク記事</a></p>
 <div id="menu_boxSP001">
 {foreach from=$cate_list_important_articles item=item}
 <p class="lb_04" style="font-weight:normal;"><a href="{site_url uri=article}/{$item.id}">{$item.title}</a></p>
