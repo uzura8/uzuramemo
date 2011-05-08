@@ -1,0 +1,38 @@
+================
+インストール方法
+================
+
+
+1. セットアップスクリプトの実施
+
+	----
+	sh setup.sh
+	----
+
+
+2. 設定ファイルの編集 (config.php)
+
+	----
+	// サイトURL
+	define('BASE_URL', 'http://example.com/');
+
+	// DBサーバ接続設定
+	$GLOBALS['DSN']['default'] = array(
+		'dbdriver' => 'mysql',
+		'username' => 'root',
+		'password' => '******',
+		'hostname' => 'localhost',
+		'database' => 'DB-name',
+	);
+
+	// 暗号化キー(ASCII文字列)
+	define('ENCRYPTION_KEY', 'abcdef');
+	----
+
+
+3. DBの作成 & セットアップSQLの実行
+
+	----
+	echo "CREATE DATABASE DB-name DEFAULT CHARACTER SET utf8" | mysql -u root -p
+	mysql -u root -p DB-name < data/sql/setup.sql
+	----
