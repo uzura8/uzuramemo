@@ -1,7 +1,5 @@
 <?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-define('IS_AUTH', false);
-
 // サイトURL
 define('BASE_URL', 'http://example.com/');
 
@@ -44,6 +42,9 @@ define('COPYRIGHT_SINCE', '2008');
 // GoogleAnalytics使用設定
 define('UM_USE_GOOGLE_ANALYTICS', false);
 
+// GoogleAnalytics使用設定
+define('UM_GOOGLE_ANALYTICS_ID', '');
+
 // GoogleAdsense使用設定
 define('UM_USE_GOOGLE_ADSENSE', false);
 
@@ -57,11 +58,11 @@ define('GOOGLE_SITE_VERIFICATION_KEY', '');
 
 // 機能設定
 
+// 引用記事表示機能使用設定
+define('UM_USE_QUOTE_ARTICLE_VIEW', true);
+
 // RSSフィード機能使用設定
 define('UM_USE_RSS_FEED', false);
-
-// お問い合わせ機能使用設定
-define('UM_USE_CONTACT', false);
 
 // 「メモ」名称設定
 define('UM_WEBMEMO_NAME', 'webメモ');
@@ -69,8 +70,8 @@ define('UM_WEBMEMO_NAME', 'webメモ');
 // 検索機能使用設定
 define('UM_USE_SEARCH_MEMO', true);
 
-// タスク管理機能使用設定
-define('USE_TASK_MANAGER', false);
+//// お問い合わせ機能使用設定
+// define('UM_USE_CONTACT', false);
 
 
 // 表示関連設定
@@ -80,6 +81,15 @@ define('UM_SIDEMENU_VIEW_MODE', 1);
 
 // トップページの名称
 define('UM_TOPPAGE_NAME', 'トップ');
+
+// 引用記事の表示文字数
+define('UM_QUOTE_TRIM_WIDTH', 500);
+
+
+// ディレクトリパス設定
+define('UM_BASE_DIR', BASEPATH.'../');
+define('UM_DATA_DIR', UM_BASE_DIR.'/data');
+define('UM_PUBLIB_DIR', UM_BASE_DIR.'/lib');
 
 
 // 動的設定項目
