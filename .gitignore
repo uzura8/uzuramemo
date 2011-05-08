@@ -1,13 +1,6 @@
 .DS_Store
 
-system/cache/*
-!system/cache/index.html
-!system/cache/.htaccess
-
 application/cache/templates_c/*
-!application/cache/index.html
-!application/cache/.htaccess
-
 img/upload/image/*
 
 config.php
