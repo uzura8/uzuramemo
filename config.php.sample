@@ -27,7 +27,7 @@ define('SITE_TITLE', 'WebMemo');
 define('SITE_DESC_MAIN', '');
 
 // SEO関連設定
-define('SITE_DESCRIPTION', '';
+define('SITE_DESCRIPTION', '');
 $GLOBALS['SITE_KEYWORDS'] = array();
 
 // copyright URL
