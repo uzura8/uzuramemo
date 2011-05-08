@@ -8,7 +8,7 @@ $config['template_dir'] = dirname(FCPATH);
 
 // The directory where compiled templates are located
 //$config['compile_dir'] = BASEPATH.'cache/';
-$config['compile_dir'] = FCPATH.APPPATH.'cache/';
+$config['compile_dir'] = FCPATH.APPPATH.'cache/templates_c/';
 
 //This tells Smarty whether or not to cache the output of the templates to the $cache_dir.
 $config['caching']        = 0;
