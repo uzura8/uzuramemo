@@ -10,7 +10,7 @@
 {if $smarty.const.GOOGLE_SITE_VERIFICATION_KEY}
 <meta name="google-site-verification" content="{$smarty.const.GOOGLE_SITE_VERIFICATION_KEY}" />
 {/if}
-<link rel="shortcut icon" href="/favicon.ico" />
+<link rel="shortcut icon" href="{site_url uri=img/favicon.ico}" />
 {if $smarty.const.UM_USE_RSS_FEED}
 <link title="RSS" href="{site_url}rss.xml" type="application/rss+xml" rel="alternate" />
 {/if}
