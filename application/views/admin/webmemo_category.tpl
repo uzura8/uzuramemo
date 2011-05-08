@@ -48,7 +48,7 @@
 <tr>
 	<th width="80">備考</td>
 	<td>
-	<textarea name="explain" id="textarea" cols="44" rows="1" wrap="off">{$session_category.explain}</textarea><span class="f_exp_s space_left_5">※500文字以内</span>
+	<textarea name="explain" id="textarea" cols="53" rows="1" wrap="off">{$session_category.explain}</textarea><span class="f_exp_s space_left_5">※500文字以内</span>
 	</td>
 </tr>
 <tr>

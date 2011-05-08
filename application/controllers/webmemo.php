@@ -225,7 +225,7 @@ class Webmemo extends MY_Controller
 			'pagination' => array(),
 			'opt' => 0,
 			'cate_list' => $this->category_list_all,
-			'cate_id_list' => $this->_get_category_id_list($this->category_list_all),
+			'cate_id_list' => $this->site_util->convert_to_category_id_list($this->category_list_all),
 			'cate_list_important_articles' => $this->memo->get_important_list($this->is_private),
 			'foot_info' => $this->_set_footer_info(),
 			'current_url' => current_url(),
@@ -320,19 +320,11 @@ class Webmemo extends MY_Controller
 		}
 	}
 
-	private function _get_category_id_list($cate_list)
-	{
-		$cate_ids = array();
-		foreach ($cate_list as $row) $cate_ids[] = (int)$row['id'];
-
-		return $cate_ids;
-	}
-
 	private function _get_pagination($count_all)
 	{
 		$config = array();
 
-		$config['base_url'] = $this->_get_list_url($this->uri->segment(2) == 'category' ? true : false);
+		$config['base_url'] = $this->_get_list_url($this->uri->segment(2) == 'category' ? true : false, array('search', 'opt', 'order'));
 		$config['offset']   = (int)$this->offset;
 		$config['query_string_segment'] = 'from';
 		$config['total_rows'] = $count_all;
@@ -370,13 +362,14 @@ class Webmemo extends MY_Controller
 		$this->search = urldecode($this->search);
 	}
 
-	public function _get_list_url($is_category = false, $keys = array('search', 'opt', 'order'))
+	public function _get_list_url($is_category = false, $keys = array('search', 'opt', 'order', 'from'))
 	{
 		$uri = 'list';
 		$params = array();
 		if (in_array('search', $keys)) $params['search'] = $this->search;
 		if (in_array('opt', $keys))    $params['opt']    = (int)$this->search_option;
 		if (in_array('order', $keys))  $params['order']  = $this->order;
+		if (in_array('from', $keys))  $params['from']  = $this->offset;
 
 		if ($is_category)
 		{

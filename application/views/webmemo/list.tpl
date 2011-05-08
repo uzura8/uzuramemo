@@ -63,11 +63,11 @@
 {/if}
 <a name="id_{$row.id}"></a>
 <div class="content">
-<h2 class="main_h2{if $row.private_flg} bg_red{/if}"><span style="font-size:small; font-weight:normal;">No.{$row.id}</span>{if $is_quote}【引用】{else}&nbsp;{/if}<a href="{if $is_quote}{$row.explain}{else}{site_url uri=article}/{$row.id}{/if}">{$row.title}</a></h2>
+<h2 class="main_h2{if $row.private_flg} bg_red{elseif $smarty.const.IS_AUTH && $row.quote_flg} bg_bl{/if}"><span style="font-size:small; font-weight:normal;">No.{$row.id}</span>{if $is_quote}<span class="quote_symbol">【引用】</span>{else}&nbsp;{/if}<a href="{if $is_quote}{$row.explain}{else}{site_url uri=article}/{$row.id}{/if}">{$row.title}</a></h2>
 <div class="box_01">
 <!--<h3 class="main_h3">内容</h3>-->
 {if $is_quote}
-<div id="article_box">{$row.body|strip_tags|nl2br|mb_strimwidth:0:$smarty.const.UM_QUOTE_TRIM_WIDTH:"..."|smarty:nodefaults}</div>
+<div id="article_box">{$row.body|strip_tags|mb_strimwidth:0:$smarty.const.UM_QUOTE_TRIM_WIDTH:"..."|nl2br|smarty:nodefaults}</div>
 <div class="f_bld">→&nbsp;<a href="{$row.explain}" target="_blank">続きを見る</a></div>
 {else}
 <div id="article_box">{$row.body|smarty:nodefaults}</div>
@@ -81,7 +81,7 @@
 {form_open action=admin/webmemo/execute_edit_memo_list class=memo_footer_form}
 <input type="submit" name="choose[{$row.id}]" value=" edit " class="btn_small" />
 <input type="submit" name="change_private_quote_flg[{$row.id}]" value="{$row.private_flg|site_output_private_quote_flg_views:$row.quote_flg}" class="btn_small{$row.private_flg|site_output_private_quote_flg_views:$row.quote_flg:"style":true}"{if $row.private_flg} onclick="return confirm('ID:{$row.id}の記事を公開しますか?');"{/if} />
-<input type="hidden" name="redirect_to" value="{$list_url}" />
+<input type="hidden" name="redirect_to" value="{$list_url}#id_{$row.id}" />
 {form_close}
 {/if}
 <span>更新：{$row.updated_at|date_format:"%Y/%m/%d %H:%M"}</span>

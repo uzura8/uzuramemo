@@ -10,12 +10,12 @@
 {form_open action=admin/execute_login}
 <table border="0" cellspacing="1" cellpadding="0" class="tbl_00">
 <tr>
-<td style="width:70px;">アカウント名</td>
+<td style="width:90px;">アカウント名</td>
 <td>
 <input type="text" name="username" value="{set_value name=username}" id="username" style="width: 12em; height: 1.2em;" />
 </td>
 </tr>
-<td style="width:70px;">パスワード</td>
+<td style="width:90px;">パスワード</td>
 <td>
 <input type="password" name="password" id="password" style="width: 12em; height: 1.2em;" />
 </td>

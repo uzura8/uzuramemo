@@ -35,7 +35,7 @@ class Site extends MY_Controller
 			'site_description' => $this->site_description,
 			'breadcrumbs' => $this->breadcrumbs,
 			'cate_list' => $this->category_list_all,
-			'cate_id_list' => $this->_get_category_id_list($this->category_list_all),
+			'cate_id_list' => $this->site_util->convert_to_category_id_list($this->category_list_all),
 			'cate_list_important_articles' => $this->memo->get_important_list(),
 			'foot_info' => $this->_set_footer_info(),
 		);
@@ -276,14 +276,6 @@ class Site extends MY_Controller
 		{
 			$this->breadcrumbs[] = array('uri' => '', 'name' => sprintf('カテゴリ「%s」の絞り込み結果: %d件', $category['name'], $count_all));
 		}
-	}
-
-	private function _get_category_id_list($cate_list)
-	{
-		$cate_ids = array();
-		foreach ($cate_list as $row) $cate_ids[] = (int)$row['id'];
-
-		return $cate_ids;
 	}
 
 	private function _get_pagination($count_all)

@@ -77,7 +77,7 @@
 <tr>
 	<th width="70">引用元</th>
 	<td colspan="3">
-	<textarea name="explain" id="textarea" cols="110" rows="3" wrap="off" style="font-size:0.8em;">{$session.explain}</textarea>
+	<textarea name="explain" id="textarea" cols="100" rows="3" wrap="off" style="font-size:0.8em;">{$session.explain}</textarea>
 	</td>
 </tr>
 <tr>

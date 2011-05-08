@@ -2,22 +2,22 @@
 {if $smarty.const.UM_USE_SEARCH_MEMO}{include file='ci:util/search_box.tpl'}{/if}
 {if $cate_list}
 {foreach from=$cate_list item=row}
-{if (!$row.is_private || ($smarty.const.IS_AUTH && $row.is_private)) && $row.sc_ary}
+{if ((!$row.is_private || $smarty.const.IS_AUTH && $row.is_private) && $row.sc_ary)}
 <p class="lb_01{if $row.id == $now_category_id} bg_red{/if}" onclick="toggleBox{$row.id}()">
 <a href="{site_url uri=category}/{$row.id}">{$row.name}</a>
-{if $smarty.const.IS_AUTH && $row.key_name}<span style="font-weight:lighter;">({$row.key_name})</span>{/if}
+{if $smarty.const.IS_AUTH && $row.key_name}<span class="f_light">({$row.key_name})</span>{/if}
 </p>
 <div id="menu_box{$row.id}">
 {foreach from=$row.sc_ary item=sub_row}
 {if $sub_row.id == $now_category_id}
 <p class="lb_04 bg_red">
 <a href="{site_url uri=category}/{$sub_row.id}">{$sub_row.name}</a>
-{if $smarty.const.IS_AUTH && $sub_row.key_name}<span style="font-weight:lighter;">({$sub_row.key_name})</span>{/if}
+{if $smarty.const.IS_AUTH && $sub_row.key_name}<span class="f_light">({$sub_row.key_name})</span>{/if}
 </p>
 {else}
 <p class="lb_04">
 <a href="{site_url uri=list/category}/{$sub_row.id}">{$sub_row.name}</a>
-{if $smarty.const.IS_AUTH && $sub_row.key_name}<span style="font-weight:lighter;">({$sub_row.key_name})</span>{/if}
+{if $smarty.const.IS_AUTH && $sub_row.key_name}<span class="f_light">({$sub_row.key_name})</span>{/if}
 </p>
 {/if}
 {/foreach}

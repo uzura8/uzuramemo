@@ -31,6 +31,9 @@
 .f_bld {
 	font-weight: bold;
 }
+.f_light {
+	font-weight: lighter;
+}
 
 /*パンくずリスト*/
 #pan {
@@ -503,6 +506,17 @@ div#pager_box td.form_td {
 	text-align: left;
 }
 
+/* 背景色 */
 .bg_red {
 	background-color: #FFE6EE;
+}
+.bg_bl {
+	background-color: #DDF7FF;
+}
+
+.quote_symbol
+{
+	color: #F06902;
+	font-size: small;
+	font-weight: normal;
 }

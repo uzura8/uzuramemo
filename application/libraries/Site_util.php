@@ -53,6 +53,20 @@ class Site_util
 		return $cate_name_list;
 	}
 
+	// memo_category IDリストへ変換する(sidemenu用)
+	public function convert_to_category_id_list($cate_list)
+	{
+		$cate_ids = array();
+		foreach ($cate_list as $row)
+		{
+			if (empty($row['sc_ary'])) continue;
+
+			$cate_ids[] = (int)$row['id'];
+		}
+
+		return $cate_ids;
+	}
+
 	public function simple_validation($value, $default = '', $rules = array())
 	{
 		if (is_null($value)) return $default;

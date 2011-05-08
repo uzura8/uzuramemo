@@ -131,7 +131,7 @@ p {
 	width: 725px;
 	float:left;
 	padding: 10px 5px 0 12px;
-	overflow: hidden;
+	overflow: visible;
 }
 #mainbody a:link {
 	font-size: 13px;
