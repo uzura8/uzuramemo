@@ -105,8 +105,16 @@ class Category extends CI_Model {
 
 		$private_category_id_list = array();
 		$sql = 'SELECT id FROM memo_category'
-				 . ' WHERE del_flg  = 0'
-				 . sprintf(' AND (is_private = 1 OR sub_id IN (%s))', implode(',', $private_parent_category_id_list));
+				 . ' WHERE del_flg  = 0';
+
+		$where_sub_id = '';
+		if ($private_parent_category_id_list)
+		{
+			$where_sub_id = sprintf(' OR sub_id IN (%s)', implode(',', $private_parent_category_id_list));
+		}
+		$sql .= sprintf(' AND (is_private = 1%s)', $where_sub_id);
+
+
 		foreach ($this->db->query($sql)->result_array() as $row)
 		{
 			$private_category_id_list[] = $row['id'];

@@ -103,14 +103,17 @@ p {
 	color: #FFFFFF;
 	display: inline;
 	border-right: solid 1px #FFF;
+	font-size: 12px;
 }
 #top_menu li a,a:visited {
 	color: #FFFFFF;
 	margin: 0 0.5em;
+	font-size: 12px;
 }
 #top_menu li a:hover {
 	color: #12CCE0;
 	margin: 0 0.5em;
+	font-size: 12px;
 }
 #top_menu li.bone {
 	border-right-style: none;	
@@ -223,14 +226,17 @@ form.momo_footer_form {
 	list-style-type: none;
 	display: inline;
 	border-right: solid 1px #FFF;
+	font-size: 12px;
 }
 #foot_menu li a,a:visited {
 	color: #FFFFFF;
 	margin: 0 0.5em;
+	font-size: 12px;
 }
 #foot_menu li a:hover {
 	color: #12CCE0;
 	margin: 0 0.5em;
+	font-size: 12px;
 }
 #foot_menu li.bone {
 	border-right-style: none;	

@@ -15,7 +15,10 @@ class Memo extends CI_Model {
 			$this->db->where('private_flg', 0);
 			$CI =& get_instance();
 			$CI->load->model('webmemo/category');
-			$this->db->where(sprintf("memo_category_id NOT IN (%s)", implode(',', $CI->category->get_private_category_id_list())));
+			if ($private_category_id_list = $CI->category->get_private_category_id_list())
+			{
+				$this->db->where(sprintf("memo_category_id NOT IN (%s)", implode(',', $private_category_id_list)));
+			}
 		}
 		$this->db->order_by('sort');
 
@@ -75,7 +78,10 @@ class Memo extends CI_Model {
 			$wheres[] = "A.private_flg = 0";
 			$CI =& get_instance();
 			$CI->load->model('webmemo/category');
-			$wheres[] = sprintf("B.id NOT IN (%s)", implode(',', $CI->category->get_private_category_id_list()));
+			if ($private_category_id_list = $CI->category->get_private_category_id_list())
+			{
+				$wheres[] = sprintf("B.id NOT IN (%s)", implode(',', $private_category_id_list));
+			}
 		}
 		if ($add_where = self::get_like_where_clause($search))
 		{

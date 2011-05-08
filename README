@@ -36,3 +36,18 @@
 	echo "CREATE DATABASE DB-name DEFAULT CHARACTER SET utf8" | mysql -u root -p
 	mysql -u root -p DB-name < data/sql/setup.sql
 	----
+
+
+4. 管理画面にログイン
+
+	URL    : http://example.com/admin
+	account: admin / password
+	※ログイン後、「パスワード変更」画面よりパスワードを変更してください
+
+
+5. メモカテゴリを登録
+
+	親カテゴリ→子カテゴリの順で登録
+
+
+6. メモを登録

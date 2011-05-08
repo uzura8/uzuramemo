@@ -196,6 +196,15 @@ form {
 	border: 1px solid #DDD;
 }
 
+#message_box {
+	border: 0 none;
+	padding: 5px;
+	margin-bottom: 5px;
+	text-align: left;
+	color: #FF0000;
+	background-color: #EEE;
+}
+
 /*サブヘッダー*/
 .head_sub {
 	border: 1px solid #DDD;

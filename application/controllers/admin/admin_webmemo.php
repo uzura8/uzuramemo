@@ -457,6 +457,8 @@ class Admin_webmemo extends MY_Controller
 
 	function _key_name_duplicate_check($str)
 	{
+		if (strlen($str) === 0) return true;
+
 		if ($this->category->get_id4key($str))
 		{
 			$this->form_validation->set_message('_key_name_duplicate_check', 'その %s は既に登録されています');
