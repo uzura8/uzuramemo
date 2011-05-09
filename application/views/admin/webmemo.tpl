@@ -169,7 +169,7 @@
 	<th style="width:60px;">キーワード</th>
 	<td class="td_w_break">{$row.keyword}</td>
 	<th style="width:50px;">公開</th>
-	<td class="td_w_break" style="width:90px;"><input type="submit" name="change_private_quote_flg[{$row.id}]" value="{$row.private_flg|site_output_private_quote_flg_views:$row.quote_flg}" class="btn f_10{$row.private_flg|site_output_private_quote_flg_views:$row.quote_flg:"style":true}" /></td>
+	<td class="td_w_break" style="width:90px;"><input type="submit" name="change_private_quote_flg[{$row.id}]" value="{$row.private_flg|site_output_private_quote_flg_views:$row.quote_flg}" class="btn f_10{$row.private_flg|site_output_private_quote_flg_views:$row.quote_flg:"style":true}"{if $row.private_flg} onclick="return confirm('ID:{$row.id}の記事を公開しますか?');"{/if} /></td>
 </tr>
 <tr>
 	<td colspan="10" style="padding:0;">

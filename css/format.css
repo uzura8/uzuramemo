@@ -196,6 +196,12 @@ div#article_footer a:hover {
 	font-size: 11px;
 }
 
+div#article_footer form {
+	float: left;
+	text-align: left;
+	width: 100px;
+}
+
 .quote_box {
 	padding-left: 10px;
 	margin-bottom: 10px;

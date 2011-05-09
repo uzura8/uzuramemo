@@ -152,6 +152,9 @@ class Webmemo extends MY_Controller
 		$view_data['cate_name_list']  = $cate_name_list;
 		$view_data['now_category'] = $now_category;
 		$view_data['now_category_id'] = $now_category_id;
+		$view_data['list_url'] = site_url('article/'.$id);
+		$view_data['list_url_without_order'] = site_url('article/'.$id);
+
 		$this->smarty_parser->parse('ci:webmemo/list.tpl', $view_data);
 	}
 
