@@ -14,7 +14,7 @@
 
 	----
 	// サイトURL
-	define('BASE_URL', 'http://example.com/');
+	define('BASE_URL', 'http://example.com/設置パス/');
 
 	// DBサーバ接続設定
 	$GLOBALS['DSN']['default'] = array(
@@ -37,17 +37,25 @@
 	mysql -u root -p DB-name < data/sql/setup.sql
 	----
 
+4. .htaccess の RewriteBase を設定
 
-4. 管理画面にログイン
+----
+vim .htaccess
+
+RewriteBase /設置パス/
+----
+
+
+5. 管理画面にログイン
 
 	URL    : http://example.com/admin
 	account: admin / password
 	※ログイン後、「パスワード変更」画面よりパスワードを変更してください
 
 
-5. メモカテゴリを登録
+6. メモカテゴリを登録
 
 	親カテゴリ→子カテゴリの順で登録
 
 
-6. メモを登録
+7. メモを登録

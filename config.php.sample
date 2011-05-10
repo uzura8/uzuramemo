@@ -58,6 +58,12 @@ define('GOOGLE_SITE_VERIFICATION_KEY', '');
 
 // 機能設定
 
+// 非公開環境での動作モード(ログインせず書き込み可能)
+define('UM_LOCAL_MODE', false);
+
+// レプリケーションされたDBを参照して動作する(管理画面へのログイン不可)
+define('UM_SLAVE_DB_MODE', false);
+
 // 引用記事表示機能使用設定
 define('UM_USE_QUOTE_ARTICLE_VIEW', true);
 
@@ -72,6 +78,10 @@ define('UM_USE_SEARCH_MEMO', true);
 
 //// お問い合わせ機能使用設定
 // define('UM_USE_CONTACT', false);
+
+// 自動ログイン許可IP
+$GLOBALS['AUTO_LOGIN_ACCEPT_IP_LIST'] = array(
+);
 
 
 // 表示関連設定
@@ -90,6 +100,7 @@ define('UM_QUOTE_TRIM_WIDTH', 500);
 define('UM_BASE_DIR', BASEPATH.'../');
 define('UM_DATA_DIR', UM_BASE_DIR.'/data');
 define('UM_PUBLIB_DIR', UM_BASE_DIR.'/lib');
+define('UM_PUBDATA_DIR', UM_BASE_DIR.'/public_data');
 
 
 // 動的設定項目

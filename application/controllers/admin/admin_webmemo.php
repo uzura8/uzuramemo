@@ -703,11 +703,7 @@ class Admin_webmemo extends MY_Controller
 	private function _input_support4memo()
 	{
 		// タイトルを本文から補う処理
-		if (!$this->input->post('title') && $this->input->post('body'))
-		{
-			$title = $this->_get_title_from_body($this->input->post('body'));
-			if ($title) $this->input->set_post('title', $title);
-		}
+		$this->_input_support2supply_title();
 
 		// タイトルよりカテゴリを抜きだす
 		if ($this->input->post('title') && !$this->input->post('memo_category_id'))
@@ -720,12 +716,24 @@ class Admin_webmemo extends MY_Controller
 			}
 		}
 
+		// タイトルを本文から補う処理(再確認)
+		$this->_input_support2supply_title();
+
 		// 本文よりURLのみ抜き出す
 		if(!$this->input->post('explain'))
 		{
 			$explain = $this->site_util->get_url_from_body($this->input->post('body'));
 			if ($explain) $this->input->set_post('explain', $explain);
 		}
+	}
+
+	// 入力補助機能(タイトルを本文から補う処理)
+	private function _input_support2supply_title()
+	{
+		if ($this->input->post('title') || !$this->input->post('body')) return;
+
+		$title = $this->_get_title_from_body($this->input->post('body'));
+		if ($title) $this->input->set_post('title', $title);
 	}
 
 	// タイトルを本文から補う処理
