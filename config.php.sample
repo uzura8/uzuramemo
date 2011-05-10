@@ -102,6 +102,9 @@ define('UM_DATA_DIR', UM_BASE_DIR.'/data');
 define('UM_PUBLIB_DIR', UM_BASE_DIR.'/lib');
 define('UM_PUBDATA_DIR', UM_BASE_DIR.'/public_data');
 
+// バージョン情報
+require_once(UM_DATA_DIR.'/version.php');
+
 
 // 動的設定項目
 
