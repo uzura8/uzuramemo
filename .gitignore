@@ -1,6 +1,9 @@
 .DS_Store
 
 application/cache/templates_c/*
-img/upload/image/*
+
+public_data/upload/*
+public_data/*
+!public_data/upload
 
 config.php

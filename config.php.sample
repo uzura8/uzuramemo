@@ -90,6 +90,7 @@ define('UM_QUOTE_TRIM_WIDTH', 500);
 define('UM_BASE_DIR', BASEPATH.'../');
 define('UM_DATA_DIR', UM_BASE_DIR.'/data');
 define('UM_PUBLIB_DIR', UM_BASE_DIR.'/lib');
+define('UM_PUBDATA_DIR', UM_BASE_DIR.'/public_data');
 
 
 // 動的設定項目
