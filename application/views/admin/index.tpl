@@ -13,6 +13,7 @@
 <p class="ttl"><a href="{admin_url uri=webmemo/category}">{$smarty.const.UM_WEBMEMO_NAME}カテゴリ</a></p>
 <p>{$smarty.const.UM_WEBMEMO_NAME}カテゴリの管理が行えます。</p>
 <br />
+{if !$smarty.const.UM_LOCAL_MODE}
 <p class="ttl"><a href="{admin_url uri=edit_user}">アカウント管理</a></p>
 <p>メンバーの管理が行えます。</p>
 <br />
@@ -22,6 +23,7 @@
 <p class="ttl"><a href="{admin_url uri=execute_logout}">ログアウト</a></p>
 <p>管理ページからログアウトします。再度、作業を行う際はログインする必要があります。</p>
 <br />
+{/if}
 <p class="ttl"><a href="{site_url}" target="_blank">サイト{$smarty.const.UM_TOPPAGE_NAME}</a></p>
 <p>この管理ページで管理しているWEBサイトのトップページにジャンプします。</p>
 </div>
