@@ -41,7 +41,7 @@ class MY_Controller extends CI_Controller
 		if (CURRENT_MODULE != $admin_path) return;
 
 		// 以下、管理画面の処理
-		if (UM_SLAVE_DB_MODE) common_error('admin module is disabled.');
+		if (UM_SLAVE_DB_MODE) show_error('admin module is disabled.');
 
 		if (CURRENT_ACTION)
 		{

@@ -10,7 +10,7 @@ function common_error($message = '')
 {
 	if (DEV_MODE) show_error($message);
 
-	show_404;
+	show_404();
 }
 
 /* End of file common_helper.php */
