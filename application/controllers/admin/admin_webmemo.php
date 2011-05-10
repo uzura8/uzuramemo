@@ -646,8 +646,8 @@ class Admin_webmemo extends MY_Controller
 	{
 		require_once(UM_PUBLIB_DIR.'/fckeditor/fckeditor.php') ;//FckEditor読み込み
 		$oFCKeditor = new FCKeditor('body') ;//name属性
-		$oFCKeditor->Config['CustomConfigurationsPath'] = '/lib/fckeditor/myconfig.js';
-		$oFCKeditor->BasePath = '/lib/fckeditor/';
+		$oFCKeditor->Config['CustomConfigurationsPath'] = BASE_URL_PATH.'lib/fckeditor/myconfig.js';
+		$oFCKeditor->BasePath = BASE_URL_PATH.'lib/fckeditor/';
 		//$oFCKeditor->Width = '520';//幅
 		$oFCKeditor->Height = '100%';//高さ
 
