@@ -17,10 +17,12 @@
 <div class="box_001">
 <p class="ttl_02">{$sub_title}</p>
 {include file='ci:admin/util/message_box.tpl'}
+{if !$smarty.const.UM_LOCAL_MODE}
 <div class="box_002">
 {$sub_title}を行います。<br />
 下記のフォームに内容を入力後、【{$edit_button}】ボタンをクリックしてください。<br />
 </div>
+{/if}
 
 <table border="1" cellspacing="1" cellpadding="0" width="100%" class="frm_form">
 <tr>

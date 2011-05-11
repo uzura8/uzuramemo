@@ -16,22 +16,23 @@
 
 <div class="box_001">
 <p class="ttl_02 td_w_break">{$sub_title}</p>
+{if !$smarty.const.UM_LOCAL_MODE}
 <div class="box_002">
 {$sub_title}を行います。<br />
-下記のフォームに内容を入力後、【{$edit_button}】ボタンをクリックしてください。<br />
-<span class="f_ora f_10 f_bld">※</span>&nbsp;は必須入力項目です。
+下記のフォームに内容を入力後、【{$edit_button}】ボタンをクリックしてください。
 </div>
+{/if}
 {include file='ci:admin/util/message_box.tpl'}
 
 <a name="frm_top"></a>
 <table border="1" cellspacing="1" cellpadding="0" width="688" class="frm_form">
 <tr>
-	<th width="70" style="font-size:11px;">タイトル<span class="f_ora f_10">※</span></th>
+	<th width="70" style="font-size:11px;">タイトル</th>
 	<td colspan="3"><input type="text" id="title" name="title" value="{$session.title}" size="72" maxlength="100" />
 	<span class="f_exp_s box_no_spc">※140文字以内</span></td>
 </tr>
 <tr>
-	<th width="70" rowspan="2" style="font-size:11px;">カテゴリ<span class="f_ora f_10">※</span></th>
+	<th width="70" rowspan="2" style="font-size:11px;">カテゴリ</th>
 	<td rowspan="2">
 {include file='ci:admin/util/form_select_category.tpl'}
 		<span class="f_exp_s box_no_spc">&gt;&gt;&nbsp;<a href="{admin_url uri=webmemo/category}" target="_blank">カテゴリ管理</a></span>
