@@ -72,7 +72,7 @@
 <div class="f_bld">→&nbsp;<a href="{$row.explain}" target="_blank">続きを見る</a></div>
 {/if}
 {else}
-<div id="article_box">{$row.body|smarty:nodefaults}</div>
+<div id="article_box">{if $row.format == 2}{$row.body|textile|smarty:nodefaults}{else}{$row.body|smarty:nodefaults}{/if}</div>
 {/if}
 {if $row.explain}
 <h3 class="main_h3">引用元</h3>

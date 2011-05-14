@@ -1,5 +1,8 @@
 <?php
-class Memo extends CI_Model {
+class Memo extends CI_Model
+{
+	const FORMAT_HTML    = 1;
+	const FORMAT_TEXTILE = 2;
 
 	function __construct()
 	{
@@ -184,7 +187,6 @@ class Memo extends CI_Model {
 	{
 		$values['sort'] = $this->get_sort_max_next();
 		$values['del_flg'] = 0;
-		$values['html_flg'] = 1;
 		$values['created_at'] = date('Y-m-d H:i:s');
 		$values['updated_at'] = date('Y-m-d H:i:s');
 

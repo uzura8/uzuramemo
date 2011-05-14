@@ -30,6 +30,9 @@ class Webmemo extends MY_Controller
 		$this->load->model('webmemo/category');
 		$this->load->model('webmemo/memo');
 
+		// load libraries
+		$this->load->library('textile');
+
 		// load helpers
 		$this->load->helper('webmemo');
 
