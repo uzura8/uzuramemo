@@ -153,7 +153,7 @@ class Admin_webmemo extends MY_Controller
 			),
 			'memo_category_id' => array(
 				'label' => 'カテゴリ',
-				'rules' => 'trim|required|is_natural|callback__memo_category_id_check',
+				'rules' => 'trim|required|is_natural',
 			),
 			'important_level' => array(
 				'label' => '重要度',
@@ -455,7 +455,7 @@ class Admin_webmemo extends MY_Controller
 		);
 	}
 
-	function _key_name_duplicate_check($str)
+	private function _key_name_duplicate_check($str)
 	{
 		if (strlen($str) === 0) return true;
 
@@ -468,7 +468,7 @@ class Admin_webmemo extends MY_Controller
 		return true;
 	}
 
-	function _sub_id_check($int)
+	private function _sub_id_check($int)
 	{
 		if (!$int) return true;
 		if (!$row = $this->category->get_row4id($int)) return true;
