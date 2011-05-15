@@ -58,7 +58,7 @@
 <!-- main_list -->
 {foreach from=$memo_list item=row}
 {assign var="is_quote" value=false}
-{if !$smarty.const.IS_AUTH && UM_USE_QUOTE_ARTICLE_VIEW && $row.quote_flg && $row.explain && $row.explain|is_url}
+{if !$smarty.const.IS_AUTH && $smarty.const.UM_USE_QUOTE_ARTICLE_VIEW && $row.quote_flg && $row.explain && $row.explain|is_url}
 {assign var="is_quote" value=true}
 {/if}
 <a name="id_{$row.id}"></a>
