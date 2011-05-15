@@ -15,6 +15,9 @@ $GLOBALS['DSN']['default'] = array(
 // 暗号化キー(ASCII文字列)
 define('ENCRYPTION_KEY', '');
 
+// 管理者メールアドレス
+define('ADMIN_MAIL_ADDRESS', 'admin@example.com');
+
 
 // headr, footer 関連設定
 

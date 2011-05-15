@@ -221,6 +221,18 @@ class Webmemo extends MY_Controller
 		redirect($redirect_url);
 	}
 
+	public function feed()
+	{
+		$page_title = 'メモ一覧';
+		$this->_set_site_keywords_and_description($page_title, '', array(), true);
+
+		// template
+		$view_data = array();
+		$view_data['site_description'] = $this->site_description;
+		$view_data['memo_list'] = $this->memo->get_main_list(false, '', array(), 'updated_at desc', 0, 20);
+		$this->smarty_parser->parse('ci:webmemo/feed.tpl', $view_data);
+	}
+
 	private function _get_default_view_data()
 	{
 		return array(
@@ -286,13 +298,15 @@ class Webmemo extends MY_Controller
 		return array($category, $category_id_list);
 	}
 
-	private function _set_site_keywords_and_description($page_title, $search, $category)
+	private function _set_site_keywords_and_description($page_title, $search = '', $category = array(), $is_rss = false)
 	{
 		$this->site_keywords[]   = $page_title;
 		if (!empty($category['sub_category_name'])) $this->site_keywords[] = $category['sub_category_name'];
 		if (!empty($category['name']))     $this->site_keywords[] = $category['name'];
 
 		$site_description = sprintf('このページは「%s」のページです。', $page_title);
+		if ($is_rss) $site_description = sprintf('このRSSファイルは「%s」のフィードです。', $page_title);
+
 		if ($category && $search)
 		{
 			$site_description = sprintf('このページは、カテゴリ「%s」の「%s」検索結果の%sです。', $category['name'], $search, $page_title);
