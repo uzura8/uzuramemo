@@ -30,7 +30,7 @@ CREATE TABLE `memo` (
   `body` text NOT NULL,
   `sort` int(6) NOT NULL DEFAULT '999',
   `del_flg` tinyint(1) NOT NULL DEFAULT '0',
-  `html_flg` tinyint(1) NOT NULL DEFAULT '0',
+  `format` tinyint(1) NOT NULL DEFAULT '0',
   `created_at` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `updated_at` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `private_flg` tinyint(1) NOT NULL DEFAULT '0',

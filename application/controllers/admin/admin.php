@@ -35,6 +35,8 @@ class Admin extends MY_Controller
 
 	public function index()
 	{
+		if (UM_LOCAL_MODE) admin_redirect('webmemo');
+
 		$view_data = $this->_get_default_view_data();
 		$this->smarty_parser->parse('ci:admin/index.tpl', $view_data);
 	}

@@ -58,7 +58,7 @@
 <!-- main_list -->
 {foreach from=$memo_list item=row}
 {assign var="is_quote" value=false}
-{if !$smarty.const.IS_AUTH && UM_USE_QUOTE_ARTICLE_VIEW && $row.quote_flg && $row.explain && $row.explain|is_url}
+{if !$smarty.const.IS_AUTH && $smarty.const.UM_USE_QUOTE_ARTICLE_VIEW && $row.quote_flg && $row.explain && $row.explain|is_url}
 {assign var="is_quote" value=true}
 {/if}
 <a name="id_{$row.id}"></a>
@@ -72,7 +72,7 @@
 <div class="f_bld">→&nbsp;<a href="{$row.explain}" target="_blank">続きを見る</a></div>
 {/if}
 {else}
-<div id="article_box">{$row.body|smarty:nodefaults}</div>
+<div id="article_box">{if $row.format == 2}{$row.body|textile|smarty:nodefaults}{else}{$row.body|smarty:nodefaults}{/if}</div>
 {/if}
 {if $row.explain}
 <h3 class="main_h3">引用元</h3>

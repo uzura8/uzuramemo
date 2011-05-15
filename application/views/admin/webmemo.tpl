@@ -16,27 +16,28 @@
 
 <div class="box_001">
 <p class="ttl_02 td_w_break">{$sub_title}</p>
+{if !$smarty.const.UM_LOCAL_MODE}
 <div class="box_002">
 {$sub_title}を行います。<br />
-下記のフォームに内容を入力後、【{$edit_button}】ボタンをクリックしてください。<br />
-<span class="f_ora f_10 f_bld">※</span>&nbsp;は必須入力項目です。
+下記のフォームに内容を入力後、【{$edit_button}】ボタンをクリックしてください。
 </div>
+{/if}
 {include file='ci:admin/util/message_box.tpl'}
 
 <a name="frm_top"></a>
 <table border="1" cellspacing="1" cellpadding="0" width="688" class="frm_form">
 <tr>
-	<th width="70" style="font-size:11px;">タイトル<span class="f_ora f_10">※</span></th>
+	<th width="70" class="f_11">{$form.title.label}</th>
 	<td colspan="3"><input type="text" id="title" name="title" value="{$session.title}" size="72" maxlength="100" />
 	<span class="f_exp_s box_no_spc">※140文字以内</span></td>
 </tr>
 <tr>
-	<th width="70" rowspan="2" style="font-size:11px;">カテゴリ<span class="f_ora f_10">※</span></th>
-	<td rowspan="2">
+	<th width="70" rowspan="3" class="f_11">{$form.memo_category_id.label}</th>
+	<td rowspan="3">
 {include file='ci:admin/util/form_select_category.tpl'}
 		<span class="f_exp_s box_no_spc">&gt;&gt;&nbsp;<a href="{admin_url uri=webmemo/category}" target="_blank">カテゴリ管理</a></span>
 	</td>
-	<th width="60" style="font-size:11px;">重要度</th>
+	<th width="60" class="f_11">{$form.important_level.label}</th>
 	<td style="width:100px;">
 	<select name="important_level">
 {section name=i start=1 loop=6}
@@ -46,7 +47,7 @@
 	</td>
 </tr>
 <tr>
-	<th width="60" style="font-size:11px;">公開範囲</th>
+	<th width="60" class="f_11">{$form.private_quote_flg.label}</th>
 	<td>
 		<ul class="simple_list">
 			<li><input type="radio" name="private_quote_flg" value="0" id="pf_0"{if !$session.private_quote_flg} checked="checked"{/if} /><label for="pf_0" class="space_left_5{0|site_output_views4private_quote_flg:"style":true}">{0|site_output_views4private_quote_flg}</label></li>
@@ -54,6 +55,15 @@
 			<li><input type="radio" name="private_quote_flg" value="1" id="pf_1"{if $session.private_quote_flg == 1} checked="checked"{/if} /><label for="pf_1" class="space_left_5{1|site_output_views4private_quote_flg:"style":true}">{1|site_output_views4private_quote_flg}</label></li>
 {/if}
 			<li><input type="radio" name="private_quote_flg" value="2" id="pf_2"{if $session.private_quote_flg == 2} checked="checked"{/if} /><label class="space_left_5{2|site_output_views4private_quote_flg:"style":true}" for="pf_2">{2|site_output_views4private_quote_flg}</label></li>
+		</ul>
+	</td>
+</td>
+</tr>
+<tr>
+	<th width="60" class="f_10">{$form.format.label}</th>
+	<td>
+		<ul class="simple_list">
+			<li><input type="checkbox" name="format" value="2" id="format_2"{if $session.format == 2} checked="checked"{/if} /><label for="format_2" class="space_left_5">textile</label></li>
 		</ul>
 	</td>
 </td>
@@ -70,18 +80,22 @@
 {$smarty.capture.form_button_row|smarty:nodefaults}
 <tr>
 	<td colspan="4" align="center" height="340">
+{if $session.format == 2}
+	<textarea name="body" id="textarea" cols="108" rows="25" wrap="off" style="font-size:0.9em;">{$session.body}</textarea>
+{else}
 	{$form_textarea_fckeditor|smarty:nodefaults}
+{/if}
 	</td>
 </tr>
 {$smarty.capture.form_button_row|smarty:nodefaults}
 <tr>
-	<th width="70">引用元</th>
+	<th width="70">{$form.explain.label}</th>
 	<td colspan="3">
-	<textarea name="explain" id="textarea" cols="100" rows="3" wrap="off" style="font-size:0.8em;">{$session.explain}</textarea>
+	<textarea name="explain" id="textarea" cols="95" rows="3" wrap="off" style="font-size:0.8em;">{$session.explain}</textarea>
 	</td>
 </tr>
 <tr>
-	<th width="70" style="font-size:11px;">キーワード</th>
+	<th width="70" class="f_11">{$form.keyword.label}</th>
 	<td colspan="3"><input type="text" name="keyword" value="{$session.keyword}" size="72" maxlength="100" id="keyword" />
 	<span class="f_exp_s box_no_spc">※500文字以内</span></td>
 </tr>
@@ -157,7 +171,7 @@
 </tr>
 <tr>
 	<th>内容</th>
-	<td class="td_w_break" colspan="5" style="padding:5px;">{$row.body|smarty:nodefaults}</td>
+	<td class="td_w_break" colspan="5" style="padding:5px;">{if $row.format == 2}{$row.body|textile|smarty:nodefaults}{else}{$row.body|smarty:nodefaults}{/if}</td>
 </tr>
 <tr>
 <th>引用元</th>

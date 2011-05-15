@@ -15,6 +15,9 @@ $GLOBALS['DSN']['default'] = array(
 // 暗号化キー(ASCII文字列)
 define('ENCRYPTION_KEY', '');
 
+// 管理者メールアドレス
+define('ADMIN_MAIL_ADDRESS', 'admin@example.com');
+
 
 // headr, footer 関連設定
 
@@ -102,6 +105,9 @@ define('UM_DATA_DIR', UM_BASE_DIR.'/data');
 define('UM_PUBLIB_DIR', UM_BASE_DIR.'/lib');
 define('UM_PUBDATA_DIR', UM_BASE_DIR.'/public_data');
 
+// バージョン情報
+require_once(UM_DATA_DIR.'/version.php');
+
 
 // 動的設定項目
 
@@ -122,3 +128,5 @@ switch (ENVIRONMENT)
 define('DEV_MODE', $value);
 ini_set('display_errors', $display_errors);
 ini_set('display_startup_errors', $display_errors);
+
+define('BASE_URL_PATH', parse_url(BASE_URL, PHP_URL_PATH));

@@ -27,6 +27,9 @@ class Admin_webmemo extends MY_Controller
 		$this->load->model('webmemo/memo');
 		$this->load->model('admin/admin_user');
 
+		// load libraries
+		$this->load->library('textile');
+
 		// load helpers
 		$this->load->helper('admin');
 
@@ -59,6 +62,7 @@ class Admin_webmemo extends MY_Controller
 		$this->_set_default_form_session_data('memo');
 		$view_data = $this->_get_default_view_data();
 		$view_data['session'] = $this->session->get(null, 'memo');
+		$view_data['form'] = $this->_validation_rules_memo();
 		$view_data['select_category_list'] = $category_list_all;
 		$view_data['main_list'] = $this->memo->get_main_list(true, '', array(), 'updated_at desc', 0, $limit, true);
 		$view_data['cate_name_list'] = $this->site_util->convert_category_name_list($category_list_all, true);
@@ -153,7 +157,7 @@ class Admin_webmemo extends MY_Controller
 			),
 			'memo_category_id' => array(
 				'label' => 'カテゴリ',
-				'rules' => 'trim|required|is_natural|callback__memo_category_id_check',
+				'rules' => 'trim|required|is_natural',
 			),
 			'important_level' => array(
 				'label' => '重要度',
@@ -161,16 +165,21 @@ class Admin_webmemo extends MY_Controller
 				'default' => 2,
 			),
 			'private_quote_flg' => array(
-				'label' => '非公開フラグ',
+				'label' => '公開範囲',
 				'rules' => 'trim|required|is_natural|less_than[3]',
 				'default' => 0,
+			),
+			'format' => array(
+				'label' => 'フォーマット',
+				'rules' => 'trim|less_than[3]',
+				'default' => 1,
 			),
 			'body' => array(
 				'label' => '本文',
 				'rules' => 'trim',
 			),
 			'explain' => array(
-				'label' => '備考',
+				'label' => '引用元',
 				'rules' => 'trim',
 			),
 			'keyword' => array(
@@ -455,7 +464,7 @@ class Admin_webmemo extends MY_Controller
 		);
 	}
 
-	function _key_name_duplicate_check($str)
+	private function _key_name_duplicate_check($str)
 	{
 		if (strlen($str) === 0) return true;
 
@@ -468,7 +477,7 @@ class Admin_webmemo extends MY_Controller
 		return true;
 	}
 
-	function _sub_id_check($int)
+	private function _sub_id_check($int)
 	{
 		if (!$int) return true;
 		if (!$row = $this->category->get_row4id($int)) return true;
@@ -646,8 +655,8 @@ class Admin_webmemo extends MY_Controller
 	{
 		require_once(UM_PUBLIB_DIR.'/fckeditor/fckeditor.php') ;//FckEditor読み込み
 		$oFCKeditor = new FCKeditor('body') ;//name属性
-		$oFCKeditor->Config['CustomConfigurationsPath'] = '/lib/fckeditor/myconfig.js';
-		$oFCKeditor->BasePath = '/lib/fckeditor/';
+		$oFCKeditor->Config['CustomConfigurationsPath'] = BASE_URL_PATH.'lib/fckeditor/myconfig.js';
+		$oFCKeditor->BasePath = BASE_URL_PATH.'lib/fckeditor/';
 		//$oFCKeditor->Width = '520';//幅
 		$oFCKeditor->Height = '100%';//高さ
 
@@ -745,7 +754,7 @@ class Admin_webmemo extends MY_Controller
 		$lines = explode("\n", $pre_title);
 		foreach ($lines as $line)
 		{
-			$line = str_replace(array('&nbsp;', ' ', '　', "'"), '', $line);
+			//$line = str_replace(array('&nbsp;', ' ', '　', "'"), '', $line);
 			if (strlen($line) > 1)
 			{
 				if (mb_strlen($line) > 140) $line = mb_strimwidth($line, 0, 135, "...");
@@ -753,6 +762,7 @@ class Admin_webmemo extends MY_Controller
 				break;
 			}
 		}
+		if ($title) $title = preg_replace('/^(h[1-6]{1}\.|[\*]+|[#]+) /iu', '', $title);
 
 		return $title;
 	}

@@ -520,3 +520,16 @@ div#pager_box td.form_td {
 	font-size: small;
 	font-weight: normal;
 }
+
+.rss_btn
+{
+	margin-top: 10px;
+	text-align: left;
+}
+.rss_btn a img {
+	border: none;
+}
+.rss_btn a {
+	margin:  0;
+	padding: 0;
+}

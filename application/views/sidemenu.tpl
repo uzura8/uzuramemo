@@ -37,7 +37,7 @@
 {/if}
 {/if}
 {if $smarty.const.UM_USE_RSS_FEED}
-<p><a href="{site_url}rss.xml" target="_blank">{img src=img/xml2_icon.gif alt=rss2.0}</a></p>
+<div class="rss_btn"><a href="{site_url uri=webmemo/feed}" target="_blank">{img src=img/rss02.gif alt=rss2.0}</a></div>
 {/if}
 {if !$smarty.const.IS_AUTH}
 {if $smarty.const.UM_USE_GOOGLE_ADSENSE}{include file='ci:util/google_adsense_sidemenu.tpl'}{/if}

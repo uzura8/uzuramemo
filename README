@@ -14,7 +14,7 @@
 
 	----
 	// サイトURL
-	define('BASE_URL', 'http://example.com/設置パス/');
+	define('BASE_URL', 'http://example.com/(設置パス/)');
 
 	// DBサーバ接続設定
 	$GLOBALS['DSN']['default'] = array(
@@ -42,13 +42,13 @@
 ----
 vim .htaccess
 
-RewriteBase /設置パス/
+RewriteBase /(設置パス/)
 ----
 
 
 5. 管理画面にログイン
 
-	URL    : http://example.com/admin
+	URL    : http://example.com/(設置パス/)admin
 	account: admin / password
 	※ログイン後、「パスワード変更」画面よりパスワードを変更してください
 
