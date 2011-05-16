@@ -7,6 +7,7 @@ class MY_Controller extends CI_Controller
 		parent::__construct();
 
 		$this->_configure();
+		$this->_check_client();
 		$this->_check_admin();
 	}
 
@@ -14,6 +15,14 @@ class MY_Controller extends CI_Controller
 	{
 		define('CURRENT_MODULE', $this->uri->segment(1, false));
 		define('CURRENT_ACTION', $this->uri->rsegment(2, false));
+	}
+
+	private function _check_client()
+	{
+		if (!empty($GLOBALS['ALLOW_IP_LIST']))
+		{
+			if (!in_array($this->input->server('REMOTE_ADDR'), $GLOBALS['AUTO_LOGIN_ACCEPT_IP_LIST'])) common_error();
+		}
 	}
 
 	private function _check_auth()
