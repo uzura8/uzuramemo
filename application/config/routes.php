@@ -55,5 +55,7 @@ $route['category/:num'] = 'webmemo/category';
 $route['search'] = 'webmemo/search';
 $route['sitemap'] = 'site/sitemap';
 
+$route['feed'] = 'webmemo/feed';
+
 /* End of file routes.php */
 /* Location: ./application/config/routes.php */
