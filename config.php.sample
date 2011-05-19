@@ -86,6 +86,10 @@ define('UM_USE_SEARCH_MEMO', true);
 $GLOBALS['AUTO_LOGIN_ACCEPT_IP_LIST'] = array(
 );
 
+// アクセスを許可するIP
+$GLOBALS['ALLOW_IP_LIST'] = array(
+);
+
 
 // 表示関連設定
 
