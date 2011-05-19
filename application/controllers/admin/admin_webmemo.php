@@ -477,7 +477,7 @@ class Admin_webmemo extends MY_Controller
 		return true;
 	}
 
-	private function _sub_id_check($int)
+	public function _sub_id_check($int)
 	{
 		if (!$int) return true;
 		if (!$row = $this->category->get_row4id($int)) return true;
@@ -762,7 +762,7 @@ class Admin_webmemo extends MY_Controller
 				break;
 			}
 		}
-		if ($title) $title = preg_replace('/^(h[1-6]{1}\.|[\*]+|[#]+) /iu', '', $title);
+		if ($title) $title = preg_replace('/^(h[1-6]{1}\.|[\*]+|[#]+|[=]{1,6}) /iu', '', $title);
 
 		return $title;
 	}
