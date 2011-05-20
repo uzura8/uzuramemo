@@ -12,7 +12,7 @@
 {/if}
 <link rel="shortcut icon" href="{site_url uri=img/favicon.ico}" />
 {if $smarty.const.UM_USE_RSS_FEED}
-<link title="RSS" href="{site_url}rss.xml" type="application/rss+xml" rel="alternate" />
+<link title="RSS" href="{site_url uri=feed}" type="application/rss+xml" rel="alternate" />
 {/if}
 <link href="{site_url}css/filter.css" rel="stylesheet" type="text/css" />
 
