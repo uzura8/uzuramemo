@@ -1,6 +1,5 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-//class Welcome extends CI_Controller {
 class Webmemo extends MY_Controller
 {
 	private $site_keywords = array();
@@ -85,7 +84,7 @@ class Webmemo extends MY_Controller
 
 		// template
 		$view_data = $this->_get_default_view_data();
-		$view_data['pagination'] = $this->_get_pagination($count_all);
+		$view_data['pagination'] = $this->_get_pagination_simple($count_all);
 		$view_data['count_all'] = $count_all;
 		$view_data['memo_list'] =  $this->memo->get_main_list($this->is_private,
 																													$this->search,
@@ -101,8 +100,8 @@ class Webmemo extends MY_Controller
 		$view_data['now_category_id'] = $this->category_id;
 		$view_data['search_category_id'] = $this->category_id;
 		$view_data['opt'] = $this->search_option;
-		$view_data['next_url'] = $this->next_url;
-		$this->smarty_parser->parse('ci:webmemo/list.tpl', $view_data);
+
+		$this->smarty_parser->parse('ci:webmemo/'.$this->_get_template_name('list'), $view_data);
 	}
 
 	public function article()
@@ -252,6 +251,14 @@ class Webmemo extends MY_Controller
 		);
 	}
 
+	private function _get_template_name($filename)
+	{
+		if (IS_MOBILE) $filename .= '_mobile';
+		$filename .= '.tpl';
+
+		return $filename;
+	}
+
 	private function _get_now_category_and_id($all_list, $id)
 	{
 		$ret = array();
@@ -340,15 +347,21 @@ class Webmemo extends MY_Controller
 		}
 	}
 
-	private function _get_pagination($count_all)
+	private function _get_pagination_config($count_all)
 	{
 		$config = array();
-
 		$config['base_url'] = $this->_get_list_url($this->uri->segment(2) == 'category' ? true : false, array('search', 'opt', 'order'));
 		$config['offset']   = (int)$this->offset;
 		$config['query_string_segment'] = 'from';
 		$config['total_rows'] = $count_all;
 		$config['per_page']   = $this->limit;
+
+		return $config;
+	}
+
+	private function _get_pagination($count_all)
+	{
+		$config = $this->_get_pagination_config($count_all);
 		$config['num_links']  = 3;
 		$config['first_link'] = '&laquo;最初';
 		$config['last_link'] = '最後&raquo;';
@@ -356,11 +369,18 @@ class Webmemo extends MY_Controller
 		$this->load->library('my_pager', $config);
 		$this->my_pager->set_params('prev_link', sprintf('&lt;前の%d件', $this->my_pager->get_prev_page_rows()));
 		$this->my_pager->set_params('next_link', sprintf('次の%d件&gt;', $this->my_pager->get_next_page_rows()));
-		$config['next_link'] = sprintf('', $this->my_pager->get_next_page_rows());
 
 		$this->next_url = $this->my_pager->get_next_url();
 
 		return $this->my_pager->create_links();
+	}
+
+	private function _get_pagination_simple($count_all)
+	{
+		$config = $this->_get_pagination_config($count_all);
+		$this->load->library('my_pager', $config);
+
+		return $this->my_pager->get_pagination_simple_urls();
 	}
 
 	public function _format_search_param($urlencode = false)

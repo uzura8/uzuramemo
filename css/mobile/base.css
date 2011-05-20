@@ -1,0 +1,90 @@
+/*
+Copyright (c) 2010, Yahoo! Inc. All rights reserved.
+Code licensed under the BSD License:
+http://developer.yahoo.com/yui/license.html
+version: 2.8.1
+*/
+body {
+	font:14px/1.231 "ヒラギノ角ゴ Pro W3";
+	text-align: center;
+	color: #3D3D3D;
+	background-color: #BDBDBD;
+}
+
+div#mainbody {
+	margin: 0 7px;
+}
+
+#wrap {
+	padding: 10px;
+}
+section, nav {
+	margin-bottom: 1em;
+}
+
+p {
+	margin-bottom: 1em;
+}
+
+/* clearfix */
+.clearfix:after {
+  content: ".";  /* 新しい要素を作る */
+  display: block;  /* ブロックレベル要素に */
+  clear: both;
+  height: 0;
+  visibility: hidden;
+}
+
+.box_01 {
+	border: 2px solid #8F8F8F;
+	background-color: #FFF;
+	border-radius: 8px;
+	-webkit-border-radius: 8px;
+	padding: 10px;
+	text-align: left;
+}
+
+h2.box_01 {
+	margin-bottom: 3px;
+}
+
+article.box_01 {
+	margin-bottom: 15px;
+}
+
+article:not(.display) {
+	display: none;
+}
+
+nav {
+	text-align: center;
+	margin: 0 auto;
+	border-radius: 8px;
+	-webkit-border-radius: 8px;
+	background-color: #2E2A2A;
+	background: -webkit-gradient(linear, left top, left bottom, from(#B4B4B4), to(#2E2A2A));
+	font-size: 107%;
+	width: 300px;
+}
+nav li {
+	text-align: center;
+	float: left;
+	font-weight: bold;
+	border-left: 1px solid #fff;
+	text-shadow: -1px -1px 0 rgba(150, 150, 150, 0.3);
+}
+nav li a {
+	display: block;
+	width: 99px;
+	padding: 8px 0;
+}
+nav li:first-child {
+	border: none;
+}
+nav a {
+	color: #fff;
+	text-decoration: none;
+}
+section, nav {
+	margin-bottom: 1em;
+}

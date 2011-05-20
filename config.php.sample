@@ -70,6 +70,9 @@ define('UM_SLAVE_DB_MODE', false);
 // 引用記事表示機能使用設定
 define('UM_USE_QUOTE_ARTICLE_VIEW', true);
 
+// スマートフォン対応設定
+define('UM_USE_MOBILE', false);
+
 // RSSフィード機能使用設定
 define('UM_USE_RSS_FEED', false);
 

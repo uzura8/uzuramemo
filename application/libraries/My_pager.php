@@ -81,6 +81,29 @@ class My_pager
 		return sprintf('%s%s%s=%s', $this->base_url, $this->delimitter, $this->query_string_segment, $next_from);
 	}
 
+	public function get_prev_offset()
+	{
+		$prev_offset = $this->offset - $this->per_page;
+		if ($prev_offset < 0) return 0;
+
+		return $prev_offset;
+	}
+
+	public function get_prev_url()
+	{
+		if (!$prev_from = $this->get_prev_offset()) return '';
+
+		return sprintf('%s%s%s=%s', $this->base_url, $this->delimitter, $this->query_string_segment, $prev_from);
+	}
+
+	public function get_pagination_simple_urls()
+	{
+		return array(
+			'prev_url' => $this->get_prev_url(),
+			'next_url' => $this->get_next_url(),
+		);
+	}
+
 	private function get_next_link()
 	{
 		if (!$next_from = $this->get_next_offset()) return '';

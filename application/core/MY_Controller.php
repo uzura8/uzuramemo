@@ -7,7 +7,8 @@ class MY_Controller extends CI_Controller
 		parent::__construct();
 
 		$this->_configure();
-		$this->_check_client();
+		$this->_check_user_agent();
+		$this->_check_client_ip();
 		$this->_check_admin();
 	}
 
@@ -17,7 +18,12 @@ class MY_Controller extends CI_Controller
 		define('CURRENT_ACTION', $this->uri->rsegment(2, false));
 	}
 
-	private function _check_client()
+	private function _check_user_agent()
+	{
+		define('IS_MOBILE', $this->agent->is_mobile());
+	}
+
+	private function _check_client_ip()
 	{
 		if (!empty($GLOBALS['ALLOW_IP_LIST']))
 		{
