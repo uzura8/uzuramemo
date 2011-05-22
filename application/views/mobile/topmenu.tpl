@@ -1,16 +1,4 @@
 <header id="top">
-<div id="banner_box">
 <h1><a href="{site_url}" style="">{$smarty.const.SITE_TITLE}</a></h1>
-<div id="siteDesc">{$smarty.const.SITE_DESC_MAIN}</div>
-{if $smarty.const.IS_AUTH}
-<div id="login_symbol">{img src=img/uzura.gif alt=Login!}</div>
-{else}
-{if $smarty.const.UM_USE_GOOGLE_ADSENSE}{include file='ci:util/google_adsense_topmenu.tpl'}{/if}
-{/if}
-</div>
-</header><!--header-->
-{*
-<div id="top_menu">
-{include file='ci:util/main_menu.tpl'}
-</div><!--top_menu-->
-*}
+<aside>{$smarty.const.SITE_DESC_MAIN}</aside>
+</header>

@@ -6,6 +6,11 @@
  * @author uzuranoie@gmail.com
  */
 
+function get_current_page_id($delimitter = '_')
+{
+	return implode($delimitter, array(CURRENT_MODULE, CURRENT_CONTROLLER, CURRENT_ACTION));
+}
+
 function common_error($message = '')
 {
 	if (DEV_MODE) show_error($message);

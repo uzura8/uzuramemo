@@ -6,16 +6,32 @@ class MY_Controller extends CI_Controller
 	{
 		parent::__construct();
 
-		$this->_configure();
+		$this->_set_current_controller_action();
 		$this->_check_user_agent();
 		$this->_check_client_ip();
 		$this->_check_admin();
+		$this->_set_current_module();
 	}
 
-	private function _configure()
+	private function _set_current_controller_action()
 	{
-		define('CURRENT_MODULE', $this->uri->segment(1, false));
-		define('CURRENT_ACTION', $this->uri->rsegment(2, false));
+		define('CURRENT_CONTROLLER', $this->uri->rsegment(1));
+		define('CURRENT_ACTION',     $this->uri->rsegment(2));
+	}
+
+	private function _set_current_module()
+	{
+		$current_module = 'default';
+		if (IS_ADMIN)
+		{
+			$current_module = 'admin';
+		}
+		elseif (IS_MOBILE)
+		{
+			$current_module = 'mobile';
+		}
+
+		define('CURRENT_MODULE', $current_module);
 	}
 
 	private function _check_user_agent()
@@ -49,13 +65,16 @@ class MY_Controller extends CI_Controller
 	private function _check_admin()
 	{
 		$this->_check_auth();
-
-		if (!CURRENT_MODULE) return;
-
 		$admin_path = $this->config->item('admin_path');
-		if (CURRENT_MODULE != $admin_path) return;
+
+		if (!$this->uri->segment(1, false) || $this->uri->segment(1, false) != $admin_path)
+		{
+			define('IS_ADMIN', false);
+			return;
+		}
 
 		// 以下、管理画面の処理
+		define('IS_ADMIN', true);
 		if (UM_SLAVE_DB_MODE) show_error('admin module is disabled.');
 
 		if (CURRENT_ACTION)

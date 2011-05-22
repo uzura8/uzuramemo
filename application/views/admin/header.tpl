@@ -14,5 +14,5 @@
 {/if}
 {$head}
 </head>
-<body>
+<body id="{get_current_page_id}">
 <div id="container">

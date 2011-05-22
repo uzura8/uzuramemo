@@ -30,5 +30,5 @@
 {$head_info}
 </head>
 
-<body>
+<body id="{get_current_page_id}">
 <div id="container"><!--container START-->

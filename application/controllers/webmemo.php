@@ -43,7 +43,8 @@ class Webmemo extends MY_Controller
 		$this->private_config = $this->config->item('webmemo');
 		$this->_set_params();
 
-		$this->breadcrumbs[] = array('uri' => '/', 'name' =>  UM_TOPPAGE_NAME);
+		$this->breadcrumbs['list'] = array();
+		$this->breadcrumbs['list'][] = array('uri' => '/', 'name' =>  UM_TOPPAGE_NAME);
 
 		$this->site_keywords    = $GLOBALS['SITE_KEYWORDS'];
 		$this->site_description = SITE_DESCRIPTION;
@@ -138,12 +139,12 @@ class Webmemo extends MY_Controller
 
 			// パンくずリスト
 			$cate_url = sprintf('category/%d', $cate_sub_id);
-			$this->breadcrumbs[] = array('uri' => $cate_url, 'name' => $cate_name_list[$cate_sub_id]);
+			$this->breadcrumbs['list'][] = array('uri' => $cate_url, 'name' => $cate_name_list[$cate_sub_id]);
 
 			$cate_url = sprintf('category/%d', $now_category_id);
-			$this->breadcrumbs[] = array('uri' => $cate_url, 'name' => $now_category_name);
+			$this->breadcrumbs['list'][] = array('uri' => $cate_url, 'name' => $now_category_name);
 
-			$this->breadcrumbs[] = array('uri' => '', 'name' => '記事');
+			$this->breadcrumbs['list'][] = array('uri' => '', 'name' => '記事');
 		}
 
 		// template
@@ -157,7 +158,7 @@ class Webmemo extends MY_Controller
 		$view_data['list_url'] = site_url('article/'.$id);
 		$view_data['list_url_without_order'] = site_url('article/'.$id);
 
-		$this->smarty_parser->parse('ci:webmemo/list.tpl', $view_data);
+		$this->smarty_parser->parse('ci:webmemo/'.$this->_get_template_name('list'), $view_data);
 	}
 
 	public function category()
@@ -181,7 +182,7 @@ class Webmemo extends MY_Controller
 		$this->site_description .= sprintf('このページはカテゴリ「%s」についての記事一覧です。', $now_category_name);
 
 		// パンくずリスト
-		$this->breadcrumbs[] = array('uri' => '', 'name' => $now_category_name);
+		$this->breadcrumbs['list'][] = array('uri' => '', 'name' => $now_category_name);
 
 		// template
 		$view_data = $this->_get_default_view_data();
@@ -331,20 +332,23 @@ class Webmemo extends MY_Controller
 
 	private function _set_breadcrumbs($page_title, $search, $category, $count_all)
 	{
-		$this->breadcrumbs[] = array('uri' => '', 'name' =>  $page_title);
+		$this->breadcrumbs['list'][] = array('uri' => '', 'name' => $page_title);
 		if ($category && $search)
 		{
-			$this->breadcrumbs[] = array('uri' => 'list/category/'.$category['id'], 'name' => sprintf('カテゴリ「%s」', $category['name']));
-			$this->breadcrumbs[] = array('uri' => '', 'name' => sprintf('「%s」の検索結果: %d件', $this->search, $count_all));
+			$this->breadcrumbs['list'][] = array('uri' => 'list/category/'.$category['id'], 'name' => sprintf('カテゴリ「%s」', $category['name']));
+			$this->breadcrumbs['list'][] = array('uri' => '', 'name' => sprintf('「%s」の検索結果', $this->search));
 		}
 		elseif ($search)
 		{
-			$this->breadcrumbs[] = array('uri' => '', 'name' => sprintf('「%s」の検索結果: %d件', $this->search, $count_all));
+			$this->breadcrumbs['list'][] = array('uri' => '', 'name' => sprintf('「%s」の検索結果', $this->search));
 		}
 		elseif ($category)
 		{
-			$this->breadcrumbs[] = array('uri' => '', 'name' => sprintf('カテゴリ「%s」の絞り込み結果: %d件', $category['name'], $count_all));
+			$this->breadcrumbs['list'][] = array('uri' => '', 'name' => sprintf('カテゴリ「%s」の絞り込み結果', $category['name']));
 		}
+
+		$this->breadcrumbs['count'] = 0;
+		if ($count_all) $this->breadcrumbs['count'] = $count_all;
 	}
 
 	private function _get_pagination_config($count_all)
@@ -445,7 +449,8 @@ class Webmemo extends MY_Controller
 	{
 		$this->load->library('form_validation');
 
-		$this->limit  = $this->private_config['article_nums'];
+		$this->limit  = $this->private_config['article_nums']['default'];
+		if (IS_MOBILE) $this->limit = $this->private_config['article_nums']['mobile'];
 		$this->search = $this->_get_params('search', '', 'trim|max_length[301]');
 		$this->offset = $this->_get_params('from', 0, 'intval|less_than[10000000]');
 		$this->order  = $this->_get_params('order', 0, 'intval|less_than[3]');

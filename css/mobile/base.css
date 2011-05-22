@@ -1,18 +1,48 @@
-/*
-Copyright (c) 2010, Yahoo! Inc. All rights reserved.
-Code licensed under the BSD License:
-http://developer.yahoo.com/yui/license.html
-version: 2.8.1
-*/
 body {
 	font:14px/1.231 "ヒラギノ角ゴ Pro W3";
 	text-align: center;
 	color: #3D3D3D;
 	background-color: #BDBDBD;
 }
+a:link {
+	color: #0E44B9;
+	text-decoration: none;
+}
+a:visited {
+	color: #0466B1;
+	text-decoration: none;
+}
+a:hover {
+	color: #0466B1;
+	text-decoration: underline;
+}
+
+h1,h2,h3,h4,h5,h6 {
+	font-weight: bold;
+	font-family: "Helvetica Neue";
+}
 
 div#mainbody {
-	margin: 0 7px;
+	margin: 5px 7px 0;
+}
+nav#topmenu {
+	margin-top: 5px;
+}
+
+#list_top_box {
+	padding: 5px;
+	margin: 5px 0 -5px;
+	background-color: #E8EBEC;
+	font-size: 12px;
+	border-radius: 4px;
+	-webkit-border-radius: 4px;
+}
+#list_util {
+	margin-top: 5px;
+	padding: 3px 0;
+}
+div.hide {
+	display: none;
 }
 
 #wrap {
@@ -36,7 +66,7 @@ p {
 }
 
 .box_01 {
-	border: 2px solid #8F8F8F;
+	border: 1px solid #8F8F8F;
 	background-color: #FFF;
 	border-radius: 8px;
 	-webkit-border-radius: 8px;
@@ -45,15 +75,52 @@ p {
 }
 
 h2.box_01 {
-	margin-bottom: 3px;
+	margin: 10px 0 2px;
+	padding-bottom: 5px;
 }
 
 article.box_01 {
-	margin-bottom: 15px;
+	padding: 20px 10px 10px;
 }
-
+/*
 article:not(.display) {
 	display: none;
+}
+*/
+
+.article_box {
+	margin-bottom: 5px;
+}
+
+.article_meta_top {
+	color: #999999;
+	font-size: 10px;
+	font-weight: bold;
+	line-height: 15px;
+}
+.article_meta_top .banner {
+	width: 50px;
+	float: left;
+	text-align: left;
+}
+.article_meta_top .meta_info {
+	width: 180px;
+	float: right;
+	text-align: right;
+}
+article aside {
+	border-top: 1px solid #ADADAD;
+	color: #666666;
+	font-size: 11px;
+	font-weight: bold;
+	line-height: 14px;
+	margin: 5px -10px;
+	padding: 10px 10px 0;
+	text-align: left;
+	text-shadow: 0 1px 1px #FAFAFA;
+}
+article aside div.quote_box {
+	margin-bottom: 10px;
 }
 
 nav {
@@ -61,30 +128,170 @@ nav {
 	margin: 0 auto;
 	border-radius: 8px;
 	-webkit-border-radius: 8px;
-	background-color: #2E2A2A;
-	background: -webkit-gradient(linear, left top, left bottom, from(#B4B4B4), to(#2E2A2A));
-	font-size: 107%;
-	width: 300px;
+	background-color: #0036AC;
+	background: -webkit-gradient(linear, left top, left bottom, from(#6B9AFF), to(#001C58));
 }
 nav li {
+	width: 33%;;
 	text-align: center;
 	float: left;
 	font-weight: bold;
 	border-left: 1px solid #fff;
 	text-shadow: -1px -1px 0 rgba(150, 150, 150, 0.3);
 }
-nav li a {
-	display: block;
-	width: 99px;
-	padding: 8px 0;
-}
 nav li:first-child {
 	border: none;
 }
 nav a {
+	display: block;
+	padding: 5px 0;
 	color: #fff;
 	text-decoration: none;
 }
+nav a:link {
+	color: #fff;
+}
+nav a:visited {
+	color: #fff;
+}
+nav a:hover {
+	color: #fff;
+}
+
 section, nav {
-	margin-bottom: 1em;
+/*	margin-bottom: 1em;*/
+}
+
+nav#next {
+	margin-top: 5px;
+}
+
+header#top {
+	padding: 10px 0 5px;
+	background-color: #1B1B1B;
+	background: -webkit-gradient(linear, left top, left bottom, from(#525252), to(#1B1B1B));
+}
+
+header#top h1 {
+	margin: 0;
+	padding: 0 15px;
+	text-align: left;
+}
+
+header#top h1 a {
+	text-decoration: none;
+	color: #fff;
+	font-size: 20px;
+	text-shadow: -1px -1px 0 rgba(150, 150, 150, 0.3);
+}
+
+header#top aside {
+	padding: 0 5px;
+	margin-top: 5px;
+	color: #fff;
+	text-align: right;
+	font-size: 11px;
+}
+
+footer {
+	margin: 10px 0;
+	padding: 5px 0;
+	color: #fff;
+	background-color: #1B1B1B;
+	background: -webkit-gradient(linear, left top, left bottom, from(#525252), to(#1B1B1B));
+}
+
+/* ボタンスタイル */
+.iPhoneButton,
+.iPhoneButtonBlack {
+  margin: 0 auto;
+
+  border: solid 2px #2d3137;
+  -webkit-border-radius: 10px;
+  box-shadow: 0 1px 2px rgba(0,0,0,.2);
+  padding: 2px;
+  text-align: center;
+}
+.iPhoneButton {
+  background: -webkit-gradient(linear, left top, left bottom, from(#eeefef), to(#bdbfc2));
+  background-color: #bdbfc2;
+}
+.iPhoneButtonBlack {
+  background: -webkit-gradient(linear, left top, left bottom, from(#6b6e74), to(#282e37));
+  background: #282e37;
+}
+.iPhoneButton a,
+.iPhoneButtonBlack a {
+  -webkit-border-radius: 5px;
+  display: inline-block;
+  text-align: center;
+  padding: .3em 0;
+  text-decoration: none;
+  font-size: 10px;
+  font-weight: bold;
+	display: block;
+}
+.iPhoneButton a {
+  color: #000;
+}
+.iPhoneButtonBlack a {
+  color: #fff;
+}
+
+article.box_01 .iPhoneButton {
+	margin-top: 20px;
+}
+
+.btnTop {
+	border-radius: 3px;
+	background-color: #cbcccf;
+	background: -webkit-gradient(linear, left top, left bottom, from(#cbcccf), to(#acaeb0));
+	font-size: 65%;
+	text-align: center;
+	float: right;
+}
+.btnTop a {
+	text-shadow: 1px 1px 0 #ddd;
+	display: block;
+	padding: 3px 5px;
+	color: #444444;
+	text-decoration: none;
+}
+
+/* 背景色 */
+.bg_red {
+	background-color: #FFE6EE;
+}
+.bg_bl {
+	background-color: #DDF7FF;
+}
+
+.quote_symbol
+{
+	color: #F06902;
+	font-size: x-small;
+	font-weight: normal;
+}
+
+.space_left{
+	margin-left: 10px;
+}
+.space_left_5{
+	margin-left: 5px;
+}
+.space_left_10{
+	margin-left: 10px;
+}
+.space_left_20{
+	margin-left: 20px;
+}
+
+/*-- form --*/
+input, textarea	{
+	padding 5px;
+}
+
+#list_util select {
+	width: 150px;
+	font-size: 18px;
 }
