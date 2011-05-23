@@ -271,14 +271,6 @@ class Webmemo extends MY_Controller
 		);
 	}
 
-	private function _get_template_name($filename)
-	{
-		if (IS_MOBILE) $filename .= '_mobile';
-		$filename .= '.tpl';
-
-		return $filename;
-	}
-
 	private function _get_now_category_and_id($all_list, $id)
 	{
 		$ret = array();

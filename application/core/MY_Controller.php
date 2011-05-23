@@ -89,4 +89,12 @@ class MY_Controller extends CI_Controller
 
 		redirect($admin_path.'/login');
 	}	
+
+	protected function _get_template_name($filename)
+	{
+		if (IS_MOBILE) $filename .= '_mobile';
+		$filename .= '.tpl';
+
+		return $filename;
+	}
 }

@@ -33,6 +33,9 @@ $(document).ready(function(){
 	$('h2').click(function() {
 		$(this).next().slideToggle();
 	});
+	$('h4').click(function() {
+		$(this).next().slideToggle();
+	});
 	$('#list_util_btn').click(function() {
 		$(this).next().slideToggle();
 	});

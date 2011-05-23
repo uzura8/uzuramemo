@@ -57,15 +57,16 @@ class Site extends MY_Controller
 	public function sitemap()
 	{
 		// page description
-		$this->site_keywords[]   = 'サイトマップ';
-		$this->site_description .= sprintf('このページは「%s」のサイトマップです。', SITE_TITLE);
-		// パンくずリスト
-		$this->breadcrumbs['list'][] = array('uri' => '', 'name' => 'サイトマップ');
+		$page_title = 'サイトマップ';
+		$this->site_keywords[]   = $page_title;
+		$this->site_description .= sprintf('このページは「%s」の%sです。', SITE_TITLE, $page_title);
+		$this->breadcrumbs['list'][] = array('uri' => '', 'name' => $page_title);
 
 		// template
 		$view_data = $this->_get_default_view_data();
-		//$view_data['main_list'] = $this->category->get_list_all();;
-		$this->smarty_parser->parse('ci:site/sitemap.tpl', $view_data);
+		$view_data['page_title'] = $page_title;
+
+		$this->smarty_parser->parse('ci:site/'.$this->_get_template_name('sitemap'), $view_data);
 	}
 }
 

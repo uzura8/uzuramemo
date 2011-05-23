@@ -2,14 +2,7 @@
 {include file='ci:mobile/topmenu.tpl'}
 
 <div id="mainbody">
-
-<nav id="topmenu">
-	<ul class="clearfix">
-		<li><a href="{site_url uri=category}">カテゴリ</a></li>
-		<li><a href="{site_url uri=search}">検索</a></li>
-		<li><a href="{site_url uri=sitemap}">サイトマップ</a></li>
-	</ul>
-</nav>
+{include file='ci:mobile/util/memo_topmenu.tpl'}
 
 {if !$memo_list}
 <div style="padding:30px 10px 30px 5px;">{if $search}「{$search}」に一致する{elseif $now_category_id}このカテゴリの{else}指定した記事の{/if}登録はありません。</div>
