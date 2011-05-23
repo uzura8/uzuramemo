@@ -161,9 +161,27 @@ class Webmemo extends MY_Controller
 		$this->smarty_parser->parse('ci:webmemo/'.$this->_get_template_name('list'), $view_data);
 	}
 
+	public function category_list()
+	{
+		// page description
+		$page_title = 'カテゴリ一覧';
+		$this->site_keywords[]   = '';
+		$this->site_description .= sprintf('このページはのページです。', $page_title);
+
+		// パンくずリスト
+		$this->breadcrumbs['list'][] = array('uri' => '', 'name' => $page_title);
+
+		// template
+		$view_data = $this->_get_default_view_data();
+		$view_data['page_title'] = $page_title;
+
+		$this->smarty_parser->parse('ci:webmemo/'.$this->_get_template_name('category_list'), $view_data);
+	}
+
 	public function category()
 	{
 		$id = (int)$this->uri->segment(2, 0);
+
 		$main_list = array();
 		if ($id && $this->category_list_all)
 		{
@@ -172,7 +190,7 @@ class Webmemo extends MY_Controller
 		if (!$main_list)
 		{
 			if ($id) redirect('list/category/'.$id);
-			redirect();
+			redirect('webmemo/list');
 		}
 
 		$now_category_name = $main_list[0]['name'];
@@ -188,7 +206,8 @@ class Webmemo extends MY_Controller
 		$view_data = $this->_get_default_view_data();
 		$view_data['now_category_id'] = $id;
 		$view_data['main_list'] = $main_list;
-		$this->smarty_parser->parse('ci:webmemo/category.tpl', $view_data);
+
+		$this->smarty_parser->parse('ci:webmemo/'.$this->_get_template_name('category'), $view_data);
 	}
 
 	public function search()

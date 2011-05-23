@@ -51,6 +51,7 @@ $route['list/category/:num'] = 'webmemo/memolist/category/$2';
 $route['list'] = 'webmemo/memolist';
 $route['article/:num'] = 'webmemo/article';
 $route['category/:num'] = 'webmemo/category';
+$route['category'] = 'webmemo/category_list';
 
 $route['search'] = 'webmemo/search';
 $route['sitemap'] = 'site/sitemap';
