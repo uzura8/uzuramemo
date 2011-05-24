@@ -85,7 +85,15 @@ class Webmemo extends MY_Controller
 
 		// template
 		$view_data = $this->_get_default_view_data();
-		$view_data['pagination'] = $this->_get_pagination_simple($count_all);
+		if (IS_MOBILE)
+		{
+			$view_data['pagination'] = $this->_get_pagination_simple($count_all);
+		}
+		else
+		{
+			$view_data['pagination'] = $this->_get_pagination($count_all);
+		}
+		$view_data['next_url'] = $this->next_url;
 		$view_data['count_all'] = $count_all;
 		$view_data['memo_list'] =  $this->memo->get_main_list($this->is_private,
 																													$this->search,
