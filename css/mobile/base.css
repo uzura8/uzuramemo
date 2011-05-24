@@ -80,7 +80,20 @@ h2.title {
 }
 h2.title a {
 	text-decoration: none;
+	display: block;
+	color: #fff;
+	text-decoration: none;
 }
+h2.title a:link {
+	color: #fff;
+}
+h2.title a:visited {
+	color: #fff;
+}
+h2.title a:hover {
+	color: #fff;
+}
+
 h3.title {
 	margin: 5px 0;
 	background-color: #D8D8D8;
@@ -134,7 +147,7 @@ ul.box_01:not(.display) {
 	display: none;
 }
 ul.box_01 li {
-	padding: 8px 40px;
+	padding: 8px 30px;
 	border-top: 1px solid #ADADAD;
 }
 ul.box_01 li:first-child {

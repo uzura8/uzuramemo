@@ -10,5 +10,4 @@
 {include file='ci:mobile/util/category_list_mobile.tpl'}
 
 </div><!-- mainbody -->
-
 {include file='ci:mobile/footer.tpl'}
