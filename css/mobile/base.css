@@ -119,6 +119,7 @@ h3.title a {
 	-webkit-border-radius: 8px;
 	padding: 10px;
 	text-align: left;
+	word-break: break-all;
 }
 
 h2.box_01 {
