@@ -11,6 +11,7 @@
 {include file='ci:util/category_menu_script.tpl'}
 
 <script type="text/javascript" src="{site_url}js/lib/jquery.js"></script>
+{include file='ci:util/syntaxhighlighter.tpl'}
 <script type="text/javascript">
 {literal}var j$ = jQuery.noConflict();{/literal}
 </script>

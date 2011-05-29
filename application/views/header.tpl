@@ -16,18 +16,8 @@
 {/if}
 <link href="{site_url}css/filter.css" rel="stylesheet" type="text/css" />
 
-<!-- search word heighlighter -->
-<script type="text/javascript" src="{site_url}js/se_hilite.js"></script>
-<style type="text/css">
-{literal}
-.hilite1, .hilite4, .hilite7 { background-color: #ffa; }
-.hilite2, .hilite5, .hilite8 { background-color: #faf; }
-.hilite3, .hilite6, .hilite9 { background-color: #aff; }
-{/literal}
-</style>
-{include file='ci:util/syntaxhighlighter.tpl'}
-
 {$head_info}
+
 </head>
 
 <body id="{get_current_page_id}">

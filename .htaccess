@@ -1,7 +1,7 @@
 RewriteEngine on
 
 RewriteBase /
-RewriteCond $1 !^(index\.php|css|lib|user_guide|.+\.gif$|.+\.jpg$|.+\.png$|.+\.js|.+\.html|.+\.xml|.+\.ico$)
+RewriteCond $1 !^(index\.php|css|lib|user_guide|.+\.gif$|.+\.jpg$|.+\.png$|.+\.js|.+\.html|.+\.xml|.+\.ico$|.+\.css$)
 RewriteRule ^(.+)$ index.php/$1 [L]
 
 # php_flag short_open_tag off

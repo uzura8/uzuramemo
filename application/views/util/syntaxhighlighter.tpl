@@ -13,7 +13,6 @@
 <script type="text/javascript" src="{site_url}js/syntaxhighlighter/scripts/shBrushScala.js"></script>
 <script type="text/javascript" src="{site_url}js/syntaxhighlighter/scripts/shBrushSql.js"></script>
 <script type="text/javascript" src="{site_url}js/syntaxhighlighter/scripts/shBrushXml.js"></script>
-<link type="text/css" rel="stylesheet" href="{site_url}js/syntaxhighlighter/styles/shCore.css"/>
 <link type="text/css" rel="stylesheet" href="{site_url}js/syntaxhighlighter/styles/shCoreDefault.css"/>
 <script type="text/javascript">SyntaxHighlighter.all();</script>
 <!-- syntaxhighlighter -->
