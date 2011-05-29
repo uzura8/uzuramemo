@@ -1,6 +1,7 @@
 <div id="sidebody">
 {if $smarty.const.UM_USE_SEARCH_MEMO}{include file='ci:util/search_box.tpl'}{/if}
 {if $cate_list}
+<div id="acc_menu">
 {foreach from=$cate_list item=row}
 {if ((!$row.is_private || $smarty.const.IS_AUTH && $row.is_private) && $row.sc_ary)}
 <p class="lb_01{if $row.id == $now_category_id} bg_red{/if}" onclick="toggleBox{$row.id}()">
@@ -24,6 +25,7 @@
 </div>
 {/if}
 {/foreach}
+</div>
 {/if}
 {if $smarty.const.IS_AUTH}
 <p class="lb_01"><a href="{site_url uri=admin}" target="_blank">管理画面</a></p>

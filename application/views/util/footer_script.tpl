@@ -7,15 +7,31 @@
 	location.href = url;
 {literal}}{/literal}
 </script>
-
-{include file='ci:util/category_menu_script.tpl'}
+{*{include file='ci:util/category_menu_script.tpl'}*}
 
 <script type="text/javascript" src="{site_url}js/lib/jquery.js"></script>
 {include file='ci:util/syntaxhighlighter.tpl'}
 <script type="text/javascript">
 {literal}var j$ = jQuery.noConflict();{/literal}
 </script>
-<!-- search word heighlighter -->
+
+<script type="text/javascript">
+{literal}
+j$(document).ready(function(){
+  j$("#acc_menu").each(function(){
+    j$("p.lb_01", this).each(function(index){
+      var $this = j$(this);
+      {/literal}{if $now_category.sub_id}{literal}if($this.next().attr("id") != 'menu_box'+{/literal}{$now_category.sub_id}{literal}) {/literal}{/if}{literal}$this.next().hide('fast');
+
+      $this.click(function(){
+        j$("p.lb_01").next().hide('fast');
+        j$(this).next().slideToggle('fast');
+      });
+    });
+  });
+});
+{/literal}
+</script>
 
 <!-- auto_pager -->
 <script src="{site_url}js/jquery.autopager2.js" type="text/javascript"></script>
