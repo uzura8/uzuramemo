@@ -21,7 +21,7 @@ j$(document).ready(function(){
   j$("#acc_menu").each(function(){
     j$("p.lb_01", this).each(function(index){
       var $this = j$(this);
-      {/literal}{if $now_category.sub_id}{literal}if($this.next().attr("id") != 'menu_box'+{/literal}{$now_category.sub_id}{literal}) {/literal}{/if}{literal}$this.next().hide('fast');
+      if($this.next().attr("id") != 'menu_boxSP001'{/literal}{if $now_category.sub_id}{literal} && $this.next().attr("id") != 'menu_box'+{/literal}{$now_category.sub_id}{/if}{literal}) $this.next().hide('fast');
 
       $this.click(function(){
         j$("p.lb_01").next().hide('fast');

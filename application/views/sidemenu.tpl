@@ -4,7 +4,7 @@
 <div id="acc_menu">
 {foreach from=$cate_list item=row}
 {if ((!$row.is_private || $smarty.const.IS_AUTH && $row.is_private) && $row.sc_ary)}
-<p class="lb_01{if $row.id == $now_category_id} bg_red{/if}" onclick="toggleBox{$row.id}()">
+<p class="lb_01{if $row.id == $now_category_id} bg_red{/if}">
 <a href="{site_url uri=category}/{$row.id}">{$row.name}</a>
 {if $smarty.const.IS_AUTH && $row.key_name}<span class="f_light">({$row.key_name})</span>{/if}
 </p>
@@ -25,18 +25,19 @@
 </div>
 {/if}
 {/foreach}
-</div>
 {/if}
 {if $smarty.const.IS_AUTH}
 <p class="lb_01"><a href="{site_url uri=admin}" target="_blank">管理画面</a></p>
+<div></div>
 {if $cate_list_important_articles}
-<p class="lb_01" onclick="toggleBoxSP001()"><a href="{site_url uri=list}?from=0&amp;order=2">ブックマーク記事</a></p>
+<p class="lb_01"><a href="{site_url uri=list}?from=0&amp;order=2">ブックマーク記事</a></p>
 <div id="menu_boxSP001">
 {foreach from=$cate_list_important_articles item=item}
 <p class="lb_04" style="font-weight:normal;"><a href="{site_url uri=article}/{$item.id}">{$item.title}</a></p>
 {/foreach}
 </div>
 {/if}
+</div>
 {/if}
 {if $smarty.const.UM_USE_RSS_FEED}
 <div class="rss_btn"><a href="{site_url uri=feed}" target="_blank">{img src=img/rss02.gif alt=rss2.0}</a></div>
