@@ -103,6 +103,12 @@
 {if $session.target_id}
 <div class="box_btn"><input type="submit" name="cancel" value="変更キャンセル" class="btn" /></div>
 {/if}
+{if $session.body}
+<div class="box_preview">
+<p class="ttl_012">プレビュー</p>
+{$session.body|smarty:nodefaults}
+</div>
+{/if}
 </div>
 <input type="hidden" name="ct" value="{$ct}">
 <input type="hidden" name="order" value="{$order}">
