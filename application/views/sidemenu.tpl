@@ -37,8 +37,8 @@
 {/foreach}
 </div>
 {/if}
-</div>
 {/if}
+</div>
 {if $smarty.const.UM_USE_RSS_FEED}
 <div class="rss_btn"><a href="{site_url uri=feed}" target="_blank">{img src=img/rss02.gif alt=rss2.0}</a></div>
 {/if}

@@ -101,7 +101,7 @@
 {/if}
 {if $pagination.next_url}<nav id="next"><a href="{$pagination.next_url}" rel="next">もっと見る</a></nav>{/if}
 {/if}
-{if !$smarty.const.IS_AUTH && $smarty.const.UM_USE_GOOGLE_ADSENSE}{include file='ci:util/google_adsense_mainbody.tpl'}{/if}
 </div>
+{if !$smarty.const.IS_AUTH && $smarty.const.UM_USE_GOOGLE_ADSENSE}{include file='ci:mobile/util/google_adsense_mainbody.tpl'}{/if}
 
 {include file='ci:mobile/footer.tpl'}
