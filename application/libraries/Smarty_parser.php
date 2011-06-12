@@ -108,13 +108,16 @@ class Smarty_parser extends Smarty {
 
 	function ci_get_timestamp($view, &$timestamp, &$smarty_obj)
 	{
-		$CI =& get_instance();
-
 		// Taken verbatim from _ci_load (Loader.php, 580):
 		$ext = pathinfo($view, PATHINFO_EXTENSION);
 		$file = ($ext == '') ? $view.EXT : $view;
-		$path = $CI->load->_ci_view_path.$file;
-
+		//$path = $CI->load->_ci_view_path.$file;
+		$path = APPPATH.'views/'.$file;
+		if (!file_exists($path))
+		{
+			$CI =& get_instance();
+			$path = $CI->load->_ci_view_path.basename($file);
+		}
 		// get file modification date
 		$timestamp = filectime($path);
 		return ($timestamp !== FALSE);

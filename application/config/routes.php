@@ -37,7 +37,6 @@
 | in the URL cannot be matched to a valid route.
 |
 */
-
 $route['default_controller'] = 'webmemo';
 $route['404_override'] = '';
 
@@ -57,6 +56,5 @@ $route['search'] = 'webmemo/search';
 $route['sitemap'] = 'site/sitemap';
 
 $route['feed'] = 'webmemo/feed';
-
 /* End of file routes.php */
 /* Location: ./application/config/routes.php */
