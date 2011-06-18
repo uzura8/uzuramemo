@@ -26,8 +26,14 @@
 {/if}
 {/foreach}
 {/if}
+<p class="lb_01"><a href="{site_url uri=sitemap}">サイトマップ</a></p>
+<div></div>
+{if $smarty.const.DEV_MODE}
+<p class="lb_01"><a href="{site_url uri=user_guide_ja}" target="user_guide" onClick="window.open(this.href,this.target).focus();return false;">開発者向けマニュアル</a></p>
+<div></div>
+{/if}
 {if $smarty.const.IS_AUTH}
-<p class="lb_01"><a href="{site_url uri=admin}" target="_blank">管理画面</a></p>
+<p class="lb_01"><a href="{site_url uri=admin}" target="admin" onClick="window.open(this.href,this.target).focus();return false;">管理画面</a></p>
 <div></div>
 {if $cate_list_important_articles}
 <p class="lb_01"><a href="{site_url uri=list}?from=0&amp;order=2">ブックマーク記事</a></p>
@@ -37,8 +43,8 @@
 {/foreach}
 </div>
 {/if}
-</div>
 {/if}
+</div>
 {if $smarty.const.UM_USE_RSS_FEED}
 <div class="rss_btn"><a href="{site_url uri=feed}" target="_blank">{img src=img/rss02.gif alt=rss2.0}</a></div>
 {/if}

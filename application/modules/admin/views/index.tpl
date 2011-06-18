@@ -24,7 +24,7 @@
 <p>管理ページからログアウトします。再度、作業を行う際はログインする必要があります。</p>
 <br />
 {/if}
-<p class="ttl"><a href="{site_url}" target="_blank">サイト{$smarty.const.UM_TOPPAGE_NAME}</a></p>
+<p class="ttl"><a href="{site_url}" target="sitetop" onClick="window.open(this.href,this.target).focus();return false;">サイト{$smarty.const.UM_TOPPAGE_NAME}</a></p>
 <p>この管理ページで管理しているWEBサイトのトップページにジャンプします。</p>
 </div>
 </div>

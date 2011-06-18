@@ -35,7 +35,7 @@
 	<th width="70" rowspan="3" class="f_11">{$form.memo_category_id.label}</th>
 	<td rowspan="3">
 {include file='ci:admin/util/form_select_category.tpl'}
-		<span class="f_exp_s box_no_spc">&gt;&gt;&nbsp;<a href="{admin_url uri=webmemo/category}" target="_blank">カテゴリ管理</a></span>
+		<span class="f_exp_s box_no_spc">&gt;&gt;&nbsp;<a href="{admin_url uri=webmemo/category}" target="memo_category" onClick="window.open(this.href,this.target).focus();return false;">カテゴリ管理</a></span>
 	</td>
 	<th width="60" class="f_11">{$form.important_level.label}</th>
 	<td style="width:100px;">
@@ -60,7 +60,7 @@
 </td>
 </tr>
 <tr>
-	<th width="60" class="f_10">{$form.format.label}</th>
+	<th width="60" class="f_7">{$form.format.label}</th>
 	<td>
 		<ul class="simple_list">
 			<li><input type="checkbox" name="format" value="2" id="format_2"{if $session.format == 2} checked="checked"{/if} /><label for="format_2" class="space_left_5">textile</label></li>
@@ -106,7 +106,7 @@
 {if $session.body}
 <div class="box_preview">
 <p class="ttl_012">プレビュー</p>
-{$session.body|smarty:nodefaults}
+{if $session.format == 2}{$session.body|textile|smarty:nodefaults}{else}{$session.body|smarty:nodefaults}{/if}
 </div>
 {/if}
 </div>
@@ -164,15 +164,15 @@
 <tr>
 	<th style="width:60px;">No</th>
 	<td style="width:30px;">{$row.id}</td>
-	<th style="width:50px;">質問タイトル</th>
+	<th style="width:50px;">タイトル</th>
 	<td class="td_w_break">{$row.title}</td>
 	<th style="width:50px;">カテゴリ</th>
 <!--
 	<td class="td_w_break" style="width:120px;">{$row.memo_category_id}</td>
 -->
 	<td class="td_w_break" style="width:120px;">
-		<span class="link_parts"><a href="{site_url uri=category}/{$row.sub_id}" target="_blank">{$cate_name_list[$row.sub_id]}</a>
-		&nbsp;&gt;&nbsp;<a href="{site_url uri=category}/{$row.memo_category_id}" target="_blank">{$row.name}</a></span>
+		<span class="link_parts"><a href="{site_url uri=category}/{$row.sub_id}" target="webmemo" onClick="window.open(this.href,this.target).focus();return false;">{$cate_name_list[$row.sub_id]}</a>
+		&nbsp;&gt;&nbsp;<a href="{site_url uri=category}/{$row.memo_category_id}" target="webmemo" onClick="window.open(this.href,this.target).focus();return false;">{$row.name}</a></span>
 	</td>
 </tr>
 <tr>

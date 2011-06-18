@@ -16,15 +16,19 @@
 </div>
 {/if}
 
-<div id="cate_list">
-{if !$memo_list}
-<div style="padding:30px 10px 30px 5px;">{if $search}「{$search}」に一致する{elseif $now_category_id}このカテゴリの{else}指定した記事の{/if}登録はありません。</div>
 {if $search}
+{capture name="google_search"}
 <div style="margin-bottom:20px;">
 「<a href="http://www.google.co.jp/search?q={$search}" target="_blank" style="font-weight:bold;">{$search}</a>」をGoogle検索
 <span style="margin-left:20px;"><a href="http://www.google.co.jp/search?q={$search}&as_qdr=m6" target="_blank">6ヶ月以内</a></span>
 </div>
+/capture}
 {/if}
+
+<div id="cate_list">
+{if !$memo_list}
+<div style="padding:30px 10px 30px 5px;">{if $search}「{$search}」に一致する{elseif $now_category_id}このカテゴリの{else}指定した記事の{/if}登録はありません。</div>
+{if $search}{$smarty.capture.google_search|smarty:nodefaults}{/if}
 {else}
 {if $pagination}
 {capture name="pager_parts"}
@@ -94,20 +98,15 @@
 </div>
 </div>
 {/foreach}
-{if $search}
-<div style="margin-bottom:20px;">
-「<a href="http://www.google.co.jp/search?q={$search}" target="_blank" style="font-weight:bold;">{$search}</a>」をGoogle検索
-<span style="margin-left:20px;"><a href="http://www.google.co.jp/search?q={$search}&as_qdr=m6" target="_blank">6ヶ月以内</a></span>
-</div>
-{/if}
+{if $search}{$smarty.capture.google_search|smarty:nodefaults}{/if}
 {if $smarty.capture.pager_parts|smarty:nodefaults}{$smarty.capture.pager_parts|smarty:nodefaults}{/if}
 {if $next_url}
 <p><a href="{$next_url}" rel="next">次のページ / Next</a></p>
 <hr />
 {/if}
 {/if}
-{if !$smarty.const.IS_AUTH && $smarty.const.UM_USE_GOOGLE_ADSENSE}{include file='ci:util/google_adsense_mainbody.tpl'}{/if}
 </div>
+{if !$smarty.const.IS_AUTH && $smarty.const.UM_USE_GOOGLE_ADSENSE}{include file='ci:util/google_adsense_mainbody.tpl'}{/if}
 </div><!-- mainbody -->
 
 {if $smarty.const.UM_SIDEMENU_VIEW_MODE}{include file='ci:sidemenu.tpl'}{/if}

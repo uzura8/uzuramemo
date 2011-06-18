@@ -1,6 +1,6 @@
 <div style="margin-top:20px;">
 <script type="text/javascript"><!--
-google_ad_client = "pub-4671197912383497";
+google_ad_client = "pub-{$smarty.const.UM_USE_GOOGLE_ADSENSE_ID}";
 /* 728x90, 作成済み 09/11/29 */
 google_ad_slot = "3308405486";
 google_ad_width = 728;
