@@ -60,11 +60,11 @@ function next_forcus(){
 {/literal}
 -->
 </script>
-<select name="memo_category_id_parent" size="10" id="memo_category_id_parent" onchange="next_forcus()" style="width:15em;">
+<select name="memo_category_id_parent" size="10" id="memo_category_id_parent" onchange="next_forcus()" style="width:14em;">
 {foreach from=$select_category_list item=row_parent}
 <option value="{$row_parent.id}">{$row_parent.name}</option>
 {/foreach}
 </select>
-<select name="memo_category_id" id="memo_category_id" size="10" style="width:15em;">
+<select name="memo_category_id" id="memo_category_id" size="10" style="width:14em;">
 </select>
 {/if}

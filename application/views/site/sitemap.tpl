@@ -13,10 +13,10 @@
 {/if}*}
 <h3 class="main_h3"><a href="{site_url uri=sitemap}">サイトマップ</a></h3>
 {if $smarty.const.DEV_MODE}
-<h3 class="main_h3"><a href="{site_url uri=user_guide_ja}" target="_blank">開発者向けマニュアル</a></h3>
+<h3 class="main_h3"><a href="{site_url uri=user_guide_ja}" target="user_guide" onClick="window.open(this.href,this.target).focus();return false;">開発者向けマニュアル</a></h3>
 {/if}
 {if $smarty.const.IS_AUTH}
-<h3 class="main_h3"><a href="{admin_url}" target="_blank">管理画面</a></h3>
+<h3 class="main_h3"><a href="{admin_url}" target="admin" onClick="window.open(this.href,this.target).focus();return false;">管理画面</a></h3>
 {/if}
 <h3 class="main_h3"><a href="{site_url}">{$smarty.const.UM_TOPPAGE_NAME}</a></h3>
 
