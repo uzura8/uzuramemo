@@ -45,11 +45,14 @@ define('COPYRIGHT_SINCE', '2008');
 // GoogleAnalytics使用設定
 define('UM_USE_GOOGLE_ANALYTICS', false);
 
-// GoogleAnalytics使用設定
+// GoogleAnalyticsID設定
 define('UM_GOOGLE_ANALYTICS_ID', '');
 
 // GoogleAdsense使用設定
 define('UM_USE_GOOGLE_ADSENSE', false);
+
+// GoogleAdsenseID設定
+define('UM_USE_GOOGLE_ADSENSE_ID', '4671197912383497');
 
 // 他のアフィリエイト使用設定
 define('UM_USE_AFFILIATE_OTHER', false);
