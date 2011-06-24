@@ -1,0 +1,53 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="Content-Script-Type" content="text/javascript" />
+<title>{$smarty.const.SITE_TITLE}</title>
+<link href="{site_url}css/filter.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body id="{get_current_page_id}">
+<div id="container"><!--container START-->
+
+<h1>タスク</h1>
+
+<div>
+{form_open action=task/execute_send id=comment-form}
+<textarea name="comment" id="comment" ...></textarea>
+<input type="submit" id="submit" .../>
+{form_close}
+</div>
+
+<div id="result"><?php echo $bbs_list; ?></div>
+
+<div id="comments">
+<div class="each-comment">
+	それぞれのコメントの内容
+</div>
+<div id="new-comment"></div>
+</div>
+
+</div>
+</body>
+
+<script type="text/javascript" src="{site_url}js/lib/jquery.js"></script>
+<script type="text/javascript">
+{literal}
+$(function(){
+  $("#comment-form").live("submit", function(){
+    $("#new-comment").load(
+      $(this).attr("action")
+        + "?nochache=" + (new Date()).getTime() + " #comments > .each-comment:last",
+      { name: $("#name").val(), url: $("#url").val(), comment: $("#comment").val() },
+      function(){ $("#new-comment > .each-comment")
+        .hide().appendTo("#comments").slideDown("slow"); }
+    );
+    $("#comment").val("");
+    return false;
+  });
+});
+{/literal}
+</script>
+
+</html>
