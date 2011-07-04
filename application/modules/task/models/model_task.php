@@ -14,7 +14,7 @@ class Model_task extends CI_Model
 		return (int)$this->db->count_all_results();
 	}
 
-	function get_each_article($id, $is_private = false)
+	function get_row($id, $is_private = false)
 	{
 		if (!$id) return array();
 
@@ -24,7 +24,7 @@ class Model_task extends CI_Model
 		return $this->db->query($sql, array((int)$id))->result_array();
 	}
 
-	function get_main_list($offset = 0, $limit = 10, $order = 'updated_at desc', $search = '', $category_id_list = array(), $with_logical_deleted = false, $columns = 'A.*, B.name, B.sub_id')
+	function get_main_list($offset = 0, $limit = 10, $order = 'id desc', $search = '', $category_id_list = array(), $with_logical_deleted = false, $columns = 'A.*, B.name, B.sub_id')
 	{
 		$sql  = $this->get_main_query($search, $category_id_list, false, $with_logical_deleted, $columns);
 		$sql .= sprintf(" ORDER BY A.%s", $order);

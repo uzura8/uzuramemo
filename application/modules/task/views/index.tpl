@@ -15,7 +15,6 @@
 {$head_info}
 </head>
 
-{*<body id="{get_current_page_id}" onload="jQueryLoad('list', '{site_url uri=task/task_list}')">*}
 <body id="{get_current_page_id}" onload="ajax_list_load('list', '{site_url uri=task/ajax_task_list}')">
 
 {*
@@ -24,9 +23,6 @@
 *}
 
 <div id="mainbody">
-{*
-{include file='ci:mobile/util/memo_topmenu.tpl'}
-*}
 
 <h1>タスク</h1>
 
@@ -36,7 +32,7 @@
 </div>
 
 <div id="list"></div>
-
+<div id="auto_pager"><a href="{$pagination.next_url}" rel="next">次のページ / Next</a></div>
 
 {*
 {include file='ci:mobile/footer.tpl'}
@@ -49,7 +45,6 @@ Copyright : {$smarty.const.COPYRIGHT_SINCE} - {$smarty.now|date_format:"%Y"} {$s
 {$foot_info}
 
 <script type="text/javascript" src="{site_url}js/lib/jquery.js"></script>
-{*<script type="text/javascript" src="{site_url}js/task.js"></script>*}
 
 <script src="{site_url}js/lib/jeditable/jquery.jeditable.js" type="text/javascript"></script>
 <script src="{site_url}js/lib/jeditable/jquery.jeditable.autogrow.js" type="text/javascript" ></script>
@@ -68,31 +63,32 @@ Copyright : {$smarty.const.COPYRIGHT_SINCE} - {$smarty.now|date_format:"%Y"} {$s
 <script type="text/javascript" src="{site_url}js/lib/jeditable/js/jquery.datePicker.js"></script>
 <script type="text/javascript" src="{site_url}js/lib/jeditable/js/jquery.ajaxfileupload.js"></script>
 
+<script src="{site_url}js/jquery.autopager.js" type="text/javascript"></script>
+
 <script type="text/javascript" charset="utf-8">
 {literal}
 // <![CDATA[
 $(document).ready(function() {
 	$(".autogrow").live("click", function(){
-		$(".autogrow").editable("{/literal}{site_url uri=task/execute_update}{literal}", { 
+		var task_id = $(this).attr("id");
+//		$(".autogrow").editable("{/literal}{site_url uri=task/execute_update}{literal}", { 
+		$("p#" + task_id).editable("{/literal}{site_url uri=task/execute_update}{literal}", { 
 				indicator : "<img src='{/literal}{site_url uri=js/lib/jeditable/img/indicator.gif}{literal}'>",
 				type      : "autogrow",
 				submit    : 'OK',
 //				submit    : '<input type="submit" value="OK" class="button">',
 				cancel    : 'cancel',
+				loadurl    : '{/literal}{site_url uri=task/ajax_task_detail}{literal}/' + task_id,
 				tooltip   : "Click to edit...",
 				onblur    : "ignore",
 				cssclass : "editable",
 				select : true,
-				autogrow : {
-					 lineHeight : 16,
-					 minHeight  : 32
-				}
+//				autogrow : {
+//					 lineHeight : 16,
+//					 minHeight  : 32
+//				}
 		})
 	});
-//	$(".button").live("click", function(){
-//			$('#list').load({/literal}'{site_url uri=task/ajax_task_list}'{literal});
-//alert('11111');
-//	});
 	$(".charcounter").editable("http://www.appelsiini.net/projects/jeditable/php/save.php", { 
 			indicator : "<img src='img/indicator.gif'>",
 			type      : "charcounter",
@@ -144,27 +140,31 @@ $(document).ready(function() {
 function ajax_list_load(id, url){
 	ajax_list(id, url);
 }
-//function load_list(){
-//alert('111111');
-//	$('#list').load({/literal}'{site_url uri=task/ajax_task_list}'{literal});
-//	$('#list').delay(5000000000000).load({/literal}'{site_url uri=task/ajax_task_list}'{literal});
-//}
+
 function ajax_list(id, url){
+	// Ajaxによるアクセスにキャッシュを利用しない(毎回サーバにアクセス)
+	$.ajaxSetup( { cache : false } );
 	$("#" + id).show();
-	$.get(url, {page : 1}, function(data){
+	$.get(url, {nochache : (new Date()).getTime(), search : {/literal}'{$search}'{literal}, order : {/literal}'{$order}'{literal}, from : {/literal}'{$from}'{literal} }, function(data){
 	 if (data.length>0){
 		 $("#" + id).html(data);
 	 }
 	})
+//	var next_url = url + '?nochache=' + (new Date()).getTime() + '{/literal}&search={$search}&order={$order}&from={$from}{literal}';
+//	var next_url = '{/literal}{$pagination.next_url}{literal}';
+//	$("#auto_pager").html("<a href='" + next_url + "' rel='next'>次のページ / Next</a>");
 }
+
 function send(post_url, id, get_url)  {
 	// サーバに投稿メッセージを送信
 	$.post( post_url, { "body" : $( 'textarea#body' ).val() } );
+	ajax_list(id, get_url);
 	// メッセージ入力欄をクリア
 	$( 'textarea#body' ).val( '' ).focus();
-	// ajax_list(id, get_url);
-	$('#' + id).load(get_url);
+
+	return false;
 }
+
 // edit textarea autogrow
 $(function(){
 	$('textarea').autogrow();

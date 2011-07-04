@@ -6,7 +6,6 @@
 
 <body>
 
-
 {if !$list}
 <div style="padding:30px 10px 30px 5px;">{if $search}「{$search}」に一致する{elseif $now_category_id}このカテゴリの{else}指定した記事の{/if}登録はありません。</div>
 {if $search}
@@ -18,9 +17,9 @@
 {else}
 
 <!-- main_list -->
+<div class="content">
 {foreach from=$list item=row}
 <a name="id_{$row.id}"></a>
-<div class="content">
 <h2 class="box_01">
 <div>{$row.name}</div>
 <div class="article_meta_top">
@@ -34,7 +33,7 @@
 </h2>
 <article class="box_01">
 <div class="article_box">
-<p class="autogrow" id="{$row.id}" style="width: 300px">{$row.body|nl2br}</p>
+<p class="autogrow" id="{$row.id}" style="width: 300px">{$row.body|nl2br|auto_link}</p>
 </div>
 
 <aside>
@@ -49,22 +48,18 @@
 </div>
 </aside>
 </article>
-</div>
 
 {/foreach}
+</div>
 {if $search}
 <section>
 「<a href="http://www.google.co.jp/search?q={$search}" target="_blank" style="font-weight:bold;">{$search}</a>」をGoogle検索
 <span style="margin-left:20px;"><a href="http://www.google.co.jp/search?q={$search}&as_qdr=m6" target="_blank">6ヶ月以内</a></span>
 </section>
 {/if}
-{if $pagination.next_url}<nav id="next"><a href="{$pagination.next_url}" rel="next">もっと見る</a></nav>{/if}
+
+{*{if $pagination.next_url}<nav id="next"><a href="{$pagination.next_url}" rel="next">もっと見る</a></nav>{/if}*}
 {/if}
 </div>
-{if !$smarty.const.IS_AUTH && $smarty.const.UM_USE_GOOGLE_ADSENSE}{include file='ci:mobile/util/google_adsense_mainbody.tpl'}{/if}
-
-
-
-
 </body>
 </html>

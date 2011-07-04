@@ -100,10 +100,12 @@
 {/foreach}
 {if $search}{$smarty.capture.google_search|smarty:nodefaults}{/if}
 {if $smarty.capture.pager_parts|smarty:nodefaults}{$smarty.capture.pager_parts|smarty:nodefaults}{/if}
+{*
 {if $next_url}
 <p><a href="{$next_url}" rel="next">次のページ / Next</a></p>
 <hr />
 {/if}
+*}
 {/if}
 </div>
 {if !$smarty.const.IS_AUTH && $smarty.const.UM_USE_GOOGLE_ADSENSE}{include file='ci:util/google_adsense_mainbody.tpl'}{/if}
