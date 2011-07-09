@@ -32,7 +32,11 @@
 </div>
 
 <div id="list"></div>
-<div id="auto_pager"><a href="{$pagination.next_url}" rel="next">次のページ / Next</a></div>
+<div id="auto_pager"></div>
+{*<div id="auto_pager"><a href="{$pagination.next_url}" rel="next">次のページ / Next</a></div>*}
+{*
+<div id="test_pager"><a href="javascript:void(0);" rel="next" onclick="load_next_list('{site_url uri=task/ajax_task_list}')">次のページ / Next</a></div>
+*}
 
 {*
 {include file='ci:mobile/footer.tpl'}
@@ -138,27 +142,69 @@ $(document).ready(function() {
 <script type="text/javascript">
 {literal}
 function ajax_list_load(id, url){
-	ajax_list(id, url);
+	ajax_list(id, url, {/literal}{$from}{literal});
 }
 
-function ajax_list(id, url){
+function ajax_list_load_next(id, url){
+	var offset = {/literal}{$from}{literal} + {/literal}{$limit}{literal};
+
 	// Ajaxによるアクセスにキャッシュを利用しない(毎回サーバにアクセス)
 	$.ajaxSetup( { cache : false } );
 	$("#" + id).show();
-	$.get(url, {nochache : (new Date()).getTime(), search : {/literal}'{$search}'{literal}, order : {/literal}'{$order}'{literal}, from : {/literal}'{$from}'{literal} }, function(data){
-	 if (data.length>0){
-		 $("#" + id).html(data);
-	 }
+
+	$.get(url, {nochache : (new Date()).getTime(), search : {/literal}'{$search}'{literal}, order : {/literal}'{$order}'{literal}, from : offset }, function(data){
+		if (data.length>0){
+			$("#" + id).html(data);
+		}
 	})
+}
+
+function ajax_list_get(id, url, offset){
+	// Ajaxによるアクセスにキャッシュを利用しない(毎回サーバにアクセス)
+	$.ajaxSetup( { cache : false } );
+	$("#" + id).show();
+
+	$.get(url, {nochache : (new Date()).getTime(), search : {/literal}'{$search}'{literal}, order : {/literal}'{$order}'{literal}, from : offset }, function(data){
+		if (data.length>0){
+			$("#" + id).html(data);
+		}
+	})
+
 //	var next_url = url + '?nochache=' + (new Date()).getTime() + '{/literal}&search={$search}&order={$order}&from={$from}{literal}';
 //	var next_url = '{/literal}{$pagination.next_url}{literal}';
 //	$("#auto_pager").html("<a href='" + next_url + "' rel='next'>次のページ / Next</a>");
 }
 
+function ajax_list(id, url, offset){
+	// Ajaxによるアクセスにキャッシュを利用しない(毎回サーバにアクセス)
+	$.ajaxSetup( { cache : false } );
+	$("#" + id).show();
+
+	$.get(url, {nochache : (new Date()).getTime(), search : {/literal}'{$search}'{literal}, order : {/literal}'{$order}'{literal}, from : offset }, function(data){
+		if (data.length>0){
+			$("#" + id).html(data);
+		}
+	})
+
+	var next = offset + {/literal}{$limit}{literal};
+	var next_url = {/literal}'{site_url}task'{literal} + '?nochache=' + (new Date()).getTime() + '{/literal}&search={$search}&order={$order}{literal}&from=' + next;
+	$("#auto_pager").html("<a href='" + next_url + "' rel='next'>次のページ / Next</a>");
+}
+
+//function load_next_list(url){
+//	var offset = 0;
+//
+//	$.get(url, {nochache : (new Date()).getTime(), search : {/literal}'{$search}'{literal}, order : {/literal}'{$order}'{literal}, from : offset }, function(data){
+//		if (data.length>0){
+//			$("#test_pager").html(data);
+//		}
+//	})
+//}
+
 function send(post_url, id, get_url)  {
 	// サーバに投稿メッセージを送信
 	$.post( post_url, { "body" : $( 'textarea#body' ).val() } );
-	ajax_list(id, get_url);
+	ajax_list(id, get_url, 0);
 	// メッセージ入力欄をクリア
 	$( 'textarea#body' ).val( '' ).focus();
 

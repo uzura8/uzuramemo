@@ -58,7 +58,9 @@
 </section>
 {/if}
 
-{*{if $pagination.next_url}<nav id="next"><a href="{$pagination.next_url}" rel="next">もっと見る</a></nav>{/if}*}
+{*<div id="test_pager"><a href="javascript:void(0);" rel="next" onclick="load_next_list('{site_url uri=task/ajax_task_list}')">次のページ / Next</a></div>
+{if $pagination.next_url}<nav id="next"><a href="{$pagination.next_url}" rel="next">もっと見る</a></nav>{/if}*}
+
 {/if}
 </div>
 </body>

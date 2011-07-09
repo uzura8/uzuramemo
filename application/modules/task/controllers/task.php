@@ -63,6 +63,12 @@ class Task extends MY_Controller
 		$view_data['order']  = $this->order;
 		$view_data['opt']    = $this->search_option;
 		$view_data['from']   = $this->offset;
+		$view_data['limit']  = $this->limit;
+
+		// 記事件数を取得
+		$count_all = $this->model_task->get_count_all($this->search);
+		$view_data['pagination'] = $this->_get_pagination_simple($count_all);
+		$view_data['count_all']  = $count_all;
 
 		$this->smarty_parser->parse('ci:task/index.tpl', $view_data);
 	}
@@ -72,11 +78,6 @@ class Task extends MY_Controller
 		// template
 		$view_data = $this->_get_default_view_data();
 		$view_data['list'] =  $this->model_task->get_main_list($this->offset, $this->limit);
-
-		// 記事件数を取得
-		$count_all = $this->model_task->get_count_all($this->search);
-		$view_data['pagination'] = $this->_get_pagination_simple($count_all);
-		$view_data['count_all']  = $count_all;
 
 		$this->smarty_parser->parse('ci:task/list.tpl', $view_data);
 	}
