@@ -86,8 +86,10 @@
 <span class="title">カテゴリ:</span>
 <span class="link_parts space_left_5"><a href="{site_url uri=category}/{$row.sub_id}">{$cate_name_list[$row.sub_id]}</a>
 &nbsp;&gt;&nbsp;<a href="{site_url uri=category}/{$row.memo_category_id}">{$row.name}</a></span>
-<span class="btnTop space_left_5"><a href="#top">▲</a></span>
-<span class="btnTop"><a href="{site_url}">{$smarty.const.UM_TOPPAGE_NAME}</a></span>
+</div>
+<div class="article_aside_button">
+<div class="btnTop space_left_5"><a href="#top">▲</a></div>
+<div class="btnTop"><a href="{site_url}">{$smarty.const.UM_TOPPAGE_NAME}</a></div>
 </div>
 </aside>
 </article>

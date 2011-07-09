@@ -312,6 +312,10 @@ article.box_01 .iPhoneButton {
 	margin-top: 20px;
 }
 
+article aside div.article_aside_button {
+	padding: 5px 0 10px;
+}
+
 .btnTop {
 	border-radius: 3px;
 	background-color: #cbcccf;
