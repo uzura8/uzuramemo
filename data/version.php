@@ -2,5 +2,5 @@
 
 if (!defined('UM_VERSION'))
 {
-  define('UM_VERSION', '2.0.0');
+  define('UM_VERSION', '2.1.0');
 }

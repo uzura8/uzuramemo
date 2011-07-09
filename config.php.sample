@@ -119,6 +119,15 @@ define('UM_PUBDATA_DIR', UM_BASE_DIR.'/public_data');
 require_once(UM_DATA_DIR.'/version.php');
 
 
+// module 設定
+
+// 無効モジュールリスト
+$GLOBALS['DISABLED_MODULES'] = array(
+	'task',
+	'welcome',
+);
+
+
 // 動的設定項目
 
 // debugモード設定
