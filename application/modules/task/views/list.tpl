@@ -36,13 +36,13 @@
 <p class="autogrow" id="{$row.id}" style="width: 300px">{$row.body|nl2br|auto_link}</p>
 </div>
 
-<aside>
+<aside class="article_footer">
 {if $row.explanation}
 <div class="quote_box">
 <span class="title">引用元:</span><span class="space_left_5">{$row.explanation}</span>
 </div>
 {/if}
-<div class="article_aside_category">
+<div class="article_aside_button">
 <span class="btnTop space_left_5"><a href="#top">▲</a></span>
 <span class="btnTop"><a href="{site_url}">{$smarty.const.UM_TOPPAGE_NAME}</a></span>
 </div>
@@ -64,4 +64,5 @@
 {/if}
 </div>
 </body>
+
 </html>

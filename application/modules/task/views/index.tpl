@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width">
 <title>{$smarty.const.SITE_TITLE}</title>
+<link rel="stylesheet" href="{site_url}css/task.css">
 <link rel="stylesheet" href="{site_url}css/mobile/reset.css">
 <link rel="stylesheet" href="{site_url}css/mobile/base.css">
 
@@ -16,6 +17,7 @@
 </head>
 
 <body id="{get_current_page_id}" onload="ajax_list_load('list', '{site_url uri=task/ajax_task_list}')">
+<header id="top"></header>
 
 {*
 {include file='ci:mobile/header.tpl'}
@@ -214,6 +216,15 @@ function send(post_url, id, get_url)  {
 // edit textarea autogrow
 $(function(){
 	$('textarea').autogrow();
+});
+{/literal}
+</script>
+
+<script type="text/javascript" src="{site_url}js/jquery.slidescroll.js"></script>
+<script type="text/javascript">
+{literal}
+$(function(){
+  $("a[href*='#']").slideScroll();
 });
 {/literal}
 </script>

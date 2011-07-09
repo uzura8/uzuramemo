@@ -22,7 +22,7 @@
 「<a href="http://www.google.co.jp/search?q={$search}" target="_blank" style="font-weight:bold;">{$search}</a>」をGoogle検索
 <span style="margin-left:20px;"><a href="http://www.google.co.jp/search?q={$search}&as_qdr=m6" target="_blank">6ヶ月以内</a></span>
 </div>
-/capture}
+{/capture}
 {/if}
 
 <div id="cate_list">
