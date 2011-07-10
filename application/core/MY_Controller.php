@@ -43,9 +43,9 @@ class MY_Controller extends CI_Controller
 		{
 			$current_module = 'mobile';
 		}
-		elseif ($this->uri->segment(1, false))
+		elseif ($this->uri->rsegment(1, false))
 		{
-			$current_module = $this->uri->segment(1, false);
+			$current_module = $this->uri->rsegment(1, false);
 		}
 
 		define('CURRENT_MODULE', $current_module);
@@ -66,7 +66,7 @@ class MY_Controller extends CI_Controller
 
 	private function _check_module_enabled()
 	{
-		if ($this->uri->segment(1, false) && in_array($this->uri->segment(1, false), $GLOBALS['DISABLED_MODULES']))
+		if ($this->uri->rsegment(1, false) && in_array($this->uri->rsegment(1, false), $GLOBALS['DISABLED_MODULES']))
 		{
 			show_error('this module is disabled.');
 		}
@@ -89,7 +89,7 @@ class MY_Controller extends CI_Controller
 
 	private function _check_module_from_uri_segment($name)
 	{
-		if ($this->uri->segment(1, false) && $this->uri->segment(1, false) == $name)
+		if ($this->uri->rsegment(1, false) && $this->uri->rsegment(1, false) == $name)
 		{
 			return true;
 		}
