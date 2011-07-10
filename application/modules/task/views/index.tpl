@@ -17,20 +17,19 @@
 </head>
 
 <body id="{get_current_page_id}" onload="ajax_list_load('list', '{site_url uri=task/ajax_task_list}')">
-<header id="top"></header>
-
 {*
 {include file='ci:mobile/header.tpl'}
 {include file='ci:mobile/topmenu.tpl'}
 *}
+<header id="top">
+<h1><a href="{site_url uri=task}" style="">{$smarty.const.SITE_TITLE}</a></h1>
+</header>
 
 <div id="mainbody">
 
-<h1>タスク</h1>
-
-<div>
+<div class="form_box">
 <textarea name="body" id="body" cols="60" rows="3"></textarea>
-<button id="send" onclick="send('{site_url uri=task/execute_insert}', 'list', '{site_url uri=task/ajax_task_list}')">投稿</button><br>
+<nav id="send" onclick="send('{site_url uri=task/execute_insert}', 'list', '{site_url uri=task/ajax_task_list}')"><a href="">投稿</a></nav>
 </div>
 
 <div id="list"></div>
@@ -190,7 +189,7 @@ function ajax_list(id, url, offset){
 
 	var next = offset + {/literal}{$limit}{literal};
 	var next_url = {/literal}'{site_url}task'{literal} + '?nochache=' + (new Date()).getTime() + '{/literal}&search={$search}&order={$order}{literal}&from=' + next;
-	$("#auto_pager").html("<a href='" + next_url + "' rel='next'>次のページ / Next</a>");
+	$("#auto_pager").html("<nav id='next'><a href='" + next_url + "' rel='next'>もっと見る</a></nav>");
 }
 
 //function load_next_list(url){

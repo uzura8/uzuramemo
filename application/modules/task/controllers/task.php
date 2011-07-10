@@ -14,9 +14,6 @@ class Task extends MY_Controller
 	{
 		parent::__construct();
 
-		// load configs
-		$this->config->load('task', TRUE);
-
 		// load models
 		$this->load->model('task/model_task');
 

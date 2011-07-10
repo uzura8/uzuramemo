@@ -44,7 +44,8 @@
 {/if}
 <div class="article_aside_button">
 <span class="btnTop space_left_5"><a href="#top">▲</a></span>
-<span class="btnTop"><a href="{site_url}">{$smarty.const.UM_TOPPAGE_NAME}</a></span>
+<span class="btnTop space_left_5"><a href="{site_url uri=task}">{$smarty.const.UM_TOPPAGE_NAME}</a></span>
+<span class="btnTop"><a href="{site_url}">サイト{$smarty.const.UM_TOPPAGE_NAME}</a></span>
 </div>
 </aside>
 </article>

@@ -226,6 +226,7 @@ nav a:visited {
 }
 nav a:hover {
 	color: #fff;
+	text-decoration: none;
 }
 
 section, nav {

@@ -22,9 +22,6 @@ class Webmemo extends MY_Controller
 	{
 		parent::__construct();
 
-		// load configs
-		$this->config->load('webmemo', TRUE);
-
 		// load models
 		$this->load->model('webmemo/category');
 		$this->load->model('webmemo/memo');

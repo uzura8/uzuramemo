@@ -1,0 +1,11 @@
+.article_footer {
+	padding-top 0;
+}
+
+.form_box {
+	text-align: center;
+}
+
+textarea#body {
+	margin: 0 auto 10px;
+}

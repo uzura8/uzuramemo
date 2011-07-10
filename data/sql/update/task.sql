@@ -7,7 +7,7 @@ CREATE TABLE `task` (
   `name` varchar(200) NOT NULL DEFAULT '',
   `body` text,
   `explanation` text,
-  `sort` int(8) NOT NULL DEFAULT '999',
+  `sort` int(8) DEFAULT NULL,
   `del_flg` tinyint(1) NOT NULL DEFAULT '0',
   `html_flg` tinyint(1) NOT NULL DEFAULT '0',
   `limitdate` date DEFAULT '0000-00-00' COMMENT '予定日',
@@ -15,7 +15,8 @@ CREATE TABLE `task` (
   `enddate` date DEFAULT NULL COMMENT '終了日',
   `private_flg` tinyint(1) DEFAULT '0',
   `priority` tinyint(1) DEFAULT '2',
-  `work_time` float NOT NULL DEFAULT '0' COMMENT '作業時間',
+  `estimate` float DEFAULT NULL COMMENT '見積工数',
+  `duration` float NOT NULL DEFAULT '0' COMMENT '作業時間',
   `created_at` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `updated_at` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`id`)

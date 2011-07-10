@@ -12,6 +12,14 @@ class MY_Controller extends CI_Controller
 		$this->_check_module_enabled();
 		$this->_check_admin();
 		$this->_set_current_module();
+		$this->_setup();
+	}
+
+	private function _setup()
+	{
+		// load configs
+		$this->config->load(CURRENT_MODULE, true);
+		if (!defined('SITE_TITLE')) define('SITE_TITLE', $this->config->item('site_title', CURRENT_MODULE));
 	}
 
 	private function _set_current_controller_action()
@@ -22,7 +30,7 @@ class MY_Controller extends CI_Controller
 
 	private function _set_current_module()
 	{
-		$current_module = 'default';
+		$current_module = 'webmemo';
 		if (IS_ADMIN)
 		{
 			$current_module = 'admin';
@@ -30,6 +38,14 @@ class MY_Controller extends CI_Controller
 		elseif (IS_MOBILE)
 		{
 			$current_module = 'mobile';
+		}
+		elseif (IS_MOBILE)
+		{
+			$current_module = 'mobile';
+		}
+		elseif ($this->uri->segment(1, false))
+		{
+			$current_module = $this->uri->segment(1, false);
 		}
 
 		define('CURRENT_MODULE', $current_module);

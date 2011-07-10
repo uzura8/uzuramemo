@@ -18,7 +18,6 @@ class Admin extends MY_Controller
 		// load helpers
 		$this->load->helper('admin');
 
-		$this->config->load('admin', true);
 		$this->_configure();
 	}
 
