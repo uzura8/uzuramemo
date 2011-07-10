@@ -88,7 +88,7 @@ $autoload['helper'] = array('url', 'html', 'form', 'common', 'site', 'webmemo');
 |
 */
 
-$autoload['config'] = array('site');
+$autoload['config'] = array();
 
 
 /*

@@ -6,6 +6,7 @@ class MY_Controller extends CI_Controller
 	{
 		parent::__construct();
 
+		$this->config->load('site', true);
 		$this->_set_current_controller_action();
 		$this->_check_user_agent();
 		$this->_check_client_ip();
@@ -19,6 +20,7 @@ class MY_Controller extends CI_Controller
 	{
 		// load configs
 		$this->config->load(CURRENT_MODULE, true);
+
 		if (!defined('SITE_TITLE')) define('SITE_TITLE', $this->config->item('site_title', CURRENT_MODULE));
 	}
 
@@ -87,22 +89,12 @@ class MY_Controller extends CI_Controller
 		define('IS_AUTH', $is_auth);
 	}
 
-	private function _check_module_from_uri_segment($name)
-	{
-		if ($this->uri->rsegment(1, false) && $this->uri->rsegment(1, false) == $name)
-		{
-			return true;
-		}
-
-		return false;
-	}
-
 	private function _check_admin()
 	{
 		$this->_check_auth();
-		$admin_path = $this->config->item('admin_path');
+		$admin_path = $this->config->item('admin_path', 'site');
 
-		if (!$this->_check_module_from_uri_segment($admin_path))
+		if (!$this->uri->segment(1, false) || $this->uri->segment(1, false) != $admin_path)
 		{
 			define('IS_ADMIN', false);
 			return;
@@ -114,7 +106,7 @@ class MY_Controller extends CI_Controller
 
 		if (CURRENT_ACTION)
 		{
-			if (in_array(CURRENT_ACTION, $this->config->item('admin_inseccure_actions')))
+			if (in_array(CURRENT_ACTION, $this->config->item('admin_inseccure_actions', 'site')))
 			{
 				if (IS_AUTH) redirect($admin_path);
 				return;
