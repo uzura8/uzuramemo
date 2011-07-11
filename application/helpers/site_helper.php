@@ -9,10 +9,8 @@
 function get_config_value($item, $index = '')
 {
 	$CI =& get_instance();
-	if (!$index) return  $CI->config->item($item);
 
-	$values = $CI->config->item($index);
-	return $values[$item];
+	return  $CI->config->item($item, $index);
 }
 
 function site_redirect($uri = '', $message = '')
@@ -26,12 +24,12 @@ function site_redirect($uri = '', $message = '')
 
 function admin_url($uri = '')
 {
-	return site_url(get_config_value('admin_path').'/'.$uri);
+	return site_url(get_config_value('admin_path', 'site').'/'.$uri);
 }
 
 function site_get_symbol($key)
 {
-	if (!$symbols = get_config_value('symbols')) return '';
+	if (!$symbols = get_config_value('symbols', 'site')) return '';
 	if (empty($symbols[$key])) return '';
 
 	return $symbols[$key];
