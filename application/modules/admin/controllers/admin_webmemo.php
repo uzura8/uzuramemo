@@ -742,6 +742,7 @@ class Admin_webmemo extends MY_Controller
 		if ($this->input->post('title') || !$this->input->post('body')) return;
 
 		$title = $this->_get_title_from_body($this->input->post('body'));
+		$title = htmlspecialchars_decode($title, ENT_QUOTES);
 		if ($title) $this->input->set_post('title', $title);
 	}
 
