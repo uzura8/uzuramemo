@@ -7,6 +7,7 @@
 <meta http-equiv="Content-Style-Type" content="text/css">
 <meta http-equiv="Content-Script-Type" content="text/javascript">
 <link href="{site_url uri=css/admin/format.css}" rel="stylesheet" type="text/css" />
+<link href="{site_url uri=css/util.css}" rel="stylesheet" type="text/css" />
 <link href="{site_url uri=img/admin/favicon.ico}" rel="shortcut icon" type="image/ico" />
 {if $set_js_libraries}
 <script type="text/javascript" src="{site_url}js/common.js"></script>
