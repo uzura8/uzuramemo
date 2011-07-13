@@ -2,6 +2,8 @@
 
 class MY_Controller extends CI_Controller
 {
+	public $validation_rules = array();
+
 	function __construct()
 	{
 		parent::__construct();
@@ -116,5 +118,27 @@ class MY_Controller extends CI_Controller
 		$filename .= '.tpl';
 
 		return $filename;
+	}
+
+	protected function _setup_validation($action = '')
+	{
+		$this->load->library('form_validation');
+		$this->validation_rules = $this->_get_validation_rules($action);
+	}
+
+	protected function _get_validation_rules($action, $field = '')
+	{
+		$method = '_validation_rules';
+		if ($action) $method .= '_'.$action;
+		if (!$list = $this->$method()) return false;
+
+		if ($field)
+		{
+			if (empty($list[$field])) return false;
+
+			return $list[$field];
+		}
+
+		return $list;
 	}
 }
