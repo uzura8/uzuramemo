@@ -37,14 +37,6 @@ class MY_Controller extends CI_Controller
 		{
 			$current_module = 'admin';
 		}
-		elseif (IS_MOBILE)
-		{
-			$current_module = 'mobile';
-		}
-		elseif (IS_MOBILE)
-		{
-			$current_module = 'mobile';
-		}
 		elseif ($this->uri->rsegment(1, false))
 		{
 			$current_module = $this->uri->rsegment(1, false);
