@@ -1,0 +1,69 @@
+/* 文字設定等 -------------*/
+.f_nm {
+	font-weight: normal;
+}
+.f_bld {
+	font-weight: bold;
+}
+.f_7 {
+	font-size: 7px;
+}
+.f_8 {
+	font-size: 8px;
+}
+.f_9 {
+	font-size: 9px;
+}
+.f_10 {
+	font-size: 10px;
+}
+.f_11 {
+	font-size: 11px;
+}
+.f_12 {
+	font-size: 12px;
+}
+.f_13 {
+	font-size: 13px;
+}
+.f_14 {
+	font-size: 14px;
+}
+
+/*文字色（赤）*/
+.f_red {
+	color:#F00;
+}
+/*文字色（オレンジ）*/
+.f_ora {
+	color: #F90;
+}
+/*文字色（青）*/
+.f_bl {
+	color: #09F;
+}
+/*文字色（薄青）*/
+.f_bl2 {
+	color: #D6E5EA;
+}
+/*文字色（薄灰）*/
+.f_gr2 {
+	color: #f2f2f2;
+}
+/*文字色（白）*/
+.f_wh {
+	color: #ffffff;
+}
+
+.space_left{
+	margin-left: 10px;
+}
+.space_left_5{
+	margin-left: 5px;
+}
+.space_left_10{
+	margin-left: 10px;
+}
+.space_left_20{
+	margin-left: 20px;
+}
