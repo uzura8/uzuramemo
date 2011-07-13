@@ -5,7 +5,6 @@ class Admin_webmemo extends MY_Controller
 {
 	private $private_config   = array();
 	private $admin_username   = '';
-	private $validation_rules = array();
 
 	private $breadcrumbs    = array();
 	private $is_private     = false;
@@ -148,7 +147,7 @@ class Admin_webmemo extends MY_Controller
 		admin_redirect('webmemo/index#frm', $message);
 	}
 
-	private function _validation_rules_memo()
+	protected function _validation_rules_memo()
 	{
 		return array(
 			'title' => array(
@@ -563,22 +562,6 @@ class Admin_webmemo extends MY_Controller
 		return $cate_ids;
 	}
 
-	private function _get_validation_rules($action, $field = '')
-	{
-		if (!$action) return false;
-		$method = '_validation_rules_'.$action;
-		if (!$list = $this->$method()) return false;
-
-		if ($field)
-		{
-			if (empty($list[$field])) return false;
-
-			return $list[$field];
-		}
-
-		return $list;
-	}
-
 	private function _set_validation_rules()
 	{
 		foreach ($this->validation_rules as $field => $row)
@@ -611,12 +594,6 @@ class Admin_webmemo extends MY_Controller
 		{
 			$this->session->remove($field, $action);
 		}
-	}
-
-	private function _setup_validation($action)
-	{
-		$this->load->library('form_validation');
-		$this->validation_rules = $this->_get_validation_rules($action);
 	}
 
 	private function _set_default_form_session_data($action)
