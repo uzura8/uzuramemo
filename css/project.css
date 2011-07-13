@@ -1,0 +1,51 @@
+.form_box {
+	padding: 10px;
+	background-color: #E7E7E7;
+}
+
+.form_box div.form_row {
+	margin: 0 0 10px;
+}
+
+.form_box label {
+	font-size: 10px;
+	float: left;
+	text-align: right;
+	width: 15%;
+	padding-top: 4px;
+	margin-right: 10px;
+}
+
+.form_box span.sublabel {
+	font-size: 10px;
+	margin-left: 10px;
+}
+
+.form_box div.input {
+	text-align: left;
+}
+
+.form_box div.input textarea, input {
+	font-size: 11px;
+}
+
+.form_box div.input textarea, input.wide {
+	width: 70%;
+}
+
+.form_box div.input input.normal {
+	width: 40%;
+}
+
+.form_box div.input input.narrow {
+	width: 10%;
+}
+
+.form_box div.left_box {
+	float: left;
+	width: 30%;
+}
+
+.form_box div.iPhoneButton {
+	margin-top: 10px;
+}

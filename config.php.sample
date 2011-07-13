@@ -123,6 +123,7 @@ require_once(UM_DATA_DIR.'/version.php');
 
 // 無効モジュールリスト
 $GLOBALS['DISABLED_MODULES'] = array(
+	'project',
 	'task',
 	'welcome',
 );
