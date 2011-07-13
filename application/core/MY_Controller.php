@@ -120,10 +120,11 @@ class MY_Controller extends CI_Controller
 		return $filename;
 	}
 
-	protected function _setup_validation($action = '')
+	protected function _setup_validation($action = '', $is_set_rules = true)
 	{
 		$this->load->library('form_validation');
 		$this->validation_rules = $this->_get_validation_rules($action);
+		if ($is_set_rules) $this->_set_validation_rules();
 	}
 
 	protected function _get_validation_rules($action, $field = '')
@@ -140,5 +141,24 @@ class MY_Controller extends CI_Controller
 		}
 
 		return $list;
+	}
+
+	protected function _set_validation_rules()
+	{
+		foreach ($this->validation_rules as $field => $row)
+		{
+			$this->form_validation->set_rules($field, $row['label'], $row['rules']);
+		}
+	}
+
+	protected function _get_form_data()
+	{
+		$values = array();
+		foreach ($this->validation_rules as $field => $row)
+		{
+			$values[$field] = set_value($field);
+		}
+
+		return $values;
 	}
 }

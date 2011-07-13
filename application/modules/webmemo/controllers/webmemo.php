@@ -7,7 +7,6 @@ class Webmemo extends MY_Controller
 
 	private $private_config = array();
 	private $breadcrumbs    = array();
-	private $validation_rules = array();
 	private $is_private     = false;
 	private $limit  = 10;
 	private $search = '';

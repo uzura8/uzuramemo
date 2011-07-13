@@ -191,7 +191,7 @@ class Admin_webmemo extends MY_Controller
 	public function execute_edit_memo_list()
 	{
 		$this->input->check_is_post();
-		$this->_setup_validation('memo');
+		$this->_setup_validation('memo', false);
 
 		// 管理画面外からのPOSTの場合は、戻りURLを確認しておく
 		if ($redirect_to = $this->input->post('redirect_to'))
@@ -560,14 +560,6 @@ class Admin_webmemo extends MY_Controller
 		foreach ($cate_list as $row) $cate_ids[] = (int)$row['id'];
 
 		return $cate_ids;
-	}
-
-	private function _set_validation_rules()
-	{
-		foreach ($this->validation_rules as $field => $row)
-		{
-			$this->form_validation->set_rules($field, $row['label'], $row['rules']);
-		}
 	}
 
 	private function _set_validation_sessions($action, $values = array())
