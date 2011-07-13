@@ -67,6 +67,9 @@ class Project extends MY_Controller
 		$view_data['pagination'] = $this->_get_pagination_simple($count_all);
 		$view_data['count_all']  = $count_all;
 
+		// form
+		$view_data['form'] = $this->_validation_rules();
+
 		$this->smarty_parser->parse('ci:project/index.tpl', $view_data);
 	}
 
@@ -139,30 +142,10 @@ class Project extends MY_Controller
 
 	public function execute_insert()
 	{
-		$this->load->library('form_validation');
-		$this->form_validation->set_rules('body', '内容', 'trim|required');
-
+		$this->input->check_is_post();
+		$this->_setup_validation();
 		if (!$this->form_validation->run()) return;
 
-//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-$isActive = 0;
-$isExit   = 0;
-$isEcho   = 0;
-$isAdd    = 1;
-if ($isActive) {
-  $type = 'wb';
-  if ($isAdd) $type = 'a';
-  $fp = fopen("/tmp/test.log", $type);
-  ob_start();
-  var_dump($this->form_validation->run(), $_POST, set_value('body'));
-  $out=ob_get_contents();
-  fwrite( $fp, $out . "\n" );
-  ob_end_clean();
-  fclose( $fp );
-  if ($isEcho) echo $out;
-if ($isExit)  exit;
-}
-//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 		// 登録
 		$this->model_project->insert(array('body' => set_value('body')));
 	}
@@ -178,6 +161,44 @@ if ($isExit)  exit;
 		$this->model_project->update4id(array('body' => set_value('value')), set_value('id'));
 
 		echo nl2br(set_value('value'));
+	}
+
+	protected function _validation_rules()
+	{
+		return array(
+			'name' => array(
+				'label' => 'プロジェクト名',
+				'type'  => 'input',
+				'rules' => 'trim|required|max_length[140]',
+				'size'  => 30,
+				'children' => array('key_name'),
+			),
+			'key_name' => array(
+				'label' => 'key',
+				'type'  => 'input',
+				'rules' => 'trim|max_length[20]|alpha_dash',
+				'size'  => 8,
+			),
+			'customer' => array(
+				'label' => '顧客名',
+				'type'  => 'input',
+				'rules' => 'trim|required|max_length[140]',
+			),
+			'body' => array(
+				'label' => '本文',
+				'type'  => 'textarea',
+				'rules' => 'trim',
+				'cols'  => 60,
+				'rows'  => 2,
+			),
+			'explanation' => array(
+				'label' => '補足',
+				'type'  => 'textarea',
+				'rules' => 'trim',
+				'cols'  => 60,
+				'rows'  => 2,
+			),
+		);
 	}
 }
 

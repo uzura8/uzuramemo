@@ -15,7 +15,7 @@
 
 {$head_info}
 </head>
-<body id="{get_current_page_id}" onload="ajax_list_load('list', '{site_url uri=project/ajax_project_list}')">
+<body id="{get_current_page_id}">
 
 <header id="top">
 <h1><a href="{site_url uri=project}" style="">{$smarty.const.SITE_TITLE}</a></h1>
@@ -23,33 +23,28 @@
 <div id="mainbody">
 
 <div class="form_box">
+{foreach from=$form key=key item=items}
+{if $ignore_keys}{if $ignore_keys|strpos:$key !== false}{php}continue;{/php}{/if}{/if}
 <div class="form_row">
-	<label for="name">プロジェクト名</label>
+	<label for="{$key}">{$items.label}</label>
 	<div class="input">
-	<input type="input" name="name" id="name" size="30" class="normal">
-	<span class="sublabel">key</span>
-	<input type="input" name="key" id="key" size="8" class="narrow">
+{if $items.type == 'input'}
+	<input type="input" name="{$key}" id="{$key}" size="{$items.size}"{if $items.children} class="normal"{/if}>
+{elseif $items.type == 'textarea'}
+	<textarea name="{$key}" id="{$key}"{if $items.cols} cols="{$items.cols}"{/if}{if $items.rows} rows="{$items.rows}"{/if}{if $items.children} class="normal"{/if}></textarea>
+{/if}
+{if $items.children}
+{foreach from=$items.children item=child_key}
+{assign var=ignore_keys value="`$ignore_keys`,`$child_key`"}
+	<span class="sublabel" for="{$child_key}">{$form.$child_key.label}</span>
+	<input type="input" name="{$child_key}" id="{$child_key}" size="{$form.$child_key.size}" class="narrow">
+{/foreach}
+{/if}
 	</div>
-{*
-	<label for="name">プロジェクト名</label>
-	<div class="input left_box"><input type="input" name="name" id="name" size="30"></div>
-	<label for="key">key</label>
-	<div class="input"><input type="input" name="key" id="key" size="10"></div>
-*}
 </div>
-<div class="form_row">
-	<label for="customer">顧客名</label>
-	<div class="input"><input type="input" name="customer" id="customer" size="30" class="wide"></div>
-</div>
-<div class="form_row">
-	<label for="body">説明</label>
-	<div class="input"><textarea name="body" id="body" cols="60" rows="5"></textarea></div>
-</div>
-<div class="form_row">
-	<label for="explanation">補足</label>
-	<div class="input"><textarea name="explanation" id="explanation" cols="60" rows="2"></textarea></div>
+{/foreach}
+
 <div class="iPhoneButton" id="send" onclick="send('{site_url uri=project/execute_insert}', 'list', '{site_url uri=project/ajax_project_list}')"><a href="">送信</a></div>
-</div>
 </div>
 
 <div id="list"></div>
@@ -79,14 +74,15 @@ Copyright : {$smarty.const.COPYRIGHT_SINCE} - {$smarty.now|date_format:"%Y"} {$s
 <script src="{site_url}js/lib/jeditable/jquery.jeditable.timepicker.js" type="text/javascript" ></script>
 <script src="{site_url}js/lib/jeditable/jquery.jeditable.datepicker.js" type="text/javascript" ></script>
 <script src="{site_url}js/lib/jeditable/jquery.jeditable.charcounter.js" type="text/javascript" ></script>
-<script type="text/javascript" src="{site_url}js/lib/jeditable/js/jquery.maskedinput.js"></script>
-<script type="text/javascript" src="{site_url}js/lib/jeditable/js/jquery.timepicker.js"></script>
-<script type="text/javascript" src="{site_url}js/lib/jeditable/js/jquery.autogrow.js"></script>
-<script type="text/javascript" src="{site_url}js/lib/jeditable/js/jquery.charcounter.js"></script>
-<script type="text/javascript" src="{site_url}js/lib/jeditable/js/date.js"></script>
-<script type="text/javascript" src="{site_url}js/lib/jeditable/js/jquery.dimensions.js"></script>
-<script type="text/javascript" src="{site_url}js/lib/jeditable/js/jquery.datePicker.js"></script>
-<script type="text/javascript" src="{site_url}js/lib/jeditable/js/jquery.ajaxfileupload.js"></script>
+
+<script src="{site_url}js/lib/jeditable/js/jquery.maskedinput.js" type="text/javascript" ></script>
+<script src="{site_url}js/lib/jeditable/js/jquery.timepicker.js" type="text/javascript" ></script>
+<script src="{site_url}js/lib/jeditable/js/jquery.autogrow.js" type="text/javascript" ></script>
+<script src="{site_url}js/lib/jeditable/js/jquery.charcounter.js" type="text/javascript" ></script>
+<script src="{site_url}js/lib/jeditable/js/date.js" type="text/javascript" ></script>
+<script src="{site_url}js/lib/jeditable/js/jquery.dimensions.js" type="text/javascript" ></script>
+<script src="{site_url}js/lib/jeditable/js/jquery.datePicker.js" type="text/javascript" ></script>
+<script src="{site_url}js/lib/jeditable/js/jquery.ajaxfileupload.js" type="text/javascript" ></script>
 
 <script src="{site_url}js/jquery.autopager.js" type="text/javascript"></script>
 
@@ -136,18 +132,6 @@ $(document).ready(function() {
 			type      : 'datepicker',
 			tooltip   : "Click to edit..."
 	});
-	$(".timepicker").editable("http://www.appelsiini.net/projects/jeditable/php/save.php", { 
-			indicator : "<img src='img/indicator.gif'>",
-			type      : 'timepicker',
-			submit    : 'OK',
-			tooltip   : "Click to edit..."
-	});
-	$(".time").editable("http://www.appelsiini.net/projects/jeditable/php/save.php", { 
-			indicator : "<img src='img/indicator.gif'>",
-			type      : 'time',
-			submit    : 'OK',
-			tooltip   : "Click to edit..."
-	});
 	$(".ajaxupload").editable("http://www.appelsiini.net/projects/jeditable/php/upload.php", { 
 			indicator : "<img src='img/indicator.gif'>",
 			type      : 'ajaxupload',
@@ -162,6 +146,10 @@ $(document).ready(function() {
 
 <script type="text/javascript">
 {literal}
+$(function(){
+	ajax_list_load('list', '{/literal}{site_url uri=project/ajax_project_list}{literal}');
+});
+
 function ajax_list_load(id, url){
 	ajax_list(id, url, {/literal}{$from}{literal});
 }
@@ -224,7 +212,7 @@ function ajax_list(id, url, offset){
 
 function send(post_url, id, get_url)  {
 	// サーバに投稿メッセージを送信
-	$.post( post_url, { "body" : $( 'textarea#body' ).val() } );
+	$.post( post_url, { {/literal}{convert2ajax_post_string form_items=$form}{literal} } );
 	ajax_list(id, get_url, 0);
 	// メッセージ入力欄をクリア
 	$( 'textarea#body' ).val( '' ).focus();
