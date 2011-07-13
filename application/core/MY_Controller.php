@@ -68,10 +68,11 @@ class MY_Controller extends CI_Controller
 
 	private function _check_module_enabled()
 	{
-		if ($this->uri->rsegment(1, false) && in_array($this->uri->rsegment(1, false), $GLOBALS['DISABLED_MODULES']))
-		{
-			show_error('this module is disabled.');
-		}
+		if (!$this->uri->rsegment(1, false)) return;
+		if (empty($GLOBALS['DISABLED_MODULES'])) return;
+		if (!in_array($this->uri->rsegment(1, false), $GLOBALS['DISABLED_MODULES'])) return;
+
+		show_error('this module is disabled.');
 	}
 
 	private function _check_auth()
