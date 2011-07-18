@@ -42,7 +42,7 @@ class Model_project extends CI_Model
 		return (int)$row['count'];
 	}
 
-	private static function get_main_query($search = '', $category_id_list = array(), $is_count = false, $with_logical_deleted = false, $columns = 'A.*, B.name, B.sub_id')
+	private static function get_main_query($search = '', $category_id_list = array(), $is_count = false, $with_logical_deleted = false, $columns = 'A.*')
 	{
 		if (is_array($columns)) $columns = implode(',', $columns);
 		if (!$columns) $columns = 'A.*, B.*';

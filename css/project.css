@@ -1,5 +1,4 @@
-.form_box {
-	padding: 10px;
+div#main_form_box {
 	background-color: #E7E7E7;
 }
 
@@ -25,11 +24,16 @@
 	text-align: left;
 }
 
+.form_box span.form_help {
+	font-size: 8px;
+	color: #09F;
+}
+
 .form_box div.input textarea, input {
 	font-size: 11px;
 }
 
-.form_box div.input textarea, input.wide {
+.form_box div.input textarea, input {
 	width: 75%;
 }
 
@@ -41,6 +45,11 @@
 	width: 10%;
 }
 
+input.blur, textarea.blur {
+	color: #999;
+	font-size: 10px;
+}
+
 .form_box div.left_box {
 	float: left;
 	width: 30%;
@@ -48,4 +57,20 @@
 
 .form_box div.iPhoneButton {
 	margin-top: 10px;
+}
+
+.form_box button.iPhoneButton {
+	width: 100%;
+}
+
+.validate_error {
+	color: #F00;
+	font-size: 10px;
+	margin-left: 5px;
+}
+
+h4#main_form_title
+{
+	font-size: 10px;
+	background-color: #E7E7E7;
 }

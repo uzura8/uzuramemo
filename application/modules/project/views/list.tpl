@@ -21,7 +21,7 @@
 {foreach from=$list item=row}
 <a name="id_{$row.id}"></a>
 <h2 class="box_01">
-<div>{$row.name}</div>
+<div>{$row.name}{if $row.key_name}<span class="sub_info">( {$row.key_name} )</span>{/if}</div>
 <div class="article_meta_top">
 <div class="banner"></div>
 <div class="meta_info">
@@ -65,5 +65,18 @@
 {/if}
 </div>
 </body>
+<script type="text/javascript" src="{site_url}js/jquery.lazyload.js"></script>
+<script type="text/javascript" charset="utf-8">
+{literal}
+// <![CDATA[
+$(document).ready(function() {
+	$('h2').click(function() {
+		$(this).next().slideToggle();
+	});
+	$("h2").next().hide('fast');
+});
+// ]]>
+{/literal}
+</script>
 
 </html>

@@ -215,13 +215,14 @@ if ($isExit)  exit;
 			'key_name' => array(
 				'label' => 'key',
 				'type'  => 'input',
-				'rules' => 'trim|max_length[20]|alpha_dash',
+				'rules' => 'trim|alpha_dash|max_length[20]',
 				'size'  => 8,
 			),
 			'customer' => array(
 				'label' => '顧客名',
 				'type'  => 'input',
 				'rules' => 'trim|required|max_length[140]',
+				'size'  => 30,
 			),
 			'body' => array(
 				'label' => '本文',
@@ -232,7 +233,7 @@ if ($isExit)  exit;
 			),
 			'explanation' => array(
 				'label' => '補足',
-				'type'  => 'textarea',
+				'type'  => 'hidden',
 				'rules' => 'trim',
 				'cols'  => 60,
 				'rows'  => 2,
