@@ -161,4 +161,12 @@ class MY_Controller extends CI_Controller
 
 		return $values;
 	}
+
+	protected function _get_post_params($key, $default = NULL, $rules = '', $xss_clean = FALSE)
+	{
+		$value = $this->input->get_post($key, $xss_clean);
+		if ($value === false) return $default;
+
+		return $valid_value = $this->site_util->simple_validation($value, $default, $rules);
+	}
 }

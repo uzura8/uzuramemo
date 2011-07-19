@@ -218,7 +218,7 @@ class Webmemo extends MY_Controller
 	{
 		$this->input->check_is_post();
 
-		$article_id  = $this->_get_params('article', 0, 'intval|less_than[999999]');
+		$article_id  = $this->_get_post_params('article', 0, 'intval|less_than[999999]');
 
 		$redirect_url = site_url('list');
 		if ($article_id)
@@ -466,19 +466,11 @@ class Webmemo extends MY_Controller
 
 		$this->limit  = $this->private_config['article_nums']['default'];
 		if (IS_MOBILE) $this->limit = $this->private_config['article_nums']['mobile'];
-		$this->search = $this->_get_params('search', '', 'trim|max_length[301]');
-		$this->offset = $this->_get_params('from', 0, 'intval|less_than[10000000]');
-		$this->order  = $this->_get_params('order', 0, 'intval|less_than[3]');
-		$this->search_option = $this->_get_params('opt', 0, 'intval|less_than[2]');
-		$this->category_id = $this->_get_params('category', 0, 'intval|less_than[1000000]');
-	}
-
-	private function _get_params($key, $default = NULL, $rules, $xss_clean = FALSE)
-	{
-		$value = $this->input->get_post($key, $xss_clean);
-		if ($value === false) return $default;
-
-		return $valid_value = $this->site_util->simple_validation($value, $default, $rules);
+		$this->search = $this->_get_post_params('search', '', 'trim|max_length[301]');
+		$this->offset = $this->_get_post_params('from', 0, 'intval|less_than[10000000]');
+		$this->order  = $this->_get_post_params('order', 0, 'intval|less_than[3]');
+		$this->search_option = $this->_get_post_params('opt', 0, 'intval|less_than[2]');
+		$this->category_id = $this->_get_post_params('category', 0, 'intval|less_than[1000000]');
 	}
 }
 

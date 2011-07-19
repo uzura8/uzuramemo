@@ -32,17 +32,9 @@ class Task extends MY_Controller
 
 		$this->limit  = $this->private_config['article_nums']['default'];
 		if (IS_MOBILE) $this->limit = $this->private_config['article_nums']['mobile'];
-		$this->search = $this->_get_params('search', '', 'trim|max_length[301]');
-		$this->offset = $this->_get_params('from', 0, 'intval|less_than[10000000]');
-		$this->order  = $this->_get_params('order', 0, 'intval|less_than[3]');
-	}
-
-	private function _get_params($key, $default = NULL, $rules, $xss_clean = FALSE)
-	{
-		$value = $this->input->get_post($key, $xss_clean);
-		if ($value === false) return $default;
-
-		return $valid_value = $this->site_util->simple_validation($value, $default, $rules);
+		$this->search = $this->_get_post_params('search', '', 'trim|max_length[301]');
+		$this->offset = $this->_get_post_params('from', 0, 'intval|less_than[10000000]');
+		$this->order  = $this->_get_post_params('order', 0, 'intval|less_than[3]');
 	}
 
 	private function _get_default_view_data()
