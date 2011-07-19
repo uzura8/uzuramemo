@@ -18,5 +18,10 @@ function common_error($message = '')
 	show_404();
 }
 
+function hsc($var)
+{
+	return htmlspecialchars($var, ENT_QUOTES, config_item('charset'));
+}
+
 /* End of file common_helper.php */
 /* Location: ./application/helpers/common_helper.php */
