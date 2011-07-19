@@ -7,6 +7,7 @@
 <link rel="stylesheet" href="{site_url}css/project.css">
 <link rel="stylesheet" href="{site_url}css/mobile/reset.css">
 <link rel="stylesheet" href="{site_url}css/mobile/base.css">
+<link rel="stylesheet" href="{site_url}css/util.css">
 
 <meta name="robots" content="{if $smarty.const.DEV_MODE}noindex,nofollow{else}index,follow{/if}" />
 <meta name="description" content="{$site_description}" />
@@ -118,16 +119,17 @@ $(document).ready(function() {
 		$(this).next().slideToggle();
 	});
 	$("h4#main_form_title").next().hide('fast');
+
 	$(".autogrow").live("click", function(){
 		var project_id = $(this).attr("id");
 		//$(".autogrow").editable("{/literal}{site_url uri=project/execute_update}{literal}", {
-		$("p#" + project_id).editable("{/literal}{site_url uri=project/execute_update}{literal}", {
+		$("p#" + project_id).editable("{/literal}{site_url uri=project/execute_update}/body{literal}", {
 			indicator : "<img src='{/literal}{site_url uri=js/lib/jeditable/img/indicator.gif}{literal}'>",
 			type      : "autogrow",
 			submit    : 'OK',
 			//submit    : '<input type="submit" value="OK" class="button">',
 			cancel    : 'cancel',
-			loadurl    : '{/literal}{site_url uri=project/ajax_project_detail}{literal}/' + project_id,
+			loadurl    : '{/literal}{site_url uri=project/ajax_project_detail}{literal}/' + project_id + '/body',
 			tooltip   : "Click to edit...",
 			onblur    : "ignore",
 			cssclass : "editable",
@@ -136,6 +138,19 @@ $(document).ready(function() {
 			//	 lineHeight : 16,
 			//	 minHeight  : 32
 			//}
+		})
+		$("span#" + project_id).editable("{/literal}{site_url uri=project/execute_update}/name{literal}", {
+			indicator : "<img src='{/literal}{site_url uri=js/lib/jeditable/img/indicator.gif}{literal}'>",
+			type      : "text",
+//			width     : '10',
+			submit    : 'OK',
+			//submit    : '<input type="submit" value="OK" class="button">',
+			cancel    : 'cancel',
+			loadurl    : '{/literal}{site_url uri=project/ajax_project_detail}{literal}/' + project_id + '/name',
+			tooltip   : "Click to edit...",
+			onblur    : "ignore",
+			cssclass : "editable",
+			select : true,
 		})
 	});
 	$(".charcounter").editable("http://www.appelsiini.net/projects/jeditable/php/save.php", {

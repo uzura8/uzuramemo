@@ -82,14 +82,15 @@ class Project extends MY_Controller
 		$this->smarty_parser->parse('ci:project/list.tpl', $view_data);
 	}
 
-	public function ajax_project_detail()
+	public function ajax_project_detail($id, $item)
 	{
-		$id = (int)$this->uri->segment(3, 0);
+		$id = (int)str_replace($item, '', $id);
 		if (!$id) show_error('need id');
 
-		$row =  $this->model_project->get_row($id);
+		if (!$this->_check_edit_form_item($item)) show_error('item is invalid');
 
-		echo $row[0]['body'];
+		$row = $this->model_project->get_row($id);
+		echo $row[0][$item];
 	}
 
 	private function _get_pagination_simple($count_all)
@@ -128,7 +129,7 @@ class Project extends MY_Controller
 		return $config;
 	}
 
-	public function _get_list_url($keys = array('search', 'opt', 'order', 'from'))
+	private function _get_list_url($keys = array('search', 'opt', 'order', 'from'))
 	{
 		$uri = 'project';
 		$params = array();
@@ -140,10 +141,20 @@ class Project extends MY_Controller
 		return  sprintf('%s%s?%s', base_url(), $uri, http_build_query($params));
 	}
 
+	private function _check_edit_form_item($item)
+	{
+		$allow_items = array('body', 'name', 'key_name');
+		if (!$item || !in_array($item, $allow_items)) return false;
+
+		return true;
+	}
+
 	public function execute_insert()
 	{
 		$this->input->check_is_post();
 		$this->_setup_validation();
+		if (!$this->form_validation->run()) return;
+
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 $isActive = 0;
 $isExit   = 0;
@@ -163,10 +174,9 @@ if ($isActive) {
 if ($isExit)  exit;
 }
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-		if (!$this->form_validation->run()) return;
-
 		// 登録
 		$values = $this->_get_form_data();
+		$this->model_project->insert($values);
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 $isActive = 0;
 $isExit   = 0;
@@ -186,18 +196,23 @@ if ($isActive) {
 if ($isExit)  exit;
 }
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-		$this->model_project->insert($values);
 	}
 
-	public function execute_update()
+	public function execute_update($item)
 	{
+		$id = $this->_get_post_params('id');
+		$id = (int)str_replace($item, '', $id);
+		if (!$id || !$this->_check_edit_form_item($item)) return;
+
+		$validate_rules = $this->_validation_rules();
 		$this->load->library('form_validation');
-		$this->form_validation->set_rules('id', 'id番号', 'trim|required|is_natural_no_zero');
-		$this->form_validation->set_rules('value', '内容', 'trim|required');
+		$this->form_validation->set_rules('value', $validate_rules[$item]['label'], $validate_rules[$item]['rules']);
+
 		if (!$this->form_validation->run()) return;
 
 		// 登録
-		$this->model_project->update4id(array('body' => set_value('value')), set_value('id'));
+		$values = array($item => set_value('value'));
+		$this->model_project->update4id($values, $id);
 
 		echo nl2br(set_value('value'));
 	}

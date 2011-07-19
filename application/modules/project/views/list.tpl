@@ -21,7 +21,10 @@
 {foreach from=$list item=row}
 <a name="id_{$row.id}"></a>
 <h2 class="box_01">
-<div>{$row.name}{if $row.key_name}<span class="sub_info">( {$row.key_name} )</span>{/if}</div>
+<div>
+<span id="name{$row.id}" class="autogrow">{$row.name}</span>{if $row.key_name}<span class="sub_info">( {$row.key_name} )</span>{/if}
+<span class="btnTop list_util_btn wider" id="title_btn_{$row.id}"><a href="javaScript:void(0);">▼</a></span>
+</div>
 <div class="article_meta_top">
 <div class="banner"></div>
 <div class="meta_info">
@@ -31,9 +34,9 @@
 <div style="clear: both"></div>
 </div>
 </h2>
-<article class="box_01">
+<article class="box_01" id="article_{$row.id}">
 <div class="article_box">
-<p class="autogrow" id="{$row.id}" style="width: 300px">{$row.body|nl2br|auto_link}</p>
+<p class="autogrow" id="body{$row.id}" style="width: 300px">{if $row.body}{$row.body|nl2br|auto_link}{else}&nbsp;&nbsp;{/if}</p>
 </div>
 
 <aside class="article_footer">
@@ -70,8 +73,12 @@
 {literal}
 // <![CDATA[
 $(document).ready(function() {
-	$('h2').click(function() {
-		$(this).next().slideToggle();
+//	$('h2').click(function() {
+//		$(this).next().slideToggle();
+//	});
+	$('.list_util_btn').click(function() {
+		var target_id = 'article_' + $(this).attr("id").replace(/title_btn_/, '');
+		$("#" + target_id).slideToggle();
 	});
 	$("h2").next().hide('fast');
 });
