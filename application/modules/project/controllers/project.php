@@ -170,13 +170,17 @@ class Project extends MY_Controller
 		$this->load->library('form_validation');
 		$this->form_validation->set_rules('value', $validate_rules[$item]['label'], $validate_rules[$item]['rules']);
 
-		if (!$this->form_validation->run()) return;
+		if (!$this->form_validation->run())
+		{
+			echo sprintf('%s<span style="color:red;">%s</span>', hsc(set_value('value')), validation_errors());
+			exit;
+		}
 
 		// 登録
 		$values = array($item => set_value('value'));
 		$this->model_project->update4id($values, $id);
 
-		echo nl2br(set_value('value'));
+		echo nl2br(hsc(set_value('value')));
 	}
 
 	protected function _validation_rules()

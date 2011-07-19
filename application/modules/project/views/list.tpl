@@ -22,7 +22,7 @@
 <a name="id_{$row.id}"></a>
 <h2 class="box_01">
 <div>
-<span id="name{$row.id}" class="autogrow">{$row.name}</span>{if $row.key_name}<span class="sub_info">( {$row.key_name} )</span>{/if}
+<span id="name{$row.id}" class="autogrow">{$row.name}</span>{if $row.key_name}<span id="key_name{$row.id}" class="autogrow sub_info2">{$row.key_name}</span>{/if}
 <span class="btnTop list_util_btn wider" id="title_btn_{$row.id}"><a href="javaScript:void(0);">▼</a></span>
 </div>
 <div class="article_meta_top">
