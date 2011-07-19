@@ -155,47 +155,9 @@ class Project extends MY_Controller
 		$this->_setup_validation();
 		if (!$this->form_validation->run()) return;
 
-//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-$isActive = 0;
-$isExit   = 0;
-$isEcho   = 0;
-$isAdd    = 1;
-if ($isActive) {
-  $type = 'wb';
-  if ($isAdd) $type = 'a';
-  $fp = fopen("/tmp/test.log", $type);
-  ob_start();
-  var_dump(111, $_POST, $this->form_validation->run());
-  $out=ob_get_contents();
-  fwrite( $fp, $out . "\n" );
-  ob_end_clean();
-  fclose( $fp );
-  if ($isEcho) echo $out;
-if ($isExit)  exit;
-}
-//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 		// 登録
 		$values = $this->_get_form_data();
 		$this->model_project->insert($values);
-//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-$isActive = 0;
-$isExit   = 0;
-$isEcho   = 0;
-$isAdd    = 1;
-if ($isActive) {
-  $type = 'wb';
-  if ($isAdd) $type = 'a';
-  $fp = fopen("/tmp/test.log", $type);
-  ob_start();
-  var_dump(222, $values, $this->model_project->insert($values));
-  $out=ob_get_contents();
-  fwrite( $fp, $out . "\n" );
-  ob_end_clean();
-  fclose( $fp );
-  if ($isEcho) echo $out;
-if ($isExit)  exit;
-}
-//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 	}
 
 	public function execute_update($item)
