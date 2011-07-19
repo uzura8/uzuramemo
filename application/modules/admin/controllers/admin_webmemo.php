@@ -436,7 +436,7 @@ class Admin_webmemo extends MY_Controller
 		}
 	}
 
-	private function _validation_rules_category()
+	protected function _validation_rules_category()
 	{
 		return array(
 			'name' => array(
