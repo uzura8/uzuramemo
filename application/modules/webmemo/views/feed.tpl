@@ -29,7 +29,7 @@
 {if $row.format == 2}{$row.body|textile|smarty:nodefaults}{else}{$row.body|smarty:nodefaults}{/if}
 {/if}
 ]]></description>
-			<pubDate>{$row.updated_at|date_format:"%Y/%m/%d %H:%M"}</pubDate>
+			<pubDate>{$row.updated_at|date_format:"%a, %d %b %Y %H:%M:%S %z"}</pubDate>
 			<guid>{site_url uri=article/`$row.id`}</guid>
 		</item>
 {/foreach}
