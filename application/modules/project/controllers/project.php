@@ -145,11 +145,19 @@ class Project extends MY_Controller
 	{
 		$this->input->check_is_post();
 		$this->_setup_validation();
-		if (!$this->form_validation->run()) return;
+
+		if (!$this->form_validation->run())
+		{
+			$this->output->set_status_header('403');
+			$this->output->set_output('NG');
+			return;
+		}
 
 		// 登録
 		$values = $this->_get_form_data();
 		$this->model_project->insert($values);
+
+		$this->output->set_output('OK');
 	}
 
 	public function execute_update($item)
@@ -165,15 +173,16 @@ class Project extends MY_Controller
 
 		if (!$this->form_validation->run())
 		{
-			echo sprintf('%s<span style="color:red;">%s</span>', hsc(set_value('value')), validation_errors());
-			exit;
+			$data = sprintf('%s<span style="color:red;">%s</span>', hsc(set_value('value')), validation_errors());
+			$this->output->set_output($data);
+			return;
 		}
 
 		// 登録
 		$values = array($item => set_value('value'));
 		$this->model_project->update4id($values, $id);
 
-		echo nl2br(hsc(set_value('value')));
+		$this->output->set_output(nl2br(hsc(set_value('value'))));
 	}
 
 	protected function _validation_rules()
@@ -182,14 +191,14 @@ class Project extends MY_Controller
 			'name' => array(
 				'label' => 'プロジェクト名',
 				'type'  => 'input',
-				'rules' => 'trim|required|max_length[140]',
+				'rules' => 'trim|required|max_length[140]|callback__unique_check_name',
 				'size'  => 30,
 				'children' => array('key_name'),
 			),
 			'key_name' => array(
 				'label' => 'key',
 				'type'  => 'input',
-				'rules' => 'trim|alpha_dash|max_length[20]',
+				'rules' => 'trim|alpha_dash|max_length[20]|callback__unique_check_key_name',
 				'size'  => 8,
 			),
 			'customer' => array(
@@ -213,6 +222,16 @@ class Project extends MY_Controller
 				'rows'  => 2,
 			),
 		);
+	}
+
+	function _unique_check_name($str)
+	{
+		return $this->_validate_unique_check('project', 'name', $str);
+	}
+
+	function _unique_check_key_name($str)
+	{
+		return $this->_validate_unique_check('project', 'key_name', $str);
 	}
 }
 

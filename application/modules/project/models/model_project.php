@@ -141,6 +141,15 @@ class Model_project extends CI_Model
 		return (int)$row['del_flg'];
 	}
 
+	function get_row_common($params)
+	{
+		$CI =& get_instance();
+		$row = $CI->db_util->get_row('project', $params, array(), 'project', 'model');
+		if (empty($row)) return array();
+
+		return $row;
+	}
+
 	public function update($values, $wheres, $update_datetime = true)
 	{
 		if (!$values || !$wheres) return false;
