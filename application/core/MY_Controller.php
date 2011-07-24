@@ -169,4 +169,17 @@ class MY_Controller extends CI_Controller
 
 		return $valid_value = $this->site_util->simple_validation($value, $default, $rules);
 	}
+
+	protected function _validate_unique_check($table, $key, $value, $error_message = 'その %s は既に登録されています')
+	{
+		$class_name = 'model_'.$table;
+		if ($this->$class_name->get_row_common(array($key => $value)))
+		{
+			$validation_name = '_unique_check_'.$key;
+			$this->form_validation->set_message($validation_name, $error_message);
+			return false;
+		}
+
+		return true;
+	}
 }
