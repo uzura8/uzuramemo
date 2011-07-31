@@ -2,9 +2,11 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
+<link rel="stylesheet" href="{site_url}css/project_list.css">
 </head>
 
-<body>
+<body id="{get_current_page_id}">
+<div id="list_top"></div>
 
 {if !$list}
 <div style="padding:30px 10px 30px 5px;">{if $search}「{$search}」に一致する{elseif $now_category_id}このカテゴリの{else}指定した記事の{/if}登録はありません。</div>
@@ -34,7 +36,7 @@
 <div style="clear: both"></div>
 </div>
 </h2>
-<article class="box_01" id="article_{$row.id}">
+<article class="box_01" id="article_{$row.id}" style="display:none">
 <div class="article_box">
 <p class="autogrow" id="body{$row.id}" style="width: 300px">{if $row.body}{$row.body|nl2br|auto_link}{else}&nbsp;&nbsp;{/if}</p>
 </div>
@@ -46,7 +48,7 @@
 </div>
 {/if}
 <div class="article_aside_button">
-<span class="btnTop space_left_5"><a href="#top">▲</a></span>
+<span class="btnTop space_left_5"><a href="#list_top">▲</a></span>
 <span class="btnTop space_left_5"><a href="{site_url uri=project}">{$smarty.const.UM_TOPPAGE_NAME}</a></span>
 <span class="btnTop"><a href="{site_url}">サイト{$smarty.const.UM_TOPPAGE_NAME}</a></span>
 </div>
@@ -62,27 +64,40 @@
 </section>
 {/if}
 
-{*<div id="test_pager"><a href="javascript:void(0);" rel="next" onclick="load_next_list('{site_url uri=project/ajax_project_list}')">次のページ / Next</a></div>
-{if $pagination.next_url}<nav id="next"><a href="{$pagination.next_url}" rel="next">もっと見る</a></nav>{/if}*}
+{if $pagination.next_url}<nav id="next"><a href="{$pagination.next_url}" rel="next">もっと見る</a></nav>{/if}
 
 {/if}
 </div>
 </body>
+<script type="text/javascript" src="{site_url}js/jquery.autopager.js"></script>
 <script type="text/javascript" src="{site_url}js/jquery.lazyload.js"></script>
 <script type="text/javascript" charset="utf-8">
 {literal}
-// <![CDATA[
-$(document).ready(function() {
-//	$('h2').click(function() {
-//		$(this).next().slideToggle();
+//$(document).ready(function() {
+////	$('h2').click(function() {
+////		$(this).next().slideToggle();
+////	});
+//	$('.list_util_btn').click(function() {
+//		var target_id = 'article_' + $(this).attr("id").replace(/title_btn_/, '');
+//		$("#" + target_id).slideToggle();
 //	});
-	$('.list_util_btn').click(function() {
+//	$("h2").next().hide('fast');
+//});
+
+$(".list_util_btn").live("click", function(){
 		var target_id = 'article_' + $(this).attr("id").replace(/title_btn_/, '');
 		$("#" + target_id).slideToggle();
-	});
-	$("h2").next().hide('fast');
 });
-// ]]>
+
+$(function() {
+	$.autopager({
+		autoLoad: false
+	});
+	$('a[rel=next]').click(function() {
+		$.autopager('load');
+		return false;
+	});
+});
 {/literal}
 </script>
 

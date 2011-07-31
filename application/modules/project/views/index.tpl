@@ -101,8 +101,6 @@ Copyright : {$smarty.const.COPYRIGHT_SINCE} - {$smarty.now|date_format:"%Y"} {$s
 <script src="{site_url}js/lib/jeditable/js/jquery.datePicker.js" type="text/javascript" ></script>
 <script src="{site_url}js/lib/jeditable/js/jquery.ajaxfileupload.js" type="text/javascript" ></script>
 
-<script src="{site_url}js/jquery.autopager.js" type="text/javascript"></script>
-
 <script src="{site_url}js/jquery.form.js" type="text/javascript" ></script>
 <script src="{site_url}js/jquery.validate.js" type="text/javascript" ></script>
 <script src="{site_url}js/jquery.validate.japlugin.js" type="text/javascript" ></script>
@@ -113,11 +111,10 @@ Copyright : {$smarty.const.COPYRIGHT_SINCE} - {$smarty.now|date_format:"%Y"} {$s
 
 <script src="{site_url}js/jquery.alphanumeric.js" type="text/javascript"></script>
 {*
+<script src="{site_url}js/jquery.autopager.js" type="text/javascript"></script>
 <script src="{site_url}js/jquery.autohelp.js" type="text/javascript"></script>
 <script src="{site_url}js/jquery.hint.js" type="text/javascript"></script>
 *}
-
-<script type="text/javascript" src="{site_url}js/jquery.lazyload.js"></script>
 
 <script type="text/javascript" charset="utf-8">
 {literal}
@@ -293,19 +290,7 @@ function ajax_list(offset){
 			$("#" + id).html(data);
 		}
 	})
-{/literal}{if $pagination.next_url}
-	var next = offset + {$limit};
-	var next_url = '{site_url}project' + '?nochache=' + (new Date()).getTime() + '&search={$search}&order={$order}&from=' + next;
-	$("#auto_pager").html("<nav id='next'><a href='" + next_url + "' rel='next'>もっと見る</a></nav>");
-{/if}{literal}
 }
-
-//function send(post_url, id, get_url)  {
-//	$.post( post_url, { {/literal}{convert2ajax_post_string form_items=$form}{literal} } );
-//	ajax_list(id, get_url, 0);
-//	$( 'textarea#body' ).val( '' ).focus();
-//	return false;
-//}
 
 // edit textarea autogrow
 $(function(){
@@ -317,7 +302,6 @@ $(function(){
 //	$("form *").autohelp("#autohelp");
 //	$("#autohelp").css({"background":"#BED1D8","color":"#fff", "padding":"3px", "font-size":"9px"});
 //});
-
 // hint view
 //$(function() {
 //	// find all the input elements with title attributes

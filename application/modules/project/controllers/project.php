@@ -54,11 +54,6 @@ class Project extends MY_Controller
 		$view_data['from']   = $this->offset;
 		$view_data['limit']  = $this->limit;
 
-		// 記事件数を取得
-		$count_all = $this->model_project->get_count_all($this->search);
-		$view_data['pagination'] = $this->_get_pagination_simple($count_all);
-		$view_data['count_all']  = $count_all;
-
 		// form
 		$view_data['form'] = $this->_validation_rules();
 
@@ -70,6 +65,11 @@ class Project extends MY_Controller
 		// template
 		$view_data = $this->_get_default_view_data();
 		$view_data['list'] =  $this->model_project->get_main_list($this->offset, $this->limit);
+
+		// 記事件数を取得
+		$count_all = $this->model_project->get_count_all($this->search);
+		$view_data['pagination'] = $this->_get_pagination_simple($count_all, 'project/ajax_project_list');
+		$view_data['count_all']  = $count_all;
 
 		$this->smarty_parser->parse('ci:project/list.tpl', $view_data);
 	}
@@ -128,9 +128,9 @@ class Project extends MY_Controller
 		$this->output->set_output('true');
 	}
 
-	private function _get_pagination_simple($count_all)
+	private function _get_pagination_simple($count_all, $uri = '')
 	{
-		$config = $this->_get_pagination_config($count_all);
+		$config = $this->_get_pagination_config($count_all, $uri);
 		$this->load->library('my_pager', $config);
 
 		return $this->my_pager->get_pagination_simple_urls();
@@ -152,10 +152,10 @@ class Project extends MY_Controller
 		return $this->my_pager->create_links();
 	}
 
-	private function _get_pagination_config($count_all)
+	private function _get_pagination_config($count_all, $uri = '')
 	{
 		$config = array();
-		$config['base_url'] = $this->_get_list_url(array('search', 'opt', 'order', 'from'));
+		$config['base_url'] = $this->_get_list_url(array('search', 'opt', 'order', 'from'), $uri);
 		$config['offset']   = (int)$this->offset;
 		$config['query_string_segment'] = 'from';
 		$config['total_rows'] = $count_all;
@@ -164,9 +164,9 @@ class Project extends MY_Controller
 		return $config;
 	}
 
-	private function _get_list_url($keys = array('search', 'opt', 'order', 'from'))
+	private function _get_list_url($keys = array('search', 'opt', 'order', 'from'), $uri = '')
 	{
-		$uri = 'project';
+		if (!$uri) $uri = 'project';
 		$params = array();
 		if (in_array('search', $keys)) $params['search'] = $this->search;
 		if (in_array('opt', $keys))    $params['opt']    = (int)$this->search_option;
