@@ -244,7 +244,12 @@ $(function() {
 			name: $('#name').val()
 			}, function(response){
 				$('#name_result').fadeOut();
-					setTimeout("finishAjax('name_result', '"+escape(response)+"')", 400);
+				if (response == 'true') {
+					var message = '<span class="validate_success">登録可能</span>';
+				} else {
+					var message = '<span class="validate_error">重複しています</span>';
+				}
+				setTimeout("finishAjax('name_result', '"+escape(message)+"')", 400);
 			});
 			return false;
 	});
@@ -258,7 +263,12 @@ $(function() {
 			key_name: $('#key_name').val()
 			}, function(response){
 				$('#key_name_result').fadeOut();
-					setTimeout("finishAjax('key_name_result', '"+escape(response)+"')", 400);
+				if (response == 'true') {
+					var message = '<span class="validate_success">登録可能</span>';
+				} else {
+					var message = '<span class="validate_error">重複しています</span>';
+				}
+				setTimeout("finishAjax('key_name_result', '"+escape(message)+"')", 400);
 			});
 			return false;
 	});

@@ -91,13 +91,11 @@ class Project extends MY_Controller
 		$key_name = $this->_get_post_params('name');
 		if (!$this->_unique_check_name($key_name))
 		{
-			$return =  '<span class="validate_error">重複しています</span>';
-			$this->output->set_output($return);
+			$this->output->set_output('false');
 			return;
 		}
 
-		$return =  '<span class="validate_success">登録可能</span>';
-		$this->output->set_output($return);
+		$this->output->set_output('true');
 	}
 
 	public function ajax_check_project_key_name()
@@ -106,13 +104,11 @@ class Project extends MY_Controller
 		$key_name = $this->_get_post_params('key_name');
 		if (!$this->_unique_check_key_name($key_name))
 		{
-			$return =  '<span class="validate_error">重複しています</span>';
-			$this->output->set_output($return);
+			$this->output->set_output('false');
 			return;
 		}
 
-		$return =  '<span class="validate_success">登録可能</span>';
-		$this->output->set_output($return);
+		$this->output->set_output('true');
 	}
 
 	public function ajax_check_project_key_name_old()
