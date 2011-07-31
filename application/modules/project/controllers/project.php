@@ -274,6 +274,8 @@ class Project extends MY_Controller
 
 	function _unique_check_key_name($str)
 	{
+		if (!strlen($str)) return true;
+
 		return $this->_validate_unique_check('project', 'key_name', $str);
 	}
 }

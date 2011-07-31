@@ -25,7 +25,7 @@
 <h2 class="box_01">
 <div>
 <span id="name{$row.id}" class="autogrow">{$row.name}</span>{if $row.key_name}<span id="key_name{$row.id}" class="autogrow sub_info2">{$row.key_name}</span>{/if}
-<span class="btnTop list_util_btn wider" id="title_btn_{$row.id}"><a href="javaScript:void(0);">▼</a></span>
+<span class="btnTop list_util_btn wider" id="title_btn_{$row.id}"><a href="javaScript:void(0);" onclick="$('#article_{$row.id}').slideToggle();">▼</a></span>
 </div>
 <div class="article_meta_top">
 <div class="banner"></div>
@@ -73,22 +73,6 @@
 <script type="text/javascript" src="{site_url}js/jquery.lazyload.js"></script>
 <script type="text/javascript" charset="utf-8">
 {literal}
-//$(document).ready(function() {
-////	$('h2').click(function() {
-////		$(this).next().slideToggle();
-////	});
-//	$('.list_util_btn').click(function() {
-//		var target_id = 'article_' + $(this).attr("id").replace(/title_btn_/, '');
-//		$("#" + target_id).slideToggle();
-//	});
-//	$("h2").next().hide('fast');
-//});
-
-$(".list_util_btn").live("click", function(){
-		var target_id = 'article_' + $(this).attr("id").replace(/title_btn_/, '');
-		$("#" + target_id).slideToggle();
-});
-
 $(function() {
 	$.autopager({
 		autoLoad: false

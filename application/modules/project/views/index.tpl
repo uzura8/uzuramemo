@@ -217,11 +217,12 @@ $('#main_form').validate({
 				// メッセージ入力欄をクリア
 {/literal}
 {foreach from=$form key=key item=items}{if $items.type == 'input' || $items.type == 'textarea'}
-				$( '{$items.type}#{$key}' ).val( '' ).focus();
+				$( '{$items.type}#{$key}' ).val( '' );
 {/if}{/foreach}
 {literal}
+				$('#name_result').fadeOut();
+				$('#key_name_result').fadeOut();
 				ajax_list(0);
-//			console.log(data);
 				$.jGrowl('{/literal}{$page_name}{literal}を作成しました。');
 			},
 			error: function(){
