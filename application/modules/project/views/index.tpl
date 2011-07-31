@@ -9,10 +9,10 @@
 <link rel="stylesheet" href="{site_url}css/mobile/base.css">
 <link rel="stylesheet" href="{site_url}css/util.css">
 
-<meta name="robots" content="{if $smarty.const.DEV_MODE}noindex,nofollow{else}index,follow{/if}" />
-<meta name="description" content="{$site_description}" />
-{if $site_keywords}<meta name="keywords" content="{','|implode:$site_keywords}" />{/if}
-<link rel="shortcut icon" href="{site_url uri=img/favicon_task.ico}" />
+<meta name="robots" content="{if $smarty.const.DEV_MODE}noindex,nofollow{else}index,follow{/if}">
+<meta name="description" content="{$site_description}">
+{if $site_keywords}<meta name="keywords" content="{','|implode:$site_keywords}">{/if}
+<link rel="shortcut icon" href="{site_url uri=img/favicon_task.ico}">
 
 {$head_info}
 </head>
@@ -39,7 +39,7 @@
 {if $items.type == 'input'}
 	<input type="input" name="{$key}" id="{$key}" size="{$items.size}"{$smarty.capture.item_class|smarty:nodefaults}>
 {if $key == 'name'}
-	<span id="{$key}_loading"><img src="{site_url}img/loading.gif" alt="Ajax Indicator" /></span>
+	<span id="{$key}_loading"><img src="{site_url}img/loading.gif" alt="Ajax Indicator"></span>
 	<span id="{$key}_result"></span>
 {/if}
 {elseif $items.type == 'textarea'}
@@ -53,7 +53,7 @@
 	<span class="sublabel" for="{$child_key}">{$form.$child_key.label}</span>
 	<input type="input" name="{$child_key}" id="{$child_key}" size="{$form.$child_key.size}" class="narrow">
 {if $child_key == 'key_name'}
-	<span id="{$child_key}_loading"><img src="{site_url}img/loading.gif" alt="Ajax Indicator" /></span>
+	<span id="{$child_key}_loading"><img src="{site_url}img/loading.gif" alt="Ajax Indicator"></span>
 	<span id="{$child_key}_result"></span>
 {/if}
 {if $smarty.capture.form_help && $items.rules_view == 'backword'}<span class="form_help">{$smarty.capture.form_help}</span>{/if}
