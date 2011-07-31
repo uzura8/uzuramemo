@@ -66,6 +66,14 @@ input.blur, textarea.blur {
 .validate_error {
 	color: #F00;
 	font-size: 10px;
+	font-weight: normal;
+	margin-left: 5px;
+}
+
+.validate_success {
+	color: #22B8DD;
+	font-size: 10px;
+	font-weight: normal;
 	margin-left: 5px;
 }
 

@@ -23,7 +23,7 @@
 </header>
 <div id="mainbody">
 
-<h4 id="main_form_title" class="box_01"><a href="javaScript:void(0);">プロジェクトの作成</a></h4>
+<h4 id="main_form_title" class="box_01"><a href="javaScript:void(0);">{$page_name}の作成</a></h4>
 <div class="form_box box_01" id="main_form_box">
 
 {form_open action=project/execute_insert id=main_form}
@@ -38,6 +38,10 @@
 {if $items.type == 'input' || $items.type == 'textarea'}{capture name="form_help"}{$items.rules|form_help:$smarty.capture.help_default}{/capture}{/if}
 {if $items.type == 'input'}
 	<input type="input" name="{$key}" id="{$key}" size="{$items.size}"{$smarty.capture.item_class|smarty:nodefaults}>
+{if $key == 'name'}
+	<span id="{$key}_loading"><img src="{site_url}img/loading.gif" alt="Ajax Indicator" /></span>
+	<span id="{$key}_result"></span>
+{/if}
 {elseif $items.type == 'textarea'}
 	<textarea name="{$key}" id="{$key}"{if $items.cols} cols="{$items.cols}"{/if}{if $items.rows} rows="{$items.rows}"{/if}{$smarty.capture.item_class|smarty:nodefaults}></textarea>
 {/if}
@@ -48,6 +52,10 @@
 {if $form.$child_key.type == 'input' || $form.$child_key.type == 'textarea'}{capture name="form_help"}{$form.$child_key.rules|form_help}{/capture}{/if}
 	<span class="sublabel" for="{$child_key}">{$form.$child_key.label}</span>
 	<input type="input" name="{$child_key}" id="{$child_key}" size="{$form.$child_key.size}" class="narrow">
+{if $child_key == 'key_name'}
+	<span id="{$child_key}_loading"><img src="{site_url}img/loading.gif" alt="Ajax Indicator" /></span>
+	<span id="{$child_key}_result"></span>
+{/if}
 {if $smarty.capture.form_help && $items.rules_view == 'backword'}<span class="form_help">{$smarty.capture.form_help}</span>{/if}
 {/foreach}
 {/if}
@@ -217,10 +225,10 @@ $('#main_form').validate({
 {literal}
 				ajax_list(0);
 //			console.log(data);
-				$.jGrowl('プロジェクトを作成しました。');
+				$.jGrowl('{/literal}{$page_name}{literal}を作成しました。');
 			},
 			error: function(){
-				$.jGrowl('プロジェクトを作成できませんでした。しばらく経ってから再度試してください。');
+				$.jGrowl('{/literal}{$page_name}{literal}を作成できませんでした。');
 			},
 			complete: function(){
 				$(form).loading(false);
@@ -228,6 +236,41 @@ $('#main_form').validate({
 		});
 	}
 });
+
+// 重複確認: name
+$(function() {
+	$('#name_loading').hide();
+	$('#name').blur(function() {
+		$('#name_loading').show();
+		$.post("{/literal}{site_url}{literal}project/ajax_check_project_name", {
+			name: $('#name').val()
+			}, function(response){
+				$('#name_result').fadeOut();
+					setTimeout("finishAjax('name_result', '"+escape(response)+"')", 400);
+			});
+			return false;
+	});
+});
+// 重複確認: key_name
+$(function() {
+	$('#key_name_loading').hide();
+	$('#key_name').blur(function() {
+		$('#key_name_loading').show();
+		$.post("{/literal}{site_url}{literal}project/ajax_check_project_key_name", {
+			key_name: $('#key_name').val()
+			}, function(response){
+				$('#key_name_result').fadeOut();
+					setTimeout("finishAjax('key_name_result', '"+escape(response)+"')", 400);
+			});
+			return false;
+	});
+});
+function finishAjax(id, response) {
+	var loading_parts_id = id.replace(/_result/g, "_loading");
+	$('#'+loading_parts_id).hide();
+	$('#'+id).html(unescape(response));
+	$('#'+id).fadeIn();
+}
 
 $(function(){
 	$('#key_name').alphanumeric({allow:"_"});

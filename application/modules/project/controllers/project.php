@@ -40,7 +40,7 @@ class Project extends MY_Controller
 	private function _get_default_view_data()
 	{
 		return array(
-//			'breadcrumbs' => $this->breadcrumbs,
+			'page_name' => $this->private_config['site_title'],
 		);
 	}
 
@@ -83,6 +83,49 @@ class Project extends MY_Controller
 
 		$row = $this->model_project->get_row($id);
 		echo $row[0][$item];
+	}
+
+	public function ajax_check_project_name()
+	{
+		$this->input->check_is_post();
+		$key_name = $this->_get_post_params('name');
+		if (!$this->_unique_check_name($key_name))
+		{
+			$return =  '<span class="validate_error">重複しています</span>';
+			$this->output->set_output($return);
+			return;
+		}
+
+		$return =  '<span class="validate_success">登録可能</span>';
+		$this->output->set_output($return);
+	}
+
+	public function ajax_check_project_key_name()
+	{
+		$this->input->check_is_post();
+		$key_name = $this->_get_post_params('key_name');
+		if (!$this->_unique_check_key_name($key_name))
+		{
+			$return =  '<span class="validate_error">重複しています</span>';
+			$this->output->set_output($return);
+			return;
+		}
+
+		$return =  '<span class="validate_success">登録可能</span>';
+		$this->output->set_output($return);
+	}
+
+	public function ajax_check_project_key_name_old()
+	{
+		$this->input->check_is_post();
+		$key_name = $this->_get_post_params('key_name');
+		if (!$this->_unique_check_key_name($key_name))
+		{
+			$this->output->set_output('false');
+			return;
+		}
+
+		$this->output->set_output('true');
 	}
 
 	private function _get_pagination_simple($count_all)
@@ -173,7 +216,7 @@ class Project extends MY_Controller
 
 		if (!$this->form_validation->run())
 		{
-			$data = sprintf('%s<span style="color:red;">%s</span>', hsc(set_value('value')), validation_errors());
+			$data = sprintf('%s<span class="validate_error">%s</span>', hsc(set_value('value')), validation_errors());
 			$this->output->set_output($data);
 			return;
 		}
