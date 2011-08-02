@@ -37,13 +37,13 @@
 {if $items.children}{capture name="item_class"} class="{if $items.children}normal{/if}"{/capture}{/if}
 {if $items.type == 'input' || $items.type == 'textarea'}{capture name="form_help"}{$items.rules|form_help:$smarty.capture.help_default}{/capture}{/if}
 {if $items.type == 'input'}
-	<input type="input" name="{$key}" id="{$key}" size="{$items.size}"{$smarty.capture.item_class|smarty:nodefaults}>
+	<input type="input" name="{$key}" id="{$key}" size="{$items.size}"{$smarty.capture.item_class|smarty:nodefaults}{if $smarty.capture.form_help} placeholder="{$smarty.capture.form_help}"{/if}>
 {if $key == 'name'}
 	<span id="{$key}_loading"><img src="{site_url}img/loading.gif" alt="Ajax Indicator"></span>
 	<span id="{$key}_result"></span>
 {/if}
 {elseif $items.type == 'textarea'}
-	<textarea name="{$key}" id="{$key}"{if $items.cols} cols="{$items.cols}"{/if}{if $items.rows} rows="{$items.rows}"{/if}{$smarty.capture.item_class|smarty:nodefaults}></textarea>
+	<textarea name="{$key}" id="{$key}"{if $items.cols} cols="{$items.cols}"{/if}{if $items.rows} rows="{$items.rows}"{/if}{$smarty.capture.item_class|smarty:nodefaults}{$smarty.capture.item_class|smarty:nodefaults}{if $smarty.capture.form_help} placeholder="{$smarty.capture.form_help}"{/if}></textarea>
 {/if}
 {if $smarty.capture.form_help && $items.rules_view == 'backword'}<span class="form_help">{$smarty.capture.form_help}</span>{/if}
 {if $items.children}
@@ -51,7 +51,7 @@
 {assign var=ignore_keys value="`$ignore_keys`,`$child_key`"}
 {if $form.$child_key.type == 'input' || $form.$child_key.type == 'textarea'}{capture name="form_help"}{$form.$child_key.rules|form_help}{/capture}{/if}
 	<span class="sublabel" for="{$child_key}">{$form.$child_key.label}</span>
-	<input type="input" name="{$child_key}" id="{$child_key}" size="{$form.$child_key.size}" class="narrow">
+	<input type="input" name="{$child_key}" id="{$child_key}" size="{$form.$child_key.size}" class="narrow"{$smarty.capture.item_class|smarty:nodefaults}{if $smarty.capture.form_help} placeholder="{$smarty.capture.form_help}"{/if}>
 {if $child_key == 'key_name'}
 	<span id="{$child_key}_loading"><img src="{site_url}img/loading.gif" alt="Ajax Indicator"></span>
 	<span id="{$child_key}_result"></span>
