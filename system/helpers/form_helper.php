@@ -636,7 +636,8 @@ if ( ! function_exists('form_prep'))
 		// the same name
 		if (isset($prepped_fields[$field_name]))
 		{
-			return $str;
+			//return $str;
+			return $prepped_fields[$field_name];
 		}
 
 		$str = htmlspecialchars($str);
@@ -646,7 +647,8 @@ if ( ! function_exists('form_prep'))
 
 		if ($field_name != '')
 		{
-			$prepped_fields[$field_name] = $field_name;
+			//$prepped_fields[$field_name] = $field_name;
+			$prepped_fields[$field_name] = $str;
 		}
 
 		return $str;
