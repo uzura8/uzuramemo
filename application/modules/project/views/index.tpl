@@ -23,7 +23,14 @@
 </header>
 <div id="mainbody">
 
-<h4 id="main_form_title" class="box_01"><a href="javaScript:void(0);">{$page_name}の作成</a></h4>
+<h4 id="main_form_title" class="box_01">
+<a id="new_form_switch" href="javaScript:void(0);">{$page_name}の作成</a>
+<select class="form_parts_right" id="select_order" name="select_order">
+<option value="0">並び順</option>
+<option value="1">更新日順</option>
+<option value="2">登録順</option>
+</select>
+</h4>
 <div class="form_box box_01" id="main_form_box">
 
 {form_open action=project/execute_insert id=main_form}
@@ -119,14 +126,18 @@ Copyright : {$smarty.const.COPYRIGHT_SINCE} - {$smarty.now|date_format:"%Y"} {$s
 <script src="{site_url}js/lib/jquery.alerts/jquery.alerts.js" type="text/javascript"></script>
 <link rel="stylesheet" href="{site_url}js/lib/jquery.alerts/jquery.alerts.css">
 
+<script src="{site_url}js/lib/jQselectable/jQselectable.js" type="text/javascript"></script>
+<link rel="stylesheet" href="{site_url}js/lib/jQselectable/css/style.css">
+<link rel="stylesheet" href="{site_url}js/lib/jQselectable/skin/selectable/style.css">
+
 <script type="text/javascript" charset="utf-8">
 {literal}
 // <![CDATA[
 $(document).ready(function() {
-	$('h4').click(function() {
-		$(this).next().slideToggle();
+	$('#new_form_switch').click(function() {
+		$('#main_form_box').slideToggle();
 	});
-	$("h4#main_form_title").next().hide('fast');
+	$('#main_form_box').hide('fast');
 
 	$(".autogrow").live("click", function(){
 		var project_id = $(this).attr("id");
@@ -276,7 +287,8 @@ $('#main_form').validate({
 {literal}
 				$('#name_result').fadeOut();
 				$('#key_name_result').fadeOut();
-				ajax_list(0);
+				// $('#main_form_box').hide('fast');
+				ajax_list(0, 1);
 				$.jGrowl('{/literal}{$page_name}{literal}を作成しました。');
 			},
 			error: function(){
@@ -342,7 +354,7 @@ $(function(){
 	ajax_list({/literal}{$from}{literal});
 });
 
-function ajax_list(offset){
+function ajax_list(offset, order){
 	var id  = 'list';
 	var url = '{/literal}{site_url uri=project/ajax_project_list}{literal}';
 
@@ -350,7 +362,7 @@ function ajax_list(offset){
 	$.ajaxSetup( { cache : false } );
 	$("#" + id).show();
 
-	$.get(url, {nochache : (new Date()).getTime(), search : {/literal}'{$search}'{literal}, order : {/literal}'{$order}'{literal}, from : offset }, function(data){
+	$.get(url, {nochache : (new Date()).getTime(), 'search' : {/literal}'{$search}'{literal}, 'order' : order, 'from' : offset }, function(data){
 		if (data.length>0){
 			$("#" + id).html(data);
 		}
@@ -360,6 +372,19 @@ function ajax_list(offset){
 // edit textarea autogrow
 $(function(){
 	$('textarea').autogrow();
+});
+
+$("#select_order").jQselectable({
+	style: "simple",
+	height: 150,
+	opacity: .9,
+	callback: function(){
+		var order = $(this).val();
+		if (order != '0' && order != '1' && order != '2') {
+			var order = '0';
+		}
+		ajax_list(0, order);
+	}
 });
 
 // help view

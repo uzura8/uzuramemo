@@ -64,7 +64,7 @@ class Project extends MY_Controller
 	{
 		// template
 		$view_data = $this->_get_default_view_data();
-		$view_data['list'] =  $this->model_project->get_main_list($this->offset, $this->limit);
+		$view_data['list'] =  $this->model_project->get_main_list($this->offset, $this->limit, $this->_get_order_sql_clause());
 
 		// 記事件数を取得
 		$count_all = $this->model_project->get_count_all($this->search);
@@ -207,6 +207,24 @@ class Project extends MY_Controller
 		if (in_array('from', $keys))  $params['from']  = $this->offset;
 
 		return  sprintf('%s%s?%s', base_url(), $uri, http_build_query($params));
+	}
+
+	private function _get_order_sql_clause()
+	{
+		switch ($this->order)
+		{
+			case 1:// 更新日順
+				$order_sql_clause = 'updated_at desc';
+				break;
+			case 2:// 登録順
+				$order_sql_clause = 'id';
+				break;
+			default :
+				$order_sql_clause = 'sort';
+				break;
+		}
+
+		return $order_sql_clause;
 	}
 
 	private function _check_edit_form_item($item)

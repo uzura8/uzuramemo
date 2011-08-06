@@ -73,6 +73,7 @@
 </body>
 <script type="text/javascript" src="{site_url}js/jquery.autopager.js"></script>
 <script type="text/javascript" src="{site_url}js/jquery.lazyload.js"></script>
+<script type="text/javascript" src="{site_url}js/jquery.slidescroll.js"></script>
 <script type="text/javascript" charset="utf-8">
 {literal}
 $(function() {
@@ -84,12 +85,7 @@ $(function() {
 		return false;
 	});
 });
-{/literal}
-</script>
 
-<script type="text/javascript" src="{site_url}js/jquery.slidescroll.js"></script>
-<script type="text/javascript">
-{literal}
 $(function(){
   $("a[href*='#']").slideScroll();
 });

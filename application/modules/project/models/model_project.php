@@ -25,7 +25,7 @@ class Model_project extends CI_Model
 	}
 
 //	function get_main_list($offset = 0, $limit = 10, $order = 'id desc', $search = '', $category_id_list = array(), $with_logical_deleted = false, $columns = 'A.*, B.name, B.sub_id')
-	function get_main_list($offset = 0, $limit = 10, $order = 'id desc', $search = '', $category_id_list = array(), $with_logical_deleted = false, $columns = 'A.*')
+	function get_main_list($offset = 0, $limit = 10, $order = 'sort', $search = '', $category_id_list = array(), $with_logical_deleted = false, $columns = 'A.*')
 	{
 		$sql  = $this->get_main_query($search, $category_id_list, false, $with_logical_deleted, $columns);
 		$sql .= sprintf(" ORDER BY A.%s", $order);
@@ -167,6 +167,7 @@ class Model_project extends CI_Model
 	{
 		$values['created_at'] = date('Y-m-d H:i:s');
 		$values['updated_at'] = date('Y-m-d H:i:s');
+		$values['sort'] = $this->get_sort_max_next();
 
 		return $this->db->insert('project', $values);
 	}
