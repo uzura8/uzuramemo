@@ -124,6 +124,43 @@ class Project extends MY_Controller
 		$this->output->set_output('true');
 	}
 
+	public function ajax_execute_update_del_flg()
+	{
+		$this->input->check_is_post();
+		$id = (int)$this->_get_post_params('id');
+		if (!$id)
+		{
+			$this->output->set_status_header('403');
+			return;
+		}
+
+		$del_flg_after = 1;
+		if ($this->model_project->get_del_flg4id($id)) $del_flg_after = 0;
+
+		$this->model_project->update4id(array('del_flg' => $del_flg_after), $id, false);
+
+		$this->output->set_output($del_flg_after);
+	}
+
+	public function ajax_execute_delete()
+	{
+		$this->input->check_is_post();
+		$id = (int)$this->_get_post_params('id');
+		if (!$id)
+		{
+			$this->output->set_status_header('403');
+			return;
+		}
+
+		if (!$this->model_project->delete4id($id))
+		{
+			$this->output->set_status_header('403');
+			return;
+		}
+
+		$this->output->set_output('true');
+	}
+
 	private function _get_pagination_simple($count_all, $uri = '')
 	{
 		$config = $this->_get_pagination_config($count_all, $uri);
@@ -210,7 +247,17 @@ class Project extends MY_Controller
 		$this->load->library('form_validation');
 		$this->form_validation->set_rules('value', $validate_rules[$item]['label'], $validate_rules[$item]['rules']);
 
-		if (!$this->form_validation->run())
+		$result = $this->form_validation->run();
+
+		// 値に変更がない場合はそのまま
+		$row = $this->model_project->get_row_common(array('id' => $id));
+		if ($row[$item] == set_value('value'))
+		{
+			$this->output->set_output(set_value('value'));
+			return;
+		}
+
+		if (!$result)
 		{
 			$data = sprintf('%s<span class="validate_error">%s</span>', hsc(set_value('value')), validation_errors());
 			$this->output->set_output($data);

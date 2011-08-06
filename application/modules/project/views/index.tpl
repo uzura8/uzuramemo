@@ -116,6 +116,9 @@ Copyright : {$smarty.const.COPYRIGHT_SINCE} - {$smarty.now|date_format:"%Y"} {$s
 <script src="{site_url}js/jquery.hint.js" type="text/javascript"></script>
 *}
 
+<script src="{site_url}js/lib/jquery.alerts/jquery.alerts.js" type="text/javascript"></script>
+<link rel="stylesheet" href="{site_url}js/lib/jquery.alerts/jquery.alerts.css">
+
 <script type="text/javascript" charset="utf-8">
 {literal}
 // <![CDATA[
@@ -192,6 +195,57 @@ $(document).ready(function() {
 		submit    : 'Upload',
 		cancel    : 'Cancel',
 		tooltip   : "Click to upload..."
+	});
+
+	// article の無効化
+	$(".btn_delFlg").live("click", function(){
+		var id_value = $(this).attr("id");
+		var id = id_value.replace(/btn_delFlg_/g, "");
+		$.ajax({
+			url : "{/literal}{site_url}{literal}project/ajax_execute_update_del_flg",
+			dataType : "text",
+			data : {"id": id,},
+			type : "POST",
+			success: function(status_after){
+				if (status_after == "1") {
+					var btn_val = "{/literal}{1|site_get_symbols_for_display}{literal}";
+					var bgcolor = "{/literal}{'background-color'|site_get_style:'display_none'}{literal}";
+				} else {
+					var btn_val = "{/literal}{0|site_get_symbols_for_display}{literal}";
+					var bgcolor = "{/literal}{'background-color'|site_get_style:'display'}{literal}";
+				}
+				$("#article_title_" + id).css({"background" : bgcolor});
+				$("#article_" + id).css({"background" : bgcolor});
+				$("#btn_delFlg_" + id).val(btn_val);
+			},
+			error: function(){
+				$.jGrowl('No.' + id + 'の{/literal}{$page_name}{literal}の状態を変更できませんでした。');
+			}
+		});
+	});
+
+	// article の削除
+	$(".btn_delete").live("click", function(){
+		var id_value = $(this).attr("id");
+		var id = id_value.replace(/btn_delete_/g, "");
+		jConfirm('削除しますか?', '削除確認', function(r) {
+			if (r == true) {
+				$.ajax({
+					url : "{/literal}{site_url}{literal}project/ajax_execute_delete",
+					dataType : "text",
+					data : {"id": id,},
+					type : "POST",
+					success: function(status_after){
+						$("#article_title_" + id).css({"display" : "none"});
+						$("#article_" + id).css({"display" : "none"});
+						$.jGrowl('No.' + id + 'の{/literal}{$page_name}{literal}を削除しました。');
+					},
+					error: function(){
+						$.jGrowl('No.' + id + 'の{/literal}{$page_name}{literal}を削除できませんでした。');
+					}
+				});
+			}
+		});
 	});
 });
 // ]]>
@@ -320,15 +374,6 @@ $(function(){
 //	$('textarea[title!=""]').hint();
 //});
 
-{/literal}
-</script>
-
-<script type="text/javascript" src="{site_url}js/jquery.slidescroll.js"></script>
-<script type="text/javascript">
-{literal}
-$(function(){
-  $("a[href*='#']").slideScroll();
-});
 {/literal}
 </script>
 

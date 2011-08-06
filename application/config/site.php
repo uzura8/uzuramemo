@@ -9,3 +9,12 @@ $config['symbols'] = array(
 	'display_none' => '×',
 	'edit' => '⇔'
 );
+
+// style
+$config['styles'] = array(
+	'background-color' => array(
+		'display' => '#fff',
+		'display_none' => '#c0c0c0',
+		'edit' => '#f7d9d9'
+	),
+);

@@ -135,7 +135,7 @@ class Model_project extends CI_Model
 	function get_del_flg4id($id)
 	{
 		$CI =& get_instance();
-		$row = $CI->db_util->get_row4id('project', $id, array('del_flg'), 'project');
+		$row = $CI->db_util->get_row4id('project', $id, array('del_flg'), 'project', 'model');
 		if (empty($row)) return 0;
 
 		return (int)$row['del_flg'];

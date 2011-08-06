@@ -42,6 +42,15 @@ function site_get_symbols_for_display($del_flg = 0)
 	return site_get_symbol('display');
 }
 
+function site_get_style($property, $type)
+{
+	if (!$styles = get_config_value('styles', 'site')) return '';
+	if (empty($styles[$property][$type])) return '';
+
+	return $styles[$property][$type];
+}
+
+
 function site_output_private_quote_flg_views($private_flg = 0, $quote_flg = 0)
 {
 	$private_quote_flg = site_synthesize2private_quote_flg($private_flg, $quote_flg);

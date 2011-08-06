@@ -29,11 +29,11 @@ div#main_form_box {
 	color: #09F;
 }
 
-.form_box div.input textarea, input {
+.form_box div.input textarea, .form_box div.input input {
 	font-size: 11px;
 }
 
-.form_box div.input textarea, input {
+.form_box div.input textarea, .form_box div.input input {
 	width: 75%;
 }
 

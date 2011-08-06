@@ -25,6 +25,6 @@ class Db_util
 
 	public function get_row4id($table, $id, $columns = array(), $model_path = '', $model_prefix = '')
 	{
-		return $this->get_row($table, array('id' => (int)$id), $columns, $model_path);
+		return $this->get_row($table, array('id' => (int)$id), $columns, $model_path, $model_prefix);
 	}
 }

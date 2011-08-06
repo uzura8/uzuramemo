@@ -22,7 +22,7 @@
 <div class="content">
 {foreach from=$list item=row}
 <a name="id_{$row.id}"></a>
-<h2 class="box_01">
+<h2 class="box_01" id="article_title_{$row.id}">
 <div>
 <span id="name{$row.id}" class="autogrow">{$row.name}</span>{if $row.key_name}<span id="key_name{$row.id}" class="autogrow sub_info2">{$row.key_name}</span>{/if}
 <span class="btnTop list_util_btn wider" id="title_btn_{$row.id}"><a href="javaScript:void(0);" onclick="$('#article_{$row.id}').slideToggle();">▼</a></span>
@@ -48,6 +48,8 @@
 </div>
 {/if}
 <div class="article_aside_button">
+<span class="btnSpan"><input type="button" name="button" value="{$row.del_flg|site_get_symbols_for_display}" id="btn_delFlg_{$row.id}" class="btn_delFlg"></span>
+<span class="btnSpan space_left_5"><input type="button" name="button" value="削除" id="btn_delete_{$row.id}" class="btnInput btn_delete"></span>
 <span class="btnTop space_left_5"><a href="#list_top">▲</a></span>
 <span class="btnTop space_left_5"><a href="{site_url uri=project}">{$smarty.const.UM_TOPPAGE_NAME}</a></span>
 <span class="btnTop"><a href="{site_url}">サイト{$smarty.const.UM_TOPPAGE_NAME}</a></span>
@@ -81,6 +83,15 @@ $(function() {
 		$.autopager('load');
 		return false;
 	});
+});
+{/literal}
+</script>
+
+<script type="text/javascript" src="{site_url}js/jquery.slidescroll.js"></script>
+<script type="text/javascript">
+{literal}
+$(function(){
+  $("a[href*='#']").slideScroll();
 });
 {/literal}
 </script>
