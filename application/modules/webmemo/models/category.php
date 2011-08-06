@@ -160,26 +160,11 @@ class Category extends CI_Model {
 		return (int)$this->db->count_all_results();
 	}
 
-	public function get_sort_max_next($sub_id)
-	{
-		$this->db->select_max('sort', 'max');
-		$this->db->where('sub_id', (int)$sub_id);
-		$query = $this->db->get('memo_category');
-		if (!$query->num_rows()) return 1;
-
-		$row = $query->row_array(0);
-		$sort = $row['max'] + 1;
-		if ($sort > 999) $sort = 999;
-
-		return $sort;
-	}
-
 	public function insert($values)
 	{
-		$values['sort'] = $this->get_sort_max_next($values['sub_id']);
-		$values['del_flg'] = 0;
-		$values['created_at'] = date('Y-m-d H:i:s');
-		$values['updated_at'] = date('Y-m-d H:i:s');
+		$CI =& get_instance();
+		$values = $CI->db_util->set_common_column_value($values);
+		$values['sort'] = $CI->db_util->get_sort_max_next('memo_category', 'webmemo', '', array('sub_id' => (int)$values['sub_id']), 'sort', 999999, 'category');
 
 		return $this->db->insert('memo_category', $values);
 	}

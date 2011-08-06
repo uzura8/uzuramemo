@@ -384,8 +384,7 @@ class Admin_webmemo extends MY_Controller
 	public function execute_edit_category_list()
 	{
 		$this->input->check_is_post();
-		$this->_setup_validation('category');
-
+		$this->_setup_validation('category', false);
 		// submit choose
 		if ($this->input->post('choose'))
 		{
@@ -393,7 +392,6 @@ class Admin_webmemo extends MY_Controller
 			$this->session->remove(null, 'category');
 			$this->_set_validation_sessions('category', $this->category->get_row4id($id, array('name', 'sub_id', 'key_name', 'is_private', 'explain')));
 			$this->session->set('target_id', $id, 'category');
-
 			admin_redirect('webmemo/category#frm');
 		}
 
