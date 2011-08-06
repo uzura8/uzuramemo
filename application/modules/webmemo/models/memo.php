@@ -148,19 +148,6 @@ class Memo extends CI_Model
 		return $add_where;
 	}
 
-	public function get_sort_max_next()
-	{
-		$this->db->select_max('sort', 'max');
-		$query = $this->db->get('memo');
-		if (!$query->num_rows()) return 1;
-
-		$row = $query->row_array(0);
-		$sort = $row['max'] + 1;
-		if ($sort > 999999) $sort = 999999;
-
-		return $sort;
-	}
-
 	function get_del_flg4id($id)
 	{
 		$CI =& get_instance();
@@ -185,10 +172,9 @@ class Memo extends CI_Model
 
 	public function insert($values)
 	{
-		$values['sort'] = $this->get_sort_max_next();
-		$values['del_flg'] = 0;
-		$values['created_at'] = date('Y-m-d H:i:s');
-		$values['updated_at'] = date('Y-m-d H:i:s');
+		$CI =& get_instance();
+		$values = $CI->db_util->set_common_column_value($values);
+		$values['sort'] = $CI->db_util->get_sort_max_next('memo', 'webmemo');
 
 		return $this->db->insert('memo', $values);
 	}
