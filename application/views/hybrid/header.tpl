@@ -13,7 +13,7 @@
 {*<link rel='stylesheet' media='screen and (min-width: 701px) and (max-width: 900px)' href='{site_url}css/medium.css' />*}
 <link rel='stylesheet' media='screen and (min-width: 701px)' href='{site_url}css/medium.css' />
 
-<link rel="shortcut icon" href="{site_url}img/favicon/{$current_module}.ico">
+{if $current_module|is_exist_favicon}<link rel="shortcut icon" href="{img_url}/favicon/{$current_module}.ico">{else}<link rel="shortcut icon" href="{img_url}/favicon/main.ico">{/if}
 {$head_info}
 </head>
 <body id="{get_current_page_id}">
