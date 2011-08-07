@@ -20,10 +20,17 @@ class MY_Controller extends CI_Controller
 
 	private function _setup()
 	{
-		// load configs
-		$this->config->load(CURRENT_MODULE, true);
-
+		$this->config->load(CURRENT_MODULE, true);// load configs
 		if (!defined('SITE_TITLE')) define('SITE_TITLE', $this->config->item('site_title', CURRENT_MODULE));
+		if (!defined('IS_ACCEPT_ROBOTS'))
+		{
+			$is_accept_robots = true;
+			if (DEV_MODE || !$this->config->item('is_accept_robots', CURRENT_MODULE))
+			{
+				$is_accept_robots = false;
+			}
+			define('IS_ACCEPT_ROBOTS', $is_accept_robots);
+		}
 	}
 
 	private function _set_current_controller_action()

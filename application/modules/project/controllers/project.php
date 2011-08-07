@@ -57,6 +57,11 @@ class Project extends MY_Controller
 		// form
 		$view_data['form'] = $this->_validation_rules();
 
+		// select:order
+		$options = $this->_get_form_dropdown_options_order();
+		$view_data['form_dropdown_list'] = array();
+		$view_data['form_dropdown_list']['order'] = array('options' => $options);
+
 		$this->smarty_parser->parse('ci:project/index.tpl', $view_data);
 	}
 
@@ -250,20 +255,14 @@ class Project extends MY_Controller
 
 	private function _get_order_sql_clause()
 	{
-		switch ($this->order)
+		$value = $this->order;
+		$dropdown_options = $this->_get_form_dropdown_options_order(true);
+		if (empty($dropdown_options[$value]['sql_clause_order']))
 		{
-			case 1:// 更新日順
-				$order_sql_clause = 'updated_at desc';
-				break;
-			case 2:// 登録順
-				$order_sql_clause = 'id';
-				break;
-			default :
-				$order_sql_clause = 'sort';
-				break;
+			$value = '0';
 		}
 
-		return $order_sql_clause;
+		return $dropdown_options[$value]['sql_clause_order'];
 	}
 
 	private function _check_edit_form_item($item)
@@ -326,6 +325,34 @@ class Project extends MY_Controller
 		$this->model_project->update4id($values, $id);
 
 		$this->output->set_output(nl2br(hsc(set_value('value'))));
+	}
+
+	protected function _get_form_dropdown_options_order($is_full_settings = false)
+	{
+		$settings = array(
+			'0' => array(
+				'display' => '並び順',
+				'sql_clause_order' => 'sort',
+			),
+			'1' => array(
+				'display' => '新着順',
+				'sql_clause_order' => 'updated_at DESC',
+			),
+			'2' => array(
+				'display' => '登録順',
+				'sql_clause_order' => 'id',
+			),
+		);
+		if ($is_full_settings) return $settings;
+
+		$return = array();
+		foreach ($settings as $value => $setting)
+		{
+			$return[$value] = $setting['display'];
+		}
+		unset($settings);
+
+		return $return;
 	}
 
 	protected function _validation_rules()
