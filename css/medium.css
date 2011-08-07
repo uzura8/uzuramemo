@@ -1,0 +1,14 @@
+div#mainbody {
+	margin: 5px 7px 0;
+	width: 77%;
+	/*min-width:720px;*/
+	float: left;
+}
+
+div#main_menu {
+	margin: 5px 2px 0;
+	float: left;
+	width: 20%;
+}
+.clearfloat { clear: both; }
+.clearfloat hr { display: none; }

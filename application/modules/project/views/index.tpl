@@ -8,6 +8,9 @@
 <link rel="stylesheet" href="{site_url}css/mobile/reset.css">
 <link rel="stylesheet" href="{site_url}css/mobile/base.css">
 <link rel="stylesheet" href="{site_url}css/util.css">
+<link rel='stylesheet' media='screen and (max-width: 700px)' href='{site_url}css/narrow.css' />
+{*<link rel='stylesheet' media='screen and (min-width: 701px) and (max-width: 900px)' href='{site_url}css/medium.css' />*}
+<link rel='stylesheet' media='screen and (min-width: 701px)' href='{site_url}css/medium.css' />
 
 <meta name="robots" content="{if $smarty.const.DEV_MODE}noindex,nofollow{else}index,follow{/if}">
 <meta name="description" content="{$site_description}">
@@ -21,6 +24,7 @@
 <header id="top">
 <h1><a href="{site_url uri=project}" style="">{$smarty.const.SITE_TITLE}</a></h1>
 </header>
+
 <div id="mainbody">
 
 <h4 id="main_form_title" class="box_01">
@@ -31,8 +35,8 @@
 <option value="2">登録順</option>
 </select>
 </h4>
-<div class="form_box box_01" id="main_form_box">
 
+<div class="form_box box_01" id="main_form_box">
 {form_open action=project/execute_insert id=main_form}
 {foreach from=$form key=key item=items}
 {if $ignore_keys}{if $ignore_keys|strpos:$key !== false}{php}continue;{/php}{/if}{/if}
@@ -69,24 +73,26 @@
 	</div>
 </div>
 {/foreach}
-
 <button id="main_form_submit" class="iPhoneButton">送信</button>
 {form_close}
-</div>
+</div><!-- main_form_box END -->
 
-<div id="list"></div>
-<div id="auto_pager"></div>
+<div id="list"></div><!-- main contents -->
 
-{*
-{include file='ci:mobile/footer.tpl'}
-*}
+</div><!-- mainbody END -->
+
+<div id="main_menu">
+<h3 class="title"><a href="{site_url}/project">{get_config_value key=site_title index=project}</a></h3>
+<h3 class="title"><a href="{site_url}">{$smarty.const.UM_TOPPAGE_NAME}</a></h3>
 </div>
+<div class="clearfloat"><hr></div>
+
+{*{include file='ci:mobile/footer.tpl'}*}
 <footer>
 Copyright : {$smarty.const.COPYRIGHT_SINCE} - {$smarty.now|date_format:"%Y"} {$smarty.const.COPYRIGHT_URL}
 </footer>
 </body>
 {$foot_info}
-
 <script type="text/javascript" src="{site_url}js/lib/jquery.js"></script>
 <script type="text/javascript" src="{site_url}js/lib/jquery-ui.min.js"></script>
 
@@ -255,6 +261,33 @@ $(document).ready(function() {
 						$.jGrowl('No.' + id + 'の{/literal}{$page_name}{literal}を削除できませんでした。');
 					}
 				});
+			}
+		});
+	});
+
+	// 並び順の変更
+	$(".input_sort").live("change", function(){
+		var id_value = $(this).attr("id");
+		var id = id_value.replace(/input_sort_/g, "");
+		var value = $(this).val();
+		// 入力値が数値であるかどうかの確認
+		if (value != parseInt(value)) {
+			$.jGrowl('整数を入力してください。');
+			return;
+		}
+
+		// 更新
+		$.ajax({
+			url : "{/literal}{site_url}{literal}project/ajax_execute_update_sort",
+			dataType : "text",
+			data : {"id": id, "value": value},
+			type : "POST",
+			success: function(data){
+				ajax_list(0);
+				$.jGrowl('No.' + id + 'の並び順を変更しました。');
+			},
+			error: function(data){
+				$.jGrowl('No.' + id + 'の並び順を変更できませんでした。');
 			}
 		});
 	});

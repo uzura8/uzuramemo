@@ -142,6 +142,45 @@ class Project extends MY_Controller
 		$this->output->set_output($del_flg_after);
 	}
 
+	public function ajax_execute_update_sort()
+	{
+		$this->input->check_is_post();
+		$id = (int)$this->_get_post_params('id');
+
+		if (!$id)
+		{
+			$this->output->set_ajax_output_error();
+			return;
+		}
+
+		$this->load->library('form_validation');
+		$this->form_validation->set_rules('value', '並び順', 'trim|integer');
+		$result = $this->form_validation->run();
+
+		// 値に変更がない場合はそのまま
+		$row = $this->model_project->get_row_common(array('id' => $id));
+		if ($row['sort'] == set_value('value'))
+		{
+			return;
+		}
+
+		if (!$result)
+		{
+			$this->output->set_ajax_output_error();
+			return;
+		}
+
+		// 登録
+		$values = array('sort' => set_value('value'));
+		if (!$this->model_project->update4id($values, $id))
+		{
+			$this->output->set_ajax_output_error();
+			return;
+		}
+
+		$this->set_output('true');
+	}
+
 	public function ajax_execute_delete()
 	{
 		$this->input->check_is_post();

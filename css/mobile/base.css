@@ -391,6 +391,11 @@ article aside div.article_aside_button {
 	padding: 0 10px;
 }
 
+.InputMini[type=text] {
+	width: 30px;
+	height: 13px;
+}
+
 /* 背景色 */
 .bg_red {
 	background-color: #FFE6EE;

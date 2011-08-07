@@ -48,8 +48,11 @@
 </div>
 {/if}
 <div class="article_aside_button">
-<span class="btnSpan"><input type="button" name="button" value="{$row.del_flg|site_get_symbols_for_display}" id="btn_delFlg_{$row.id}" class="btn_delFlg"></span>
-<span class="btnSpan space_left_5"><input type="button" name="button" value="削除" id="btn_delete_{$row.id}" class="btnInput btn_delete"></span>
+<span class="btnSpan"><input type="button" name="update_del_flg_{$row.id}" value="{$row.del_flg|site_get_symbols_for_display}" id="btn_delFlg_{$row.id}" class="btn_delFlg"></span>
+<span class="btnSpan space_left_5"><input type="button" name="delete_{$row.id}" value="削除" id="btn_delete_{$row.id}" class="btnInput btn_delete"></span>
+<span class="btnSpan space_left">
+<label for="input_sort_{$row.id}">並び順:</label>
+<input type="text" name="input_sort_{$row.id}" value="{$row.sort}" id="input_sort_{$row.id}" class="InputMini input_sort" maxlength="6" placeholder="並び順"></span>
 <span class="btnTop space_left_5"><a href="#list_top">▲</a></span>
 <span class="btnTop space_left_5"><a href="{site_url uri=project}">{$smarty.const.UM_TOPPAGE_NAME}</a></span>
 <span class="btnTop"><a href="{site_url}">サイト{$smarty.const.UM_TOPPAGE_NAME}</a></span>
