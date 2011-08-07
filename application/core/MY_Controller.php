@@ -21,7 +21,9 @@ class MY_Controller extends CI_Controller
 	private function _setup()
 	{
 		$this->config->load(CURRENT_MODULE, true);// load configs
-		if (!defined('SITE_TITLE')) define('SITE_TITLE', $this->config->item('site_title', CURRENT_MODULE));
+		if (!defined('SITE_TITLE')) define('SITE_TITLE', $this->config->item('site_title', 'site'));
+		if (!defined('SITE_TITLE_MODULE')) define('SITE_TITLE_MODULE', $this->config->item('site_title', CURRENT_MODULE));
+
 		if (!defined('IS_ACCEPT_ROBOTS'))
 		{
 			$is_accept_robots = true;

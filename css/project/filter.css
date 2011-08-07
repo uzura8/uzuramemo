@@ -1,5 +1,6 @@
 @charset "utf-8";
-@import "project.css";
 @import "../mobile/reset.css";
 @import "../mobile/base.css";
 @import "../util.css";
+@import "../main.css";
+@import "main.css";

@@ -1,0 +1,28 @@
+h4#main_form_title {
+	font-size: 13px;
+	background-color: #E7E7E7;
+	line-height: 26px;
+}
+
+.link_right {
+	float: right;
+	font-size: 11px;
+}
+
+header#top h1 {
+	width: 70%;
+	float: left;
+}
+
+header#top h3 {
+	text-align: right;
+	width: 20%;
+	float: left;
+	line-height: 25px;
+}
+
+header#top h3 a {
+	text-decoration: none;
+	color: #fff;
+	text-shadow: -1px -1px 0 rgba(150, 150, 150, 0.3);
+}

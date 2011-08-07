@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width">
-<title>{$smarty.const.SITE_TITLE}</title>
+<title>{$smarty.const.SITE_TITLE_MODULE} - {$smarty.const.SITE_TITLE}</title>
 <meta name="robots" content="{if $smarty.const.IS_ACCEPT_ROBOTS}index,follow{else}noindex,nofollow{/if}">
 {if $site_keywords}<meta name="keywords" content="{','|implode:$site_keywords}">{/if}
 <meta name="description" content="{$site_description}">

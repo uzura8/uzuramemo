@@ -4,6 +4,7 @@
 
 <div id="mainbody">
 
+{include file='ci:hybrid/subtitle.tpl'}
 {include file='ci:project/main_form.tpl'}
 <div id="list"></div><!-- main contents -->
 

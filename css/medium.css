@@ -10,5 +10,3 @@ div#main_menu {
 	float: left;
 	width: 20%;
 }
-.clearfloat { clear: both; }
-.clearfloat hr { display: none; }

@@ -48,6 +48,8 @@ class Project extends MY_Controller
 	{
 		// template
 		$view_data = $this->_get_default_view_data();
+		$view_data['page_subtitle'] = $this->private_config['site_title'].'一覧';
+
 		$view_data['search'] = $this->search;
 		$view_data['order']  = $this->order;
 		$view_data['opt']    = $this->search_option;

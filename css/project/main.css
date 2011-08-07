@@ -77,13 +77,6 @@ input.blur, textarea.blur {
 	margin-left: 5px;
 }
 
-h4#main_form_title
-{
-	font-size: 10px;
-	background-color: #E7E7E7;
-	line-height: 28px;
-}
-
 .form_parts_right {
 	float: right;
 	vertical-align: top;

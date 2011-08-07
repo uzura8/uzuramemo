@@ -77,3 +77,6 @@
 	padding-left: 5px;
 	padding-right: 5px;
 }
+
+.clearfloat { clear: both; }
+.clearfloat hr { display: none; }

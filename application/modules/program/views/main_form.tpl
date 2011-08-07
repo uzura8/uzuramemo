@@ -1,8 +1,3 @@
-<h4 id="main_form_title" class="box_01">
-<a id="new_form_switch" href="javaScript:void(0);">{$page_name}の作成</a>
-{form_dropdown name=select_order options=`$form_dropdown_list.order.options` selected='' extra='class="form_parts_right" id="select_order"'}
-</h4>
-
 <div class="form_box box_01" id="main_form_box">
 {form_open action="`$current_module`/execute_insert" id=main_form}
 {foreach from=$form key=key item=items}
