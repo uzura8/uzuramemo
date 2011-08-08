@@ -30,6 +30,7 @@ header#top h3 a {
 /* main form */
 div#main_form_box {
 	background-color: #E7E7E7;
+	display: none;
 }
 
 .form_box div.form_row {
