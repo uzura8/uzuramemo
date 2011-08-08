@@ -58,10 +58,10 @@ $(document).ready(function() {
 			success: function(status_after){
 				if (status_after == "1") {
 					var btn_val = "{/literal}{1|site_get_symbols_for_display}{literal}";
-					var bgcolor = "{/literal}{'background-color'|site_get_style:'display_none'}{literal}";
+					var bgcolor = "{/literal}{'background-color'|site_get_style:'1'}{literal}";
 				} else {
 					var btn_val = "{/literal}{0|site_get_symbols_for_display}{literal}";
-					var bgcolor = "{/literal}{'background-color'|site_get_style:'display'}{literal}";
+					var bgcolor = "{/literal}{'background-color'|site_get_style:'0'}{literal}";
 				}
 				$("#article_title_" + id).css({"background" : bgcolor});
 				$("#article_" + id).css({"background" : bgcolor});

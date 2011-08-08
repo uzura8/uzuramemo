@@ -72,7 +72,7 @@ class Project extends MY_Controller
 	{
 		// template
 		$view_data = $this->_get_default_view_data();
-		$view_data['list'] =  $this->model_project->get_main_list($this->offset, $this->limit, $this->_get_order_sql_clause());
+		$view_data['list'] =  $this->model_project->get_main_list($this->offset, $this->limit, $this->_get_order_sql_clause(), '', array(), true);
 
 		// 記事件数を取得
 		$count_all = $this->model_project->get_count_all($this->search);

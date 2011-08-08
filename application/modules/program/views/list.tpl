@@ -21,7 +21,7 @@
 <div class="content">
 {foreach from=$list item=row}
 <a name="id_{$row.id}"></a>
-<h2 class="box_01" id="article_title_{$row.id}">
+<h2 class="box_01" id="article_title_{$row.id}" style="background-color:{'background-color'|site_get_style:$row.del_flg};">
 <div>
 <span id="name{$row.id}" class="autogrow">{$row.name}</span>{if $row.key_name}<span id="key_name{$row.id}" class="autogrow sub_info2">{$row.key_name}</span>{/if}
 <span class="btnTop list_util_btn wider" id="title_btn_{$row.id}"><a href="javaScript:void(0);" onclick="$('#article_{$row.id}').slideToggle();">▼</a></span>
@@ -35,7 +35,7 @@
 <div style="clear: both"></div>
 </div>
 </h2>
-<article class="box_01" id="article_{$row.id}" style="display:none">
+<article class="box_01" id="article_{$row.id}" style="display:none;background-color:{'background-color'|site_get_style:$row.del_flg};">
 <div class="article_box">
 <p class="autogrow" id="body{$row.id}" style="width: 300px">{if $row.body}{$row.body|nl2br|auto_link}{else}&nbsp;&nbsp;{/if}</p>
 </div>

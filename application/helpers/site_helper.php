@@ -45,6 +45,16 @@ function site_get_symbols_for_display($del_flg = 0)
 function site_get_style($property, $type)
 {
 	if (!$styles = get_config_value('styles', 'site')) return '';
+
+	if ($type == 1)
+	{
+		$type = 'display_none';
+	}
+	elseif ($type == 0)
+	{
+		$type = 'display';
+	}
+
 	if (empty($styles[$property][$type])) return '';
 
 	return $styles[$property][$type];
