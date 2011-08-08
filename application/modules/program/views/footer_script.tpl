@@ -178,6 +178,7 @@ $('#main_form').validate({
 				$('#key_name_result').fadeOut();
 				// $('#main_form_box').hide('fast');
 				ajax_list(0, 1);
+				$('#name').focus();
 				$.jGrowl('{/literal}{$page_name}{literal}を作成しました。');
 			},
 			error: function(){

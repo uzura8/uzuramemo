@@ -179,6 +179,8 @@ $('#main_form').validate({
 {literal}
 				$('#name_result').fadeOut();
 				$('#key_name_result').fadeOut();
+				//$('#name').focus();
+				$('select#program_id').focus();
 				// $('#main_form_box').hide('fast');
 				ajax_list(0, 1);
 				$.jGrowl('{/literal}{$page_name}{literal}を作成しました。');
