@@ -172,7 +172,7 @@ $('#main_form').validate({
 {/literal}
 {foreach from=$form key=key item=items}
 {if $items.type == 'input' || $items.type == 'textarea'}$( '{$items.type}#{$key}' ).val( '' );
-{elseif $items.type == 'dropdown'}$( 'select#{$key}' ).val(0);
+{elseif $items.type == 'select'}$( '{$items.type}#{$key}' ).val(0);
 {/if}
 {/foreach}
 {literal}

@@ -383,7 +383,7 @@ class Project extends MY_Controller
 		return array(
 			'program_id' => array(
 				'label' => 'プログラム',
-				'type'  => 'dropdown',
+				'type'  => 'select',
 				'rules' => 'trim|required|is_natural_no_zero|callback__is_registered_program_id',
 				'size'  => 30,
 				'options' => $this->_get_dropdown_options_program_id(),

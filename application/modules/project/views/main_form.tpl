@@ -3,7 +3,7 @@
 {foreach from=$form key=key item=items}
 {if $ignore_keys}{if $ignore_keys|strpos:$key !== false}{php}continue;{/php}{/if}{/if}
 <div class="form_row">
-{if $items.type == 'input' || $items.type == 'textarea' || $items.type == 'dropdown'}
+{if $items.type == 'input' || $items.type == 'textarea' || $items.type == 'select'}
 	<label for="{$key}">{$items.label}</label>
 {/if}
 	<div class="input">
@@ -17,7 +17,7 @@
 {/if}
 {elseif $items.type == 'textarea'}
 	<textarea name="{$key}" id="{$key}"{if $items.cols} cols="{$items.cols}"{/if}{if $items.rows} rows="{$items.rows}"{/if}{$smarty.capture.item_class|smarty:nodefaults}{$smarty.capture.item_class|smarty:nodefaults}{if $smarty.capture.form_help} placeholder="{$smarty.capture.form_help}"{/if}></textarea>
-{elseif $items.type == 'dropdown'}
+{elseif $items.type == 'select'}
 {form_dropdown name=`$key` options=`$items.options` selected='' extra=" id=\"$key\""}
 {/if}
 {if $smarty.capture.form_help && $items.rules_view == 'backword'}<span class="form_help">{$smarty.capture.form_help}</span>{/if}
