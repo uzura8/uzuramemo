@@ -77,5 +77,11 @@ jQuery.validator.addMethod("telnum", function(value, element) {
 // 半角英数字、アンダースコア(_)のいずれか
 jQuery.validator.addMethod("key_name", function(value, element) {
 	return this.optional(element) || /^([a-zA-Z0-9_]+)$/.test(value);
-	}, "半角英数字、アンダースコア(_)のいずれかで入力して下さい"
+	}, "半角英数字、アンダースコア(_)のいずれかで入力してください"
+);
+
+// key が child まで指定されているか
+jQuery.validator.addMethod("key_name_child", function(value, element) {
+	return this.optional(element) || /^([a-zA-Z0-9]+_[a-zA-Z0-9_]+[a-zA-Z0-9]+)$/.test(value);
+	}, "正しく入力してください"
 );

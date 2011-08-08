@@ -198,7 +198,12 @@ $('#main_form').validate({
 // 重複確認: name
 $(function() {
 	$('#name_loading').hide();
-	$('#name').blur(function() {
+	$('#name').change(function() {
+		if ($(this).val().length == 0)
+		{
+			$('#name_result').html('');
+			return;
+		}
 		$('#name_loading').show();
 		$.post("{/literal}{site_url}{literal}project/ajax_check_project_name", {
 			name: $('#name').val()
@@ -217,7 +222,12 @@ $(function() {
 // 重複確認: key_name
 $(function() {
 	$('#key_name_loading').hide();
-	$('#key_name').blur(function() {
+	$('#key_name').change(function() {
+		if ($(this).val().length == 0)
+		{
+			$('#key_name_result').html('');
+			return;
+		}
 		$('#key_name_loading').show();
 		$.post("{/literal}{site_url}{literal}project/ajax_check_project_key_name", {
 			key_name: $('#key_name').val()

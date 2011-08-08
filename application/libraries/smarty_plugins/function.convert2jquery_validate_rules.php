@@ -19,6 +19,14 @@ function smarty_function_convert2jquery_validate_rules($params, &$smarty)
 				$each_rules[] = $each_rule;
 			}
 		}
+		if (!empty($items['custom_rules']))
+		{
+			$custom_rules = explode('|', $items['custom_rules']);
+			foreach ($custom_rules as $rule)
+			{
+				$each_rules[] = sprintf('%s: true', $rule);
+			}
+		}
 		if (!$each_rules) continue;
 
 		$return[] = sprintf('%s: { %s }', $key, implode(', ', $each_rules));
