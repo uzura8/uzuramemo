@@ -153,6 +153,7 @@ $('#main_form').validate({
 {/if}
 {/foreach}
 {literal}
+				$('span').removeClass('validate_success');
 				$('span').removeClass('validate_error');
 				$('#name_result').fadeOut();
 				$('#key_name_result').fadeOut();
@@ -214,7 +215,7 @@ $(function() {
 				if (response == 'true') {
 					var message = '<span class="validate_success">登録可能</span>';
 				} else {
-					var message = '<span class="validate_error">重複しています</span>';
+					var message = '<span class="validate_error">' + response + '</span>';
 				}
 				setTimeout("finishAjax('key_name_result', '"+escape(message)+"')", 400);
 			});
@@ -265,6 +266,7 @@ $("select#program_id").change(function(){
 		success: function(data) {
 			if (data.length > 0) {
 				$("input#key_name").val(data + '_');
+				$("#key_name_result").html('');
 			}
 		}
 	});

@@ -159,7 +159,6 @@ class Program extends MY_Controller
 			return;
 		}
 
-		$this->load->library('form_validation');
 		$this->form_validation->set_rules('value', '並び順', 'trim|integer');
 		$result = $this->form_validation->run();
 
@@ -301,7 +300,6 @@ class Program extends MY_Controller
 		if (!$id || !$this->_check_edit_form_item($item)) return;
 
 		$validate_rules = $this->_validation_rules();
-		$this->load->library('form_validation');
 		$this->form_validation->set_rules('value', $validate_rules[$item]['label'], $validate_rules[$item]['rules']);
 
 		$result = $this->form_validation->run();

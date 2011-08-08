@@ -110,22 +110,15 @@ class Project extends MY_Controller
 	{
 		$this->input->check_is_post();
 		$key_name = $this->_get_post_params('key_name');
-		if (!$this->_unique_check_key_name($key_name))
-		{
-			$this->output->set_output('false');
-			return;
-		}
 
-		$this->output->set_output('true');
-	}
+		$validate_rules = $this->_validation_rules();
+		$this->form_validation->set_rules('key_name', $validate_rules['key_name']['label'], $validate_rules['key_name']['rules']);
+		$this->form_validation->set_error_delimiters('', '');
 
-	public function ajax_check_project_key_name_old()
-	{
-		$this->input->check_is_post();
-		$key_name = $this->_get_post_params('key_name');
-		if (!$this->_unique_check_key_name($key_name))
+		$result = $this->form_validation->run();
+		if (!$result)
 		{
-			$this->output->set_output('false');
+			$this->output->set_output(trim(validation_errors()));
 			return;
 		}
 
@@ -161,7 +154,6 @@ class Project extends MY_Controller
 			return;
 		}
 
-		$this->load->library('form_validation');
 		$this->form_validation->set_rules('value', '並び順', 'trim|integer');
 		$result = $this->form_validation->run();
 
@@ -304,7 +296,6 @@ class Project extends MY_Controller
 		if (!$this->form_validation->run())
 		{
 			$this->output->set_status_header('403');
-			$this->output->set_output('NG');
 			return;
 		}
 
@@ -323,7 +314,6 @@ class Project extends MY_Controller
 		if (!$id || !$this->_check_edit_form_item($item)) return;
 
 		$validate_rules = $this->_validation_rules();
-		$this->load->library('form_validation');
 		$this->form_validation->set_rules('value', $validate_rules[$item]['label'], $validate_rules[$item]['rules']);
 
 		$result = $this->form_validation->run();
@@ -441,7 +431,37 @@ class Project extends MY_Controller
 	{
 		if (!strlen($str)) return true;
 
-		return $this->_validate_unique_check('project', 'key_name', $str);
+		return $this->_validate_unique_check_key_name_project($str);
+	}
+
+	protected function _validate_unique_check_key_name_project($value)
+	{
+		$validation_name = '_unique_check_key_name';
+		$error_message = '正しくありません';
+
+		// 形式確認
+		if (!preg_match('/^([0-9a-zA-Z]+)_[0-9a-zA-Z]{1}[0-9a-zA-Z_]+[0-9a-zA-Z]{1}$/', $value, $matches))
+		{
+			$this->form_validation->set_message($validation_name, $error_message);
+			return false;
+		}
+		$parent_key = $matches[1];
+
+		// 親側のkey確認
+		if (!$this->model_program->get_row_common(array('key_name' => $parent_key)))
+		{
+			$this->form_validation->set_message($validation_name, $error_message);
+			return false;
+		}
+
+		$error_message = 'その %s は既に登録されています';
+		if ($this->model_project->get_row_common(array('key_name' => $value)))
+		{
+			$this->form_validation->set_message($validation_name, $error_message);
+			return false;
+		}
+
+		return true;
 	}
 }
 
