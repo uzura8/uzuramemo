@@ -365,12 +365,14 @@ class Program extends MY_Controller
 				'rules' => 'trim|required|max_length[140]|callback__unique_check_name',
 				'size'  => 30,
 				'children' => array('key_name'),
+				'realtime_validation'  => true,
 			),
 			'key_name' => array(
 				'label' => 'key',
 				'type'  => 'input',
 				'rules' => 'trim|required|alpha_dash|max_length[20]|callback__unique_check_key_name',
 				'size'  => 8,
+				'realtime_validation'  => true,
 			),
 			'customer' => array(
 				'label' => '顧客名',

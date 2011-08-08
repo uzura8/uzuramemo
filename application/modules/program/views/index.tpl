@@ -4,7 +4,7 @@
 
 <div id="mainbody">
 {include file='ci:hybrid/subtitle.tpl'}
-{include file='ci:program/main_form.tpl'}
+{include file='ci:hybrid/main_form.tpl'}
 <div id="list"></div><!-- main contents -->
 </div><!-- mainbody END -->
 
@@ -13,4 +13,5 @@
 
 {include file='ci:hybrid/footer.tpl'}
 {include file='ci:program/footer_script.tpl'}
+{include file='ci:hybrid/footer_script.tpl'}
 </html>

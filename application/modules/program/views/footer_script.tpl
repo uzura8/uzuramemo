@@ -32,20 +32,20 @@ $(document).ready(function() {
 	$('#main_form_box').hide('fast');
 
 	$(".autogrow").live("click", function(){
-		var program_id = $(this).attr("id");
+		var id = $(this).attr("id");
 		var item_name = $(this).attr("id").replace(/[0-9]+/g, "");
 		var text_box_width = '250px';
 		if (item_name == 'key_name') {
 			var text_box_width = '50px';
 		}
 
-		$("p#" + program_id).editable("{/literal}{site_url uri=program/execute_update}/{literal}" + item_name, {
+		$("p#" + id).editable("{/literal}{site_url uri=program/execute_update}/{literal}" + item_name, {
 			indicator : "<img src='{/literal}{site_url uri=js/lib/jeditable/img/indicator.gif}{literal}'>",
 			type      : "autogrow",
 			submit    : 'OK',
 			//submit    : '<input type="submit" value="OK" class="button">',
 			cancel    : 'cancel',
-			loadurl    : '{/literal}{site_url uri=program/ajax_program_detail}{literal}/' + program_id + '/' + item_name,
+			loadurl    : '{/literal}{site_url uri=program/ajax_program_detail}{literal}/' + id + '/' + item_name,
 			tooltip   : "Click to edit...",
 			onblur    : "ignore",
 			cssclass : "editable",
@@ -55,14 +55,14 @@ $(document).ready(function() {
 			//	 minHeight  : 32
 			//}
 		})
-		$("span#" + program_id).editable("{/literal}{site_url uri=program/execute_update}/{literal}" + item_name, {
+		$("span#" + id).editable("{/literal}{site_url uri=program/execute_update}/{literal}" + item_name, {
 			indicator : "<img src='{/literal}{site_url uri=js/lib/jeditable/img/indicator.gif}{literal}'>",
 			type      : "text",
 			width     : 'width: ' + text_box_width + ';',// js/lib/jeditable/jquery.jeditable.js : 455 を修正し style で指定できるように対応
 			submit    : 'OK',
 			//submit    : '<input type="submit" value="OK" class="button">',
 			cancel    : 'cancel',
-			loadurl    : '{/literal}{site_url uri=program/ajax_program_detail}{literal}/' + program_id + '/' + item_name,
+			loadurl    : '{/literal}{site_url uri=program/ajax_program_detail}{literal}/' + id + '/' + item_name,
 			tooltip   : "Click to edit...",
 			onblur    : "ignore",
 			cssclass : "editable",
@@ -157,6 +157,7 @@ $(document).ready(function() {
 $('#main_form_submit').button();
 $('#main_form').validate({
 	rules : { {/literal}{convert2jquery_validate_rules form_items=$form}{literal} },
+	messages : { {/literal}{convert2jquery_validate_messages form_items=$form}{literal} },
 	errorClass: "validate_error",
 	errorElement: "span",
 //	errorLabelContainer: "#main_form_errorList",
@@ -170,15 +171,18 @@ $('#main_form').validate({
 			success: function(data){
 				// メッセージ入力欄をクリア
 {/literal}
-{foreach from=$form key=key item=items}{if $items.type == 'input' || $items.type == 'textarea'}
-				$( '{$items.type}#{$key}' ).val( '' );
-{/if}{/foreach}
+{foreach from=$form key=key item=items}
+{if $items.type == 'input' || $items.type == 'textarea'}$( '{$items.type}#{$key}' ).val( '' );
+{elseif $items.type == 'select'}$( '{$items.type}#{$key}' ).val(0);
+{/if}
+{/foreach}
 {literal}
+				$('span').removeClass('validate_error');
 				$('#name_result').fadeOut();
 				$('#key_name_result').fadeOut();
+				$('#name').focus();
 				// $('#main_form_box').hide('fast');
 				ajax_list(0, 1);
-				$('#name').focus();
 				$.jGrowl('{/literal}{$page_name}{literal}を作成しました。');
 			},
 			error: function(){
@@ -269,23 +273,5 @@ function ajax_list(offset, order){
 		}
 	})
 }
-
-// edit textarea autogrow
-$(function(){
-	$('textarea').autogrow();
-});
-
-$("#select_order").jQselectable({
-	style: "simple",
-	height: 150,
-	opacity: .9,
-	callback: function(){
-		var order = $(this).val();
-		if (order != '0' && order != '1' && order != '2') {
-			var order = '0';
-		}
-		ajax_list(0, order);
-	}
-});
 {/literal}
 </script>
