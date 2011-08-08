@@ -159,6 +159,7 @@ $('#main_form').validate({
 				$('#name').focus();
 				// $('#main_form_box').hide('fast');
 				ajax_list(0, 1);
+				$('#select_order').val('1');
 				$.jGrowl('{/literal}{$page_name}{literal}を作成しました。');
 			},
 			error: function(){

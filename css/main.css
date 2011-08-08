@@ -1,7 +1,7 @@
 h4#main_form_title {
 	font-size: 13px;
 	background-color: #E7E7E7;
-	line-height: 26px;
+	line-height: 23px;
 }
 
 .link_right {
@@ -10,13 +10,13 @@ h4#main_form_title {
 }
 
 header#top h1 {
-	width: 70%;
+	width: 65%;
 	float: left;
 }
 
 header#top h3 {
 	text-align: right;
-	width: 20%;
+	width: 25%;
 	float: left;
 	line-height: 25px;
 }
@@ -60,7 +60,36 @@ div#main_form_box {
 	color: #09F;
 }
 
-.form_box div.input textarea, .form_box div.input input {
+/*.form_box div.input input[type=text], .form_box div.input textarea, .form_box div.input select {*/
+input[type=text], input.style01, textarea, select, button.style01 {
+	border:1px solid #777;
+	padding: 2px 5px;
+	color: #47484A;
+	background: #fff;
+	
+/* Webkit */
+	background: -webkit-gradient(
+		linear,
+		left top,
+		left bottom,
+		from(#eee),
+		to(#fff)
+		);
+	
+/* Firefox */
+	background: -moz-linear-gradient(
+		top,
+		#eee,
+		#fff
+		);
+	
+/* IE */
+	filter:progid:DXImageTransform.Microsoft.gradient
+        (startColorstr=#ffeeeeee,endColorstr=#ffffffff);
+	zoom: 1;
+}
+
+.form_box div.input textarea, .form_box div.input input, .form_box div.input select {
 	font-size: 11px;
 }
 
@@ -92,6 +121,12 @@ input.blur, textarea.blur {
 
 .form_box button.iPhoneButton {
 	width: 100%;
+}
+
+form.editable button {
+	font-size: 10px;
+	font-weight: normal;
+	margin-left: 5px;
 }
 
 .validate_error {
