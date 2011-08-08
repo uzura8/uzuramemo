@@ -157,6 +157,7 @@ $(document).ready(function() {
 $('#main_form_submit').button();
 $('#main_form').validate({
 	rules : { {/literal}{convert2jquery_validate_rules form_items=$form}{literal} },
+	messages : { {/literal}{convert2jquery_validate_messages form_items=$form}{literal} },
 	errorClass: "validate_error",
 	errorElement: "span",
 //	errorLabelContainer: "#main_form_errorList",
