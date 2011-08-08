@@ -81,3 +81,7 @@ input.blur, textarea.blur {
 	float: right;
 	vertical-align: top;
 }
+
+#main_form_box a.sctble_display span {
+	width: 100%;
+}

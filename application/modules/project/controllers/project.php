@@ -16,6 +16,7 @@ class Project extends MY_Controller
 
 		// load models
 		$this->load->model('project/model_project');
+		$this->load->model('program/model_program');
 
 		$this->_configure();
 	}
@@ -207,6 +208,26 @@ class Project extends MY_Controller
 		$this->output->set_output('true');
 	}
 
+	public function ajax_get_project_key_name()
+	{
+		$this->input->check_is_post();
+		$program_id = (int)$this->_get_post_params('id');
+		if (!$program_id)
+		{
+			$this->output->set_status_header('403');
+			return;
+		}
+
+		$row = $this->model_program->get_row_common(array('id' => $program_id));
+		if (!$key_name = $row['key_name'])
+		{
+			$this->output->set_status_header('403');
+			return;
+		}
+
+		$this->output->set_output($key_name);
+	}
+
 	private function _get_pagination_simple($count_all, $uri = '')
 	{
 		$config = $this->_get_pagination_config($count_all, $uri);
@@ -360,24 +381,27 @@ class Project extends MY_Controller
 	protected function _validation_rules()
 	{
 		return array(
+			'program_id' => array(
+				'label' => 'プログラム',
+				'type'  => 'dropdown',
+				'rules' => 'trim|required|is_natural_no_zero|callback__is_registered_program_id',
+				'size'  => 30,
+				'options' => $this->_get_dropdown_options_program_id(),
+			),
 			'name' => array(
 				'label' => 'プロジェクト名',
 				'type'  => 'input',
 				'rules' => 'trim|required|max_length[140]|callback__unique_check_name',
 				'size'  => 30,
 				'children' => array('key_name'),
+				'realtime_validation'  => true,
 			),
 			'key_name' => array(
 				'label' => 'key',
 				'type'  => 'input',
 				'rules' => 'trim|alpha_dash|max_length[20]|callback__unique_check_key_name',
 				'size'  => 8,
-			),
-			'customer' => array(
-				'label' => '顧客名',
-				'type'  => 'input',
-				'rules' => 'trim|required|max_length[140]',
-				'size'  => 30,
+				'realtime_validation'  => true,
 			),
 			'body' => array(
 				'label' => '本文',
@@ -394,6 +418,16 @@ class Project extends MY_Controller
 				'rows'  => 2,
 			),
 		);
+	}
+
+	function _get_dropdown_options_program_id()
+	{
+		$return = array();
+		$return['0'] = '選択してください';
+		$rows = $this->model_program->get_main_list(0, 0, 'sort', '', array(), false, array('id', 'name'));
+		$return += $this->db_util->convert2assoc($rows);
+
+		return $return;
 	}
 
 	function _unique_check_name($str)

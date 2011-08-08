@@ -59,4 +59,17 @@ class Db_util
 
 		return $sort;
 	}
+
+	public function convert2assoc($rows)
+	{
+		$return = array();
+		foreach ($rows as $row)
+		{
+			$key = array_shift($row);
+			$value = array_shift($row);
+			$return[$key] = $value;
+		}
+
+		return $return;
+	}
 }

@@ -170,9 +170,11 @@ $('#main_form').validate({
 			success: function(data){
 				// メッセージ入力欄をクリア
 {/literal}
-{foreach from=$form key=key item=items}{if $items.type == 'input' || $items.type == 'textarea'}
-				$( '{$items.type}#{$key}' ).val( '' );
-{/if}{/foreach}
+{foreach from=$form key=key item=items}
+{if $items.type == 'input' || $items.type == 'textarea'}$( '{$items.type}#{$key}' ).val( '' );
+{elseif $items.type == 'dropdown'}$( 'select#{$key}' ).val(0);
+{/if}
+{/foreach}
 {literal}
 				$('#name_result').fadeOut();
 				$('#key_name_result').fadeOut();
@@ -275,6 +277,25 @@ $("#select_order").jQselectable({
 		}
 		ajax_list(0, order);
 	}
+});
+
+// key名を補う
+$("select#program_id").change(function(){
+	var program_id = $(this).val();
+	//if ($("input#key_name").val().length > 0) return;// key_name が入力済みの場合は何もしない
+
+	// program のkey_nameを取得し、補う
+	$.ajax({
+		url : "{/literal}{site_url}{literal}project/ajax_get_project_key_name",
+		dataType : "text",
+		data : {"id": program_id},
+		type : "POST",
+		success: function(data) {
+			if (data.length > 0) {
+				$("input#key_name").val(data + '_');
+			}
+		}
+	});
 });
 {/literal}
 </script>

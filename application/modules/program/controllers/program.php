@@ -369,7 +369,7 @@ class Program extends MY_Controller
 			'key_name' => array(
 				'label' => 'key',
 				'type'  => 'input',
-				'rules' => 'trim|alpha_dash|max_length[20]|callback__unique_check_key_name',
+				'rules' => 'trim|required|alpha_dash|max_length[20]|callback__unique_check_key_name',
 				'size'  => 8,
 			),
 			'customer' => array(

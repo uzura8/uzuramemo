@@ -3,6 +3,7 @@ DROP TABLE IF EXISTS `project`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `project` (
   `id` int(8) NOT NULL AUTO_INCREMENT,
+  `program_id` int(8) NOT NULL DEFAULT '0',
   `name` varchar(200) NOT NULL DEFAULT '',
   `key_name` varchar(20) DEFAULT NULL,
   `body` text,

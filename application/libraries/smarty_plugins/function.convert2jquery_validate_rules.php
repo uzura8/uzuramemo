@@ -10,7 +10,14 @@ function smarty_function_convert2jquery_validate_rules($params, &$smarty)
 		foreach ($rules as $rule)
 		{
 			if (!$each_rule = _smarty_function_convert2jquery_validate_each_rules($rule)) continue;
-			$each_rules[] = $each_rule;
+			if (is_array($each_rule))
+			{
+				$each_rules = array_merge($each_rules, $each_rule);
+			}
+			else
+			{
+				$each_rules[] = $each_rule;
+			}
 		}
 		if (!$each_rules) continue;
 
@@ -33,5 +40,9 @@ function _smarty_function_convert2jquery_validate_each_rules($rule)
 	elseif ($rule == 'alpha_dash')
 	{
 		return 'key_name: true';
+	}
+	elseif ($rule == 'is_natural_no_zero')
+	{
+		return array('digits: true', 'min: 1');
 	}
 }

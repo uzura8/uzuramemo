@@ -45,7 +45,7 @@ class Model_program extends CI_Model
 	private static function get_main_query($search = '', $category_id_list = array(), $is_count = false, $with_logical_deleted = false, $columns = 'A.*')
 	{
 		if (is_array($columns)) $columns = implode(',', $columns);
-		if (!$columns) $columns = 'A.*, B.*';
+		if (!$columns) $columns = 'A.*';
 
 		$select = sprintf("SELECT %s FROM program A", $columns);
 		if ($is_count) $select = "SELECT COUNT(A.id) as count FROM program A";
