@@ -13,6 +13,6 @@
 <div class="clearfloat"><hr></div>
 
 {include file='ci:hybrid/footer.tpl'}
-{include file='ci:project/footer_script.tpl'}
 {include file='ci:hybrid/footer_script.tpl'}
+{include file='ci:project/footer_script.tpl'}
 </html>
