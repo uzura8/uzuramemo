@@ -26,3 +26,88 @@ header#top h3 a {
 	color: #fff;
 	text-shadow: -1px -1px 0 rgba(150, 150, 150, 0.3);
 }
+
+/* main form */
+div#main_form_box {
+	background-color: #E7E7E7;
+}
+
+.form_box div.form_row {
+	margin: 0 0 10px;
+}
+
+.form_box label {
+	font-size: 10px;
+	float: left;
+	text-align: right;
+	width: 15%;
+	padding-top: 4px;
+	margin-right: 10px;
+}
+
+.form_box span.sublabel {
+	font-size: 10px;
+	margin-left: 10px;
+}
+
+.form_box div.input {
+	text-align: left;
+}
+
+.form_box span.form_help {
+	font-size: 8px;
+	color: #09F;
+}
+
+.form_box div.input textarea, .form_box div.input input {
+	font-size: 11px;
+}
+
+.form_box div.input textarea, .form_box div.input input {
+	width: 75%;
+}
+
+.form_box div.input input.normal {
+	width: 30%;
+}
+
+.form_box div.input input.narrow {
+	width: 10%;
+}
+
+input.blur, textarea.blur {
+	color: #999;
+	font-size: 10px;
+}
+
+.form_box div.left_box {
+	float: left;
+	width: 30%;
+}
+
+.form_box div.iPhoneButton {
+	margin-top: 10px;
+}
+
+.form_box button.iPhoneButton {
+	width: 100%;
+}
+
+.validate_error {
+	color: #F00;
+	font-size: 10px;
+	font-weight: normal;
+	margin-left: 5px;
+}
+
+.validate_success {
+	color: #22B8DD;
+	font-size: 10px;
+	font-weight: normal;
+	margin-left: 5px;
+}
+
+.form_parts_right {
+	float: right;
+	vertical-align: top;
+}
