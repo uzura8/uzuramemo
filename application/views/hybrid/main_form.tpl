@@ -7,10 +7,10 @@
 	<label for="{$key}">{$items.label}</label>
 {/if}
 	<div class="input">
-{if $items.children}{capture name="item_class"} class="{if $items.children}normal{/if}"{/capture}{/if}
+{capture name="item_class"} class="{if $items.children || $items.width}{if $items.width}width_{$items.width}{elseif $items.children}normal{/if}{else}width_75{/if}"{/capture}
 {if $items.type == 'text' || $items.type == 'textarea'}{capture name="form_help"}{$items.rules|form_help:$smarty.capture.help_default}{/capture}{/if}
 {if $items.type == 'text'}
-	<input type="text" name="{$key}" id="{$key}" size="{$items.size}"{$smarty.capture.item_class|smarty:nodefaults}{if $smarty.capture.form_help} placeholder="{$smarty.capture.form_help}"{/if}>
+	<input type="text" name="{$key}" id="{$key}"{$smarty.capture.item_class|smarty:nodefaults}{if $smarty.capture.form_help} placeholder="{$smarty.capture.form_help}"{/if}>
 {if $items.realtime_validation}
 	<span id="{$key}_loading"><img src="{site_url}img/loading.gif" alt="Ajax Indicator"></span>
 	<span id="{$key}_result"></span>
@@ -26,7 +26,7 @@
 {assign var=ignore_keys value="`$ignore_keys`,`$child_key`"}
 {if $form.$child_key.type == 'text' || $form.$child_key.type == 'textarea'}{capture name="form_help"}{$form.$child_key.rules|form_help}{/capture}{/if}
 	<span class="sublabel" for="{$child_key}">{$form.$child_key.label}</span>
-	<input type="text" name="{$child_key}" id="{$child_key}" size="{$form.$child_key.size}" class="narrow"{$smarty.capture.item_class|smarty:nodefaults}{if $smarty.capture.form_help} placeholder="{$smarty.capture.form_help}"{/if}>
+	<input type="text" name="{$child_key}" id="{$child_key}" class="narrow"{$smarty.capture.item_class|smarty:nodefaults}{if $smarty.capture.form_help} placeholder="{$smarty.capture.form_help}"{/if}>
 {if $form.$child_key.realtime_validation}
 	<span id="{$child_key}_loading"><img src="{site_url}img/loading.gif" alt="Ajax Indicator"></span>
 	<span id="{$child_key}_result"></span>

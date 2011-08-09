@@ -78,5 +78,12 @@
 	padding-right: 5px;
 }
 
+.width_10 {width: 10%;}
+.width_20 {width: 20%;}
+.width_30 {width: 30%;}
+.width_40 {width: 40%;}
+.width_50 {width: 50%;}
+.width_75 {width: 75%;}
+
 .clearfloat { clear: both; }
 .clearfloat hr { display: none; }

@@ -93,10 +93,11 @@ input[type=text], input.style01, textarea, select, button.style01 {
 	font-size: 11px;
 }
 
+/*
 .form_box div.input textarea, .form_box div.input input {
 	width: 75%;
 }
-
+*/
 .form_box div.input input.normal {
 	width: 30%;
 }
