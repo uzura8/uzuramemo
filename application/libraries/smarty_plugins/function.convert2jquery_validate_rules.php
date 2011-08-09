@@ -53,4 +53,8 @@ function _smarty_function_convert2jquery_validate_each_rules($rule)
 	{
 		return array('digits: true', 'min: 1');
 	}
+	elseif ($rule == 'date_format')
+	{
+		return 'date_format: true';
+	}
 }

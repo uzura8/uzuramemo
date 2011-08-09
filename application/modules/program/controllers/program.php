@@ -359,7 +359,7 @@ class Program extends MY_Controller
 		return array(
 			'name' => array(
 				'label' => $this->private_config['site_title'].'名',
-				'type'  => 'input',
+				'type'  => 'text',
 				'rules' => 'trim|required|max_length[140]|callback__unique_check_name',
 				'size'  => 30,
 				'children' => array('key_name'),
@@ -367,14 +367,14 @@ class Program extends MY_Controller
 			),
 			'key_name' => array(
 				'label' => 'key',
-				'type'  => 'input',
+				'type'  => 'text',
 				'rules' => 'trim|required|alpha_dash|max_length[20]|callback__unique_check_key_name',
 				'size'  => 8,
 				'realtime_validation'  => true,
 			),
 			'customer' => array(
 				'label' => '顧客名',
-				'type'  => 'input',
+				'type'  => 'text',
 				'rules' => 'trim|required|max_length[140]',
 				'size'  => 30,
 			),

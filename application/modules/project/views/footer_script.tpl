@@ -13,6 +13,8 @@ $(document).ready(function() {
 		var text_box_width = '250px';
 		if (item_name == 'key_name') {
 			var text_box_width = '50px';
+		} else if (item_name == 'due_date') {
+			var text_box_width = '100px';
 		}
 
 		$("p#" + id).editable("{/literal}{site_url uri=project/execute_update}/{literal}" + item_name, {
@@ -148,7 +150,8 @@ $('#main_form').validate({
 				// メッセージ入力欄をクリア
 {/literal}
 {foreach from=$form key=key item=items}
-{if $items.type == 'input' || $items.type == 'textarea'}$( '{$items.type}#{$key}' ).val( '' );
+{if $items.type == 'text'}$( 'input#{$key}' ).val( '' );
+{elseif $items.type == 'textarea'}$( '{$items.type}#{$key}' ).val( '' );
 {elseif $items.type == 'select'}$( '{$items.type}#{$key}' ).val(0);
 {/if}
 {/foreach}

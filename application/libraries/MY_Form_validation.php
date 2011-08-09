@@ -35,4 +35,12 @@ class MY_Form_validation extends CI_Form_validation
 	{
 		return (!in_array((int)$str, array(0, 1))) ? FALSE : TRUE;
 	}
+
+	public function date_format($str)
+	{
+		if (!strlen($str)) return true;
+
+		$CI =& get_instance();
+		return (!$CI->date_util->check_date_format($str)) ? FALSE : TRUE;
+	}
 }

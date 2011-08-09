@@ -15,6 +15,7 @@ CREATE TABLE `project` (
   `private_flg` tinyint(1) DEFAULT '0',
   `created_at` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `updated_at` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+	 `due_date` date DEFAULT NULL COMMENT '期日',
   PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`),
   UNIQUE KEY `key_name` (`key_name`)

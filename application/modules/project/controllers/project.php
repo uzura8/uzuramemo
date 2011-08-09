@@ -282,7 +282,7 @@ class Project extends MY_Controller
 
 	private function _check_edit_form_item($item)
 	{
-		$allow_items = array('body', 'name', 'key_name');
+		$allow_items = array('body', 'name', 'key_name', 'due_date');
 		if (!$item || !in_array($item, $allow_items)) return false;
 
 		return true;
@@ -381,7 +381,7 @@ class Project extends MY_Controller
 			),
 			'name' => array(
 				'label' => 'プロジェクト名',
-				'type'  => 'input',
+				'type'  => 'text',
 				'rules' => 'trim|required|max_length[140]|callback__unique_check_name',
 				'size'  => 30,
 				'children' => array('key_name'),
@@ -389,11 +389,18 @@ class Project extends MY_Controller
 			),
 			'key_name' => array(
 				'label' => 'key',
-				'type'  => 'input',
+				'type'  => 'text',
 				'rules' => 'trim|required|alpha_dash|max_length[20]|callback__unique_check_key_name',
 				'custom_rules' => 'key_name_child',
 				'size'  => 8,
 				'realtime_validation'  => true,
+			),
+			'due_date' => array(
+				'label' => '期日',
+				'type'  => 'text',
+//				'rules' => 'trim|callback__date_format_check',
+				'rules' => 'trim|date_format',
+				'size'  => 20,
 			),
 			'body' => array(
 				'label' => '本文',

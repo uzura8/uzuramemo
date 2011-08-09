@@ -148,7 +148,8 @@ $('#main_form').validate({
 				// メッセージ入力欄をクリア
 {/literal}
 {foreach from=$form key=key item=items}
-{if $items.type == 'input' || $items.type == 'textarea'}$( '{$items.type}#{$key}' ).val( '' );
+{if $items.type == 'text'}$( 'input#{$key}' ).val( '' );
+{elseif $items.type == 'textarea'}$( '{$items.type}#{$key}' ).val( '' );
 {elseif $items.type == 'select'}$( '{$items.type}#{$key}' ).val(0);
 {/if}
 {/foreach}

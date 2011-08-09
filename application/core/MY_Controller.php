@@ -191,4 +191,19 @@ class MY_Controller extends CI_Controller
 
 		return true;
 	}
+
+/*
+	public function _date_format_check($str)
+	{
+		if (!strlen($str)) return true;
+
+		if (!$this->date_util->check_date_format($str))
+		{
+			$this->form_validation->set_message('_date_format_check', '%s が正しくありません');
+			return false;
+		}
+
+		return true;
+	}
+*/
 }
