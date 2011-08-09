@@ -288,16 +288,19 @@ $("select#program_id").change(function(){
 $(function() {
 	//テキストボックスにカレンダーをバインドする（パラメータは必要に応じて）
 	$("#due_date").datepicker({
-			showButtonPanel: true,//「今日」「閉じる」ボタンを表示する
-			firstDay: 1,//週の先頭を月曜日にする（デフォルトは日曜日）
-			
-			//年月をドロップダウンリストから選択できるようにする場合
-			changeYear: true,
-			changeMonth: true,
-			
-			// 選択可能な日付の範囲を限定する場合（月は0～11）
-			// minDate: new Date(2010, 6 - 1, 16),
-			// maxDate: new Date(2010, 8 - 1, 15)
+		showButtonPanel: true,//「今日」「閉じる」ボタンを表示する
+		firstDay: 1,//週の先頭を月曜日にする（デフォルトは日曜日）
+
+		//年月をドロップダウンリストから選択できるようにする場合
+		changeYear: true,
+		changeMonth: true,
+
+		prevText: '&#x3c;前',
+		nextText: '次&#x3e;',
+
+		// 選択可能な日付の範囲を限定する場合（月は0～11）
+		// minDate: new Date(2010, 6 - 1, 16),
+		// maxDate: new Date(2010, 8 - 1, 15)
 	});
 });
 {/literal}
