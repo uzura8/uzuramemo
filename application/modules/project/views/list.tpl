@@ -37,7 +37,7 @@
 </h2>
 <article class="box_01" id="article_{$row.id}" style="display:none;background-color:{'background-color'|site_get_style:$row.del_flg};">
 <div class="article_box">
-<span id="due_date{$row.id}" class="autogrow">{$row.due_date}</span>
+<span>期限: </span><span id="due_date{$row.id}" class="autogrow space_left_5">{$row.due_date}</span>
 <p class="autogrow" id="body{$row.id}" style="width: 300px">{if $row.body}{$row.body|nl2br|auto_link}{else}&nbsp;&nbsp;{/if}</p>
 </div>
 
