@@ -43,4 +43,28 @@ class MY_Form_validation extends CI_Form_validation
 		$CI =& get_instance();
 		return (!$CI->date_util->check_date_format($str)) ? FALSE : TRUE;
 	}
+
+	public function min_num($str, $val)
+	{
+		if (preg_match("/[^0-9]/", $val))
+		{
+			return FALSE;
+		}
+
+		$str = (int)$str;
+
+		return ($str < $val) ? FALSE : TRUE;
+	}
+
+	public function max_num($str, $val)
+	{
+		if (preg_match("/[^0-9]/", $val))
+		{
+			return FALSE;
+		}
+
+		$str = (int)$str;
+
+		return ($str > $val) ? FALSE : TRUE;
+	}
 }
