@@ -276,3 +276,32 @@ $("select#program_id").change(function(){
 });
 {/literal}
 </script>
+
+<!-- カレンダー対応 -->
+<script src="{site_url}js/lib/jquery-ui-1.8.14.custom.min.js" type="text/javascript"></script>
+<script src="{site_url}js/lib/jquery.ui.datepicker-ja.js" type="text/javascript"></script>
+<script src="{site_url}js/lib/gcalendar-holidays.js" type="text/javascript"></script>
+<link rel="stylesheet" href="{site_url}css/jquery-ui-1.8.14.custom.css">
+<link rel="stylesheet" href="{site_url}css/jquery-ui-calendar.custom.css">
+<script type="text/javascript" charset="utf-8">
+{literal}
+$(function() {
+	//テキストボックスにカレンダーをバインドする（パラメータは必要に応じて）
+	$("#due_date").datepicker({
+			showButtonPanel: true,//「今日」「閉じる」ボタンを表示する
+			firstDay: 1,//週の先頭を月曜日にする（デフォルトは日曜日）
+			
+			//年月をドロップダウンリストから選択できるようにする場合
+			changeYear: true,
+			changeMonth: true,
+			
+			// 選択可能な日付の範囲を限定する場合（月は0～11）
+			// minDate: new Date(2010, 6 - 1, 16),
+			// maxDate: new Date(2010, 8 - 1, 15)
+	});
+});
+{/literal}
+</script>
+
+<!-- module専用CSSの読み込み -->
+<link rel="stylesheet" href="{site_url}css/project/main.css">

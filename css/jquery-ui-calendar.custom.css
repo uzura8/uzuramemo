@@ -1,0 +1,9 @@
+.ui-datepicker td span, .ui-datepicker td a {
+	text-align: center;/* 日付をセンタリング */
+}
+.ui-datepicker select.ui-datepicker-year, .ui-datepicker select.ui-datepicker-month {
+	width: auto;/* 改行防止 */
+}
+.ui-datepicker select.ui-datepicker-month {
+	margin-left: 1em;/* ちょっと離す */
+}

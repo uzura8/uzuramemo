@@ -1,4 +1,46 @@
-
 #main_form_box a.sctble_display span {
 	width: 100%;
 }
+
+/* ボタンスタイル */
+#project_project_index .iPhoneButton,
+#project_project_index .iPhoneButtonBlack {
+  margin: 0 auto;
+
+  border: solid 2px #2d3137;
+  -webkit-border-radius: 10px;
+  box-shadow: 0 1px 2px rgba(0,0,0,.2);
+  padding: 2px;
+  text-align: center;
+}
+#project_project_index .iPhoneButton {
+  background: -webkit-gradient(linear, left top, left bottom, from(#eeefef), to(#bdbfc2));
+  background-color: #bdbfc2;
+}
+#project_project_index .iPhoneButtonBlack {
+  background: -webkit-gradient(linear, left top, left bottom, from(#6b6e74), to(#282e37));
+  background: #282e37;
+}
+#project_project_index .iPhoneButton a,
+#project_project_index .iPhoneButtonBlack a {
+  -webkit-border-radius: 5px;
+  display: inline-block;
+  text-align: center;
+  padding: .3em 0;
+  text-decoration: none;
+  font-size: 10px;
+  font-weight: bold;
+	display: block;
+	color: #1C94C4;
+	/*padding: 2px;*/
+	color: #252525;
+	font-family: Helvetica;
+}
+/*
+#project_project_index .iPhoneButton a {
+  color: #000;
+}
+#project_project_index .iPhoneButtonBlack a {
+  color: #fff;
+}
+*/
