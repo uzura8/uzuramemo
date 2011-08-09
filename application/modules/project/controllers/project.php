@@ -509,6 +509,27 @@ class Project extends MY_Controller
 
 		return true;
 	}
+
+	public function _is_registered_program_id($value)
+	{
+		$validation_name = '_is_registered_program_id';
+		$error_message = 'プログラムIDが正しくありません';
+
+		if (!intval($value))
+		{
+			$this->form_validation->set_message($validation_name, $error_message);
+			return false;
+		}
+
+		// idの存在確認
+		if (!$this->db_util->get_row4id('program', $value, array('id'), 'program', 'model'))
+		{
+			$this->form_validation->set_message($validation_name, $error_message);
+			return false;
+		}
+
+		return true;
+	}
 }
 
 /* End of file welcome.php */
