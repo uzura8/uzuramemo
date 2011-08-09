@@ -4,8 +4,9 @@
 $(document).ready(function() {
 	$('#new_form_switch').click(function() {
 		$('#main_form_box').slideToggle();
+		$('#name').focus();
 	});
-	$('#main_form_box').hide('fast');
+	//$('#main_form_box').hide('fast');
 
 	$(".autogrow").live("click", function(){
 		var id = $(this).attr("id");

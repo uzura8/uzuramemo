@@ -8,6 +8,8 @@ class Project extends MY_Controller
 	private $order  = 0;
 	private $search = '';
 	private $search_option  = false;
+	private $program_id = 0;
+	private $edit = 0;
 	private $next_url;
 
 	function __construct()
@@ -17,6 +19,9 @@ class Project extends MY_Controller
 		// load models
 		$this->load->model('project/model_project');
 		$this->load->model('program/model_program');
+
+		// load config
+		$this->config->load('program', true);
 
 		$this->_configure();
 	}
@@ -35,33 +40,60 @@ class Project extends MY_Controller
 		if (IS_MOBILE) $this->limit = $this->private_config['article_nums']['mobile'];
 		$this->search = $this->_get_post_params('search', '', 'trim|max_length[301]');
 		$this->offset = $this->_get_post_params('from', 0, 'intval|less_than[10000000]');
-		$this->order  = $this->_get_post_params('order', 0, 'intval|less_than[3]');
+		$this->program_id = $this->_get_post_params('program_id', 0, 'intval');
+		$this->edit   = $this->_get_post_params('edit', 0, 'intval|is_natural|less_than[2]');
+
+		$options = $this->_get_form_dropdown_options_order();// select:order
+		$this->order  = $this->_get_post_params('order', 0, sprintf('intval|less_than[%d]', count($options)));
 	}
 
 	private function _get_default_view_data()
 	{
 		return array(
 			'page_name' => $this->private_config['site_title'],
+			'selected_select_order' => 4,
 		);
 	}
 
-	public function index()
+	public function index($program_key = '')
 	{
 		// template
 		$view_data = $this->_get_default_view_data();
-		$view_data['page_subtitle'] = $this->private_config['site_title'].'一覧';
+		$view_data['page_title'] = $this->private_config['site_title'].'一覧';
 
+		// request parameter
 		$view_data['search'] = $this->search;
 		$view_data['order']  = $this->order;
 		$view_data['opt']    = $this->search_option;
 		$view_data['from']   = $this->offset;
 		$view_data['limit']  = $this->limit;
+		$view_data['edit']   = $this->edit;
+
+		$validation_rules = $this->_validation_rules();// form
+		$options = $this->_get_form_dropdown_options_order();// select:order
+
+		// program 指定時
+		if ($program_key)
+		{
+			$program = $this->model_program->get_row_common(array('key_name' => $program_key));
+			$this->program_id = (int)$program['id'];
+			$view_data['page_subtitle'] = $program['name'];
+
+			$validation_rules['program_id']['type'] = 'hidden';
+			$validation_rules['program_id']['value'] = $this->program_id;
+			$validation_rules['program_id']['options'] = array();
+			$validation_rules['key_name']['value'] = $program_key.'_';
+
+			$view_data['selected_select_order'] = 0;
+			array_pop($options);
+		}
+		$view_data['program_key'] = $program_key;
+		$view_data['program_id'] = $this->program_id;
 
 		// form
-		$view_data['form'] = $this->_validation_rules();
+		$view_data['form'] = $validation_rules;
 
 		// select:order
-		$options = $this->_get_form_dropdown_options_order();
 		$view_data['form_dropdown_list'] = array();
 		$view_data['form_dropdown_list']['order'] = array('options' => $options);
 
@@ -72,7 +104,7 @@ class Project extends MY_Controller
 	{
 		// template
 		$view_data = $this->_get_default_view_data();
-		$view_data['list'] =  $this->model_project->get_main_list($this->offset, $this->limit, $this->_get_order_sql_clause(), '', array(), true);
+		$view_data['list'] =  $this->model_project->get_main_list($this->offset, $this->limit, $this->_get_order_sql_clause(), '', $this->program_id, true, 'A.*, B.name as program_name');
 
 		// 記事件数を取得
 		$count_all = $this->model_project->get_count_all($this->search);
@@ -345,15 +377,23 @@ class Project extends MY_Controller
 		$settings = array(
 			'0' => array(
 				'display' => '並び順',
-				'sql_clause_order' => 'sort',
+				'sql_clause_order' => 'A.sort',
 			),
 			'1' => array(
 				'display' => '新着順',
-				'sql_clause_order' => 'updated_at DESC',
+				'sql_clause_order' => 'A.updated_at DESC',
 			),
 			'2' => array(
 				'display' => '登録順',
-				'sql_clause_order' => 'id',
+				'sql_clause_order' => 'A.id',
+			),
+			'3' => array(
+				'display' => '期限順',
+				'sql_clause_order' => 'A.due_date',
+			),
+			'4' => array(
+				'display' => 'プログラム順',
+				'sql_clause_order' => 'B.name, A.sort',
 			),
 		);
 		if ($is_full_settings) return $settings;

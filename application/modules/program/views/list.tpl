@@ -24,7 +24,9 @@
 <h2 class="box_01" id="article_title_{$row.id}" style="background-color:{'background-color'|site_get_style:$row.del_flg};">
 <div>
 <span id="name{$row.id}" class="autogrow">{$row.name}</span>{if $row.key_name}<span id="key_name{$row.id}" class="autogrow sub_info2">{$row.key_name}</span>{/if}
-<span class="btnTop list_util_btn wider" id="title_btn_{$row.id}"><a href="javaScript:void(0);" onclick="$('#article_{$row.id}').slideToggle();">▼</a></span>
+<span class="btnTop list_util_btn wider space_left" id="title_btn_{$row.id}"><a href="javaScript:void(0);" onclick="$('#article_{$row.id}').slideToggle();">▼</a></span>
+<span class="link_right_each line_height_15 space_left"><a id="new_form_switch" href="{site_url}project/index/{$row.key_name}?edit=1">&raquo;&nbsp;作成</a></span>
+<span class="link_right_each line_height_15"><a id="new_form_switch" href="{site_url}project/index/{$row.key_name}">&raquo;&nbsp;{get_config_value key=site_title index=project}一覧</a></span>
 </div>
 <div class="article_meta_top">
 <div class="banner"></div>
@@ -39,6 +41,8 @@
 <div class="article_box">
 <p class="autogrow" id="body{$row.id}" style="width: 300px">{if $row.body}{$row.body|nl2br|auto_link}{else}&nbsp;&nbsp;{/if}</p>
 </div>
+<span class="link_right_each f_bld"><a id="new_form_switch" href="{site_url}project/index/{$row.key_name}/?edit=1">&raquo;&nbsp;{get_config_value key=site_title index=project}作成</a></span>
+<div class="clearfloat"><hr></div>
 
 <aside class="article_footer">
 {if $row.explanation}

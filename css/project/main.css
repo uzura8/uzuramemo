@@ -44,3 +44,14 @@
   color: #fff;
 }
 */
+
+#project_project_index .article_meta_top .banner {
+	float: left;
+	text-align: left;
+	width: 30%;
+}
+#project_project_index .article_meta_top .meta_info {
+	float: right;
+	text-align: right;
+	width: 67%;
+}

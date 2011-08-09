@@ -55,6 +55,14 @@
 	color: #ffffff;
 }
 
+/* 文字の太さ */
+.f_bld {
+	font-weight: bold;
+}
+.f_light {
+	font-weight: lighter;
+}
+
 .space_left{
 	margin-left: 10px;
 }
@@ -85,5 +93,9 @@
 .width_50 {width: 50%;}
 .width_75 {width: 75%;}
 
+.line_height_15 { line-height: 15px; }
+
 .clearfloat { clear: both; }
 .clearfloat hr { display: none; }
+
+.display_none { display: none; }

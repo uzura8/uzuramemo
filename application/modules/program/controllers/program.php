@@ -16,6 +16,9 @@ class Program extends MY_Controller
 		// load models
 		$this->load->model('program/model_program');
 
+		// load config
+		$this->config->load('project', true);
+
 		$this->_configure();
 	}
 
@@ -47,7 +50,7 @@ class Program extends MY_Controller
 	{
 		// template
 		$view_data = $this->_get_default_view_data();
-		$view_data['page_subtitle'] = $this->private_config['site_title'].'一覧';
+		$view_data['page_title'] = $this->private_config['site_title'].'一覧';
 
 		$view_data['search'] = $this->search;
 		$view_data['order']  = $this->order;

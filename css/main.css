@@ -9,6 +9,11 @@ h4#main_form_title {
 	font-size: 11px;
 }
 
+.link_right_each {
+	float: right;
+	font-size: 10px;
+}
+
 header#top h1 {
 	width: 65%;
 	float: left;

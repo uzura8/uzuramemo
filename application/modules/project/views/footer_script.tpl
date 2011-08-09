@@ -4,8 +4,14 @@
 $(document).ready(function() {
 	$('#new_form_switch').click(function() {
 		$('#main_form_box').slideToggle();
+		$('#name').focus();
 	});
-	$('#main_form_box').hide('fast');
+	//$('#main_form_box').hide('fast');
+{/literal}{if $edit}
+	$('#main_form_box').show('fast');
+	$('#name').focus();
+{assign var=edit value=0}
+{/if}{literal}
 
 	$(".autogrow").live("click", function(){
 		var id = $(this).attr("id");
@@ -249,7 +255,7 @@ function ajax_list(offset, order){
 	$.ajaxSetup( { cache : false } );
 	$("#" + id).show();
 
-	$.get(url, {nochache : (new Date()).getTime(), 'search' : {/literal}'{$search}'{literal}, 'order' : order, 'from' : offset }, function(data){
+	$.get(url, { nochache:(new Date()).getTime(), 'program_id':{/literal}'{$program_id}'{literal}, 'search':{/literal}'{$search}'{literal}, 'order':order, 'from':offset }, function(data){
 		if (data.length>0){
 			$("#" + id).html(data);
 		}

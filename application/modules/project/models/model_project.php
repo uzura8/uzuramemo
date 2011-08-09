@@ -25,33 +25,31 @@ class Model_project extends CI_Model
 	}
 
 //	function get_main_list($offset = 0, $limit = 10, $order = 'id desc', $search = '', $category_id_list = array(), $with_logical_deleted = false, $columns = 'A.*, B.name, B.sub_id')
-	function get_main_list($offset = 0, $limit = 10, $order = 'sort', $search = '', $category_id_list = array(), $with_logical_deleted = false, $columns = 'A.*')
+	function get_main_list($offset = 0, $limit = 10, $order = 'A.sort', $search = '', $program_id = 0, $with_logical_deleted = false, $columns = 'A.*')
 	{
-		$sql  = $this->get_main_query($search, $category_id_list, false, $with_logical_deleted, $columns);
-		$sql .= sprintf(" ORDER BY A.%s", $order);
+		$sql  = $this->get_main_query($search, $program_id, false, $with_logical_deleted, $columns);
+		$sql .= sprintf(" ORDER BY %s", $order);
 		if ($limit) $sql .= sprintf(" LIMIT %d, %d", $offset, $limit);
 
 		return $this->db->query($sql)->result_array();
 	}
 
-	function get_count_all($search = '', $category_id_list = array())
+	function get_count_all($search = '', $program_id = 0)
 	{
-		$sql  = $this->get_main_query($search, $category_id_list, true);
+		$sql  = $this->get_main_query($search, $program_id, true);
 		$row = $this->db->query($sql)->first_row('array');
 
 		return (int)$row['count'];
 	}
 
-	private static function get_main_query($search = '', $category_id_list = array(), $is_count = false, $with_logical_deleted = false, $columns = 'A.*')
+	private static function get_main_query($search = '', $program_id = 0, $is_count = false, $with_logical_deleted = false, $columns = 'A.*')
 	{
 		if (is_array($columns)) $columns = implode(',', $columns);
 		if (!$columns) $columns = 'A.*, B.*';
 
 		$select = sprintf("SELECT %s FROM project A", $columns);
 		if ($is_count) $select = "SELECT COUNT(A.id) as count FROM project A";
-
-//		$sql = $select." LEFT JOIN project_category B ON A.project_category_id = B.id";
-		$sql = $select;
+		$sql = $select." LEFT JOIN program B ON A.program_id = B.id";
 
 		$where  = '';
 		$wheres = array();
@@ -61,10 +59,17 @@ class Model_project extends CI_Model
 			$wheres[] = $add_where;
 			unset($add_where);
 		}
+		if ($program_id)
+		{
+			$wheres[] = sprintf("program_id = %d", $program_id);
+		}
+/*
 		if ($category_id_list)
 		{
 			$wheres[] = sprintf("B.id IN (%s)", implode(',', $category_id_list));
 		}
+*/
+
 		if ($wheres) $where = ' WHERE '.implode(' AND ', $wheres);
 
 		return $sql.$where;

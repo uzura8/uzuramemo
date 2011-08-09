@@ -128,6 +128,15 @@ class Model_program extends CI_Model
 		return (int)$row['del_flg'];
 	}
 
+	function get_id4key($key)
+	{
+		$CI =& get_instance();
+		$row = $CI->db_util->get_row('program', array('key_name' => $key), array('id'), 'program', 'model');
+		if (empty($row['id'])) return array();
+
+		return $row['id'];
+	}
+
 	function get_row_common($params)
 	{
 		$CI =& get_instance();
