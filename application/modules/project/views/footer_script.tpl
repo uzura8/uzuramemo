@@ -124,6 +124,7 @@ $(document).ready(function() {
 			type : "POST",
 			success: function(data){
 				ajax_list(0);
+				$('#select_order').val('0');
 				$.jGrowl('No.' + id + 'の並び順を変更しました。');
 			},
 			error: function(data){
@@ -183,30 +184,30 @@ $('#main_form').validate({
 	}
 });
 
-// 重複確認: name
-$(function() {
-	$('#name_loading').hide();
-	$('#name').change(function() {
-		if ($(this).val().length == 0)
-		{
-			$('#name_result').html('');
-			return;
-		}
-		$('#name_loading').show();
-		$.post("{/literal}{site_url}{literal}project/ajax_check_project_name", {
-			name: $('#name').val()
-			}, function(response){
-				$('#name_result').fadeOut();
-				if (response == 'true') {
-					var message = '<span class="validate_success">登録可能</span>';
-				} else {
-					var message = '<span class="validate_error">重複しています</span>';
-				}
-				setTimeout("finishAjax('name_result', '"+escape(message)+"')", 400);
-			});
-			return false;
-	});
-});
+//// 重複確認: name
+//$(function() {
+//	$('#name_loading').hide();
+//	$('#name').change(function() {
+//		if ($(this).val().length == 0)
+//		{
+//			$('#name_result').html('');
+//			return;
+//		}
+//		$('#name_loading').show();
+//		$.post("{/literal}{site_url}{literal}project/ajax_check_project_name", {
+//			name: $('#name').val()
+//			}, function(response){
+//				$('#name_result').fadeOut();
+//				if (response == 'true') {
+//					var message = '<span class="validate_success">登録可能</span>';
+//				} else {
+//					var message = '<span class="validate_error">重複しています</span>';
+//				}
+//				setTimeout("finishAjax('name_result', '"+escape(message)+"')", 400);
+//			});
+//			return false;
+//	});
+//});
 // 重複確認: key_name
 $(function() {
 	$('#key_name_loading').hide();
