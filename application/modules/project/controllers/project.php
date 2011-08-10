@@ -78,7 +78,9 @@ class Project extends MY_Controller
 		{
 			if (!$program = $this->model_program->get_row_common(array('key_name' => $program_key, 'del_flg' => 0))) show_404();
 			$this->program_id = (int)$program['id'];
-			$view_data['page_subtitle'] = $program['name'];
+			$view_data['page_subtitle_parts'] = array(
+				array('url' => '', 'subtitle' => $program['name']),
+			);
 
 			$validation_rules['program_id']['type'] = 'hidden';
 			$validation_rules['program_id']['value'] = $this->program_id;
