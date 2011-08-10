@@ -60,7 +60,7 @@ class Wbs extends MY_Controller
 
 	public function index($project_key = '')
 	{
-		if (!$project_key || !$project = $this->model_project->get_row_full(array('key_name' => $project_key), 'A.id, A.name, B.name as program_name, B.key_name as program_key'))
+		if (!$project_key || !$project = $this->model_project->get_row_full(array('A.key_name' => $project_key), 'A.id, A.name, B.name as program_name, B.key_name as program_key'))
 		{
 			show_404();
 		}
@@ -68,6 +68,10 @@ class Wbs extends MY_Controller
 		$view_data = $this->_get_default_view_data();
 		$view_data['page_title'] = $this->private_config['site_title'].'一覧';
 		$view_data['page_subtitle'] = $project['name'];
+		$view_data['page_subtitle_parts'] = array(
+			array('url' => site_url('project/index/'.$project['program_key']), 'subtitle' => $project['program_name']),
+			array('url' => '', 'subtitle' => $project['name']),
+		);
 
 		$this->project_id = (int)$project['id'];
 		$view_data['project_id'] = $this->project_id;
@@ -98,7 +102,7 @@ class Wbs extends MY_Controller
 	{
 		// template
 		$view_data = $this->_get_default_view_data();
-		$view_data['list'] =  $this->model_wbs->get_main_list($this->offset, $this->limit, $this->_get_order_sql_clause(), '', $this->project_id, true, 'A.*, B.name as project_name');
+		$view_data['list'] =  $this->model_wbs->get_main_list($this->offset, $this->limit, $this->_get_order_sql_clause(), '', $this->project_id, true, 'A.*, B.name as project_name, C.name as program_name');
 
 		// 記事件数を取得
 		$count_all = $this->model_wbs->get_count_all($this->search, $this->project_id, true);

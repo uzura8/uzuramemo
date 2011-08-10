@@ -151,7 +151,7 @@ class Model_project extends CI_Model
 		return $CI->db_util->get_cols('project', array('program_id' => $program_id), 'id', 'project', 'model');
 	}
 
-	public function get_row_full($params, $colmns = 'A.*', $with_logical_deleted = false)
+	public function get_row_full($params, $columns = 'A.*', $with_logical_deleted = false)
 	{
 		if (is_array($columns)) $columns = implode(',', $columns);
 		if (!$columns) $columns = 'A.*';
@@ -168,7 +168,7 @@ class Model_project extends CI_Model
 		$values = array();
 		foreach ($params as $key => $value)
 		{
-			$wheres[] = sprintf("%s = ?");
+			$wheres[] = sprintf("%s = ?", $key);
 			$values[] = $value;
 		}
 		if ($wheres) $where = ' WHERE '.implode(' AND ', $wheres);

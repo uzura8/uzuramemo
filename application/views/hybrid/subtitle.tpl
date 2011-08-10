@@ -1,9 +1,9 @@
 <h4 id="main_form_title" class="box_01">
-<span class="space_right">{$page_title}</span>
+<span class="space_right f_15">{$page_title}</span>
 {foreach from=$page_subtitle_parts item=row}
-{if $row.url}
+{if $row.url && $row.subtitle}
 <span class="f_12 space_left_5">&raquo;&nbsp;<a href="{$row.url}">{$row.subtitle}</a></span>
-{else}
+{elseif $row.subtitle}
 <span class="f_12 space_left_5">&raquo;&nbsp;{$row.subtitle}</span>
 {/if}
 {/foreach}

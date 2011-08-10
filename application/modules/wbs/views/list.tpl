@@ -27,7 +27,10 @@
 <span class="btnTop list_util_btn wider" id="title_btn_{$row.id}"><a href="javaScript:void(0);" onclick="$('#article_{$row.id}').slideToggle();">▼</a></span>
 </div>
 <div class="article_meta_top">
-<div class="banner">{$row.project_name}</div>
+<div class="banner">
+<span class="space_left_5">{$row.program_name}</span>
+<span class="space_left_5">{$row.project_name}</span>
+</div>
 <div class="meta_info">
 <span>No.{$row.id}</span>
 <span class="space_left_5">update: {$row.updated_at|date_format:"%Y/%m/%d %H:%M"}</span>
