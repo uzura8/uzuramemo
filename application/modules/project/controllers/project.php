@@ -472,6 +472,7 @@ class Project extends MY_Controller
 				'rules' => 'trim',
 				'cols'  => 60,
 				'rows'  => 2,
+				'disabled_for_insert'  => true,
 			),
 		);
 	}

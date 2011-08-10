@@ -2,6 +2,7 @@
 {form_open action="`$current_module`/execute_insert" id=main_form}
 {foreach from=$form key=key item=items}
 {if $ignore_keys}{if $ignore_keys|strpos:$key !== false}{php}continue;{/php}{/if}{/if}
+{if $items.disabled_for_insert}{php}continue;{/php}{/if}
 <div class="form_row{if $items.type == 'hidden'} display_none{/if}">
 {if $items.type == 'text' || $items.type == 'textarea' || $items.type == 'select'}
 	<label for="{$key}">{$items.label}</label>
