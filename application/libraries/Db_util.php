@@ -43,6 +43,14 @@ class Db_util
 		return $this->get_row($table, array('id' => (int)$id), $columns, $model_path, $model_prefix, $model_file_name);
 	}
 
+	public function get_col4id($table, $id, $column, $model_path = '', $model_prefix = '', $model_file_name = '')
+	{
+		$row = $this->get_row4id($table, $id, array($column), $model_path, $model_prefix, $model_file_name);
+		if (empty($row[$column])) return false;
+
+		return $row[$column];
+	}
+
 	public function get_sort_max_next($table, $model_path = '', $model_prefix = '', $params = array(), $sort_column = 'sort', $max_value = 999999, $model_file_name = '')
 	{
 		$CI =& get_instance();

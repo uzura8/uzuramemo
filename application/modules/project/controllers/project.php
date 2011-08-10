@@ -365,6 +365,24 @@ class Project extends MY_Controller
 			return;
 		}
 
+		if ($item == 'key_name')
+		{
+			if (!$program_id = $this->db_util->get_col4id('project', $id, 'program_id', 'project', 'model'))
+			{
+				$data = sprintf('%s<span class="validate_error">%s</span>', hsc(set_value('value')), 'IDが正しくありません');
+				$this->output->set_output($data);
+				return;
+			}
+
+			// key名prefixの整合性確認
+			if (!$this->_check_key_name_prefix_corresponded_to_program_id(set_value('value'), $program_id))
+			{
+				$data = sprintf('%s<span class="validate_error">%s</span>', hsc(set_value('value')), 'key名がプログラムと一致しません');
+				$this->output->set_output($data);
+				return;
+			}
+		}
+
 		// 登録
 		$values = array($item => set_value('value'));
 		$this->model_project->update4id($values, $id);
@@ -430,7 +448,7 @@ class Project extends MY_Controller
 			'key_name' => array(
 				'label' => 'key',
 				'type'  => 'text',
-				'rules' => 'trim|required|alpha_dash|max_length[20]|callback__unique_check_key_name',
+				'rules' => 'trim|required|alpha_dash|max_length[20]|callback__check_key_name_prefix_is_valid[program_id]|callback__unique_check_key_name',
 				'custom_rules' => 'key_name_child',
 				'width'  => 10,
 				'realtime_validation'  => true,
@@ -530,7 +548,32 @@ class Project extends MY_Controller
 
 		return true;
 	}
+
+	protected function _check_key_name_prefix_corresponded_to_program_id($key_name, $program_id)
+	{
+		if (!$key_name_prefix = $this->strings_util->get_prefix($key_name)) return false;
+		if (!$row = $this->db_util->get_row4id('program', $program_id, array('key_name'), 'program', 'model')) return false;
+		if ($key_name_prefix != $row['key_name']) return false;
+
+		return true;
+	}
+
+	public function _check_key_name_prefix_is_valid($value, $field)
+	{
+		if (!isset($_POST[$field])) return true;// program_id が送出されていない場合は確認しない
+		$program_id = $_POST[$field];
+
+		$validation_name = '_is_registered_program_id';
+		$error_message = 'key名が正しくありません';
+		if (!$this->_check_key_name_prefix_corresponded_to_program_id($value, $program_id))
+		{
+			$this->form_validation->set_message($validation_name, $error_message);
+			return false;
+		}
+
+		return true;
+	}
 }
 
-/* End of file welcome.php */
-/* Location: ./application/controllers/welcome.php */
+/* End of file project.php */
+/* Location: ./application/modules/project/controllers/project.php */

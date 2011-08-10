@@ -57,6 +57,7 @@ $autoload['libraries'] = array(
 	'session',
 	'smarty_parser',
 	'simplelogin',
+	'strings_util',
 	'site_util',
 	'date_util',
 	'db_util',
