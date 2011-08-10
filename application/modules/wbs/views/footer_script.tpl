@@ -124,6 +124,7 @@ $(document).ready(function() {
 			type : "POST",
 			success: function(data){
 				ajax_list(0);
+				$('#select_order').val('0');
 				$.jGrowl('No.' + id + 'の並び順を変更しました。');
 			},
 			error: function(data){
