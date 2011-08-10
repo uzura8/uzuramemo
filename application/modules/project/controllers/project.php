@@ -75,7 +75,7 @@ class Project extends MY_Controller
 		// program 指定時
 		if ($program_key)
 		{
-			$program = $this->model_program->get_row_common(array('key_name' => $program_key));
+			if (!$program = $this->model_program->get_row_common(array('key_name' => $program_key))) show_404();
 			$this->program_id = (int)$program['id'];
 			$view_data['page_subtitle'] = $program['name'];
 
@@ -440,7 +440,7 @@ class Project extends MY_Controller
 			'name' => array(
 				'label' => 'プロジェクト名',
 				'type'  => 'text',
-				'rules' => 'trim|required|max_length[140]|callback__unique_check_name',
+				'rules' => 'trim|required|max_length[140]',
 				'width'  => 30,
 				'children' => array('key_name'),
 				'realtime_validation'  => true,

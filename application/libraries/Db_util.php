@@ -16,7 +16,7 @@ class Db_util
 		return $model_file;
 	}
 
-	public function set_common_column_value($values, $use_del_flg = true)
+	public function set_common_column_value($values, $use_del_flg = true, $use_datetime = true)
 	{
 		if ($use_del_flg) $values['del_flg'] = 0;
 		$values['created_at'] = date('Y-m-d H:i:s');
