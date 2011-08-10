@@ -34,9 +34,9 @@ class Model_program extends CI_Model
 		return $this->db->query($sql)->result_array();
 	}
 
-	function get_count_all($search = '', $category_id_list = array())
+	function get_count_all($search = '', $category_id_list = array(), $with_logical_deleted)
 	{
-		$sql  = $this->get_main_query($search, $category_id_list, true);
+		$sql = $this->get_main_query($search, $category_id_list, true, $with_logical_deleted);
 		$row = $this->db->query($sql)->first_row('array');
 
 		return (int)$row['count'];

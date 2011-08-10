@@ -25,6 +25,31 @@ class Db_util
 		return $values;
 	}
 
+	public function get_result_array($table, $params = array(), $columns = array(), $model_path = '', $model_prefix = '', $model_file_name = '')
+	{
+		$CI =& get_instance();
+		$CI->load->model($this->_get_model_file($table, $model_path, $model_prefix, $model_file_name));
+
+		if ($columns) $CI->db->select($columns);
+		if ($params)  $CI->db->where($params);
+		$query = $CI->db->get($table);
+		if (!$query->num_rows()) return array();
+
+		return $query->result_array();
+	}
+
+	public function get_cols($table, $params = array(), $column, $model_path = '', $model_prefix = '', $model_file_name = '')
+	{
+		$return = array();
+		$rows = $this->get_result_array($table, $params, $column, $model_path, $model_prefix, $model_file_name);
+		foreach ($rows as $row)
+		{
+			$return[] = $row[$column];
+		}
+
+		return $return;
+	}
+
 	public function get_row($table, $params = array(), $columns = array(), $model_path = '', $model_prefix = '', $model_file_name = '')
 	{
 		$CI =& get_instance();

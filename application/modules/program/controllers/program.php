@@ -76,7 +76,7 @@ class Program extends MY_Controller
 		$view_data['list'] =  $this->model_program->get_main_list($this->offset, $this->limit, $this->_get_order_sql_clause(), '', array(), true);
 
 		// 記事件数を取得
-		$count_all = $this->model_program->get_count_all($this->search);
+		$count_all = $this->model_program->get_count_all($this->search, array(), true);
 		$view_data['pagination'] = $this->_get_pagination_simple($count_all, 'program/ajax_program_list');
 		$view_data['count_all']  = $count_all;
 

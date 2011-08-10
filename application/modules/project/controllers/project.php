@@ -108,7 +108,7 @@ class Project extends MY_Controller
 		$view_data['list'] =  $this->model_project->get_main_list($this->offset, $this->limit, $this->_get_order_sql_clause(), '', $this->program_id, true, 'A.*, B.name as program_name');
 
 		// 記事件数を取得
-		$count_all = $this->model_project->get_count_all($this->search, $this->program_id);
+		$count_all = $this->model_project->get_count_all($this->search, $this->program_id, true);
 		$view_data['pagination'] = $this->_get_pagination_simple($count_all, 'project/ajax_project_list');
 		$view_data['count_all']  = $count_all;
 
