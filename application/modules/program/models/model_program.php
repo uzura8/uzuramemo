@@ -171,7 +171,11 @@ class Model_program extends CI_Model
 	public function delete4id($id)
 	{
 		if (!$id) return false;
-//		if (!$row = $this->get_row4id($id)) return false;
+
+		// transaction したいね
+		$CI =& get_instance();
+		$CI->load->model('project/model_project');
+		$CI->model_project->delete4program_id($id);
 
 		$this->db->where('id', $id);
 		$this->db->delete('program');

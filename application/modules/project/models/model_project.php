@@ -53,6 +53,7 @@ class Model_project extends CI_Model
 
 		$where  = '';
 		$wheres = array();
+		$wheres[] = "B.del_flg = 0";
 		if (!$with_logical_deleted) $wheres[] = "A.del_flg = 0";
 		if ($add_where = self::get_like_where_clause($search))
 		{
@@ -167,9 +168,18 @@ class Model_project extends CI_Model
 	public function delete4id($id)
 	{
 		if (!$id) return false;
-//		if (!$row = $this->get_row4id($id)) return false;
 
 		$this->db->where('id', $id);
+		$this->db->delete('project');
+
+		return $this->db->affected_rows();
+	}
+
+	public function delete4program_id($program_id)
+	{
+		if (!$program_id) return false;
+
+		$this->db->where('program_id', $program_id);
 		$this->db->delete('project');
 
 		return $this->db->affected_rows();
