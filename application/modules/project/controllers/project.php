@@ -22,6 +22,7 @@ class Project extends MY_Controller
 
 		// load config
 		$this->config->load('program', true);
+		$this->config->load('wbs', true);
 
 		$this->_configure();
 	}

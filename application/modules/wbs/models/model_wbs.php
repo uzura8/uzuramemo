@@ -49,10 +49,14 @@ class Model_wbs extends CI_Model
 
 		$select = sprintf("SELECT %s FROM wbs A", $columns);
 		if ($is_count) $select = "SELECT COUNT(A.id) as count FROM wbs A";
-		$sql = $select." LEFT JOIN project B ON A.project_id = B.id";
+		$sql  = $select;
+		$sql .= " LEFT JOIN project B ON A.project_id = B.id";
+		$sql .= " LEFT JOIN program C ON B.program_id = C.id";
 
 		$where  = '';
 		$wheres = array();
+		$wheres[] = "B.del_flg = 0";
+		$wheres[] = "C.del_flg = 0";
 		if (!$with_logical_deleted) $wheres[] = "A.del_flg = 0";
 		if ($add_where = self::get_like_where_clause($search))
 		{
@@ -167,9 +171,18 @@ class Model_wbs extends CI_Model
 	public function delete4id($id)
 	{
 		if (!$id) return false;
-//		if (!$row = $this->get_row4id($id)) return false;
 
 		$this->db->where('id', $id);
+		$this->db->delete('wbs');
+
+		return $this->db->affected_rows();
+	}
+
+	public function delete4project_id($project_id)
+	{
+		if (!$project_id) return false;
+
+		$this->db->where('project_id', $project_id);
 		$this->db->delete('wbs');
 
 		return $this->db->affected_rows();

@@ -60,18 +60,18 @@ class Wbs extends MY_Controller
 
 	public function index($project_key = '')
 	{
-		if (!$project_key || !$project = $this->model_project->get_row_common(array('key_name' => $project_key)))
+		if (!$project_key || !$project = $this->model_project->get_row_common(array('key_name' => $project_key, 'del_flg' => 0)))
 		{
 			show_404();
 		}
-		$this->project_id = (int)$project['id'];
-		$view_data['project_id'] = $this->project_id;
-		$view_data['project_key'] = $project_key;
-
 		// template
 		$view_data = $this->_get_default_view_data();
 		$view_data['page_title'] = $this->private_config['site_title'].'一覧';
 		$view_data['page_subtitle'] = $project['name'];
+
+		$this->project_id = (int)$project['id'];
+		$view_data['project_id'] = $this->project_id;
+		$view_data['project_key'] = $project_key;
 
 		// request parameter
 		$view_data['search'] = $this->search;
@@ -101,7 +101,7 @@ class Wbs extends MY_Controller
 		$view_data['list'] =  $this->model_wbs->get_main_list($this->offset, $this->limit, $this->_get_order_sql_clause(), '', $this->project_id, true, 'A.*, B.name as project_name');
 
 		// 記事件数を取得
-		$count_all = $this->model_wbs->get_count_all($this->search);
+		$count_all = $this->model_wbs->get_count_all($this->search, $this->project_id);
 		$view_data['pagination'] = $this->_get_pagination_simple($count_all, 'wbs/ajax_wbs_list');
 		$view_data['count_all']  = $count_all;
 

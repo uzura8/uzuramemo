@@ -143,6 +143,14 @@ class Model_project extends CI_Model
 		return $row;
 	}
 
+	public function get_ids4program_id($program_id)
+	{
+		if (!$program_id) return false;
+
+		$CI =& get_instance();
+		return $CI->db_util->get_cols('project', array('program_id' => $program_id), 'id', 'project', 'model');
+	}
+
 	public function update($values, $wheres, $update_datetime = true)
 	{
 		if (!$values || !$wheres) return false;
@@ -169,6 +177,11 @@ class Model_project extends CI_Model
 	{
 		if (!$id) return false;
 
+		// transaction したいね
+		$CI =& get_instance();
+		$CI->load->model('wbs/model_wbs');
+		$CI->model_wbs->delete4project_id($id);
+
 		$this->db->where('id', $id);
 		$this->db->delete('project');
 
@@ -179,9 +192,13 @@ class Model_project extends CI_Model
 	{
 		if (!$program_id) return false;
 
-		$this->db->where('program_id', $program_id);
-		$this->db->delete('project');
+		$ids = $this->get_ids4program_id($program_id);
+		$count = 0;
+		foreach ($ids as $id)
+		{
+			$count += $this->delete4id($id);
+		}
 
-		return $this->db->affected_rows();
+		return $count;
 	}
 }
