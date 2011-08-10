@@ -101,7 +101,7 @@ class Wbs extends MY_Controller
 		$view_data['list'] =  $this->model_wbs->get_main_list($this->offset, $this->limit, $this->_get_order_sql_clause(), '', $this->project_id, true, 'A.*, B.name as project_name');
 
 		// 記事件数を取得
-		$count_all = $this->model_wbs->get_count_all($this->search, $this->project_id);
+		$count_all = $this->model_wbs->get_count_all($this->search, $this->project_id, true);
 		$view_data['pagination'] = $this->_get_pagination_simple($count_all, 'wbs/ajax_wbs_list');
 		$view_data['count_all']  = $count_all;
 

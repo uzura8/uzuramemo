@@ -34,9 +34,9 @@ class Model_wbs extends CI_Model
 		return $this->db->query($sql)->result_array();
 	}
 
-	function get_count_all($search = '', $project_id = 0)
+	function get_count_all($search = '', $project_id = 0, $with_logical_deleted = false)
 	{
-		$sql  = $this->get_main_query($search, $project_id, true);
+		$sql  = $this->get_main_query($search, $project_id, $with_logical_deleted);
 		$row = $this->db->query($sql)->first_row('array');
 
 		return (int)$row['count'];
