@@ -8,7 +8,7 @@ class Wbs extends MY_Controller
 	private $order  = 0;
 	private $search = '';
 	private $search_option  = false;
-	private $program_id = 0;
+	private $project_id = 0;
 	private $edit = 0;
 	private $next_url;
 
@@ -18,10 +18,13 @@ class Wbs extends MY_Controller
 
 		// load models
 		$this->load->model('wbs/model_wbs');
+		$this->load->model('wbs/model_work_class');
 		$this->load->model('program/model_program');
+		$this->load->model('project/model_project');
 
 		// load config
 		$this->config->load('program', true);
+		$this->config->load('project', true);
 
 		$this->_configure();
 	}
@@ -40,7 +43,7 @@ class Wbs extends MY_Controller
 		if (IS_MOBILE) $this->limit = $this->private_config['article_nums']['mobile'];
 		$this->search = $this->_get_post_params('search', '', 'trim|max_length[301]');
 		$this->offset = $this->_get_post_params('from', 0, 'intval|less_than[10000000]');
-		$this->program_id = $this->_get_post_params('program_id', 0, 'intval');
+		$this->project_id = $this->_get_post_params('project_id', 0, 'intval');
 		$this->edit   = $this->_get_post_params('edit', 0, 'intval|is_natural|less_than[2]');
 
 		$options = $this->_get_form_dropdown_options_order();// select:order
@@ -51,15 +54,24 @@ class Wbs extends MY_Controller
 	{
 		return array(
 			'page_name' => $this->private_config['site_title'],
-			'selected_select_order' => 4,
+			'selected_select_order' => 0,
 		);
 	}
 
-	public function index($program_key = '')
+	public function index($project_key = '')
 	{
+		if (!$project_key || !$project = $this->model_project->get_row_common(array('key_name' => $project_key)))
+		{
+			show_404();
+		}
+		$this->project_id = (int)$project['id'];
+		$view_data['project_id'] = $this->project_id;
+		$view_data['project_key'] = $project_key;
+
 		// template
 		$view_data = $this->_get_default_view_data();
 		$view_data['page_title'] = $this->private_config['site_title'].'一覧';
+		$view_data['page_subtitle'] = $project['name'];
 
 		// request parameter
 		$view_data['search'] = $this->search;
@@ -69,31 +81,13 @@ class Wbs extends MY_Controller
 		$view_data['limit']  = $this->limit;
 		$view_data['edit']   = $this->edit;
 
-		$validation_rules = $this->_validation_rules();// form
-		$options = $this->_get_form_dropdown_options_order();// select:order
-
-		// program 指定時
-		if ($program_key)
-		{
-			$program = $this->model_program->get_row_common(array('key_name' => $program_key));
-			$this->program_id = (int)$program['id'];
-			$view_data['page_subtitle'] = $program['name'];
-
-			$validation_rules['program_id']['type'] = 'hidden';
-			$validation_rules['program_id']['value'] = $this->program_id;
-			$validation_rules['program_id']['options'] = array();
-			$validation_rules['key_name']['value'] = $program_key.'_';
-
-			$view_data['selected_select_order'] = 0;
-			array_pop($options);
-		}
-		$view_data['program_key'] = $program_key;
-		$view_data['program_id'] = $this->program_id;
-
 		// form
+		$validation_rules = $this->_validation_rules();// form
+		$validation_rules['project_id']['value'] = $this->project_id;
 		$view_data['form'] = $validation_rules;
 
 		// select:order
+		$options = $this->_get_form_dropdown_options_order();// select:order
 		$view_data['form_dropdown_list'] = array();
 		$view_data['form_dropdown_list']['order'] = array('options' => $options);
 
@@ -104,7 +98,7 @@ class Wbs extends MY_Controller
 	{
 		// template
 		$view_data = $this->_get_default_view_data();
-		$view_data['list'] =  $this->model_wbs->get_main_list($this->offset, $this->limit, $this->_get_order_sql_clause(), '', $this->program_id, true, 'A.*, B.name as program_name');
+		$view_data['list'] =  $this->model_wbs->get_main_list($this->offset, $this->limit, $this->_get_order_sql_clause(), '', $this->project_id, true, 'A.*, B.name as project_name');
 
 		// 記事件数を取得
 		$count_all = $this->model_wbs->get_count_all($this->search);
@@ -235,14 +229,14 @@ class Wbs extends MY_Controller
 	public function ajax_get_wbs_key_name()
 	{
 		$this->input->check_is_post();
-		$program_id = (int)$this->_get_post_params('id');
-		if (!$program_id)
+		$project_id = (int)$this->_get_post_params('id');
+		if (!$project_id)
 		{
 			$this->output->set_status_header('403');
 			return;
 		}
 
-		$row = $this->model_program->get_row_common(array('id' => $program_id));
+		$row = $this->model_project->get_row_common(array('id' => $project_id));
 		if (!$key_name = $row['key_name'])
 		{
 			$this->output->set_status_header('403');
@@ -391,10 +385,6 @@ class Wbs extends MY_Controller
 				'display' => '期限順',
 				'sql_clause_order' => 'A.due_date',
 			),
-			'4' => array(
-				'display' => 'プログラム順',
-				'sql_clause_order' => 'B.name, A.sort',
-			),
 		);
 		if ($is_full_settings) return $settings;
 
@@ -411,18 +401,19 @@ class Wbs extends MY_Controller
 	protected function _validation_rules()
 	{
 		return array(
-			'project_id' => array(
-				'label' => 'プロジェクト',
-				'type'  => 'hidden',
-				'rules' => 'trim|required|is_natural_no_zero|callback__is_registered_project_id',
-				'error_messages'  => array('min' => ''),
-				'width'  => 30,
-			),
 			'name' => array(
 				'label' => 'WBS名',
 				'type'  => 'text',
 				'rules' => 'trim|required|max_length[140]',
 				'width'  => 30,
+			),
+			'work_class_id' => array(
+				'label' => '作業分類',
+				'type'  => 'select',
+				'rules' => 'trim|is_natural_no_zero|callback__is_registered_work_class_id',
+				'error_messages'  => array('min' => ''),
+				'width'  => 30,
+				'options' => $this->_get_dropdown_options_work_class_id(),
 			),
 			'start_date' => array(
 				'label' => '開始日',
@@ -442,6 +433,7 @@ class Wbs extends MY_Controller
 				'type'  => 'text',
 				'rules' => 'trim|numeric',
 				'width'  => 10,
+				'after_label' => '人日',
 			),
 			'spent_time' => array(
 				'label' => '実績工数',
@@ -449,6 +441,7 @@ class Wbs extends MY_Controller
 				'rules' => 'trim|numeric',
 				'width'  => 10,
 				'disabled_for_insert'  => true,
+				'after_label' => '人日',
 			),
 			'percent_complete' => array(
 				'label' => '進捗率',
@@ -456,6 +449,7 @@ class Wbs extends MY_Controller
 				'rules' => 'trim|is_natural|max_num[100]',
 				'width'  => 10,
 				'disabled_for_insert'  => true,
+				'after_label' => '%',
 			),
 			'body' => array(
 				'label' => '本文',
@@ -472,14 +466,21 @@ class Wbs extends MY_Controller
 				'rows'  => 2,
 				'disabled_for_insert'  => true,
 			),
+			'project_id' => array(
+				'label' => 'プロジェクト',
+				'type'  => 'hidden',
+				'rules' => 'trim|required|is_natural_no_zero|callback__is_registered_project_id',
+				'error_messages'  => array('min' => ''),
+				'width'  => 30,
+			),
 		);
 	}
 
-	function _get_dropdown_options_program_id()
+	function _get_dropdown_options_work_class_id()
 	{
 		$return = array();
 		$return['0'] = '選択してください';
-		$rows = $this->model_program->get_main_list(0, 0, 'sort', '', array(), false, array('id', 'name'));
+		$rows = $this->model_work_class->get_main_list();
 		$return += $this->db_util->convert2assoc($rows);
 
 		return $return;
@@ -511,7 +512,7 @@ class Wbs extends MY_Controller
 		$parent_key = $matches[1];
 
 		// 親側のkey確認
-		if (!$this->model_program->get_row_common(array('key_name' => $parent_key)))
+		if (!$this->model_project->get_row_common(array('key_name' => $parent_key)))
 		{
 			$this->form_validation->set_message($validation_name, $error_message);
 			return false;
@@ -519,6 +520,48 @@ class Wbs extends MY_Controller
 
 		$error_message = 'その %s は既に登録されています';
 		if ($this->model_wbs->get_row_common(array('key_name' => $value)))
+		{
+			$this->form_validation->set_message($validation_name, $error_message);
+			return false;
+		}
+
+		return true;
+	}
+
+	public function _is_registered_project_id($value)
+	{
+		$validation_name = '_is_registered_project_id';
+		$error_message = 'プロジェクトIDが正しくありません';
+
+		if (!intval($value))
+		{
+			$this->form_validation->set_message($validation_name, $error_message);
+			return false;
+		}
+
+		// idの存在確認
+		if (!$this->db_util->get_row4id('project', $value, array('id'), 'project', 'model'))
+		{
+			$this->form_validation->set_message($validation_name, $error_message);
+			return false;
+		}
+
+		return true;
+	}
+
+	public function _is_registered_work_class_id($value)
+	{
+		$validation_name = '_is_registered_work_class_id';
+		$error_message = '作業分類が正しくありません';
+
+		if (!intval($value))
+		{
+			$this->form_validation->set_message($validation_name, $error_message);
+			return false;
+		}
+
+		// idの存在確認
+		if (!$this->db_util->get_row4id('work_class', $value, array('id'), 'wbs', 'model'))
 		{
 			$this->form_validation->set_message($validation_name, $error_message);
 			return false;

@@ -167,7 +167,7 @@ $('#main_form').validate({
 				$('#name_result').fadeOut();
 				$('#key_name_result').fadeOut();
 				//$('#name').focus();
-				$('select#program_id').focus();
+				$('select#project_id').focus();
 				// $('#main_form_box').hide('fast');
 				ajax_list(0, 1);
 				$('select#select_order').val('1');
@@ -183,64 +183,40 @@ $('#main_form').validate({
 	}
 });
 
-// 重複確認: name
-$(function() {
-	$('#name_loading').hide();
-	$('#name').change(function() {
-		if ($(this).val().length == 0)
-		{
-			$('#name_result').html('');
-			return;
-		}
-		$('#name_loading').show();
-		$.post("{/literal}{site_url}{literal}wbs/ajax_check_wbs_name", {
-			name: $('#name').val()
-			}, function(response){
-				$('#name_result').fadeOut();
-				if (response == 'true') {
-					var message = '<span class="validate_success">登録可能</span>';
-				} else {
-					var message = '<span class="validate_error">重複しています</span>';
-				}
-				setTimeout("finishAjax('name_result', '"+escape(message)+"')", 400);
-			});
-			return false;
-	});
-});
-// 重複確認: key_name
-$(function() {
-	$('#key_name_loading').hide();
-	$('#key_name').change(function() {
-		if ($(this).val().length == 0)
-		{
-			$('#key_name_result').html('');
-			return;
-		}
-		$('#key_name_loading').show();
-		$.post("{/literal}{site_url}{literal}wbs/ajax_check_wbs_key_name", {
-			key_name: $('#key_name').val()
-			}, function(response){
-				$('#key_name_result').fadeOut();
-				if (response == 'true') {
-					var message = '<span class="validate_success">登録可能</span>';
-				} else {
-					var message = '<span class="validate_error">' + response + '</span>';
-				}
-				setTimeout("finishAjax('key_name_result', '"+escape(message)+"')", 400);
-			});
-			return false;
-	});
-});
-function finishAjax(id, response) {
-	var loading_parts_id = id.replace(/_result/g, "_loading");
-	$('#'+loading_parts_id).hide();
-	$('#'+id).html(unescape(response));
-	$('#'+id).fadeIn();
-}
-
-$(function(){
-	$('#key_name').alphanumeric({allow:"_"});
-});
+//// 重複確認: key_name
+//$(function() {
+//	$('#key_name_loading').hide();
+//	$('#key_name').change(function() {
+//		if ($(this).val().length == 0)
+//		{
+//			$('#key_name_result').html('');
+//			return;
+//		}
+//		$('#key_name_loading').show();
+//		$.post("{/literal}{site_url}{literal}wbs/ajax_check_wbs_key_name", {
+//			key_name: $('#key_name').val()
+//			}, function(response){
+//				$('#key_name_result').fadeOut();
+//				if (response == 'true') {
+//					var message = '<span class="validate_success">登録可能</span>';
+//				} else {
+//					var message = '<span class="validate_error">' + response + '</span>';
+//				}
+//				setTimeout("finishAjax('key_name_result', '"+escape(message)+"')", 400);
+//			});
+//			return false;
+//	});
+//});
+//function finishAjax(id, response) {
+//	var loading_parts_id = id.replace(/_result/g, "_loading");
+//	$('#'+loading_parts_id).hide();
+//	$('#'+id).html(unescape(response));
+//	$('#'+id).fadeIn();
+//}
+//
+//$(function(){
+//	$('#key_name').alphanumeric({allow:"_"});
+//});
 
 $(function(){
 	var order = $("#select_order").val();
@@ -255,31 +231,12 @@ function ajax_list(offset, order){
 	$.ajaxSetup( { cache : false } );
 	$("#" + id).show();
 
-	$.get(url, { nochache:(new Date()).getTime(), 'program_id':{/literal}'{$program_id}'{literal}, 'search':{/literal}'{$search}'{literal}, 'order':order, 'from':offset }, function(data){
+	$.get(url, { nochache:(new Date()).getTime(), 'project_id':{/literal}'{$project_id}'{literal}, 'search':{/literal}'{$search}'{literal}, 'order':order, 'from':offset }, function(data){
 		if (data.length>0){
 			$("#" + id).html(data);
 		}
 	})
 }
-
-// key名を補う
-$("select#program_id").change(function(){
-	var program_id = $(this).val();
-
-	// program のkey_nameを取得し、補う
-	$.ajax({
-		url : "{/literal}{site_url}{literal}wbs/ajax_get_wbs_key_name",
-		dataType : "text",
-		data : {"id": program_id},
-		type : "POST",
-		success: function(data) {
-			if (data.length > 0) {
-				$("input#key_name").val(data + '_');
-				$("#key_name_result").html('');
-			}
-		}
-	});
-});
 {/literal}
 </script>
 
@@ -294,6 +251,23 @@ $("select#program_id").change(function(){
 $(function() {
 	//テキストボックスにカレンダーをバインドする（パラメータは必要に応じて）
 	$("#due_date").datepicker({
+		showButtonPanel: true,//「今日」「閉じる」ボタンを表示する
+		firstDay: 1,//週の先頭を月曜日にする（デフォルトは日曜日）
+
+		//年月をドロップダウンリストから選択できるようにする場合
+		changeYear: true,
+		changeMonth: true,
+
+		prevText: '&#x3c;前',
+		nextText: '次&#x3e;',
+
+		// 選択可能な日付の範囲を限定する場合（月は0～11）
+		// minDate: new Date(2010, 6 - 1, 16),
+		// maxDate: new Date(2010, 8 - 1, 15)
+	});
+
+	//テキストボックスにカレンダーをバインドする（パラメータは必要に応じて）
+	$("#start_date").datepicker({
 		showButtonPanel: true,//「今日」「閉じる」ボタンを表示する
 		firstDay: 1,//週の先頭を月曜日にする（デフォルトは日曜日）
 
