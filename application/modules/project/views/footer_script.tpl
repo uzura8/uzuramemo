@@ -167,8 +167,14 @@ $('#main_form').validate({
 				$('span').removeClass('validate_error');
 				$('#name_result').fadeOut();
 				$('#key_name_result').fadeOut();
-				//$('#name').focus();
+{/literal}
+{if $program_key}
+				$("input#key_name").val('{$program_key}_');
+				$('#name').focus();
+{else}
 				$('select#program_id').focus();
+{/if}
+{literal}
 				// $('#main_form_box').hide('fast');
 				ajax_list(0, 1);
 				$('select#select_order').val('1');
