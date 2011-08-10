@@ -60,7 +60,7 @@ class Wbs extends MY_Controller
 
 	public function index($project_key = '')
 	{
-		if (!$project_key || !$project = $this->model_project->get_row_common(array('key_name' => $project_key, 'del_flg' => 0)))
+		if (!$project_key || !$project = $this->model_project->get_row_full(array('key_name' => $project_key), 'A.id, A.name, B.name as program_name, B.key_name as program_key'))
 		{
 			show_404();
 		}

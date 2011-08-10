@@ -146,6 +146,34 @@ class Model_wbs extends CI_Model
 		return $row;
 	}
 
+	public function get_row_full($params, $colmns = 'A.*', $with_logical_deleted = false)
+	{
+		if (is_array($columns)) $columns = implode(',', $columns);
+		if (!$columns) $columns = 'A.*';
+
+		$select = sprintf("SELECT %s FROM wbs A", $columns);
+
+		$sql  = $select;
+		$sql .= " LEFT JOIN project B ON A.project_id = B.id";
+		$sql .= " LEFT JOIN program C ON B.program_id = C.id";
+
+		$where  = '';
+		$wheres = array();
+		if (!$with_logical_deleted) $wheres[] = "A.del_flg = 0";
+		$wheres[] = "B.del_flg = 0";
+		$wheres[] = "C.del_flg = 0";
+		$values = array();
+		foreach ($params as $key => $value)
+		{
+			$wheres[] = sprintf("%s = ?");
+			$values[] = $value;
+		}
+		if ($wheres) $where = ' WHERE '.implode(' AND ', $wheres);
+		$sql .= $where;
+
+		return $this->db->query($sql, $values)->row_array(0);
+	}
+
 	public function update($values, $wheres, $update_datetime = true)
 	{
 		if (!$values || !$wheres) return false;
