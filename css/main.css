@@ -153,3 +153,9 @@ form.editable button {
 	float: right;
 	vertical-align: top;
 }
+
+.after_label {
+	color: #949494;
+	font-size: 10px;
+	margin-left: 2px;
+}
