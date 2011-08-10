@@ -429,12 +429,33 @@ class Wbs extends MY_Controller
 				'type'  => 'text',
 				'rules' => 'trim|date_format',
 				'width'  => 10,
+				'children' => array('due_date'),
 			),
 			'due_date' => array(
 				'label' => '期日',
 				'type'  => 'text',
 				'rules' => 'trim|date_format',
 				'width'  => 10,
+			),
+			'estimated_time' => array(
+				'label' => '見積工数',
+				'type'  => 'text',
+				'rules' => 'trim|numeric',
+				'width'  => 10,
+			),
+			'spent_time' => array(
+				'label' => '実績工数',
+				'type'  => 'text',
+				'rules' => 'trim|numeric',
+				'width'  => 10,
+				'disabled_for_insert'  => true,
+			),
+			'percent_complete' => array(
+				'label' => '進捗率',
+				'type'  => 'text',
+				'rules' => 'trim|is_natural|max_num[100]',
+				'width'  => 10,
+				'disabled_for_insert'  => true,
 			),
 			'body' => array(
 				'label' => '本文',
@@ -449,24 +470,7 @@ class Wbs extends MY_Controller
 				'rules' => 'trim',
 				'cols'  => 60,
 				'rows'  => 2,
-			),
-			'percent_complete' => array(
-				'label' => '進捗率',
-				'type'  => 'text',
-				'rules' => 'trim|is_natural|max_num[100]',
-				'width'  => 10,
-			),
-			'estimated_time' => array(
-				'label' => '見積工数',
-				'type'  => 'text',
-				'rules' => 'trim|numeric',
-				'width'  => 10,
-			),
-			'spent_time' => array(
-				'label' => '見積工数',
-				'type'  => 'text',
-				'rules' => 'trim|numeric',
-				'width'  => 10,
+				'disabled_for_insert'  => true,
 			),
 		);
 	}
