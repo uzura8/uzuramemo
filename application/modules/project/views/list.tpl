@@ -111,9 +111,6 @@ $(function(){
 <script src="{site_url}js/lib/jquery-ui-1.8.14.custom.min.js" type="text/javascript"></script>
 <script src="{site_url}js/lib/jquery.ui.datepicker-ja.js" type="text/javascript"></script>
 {*<script src="{site_url}js/lib/gcalendar-holidays.js" type="text/javascript"></script>*}
-<link rel="stylesheet" href="{site_url}css/jquery-ui-1.8.14.custom.css">
-<link rel="stylesheet" href="{site_url}css/jquery-ui-calendar.custom.css">
-<link rel="stylesheet" href="{site_url}css/ui.theme.css">
 <script type="text/javascript" charset="utf-8">
 {literal}
 $(function() {
