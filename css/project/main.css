@@ -36,14 +36,6 @@
 	color: #252525;
 	font-family: Helvetica;
 }
-/*
-#project_project_index .iPhoneButton a {
-  color: #000;
-}
-#project_project_index .iPhoneButtonBlack a {
-  color: #fff;
-}
-*/
 
 #project_project_index .article_meta_top .banner {
 	float: left;
@@ -56,7 +48,7 @@
 	width: 67%;
 }
 
-.form_box_each label {
+#project_project_index .form_box_each label {
 	font-size: 10px;
 	float: left;
 	text-align: right;
@@ -64,7 +56,7 @@
 	margin-right: 10px;
 }
 
-#project_project_index .btnSpan {
+#project_project_index .form_box_each div.input .btnSpan {
 	float: none;
 	font-size: 10px;
 	line-height: 0;
