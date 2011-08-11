@@ -178,23 +178,26 @@ class Project extends MY_Controller
 		$this->output->set_output($del_flg_after);
 	}
 
-	public function ajax_execute_update_sort()
+	public function ajax_execute_update_common()
 	{
 		$this->input->check_is_post();
-		$id = (int)$this->_get_post_params('id');
+		$id  = (int)$this->_get_post_params('id');
 
-		if (!$id)
+		$key = $this->_get_post_params('key');
+		$allow_keys = array('sort', 'due_date');
+		if (!$id || !in_array($key, $allow_keys))
 		{
 			$this->output->set_ajax_output_error();
 			return;
 		}
 
-		$this->form_validation->set_rules('value', '並び順', 'trim|integer');
+		$validate_rules = $this->_validation_rules();
+		$this->form_validation->set_rules('value', $validate_rules[$key]['label'], $validate_rules[$key]['rules']);
 		$result = $this->form_validation->run();
 
 		// 値に変更がない場合はそのまま
 		$row = $this->model_project->get_row_common(array('id' => $id));
-		if ($row['sort'] == set_value('value'))
+		if ($row[$key] == set_value('value'))
 		{
 			return;
 		}
@@ -206,7 +209,7 @@ class Project extends MY_Controller
 		}
 
 		// 登録
-		$values = array('sort' => set_value('value'));
+		$values = array($key => set_value('value'));
 		if (!$this->model_project->update4id($values, $id))
 		{
 			$this->output->set_ajax_output_error();
@@ -474,6 +477,12 @@ class Project extends MY_Controller
 				'rules' => 'trim',
 				'cols'  => 60,
 				'rows'  => 2,
+				'disabled_for_insert'  => true,
+			),
+			'sort' => array(
+				'label' => '並び順',
+				'type'  => 'hidden',
+				'rules' => 'trim|integer',
 				'disabled_for_insert'  => true,
 			),
 		);

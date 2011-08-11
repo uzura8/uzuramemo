@@ -4,7 +4,8 @@
 $(document).ready(function() {
 	$('#new_form_switch').click(function() {
 		$('#main_form_box').slideToggle();
-		$('#name').focus();
+		//$('#name').focus();
+		$('#program_id').focus();
 	});
 	//$('#main_form_box').hide('fast');
 {/literal}{if $edit}
@@ -118,9 +119,9 @@ $(document).ready(function() {
 
 		// 更新
 		$.ajax({
-			url : "{/literal}{site_url}{literal}project/ajax_execute_update_sort",
+			url : "{/literal}{site_url}{literal}project/ajax_execute_update_common",
 			dataType : "text",
-			data : {"id": id, "value": value},
+			data : {"id": id, "key": 'sort', "value": value},
 			type : "POST",
 			success: function(data){
 				ajax_list(0);
@@ -129,6 +130,33 @@ $(document).ready(function() {
 			},
 			error: function(data){
 				$.jGrowl('No.' + id + 'の並び順を変更できませんでした。');
+			}
+		});
+	});
+
+	// 日付の変更
+	$(".btn_due_date").live("click", function(){
+		var id_value = $(this).attr("id");
+		var id = id_value.replace(/btn_due_date_/g, "");
+		var value = $("#input_due_date_" + id).val();
+
+		// 入力値確認
+		var ret = util_check_date_format(value);
+		if (ret == false) {
+			$.jGrowl('No.' + id + 'の日付形式が正しくありません');
+			return;
+		}
+		// 更新
+		$.ajax({
+			url : "{/literal}{site_url}{literal}project/ajax_execute_update_common",
+			dataType : "text",
+			data : {"id": id, "key": 'due_date', "value": value},
+			type : "POST",
+			success: function(data){
+				$.jGrowl('No.' + id + 'の期日を変更しました。');
+			},
+			error: function(data){
+				$.jGrowl('No.' + id + 'の期日を変更できませんでした。');
 			}
 		});
 	});
@@ -293,9 +321,10 @@ $("select#program_id").change(function(){
 <!-- カレンダー対応 -->
 <script src="{site_url}js/lib/jquery-ui-1.8.14.custom.min.js" type="text/javascript"></script>
 <script src="{site_url}js/lib/jquery.ui.datepicker-ja.js" type="text/javascript"></script>
-<script src="{site_url}js/lib/gcalendar-holidays.js" type="text/javascript"></script>
+{*<script src="{site_url}js/lib/gcalendar-holidays.js" type="text/javascript"></script>*}
 <link rel="stylesheet" href="{site_url}css/jquery-ui-1.8.14.custom.css">
 <link rel="stylesheet" href="{site_url}css/jquery-ui-calendar.custom.css">
+<link rel="stylesheet" href="{site_url}css/ui.theme.css">
 <script type="text/javascript" charset="utf-8">
 {literal}
 $(function() {
@@ -304,8 +333,12 @@ $(function() {
 		showButtonPanel: true,//「今日」「閉じる」ボタンを表示する
 		firstDay: 1,//週の先頭を月曜日にする（デフォルトは日曜日）
 
+		showOn: 'button',
+		buttonImage: '{/literal}{site_url}{literal}/css/images/calendar.gif',
+		buttonImageOnly: true,
+
 		//年月をドロップダウンリストから選択できるようにする場合
-		changeYear: true,
+//		changeYear: true,
 		changeMonth: true,
 
 		prevText: '&#x3c;前',
@@ -316,6 +349,7 @@ $(function() {
 		// maxDate: new Date(2010, 8 - 1, 15)
 	});
 });
+
 {/literal}
 </script>
 

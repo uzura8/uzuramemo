@@ -69,6 +69,9 @@
 .space_left{
 	margin-left: 10px;
 }
+.space_left_2, .sl2{
+	margin-left: 2px;
+}
 .space_left_5{
 	margin-left: 5px;
 }
@@ -104,5 +107,7 @@
 
 .clearfloat { clear: both; }
 .clearfloat hr { display: none; }
+
+.float_left { float: left; }
 
 .display_none { display: none; }
