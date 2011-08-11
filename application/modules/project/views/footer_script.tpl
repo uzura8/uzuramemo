@@ -119,9 +119,9 @@ $(document).ready(function() {
 
 		// 更新
 		$.ajax({
-			url : "{/literal}{site_url}{literal}project/ajax_execute_update_sort",
+			url : "{/literal}{site_url}{literal}project/ajax_execute_update_common",
 			dataType : "text",
-			data : {"id": id, "value": value},
+			data : {"id": id, "key": 'sort', "value": value},
 			type : "POST",
 			success: function(data){
 				ajax_list(0);
@@ -130,6 +130,33 @@ $(document).ready(function() {
 			},
 			error: function(data){
 				$.jGrowl('No.' + id + 'の並び順を変更できませんでした。');
+			}
+		});
+	});
+
+	// 日付の変更
+	$(".btn_due_date").live("click", function(){
+		var id_value = $(this).attr("id");
+		var id = id_value.replace(/btn_due_date_/g, "");
+		var value = $("#input_due_date_" + id).val();
+
+		// 入力値確認
+		var ret = util_check_date_format(value);
+		if (ret == false) {
+			$.jGrowl('No.' + id + 'の日付形式が正しくありません');
+			return;
+		}
+		// 更新
+		$.ajax({
+			url : "{/literal}{site_url}{literal}project/ajax_execute_update_common",
+			dataType : "text",
+			data : {"id": id, "key": 'due_date', "value": value},
+			type : "POST",
+			success: function(data){
+				$.jGrowl('No.' + id + 'の期日を変更しました。');
+			},
+			error: function(data){
+				$.jGrowl('No.' + id + 'の期日を変更できませんでした。');
 			}
 		});
 	});
@@ -294,7 +321,7 @@ $("select#program_id").change(function(){
 <!-- カレンダー対応 -->
 <script src="{site_url}js/lib/jquery-ui-1.8.14.custom.min.js" type="text/javascript"></script>
 <script src="{site_url}js/lib/jquery.ui.datepicker-ja.js" type="text/javascript"></script>
-<script src="{site_url}js/lib/gcalendar-holidays.js" type="text/javascript"></script>
+{*<script src="{site_url}js/lib/gcalendar-holidays.js" type="text/javascript"></script>*}
 <link rel="stylesheet" href="{site_url}css/jquery-ui-1.8.14.custom.css">
 <link rel="stylesheet" href="{site_url}css/jquery-ui-calendar.custom.css">
 <link rel="stylesheet" href="{site_url}css/ui.theme.css">
@@ -322,6 +349,7 @@ $(function() {
 		// maxDate: new Date(2010, 8 - 1, 15)
 	});
 });
+
 {/literal}
 </script>
 

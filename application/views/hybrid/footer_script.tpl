@@ -1,3 +1,5 @@
+<script type="text/javascript" src="{site_url}js/util.js"></script>
+
 <script type="text/javascript" src="{site_url}js/lib/jquery.js"></script>
 <script type="text/javascript" src="{site_url}js/lib/jquery-ui.min.js"></script>
 

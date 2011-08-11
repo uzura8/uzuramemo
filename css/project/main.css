@@ -55,3 +55,18 @@
 	text-align: right;
 	width: 67%;
 }
+
+.form_box_each label {
+	font-size: 10px;
+	float: left;
+	text-align: right;
+	padding-top: 4px;
+	margin-right: 10px;
+}
+
+#project_project_index .btnSpan {
+	float: none;
+	font-size: 10px;
+	line-height: 0;
+	padding: 0;
+}
