@@ -32,10 +32,7 @@ $(function(){
 });
 
 $('#select_order').change(function() {
-	var order = $(this).val();
-	if (order != '0' && order != '1' && order != '2') {
-		var order = '0';
-	}
+	var order = parseInt($(this).val());
 	ajax_list(0, order);
 });
 //$("#select_order").jQselectable({
