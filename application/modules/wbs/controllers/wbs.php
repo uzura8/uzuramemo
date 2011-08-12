@@ -211,6 +211,86 @@ class Wbs extends MY_Controller
 		$this->set_output('true');
 	}
 
+	public function ajax_execute_update_common()
+	{
+		$this->input->check_is_post();
+		$id = (int)$this->_get_post_params('id');
+
+		$key = $this->_get_post_params('key');
+		$allow_keys = array('sort', 'start_date', 'due_date', 'estimated_time', 'spent_time', 'percent_complete');
+		if (!$id || !in_array($key, $allow_keys))
+		{
+			$this->output->set_ajax_output_error();
+			return;
+		}
+
+		$validate_rules = $this->_validation_rules();
+		$this->form_validation->set_rules('value', $validate_rules[$key]['label'], $validate_rules[$key]['rules']);
+		$result = $this->form_validation->run();
+
+		// 値に変更がない場合はそのまま
+		$row = $this->model_wbs->get_row_common(array('id' => $id));
+		if ($row[$key] == set_value('value'))
+		{
+			return;
+		}
+
+		if (!$result)
+		{
+			$this->output->set_ajax_output_error();
+			return;
+		}
+
+		// 登録
+		$values = array($key => set_value('value'));
+		if (!$this->model_wbs->update4id($values, $id))
+		{
+			$this->output->set_ajax_output_error();
+			return;
+		}
+
+		$this->set_output('true');
+	}
+
+	public function ajax_execute_update_date()
+	{
+		$this->input->check_is_post();
+		$id  = (int)$this->_get_post_params('id');
+		if (!$id)
+		{
+			$this->output->set_ajax_output_error();
+			return;
+		}
+
+		$validate_rules = $this->_validation_rules();
+		$this->form_validation->set_rules('start_date', $validate_rules['start_date']['label'], $validate_rules['start_date']['rules']);
+		$this->form_validation->set_rules('due_date', $validate_rules['due_date']['label'], $validate_rules['due_date']['rules']);
+		$result = $this->form_validation->run();
+
+		// 値に変更がない場合はそのまま
+		$row = $this->model_wbs->get_row_common(array('id' => $id));
+		if ($row['start_date'] == set_value('start_date') && $row['due_date'] == set_value('due_date'))
+		{
+			return;
+		}
+
+		if (!$result)
+		{
+			$this->output->set_ajax_output_error();
+			return;
+		}
+
+		// 登録
+		$values = array('start_date' => set_value('start_date'), 'due_date' => set_value('due_date'));
+		if (!$this->model_wbs->update4id($values, $id))
+		{
+			$this->output->set_ajax_output_error();
+			return;
+		}
+
+		$this->set_output('true');
+	}
+
 	public function ajax_execute_delete()
 	{
 		$this->input->check_is_post();

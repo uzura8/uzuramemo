@@ -105,6 +105,47 @@ $(document).ready(function() {
 		});
 	});
 
+	// 各値の変更
+	$(".input_each").live("change", function(){
+		var conf = {
+			'estimated_time'   : {'name' : '見積工数', 'format' : 'numeric', 'error_message' : '数値を入力してください。'},
+			'spent_time'       : {'name' : '実績工数', 'format' : 'numeric', 'error_message' : '数値を入力してください。'},
+			'percent_complete' : {'name' : '進捗率', 'format' : 'integer', 'error_message' : '整数を入力してください。'},
+		}
+
+		var key = $(this).attr("name");
+		var id_value = $(this).attr("id");
+		var pattern = 'input_' + key + '_';
+		var id = id_value.replace(eval("/" + pattern + "/g"), "");
+		var value = $(this).val();
+
+		// 入力値確認
+		funcname = "return util_check_" + conf[key]['format'] + "(arg)";
+		f = new Function('arg', funcname);
+		var ret = f(value);
+		console.log(ret);
+		if (!ret) {
+			$.jGrowl(conf[key]['error_message']);
+			return;
+		}
+
+		// 更新
+		$.ajax({
+			url : "{/literal}{site_url}{literal}wbs/ajax_execute_update_common",
+			dataType : "text",
+			data : {"id": id, "key": key, "value": value},
+			type : "POST",
+			success: function(data){
+				//ajax_list(0);
+				$('#select_order').val('0');
+				$.jGrowl('No.' + id + 'の' + conf[key]['name'] + 'を変更しました。');
+			},
+			error: function(data){
+				$.jGrowl('No.' + id + 'の' + conf[key]['name'] + 'を変更できませんでした。');
+			}
+		});
+	});
+
 	// 並び順の変更
 	$(".input_sort").live("change", function(){
 		var id_value = $(this).attr("id");
@@ -129,6 +170,40 @@ $(document).ready(function() {
 			},
 			error: function(data){
 				$.jGrowl('No.' + id + 'の並び順を変更できませんでした。');
+			}
+		});
+	});
+
+	// 日付の変更
+	$(".btn_date").live("click", function(){
+		var id_value = $(this).attr("id");
+		var id = id_value.replace(/btn_date_/g, "");
+		var value_start_date = $("#input_start_date_" + id).val();
+		var value_due_date = $("#input_due_date_" + id).val();
+
+		// 入力値確認
+		var ret = util_check_date_format(value_start_date);
+		if (value_start_date && ret == false) {
+			$.jGrowl('No.' + id + ': 開始日の日付形式が正しくありません');
+			return;
+		}
+		var ret = util_check_date_format(value_due_date);
+		if (value_due_date && ret == false) {
+			$.jGrowl('No.' + id + ': 期日の日付形式が正しくありません');
+			return;
+		}
+
+		// 更新
+		$.ajax({
+			url : "{/literal}{site_url}{literal}wbs/ajax_execute_update_date",
+			dataType : "text",
+			data : {"id": id, "due_date": value_due_date, "start_date": value_start_date},
+			type : "POST",
+			success: function(data){
+				$.jGrowl('No.' + id + 'の日付を変更しました。');
+			},
+			error: function(data){
+				$.jGrowl('No.' + id + 'の日付を変更できませんでした。');
 			}
 		});
 	});
@@ -244,9 +319,10 @@ function ajax_list(offset, order){
 <!-- カレンダー対応 -->
 <script src="{site_url}js/lib/jquery-ui-1.8.14.custom.min.js" type="text/javascript"></script>
 <script src="{site_url}js/lib/jquery.ui.datepicker-ja.js" type="text/javascript"></script>
-<script src="{site_url}js/lib/gcalendar-holidays.js" type="text/javascript"></script>
+{*<script src="{site_url}js/lib/gcalendar-holidays.js" type="text/javascript"></script>*}
 <link rel="stylesheet" href="{site_url}css/jquery-ui-1.8.14.custom.css">
 <link rel="stylesheet" href="{site_url}css/jquery-ui-calendar.custom.css">
+<link rel="stylesheet" href="{site_url}css/ui.theme.css">
 <script type="text/javascript" charset="utf-8">
 {literal}
 $(function() {
@@ -256,7 +332,7 @@ $(function() {
 		firstDay: 1,//週の先頭を月曜日にする（デフォルトは日曜日）
 
 		//年月をドロップダウンリストから選択できるようにする場合
-		changeYear: true,
+		//changeYear: true,
 		changeMonth: true,
 
 		prevText: '&#x3c;前',
