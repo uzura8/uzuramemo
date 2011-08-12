@@ -66,23 +66,26 @@
 	font-weight: lighter;
 }
 
-.space_left{
+.space_left, .sl {
 	margin-left: 10px;
 }
-.space_left_2, .sl2{
+.space_left_2, .sl2 {
 	margin-left: 2px;
 }
-.space_left_5{
+.space_left_5, .sl5 {
 	margin-left: 5px;
 }
-.space_left_10{
+.space_left_10, .sl10 {
 	margin-left: 10px;
 }
-.space_left_20{
+.space_left_20, .sl20 {
 	margin-left: 20px;
 }
+.space_left_30, .sl30 {
+	margin-left: 30px;
+}
 
-.space_right{
+.space_right, .sr {
 	margin-right: 10px;
 }
 
@@ -96,6 +99,8 @@
 	padding-right: 5px;
 }
 
+.width_3 {width: 3%;}
+.width_5 {width: 5%;}
 .width_10 {width: 10%;}
 .width_20 {width: 20%;}
 .width_30 {width: 30%;}
