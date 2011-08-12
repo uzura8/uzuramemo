@@ -13,3 +13,15 @@ function util_check_date_format(value) {
 
 	return ret;
 }
+
+function util_check_numeric(value) {
+//  return value.match(/^[0-9]{1,}(\.[0-9]+)?$/);
+	if (value != parseFloat(value)) return false;
+	return true;
+}
+
+function util_check_integer(value) {
+//  return value.match(/^[1-9]{1}{0-9}+$/);
+	if (value != parseInt(value)) return false;
+	return true;
+}
