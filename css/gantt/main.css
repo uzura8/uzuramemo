@@ -1,0 +1,80 @@
+#main_form_box a.sctble_display span {
+	width: 100%;
+}
+
+/* ボタンスタイル */
+#gantt_gantt_index .iPhoneButton,
+#gantt_gantt_index .iPhoneButtonBlack {
+  margin: 0 auto;
+
+  border: solid 2px #2d3137;
+  -webkit-border-radius: 10px;
+  box-shadow: 0 1px 2px rgba(0,0,0,.2);
+  padding: 2px;
+  text-align: center;
+}
+#gantt_gantt_index .iPhoneButton {
+  background: -webkit-gradient(linear, left top, left bottom, from(#eeefef), to(#bdbfc2));
+  background-color: #bdbfc2;
+}
+#gantt_gantt_index .iPhoneButtonBlack {
+  background: -webkit-gradient(linear, left top, left bottom, from(#6b6e74), to(#282e37));
+  background: #282e37;
+}
+#gantt_gantt_index .iPhoneButton a,
+#gantt_gantt_index .iPhoneButtonBlack a {
+  -webkit-border-radius: 5px;
+  display: inline-block;
+  text-align: center;
+  padding: .3em 0;
+  text-decoration: none;
+  font-size: 10px;
+  font-weight: bold;
+	display: block;
+	color: #1C94C4;
+	/*padding: 2px;*/
+	color: #252525;
+	font-family: Helvetica;
+}
+/*
+#gantt_gantt_index .iPhoneButton a {
+  color: #000;
+}
+#gantt_gantt_index .iPhoneButtonBlack a {
+  color: #fff;
+}
+*/
+
+#gantt_gantt_index .article_meta_top .banner {
+	float: left;
+	text-align: left;
+	width: 30%;
+}
+#gantt_gantt_index .article_meta_top .meta_info {
+	float: right;
+	text-align: right;
+	width: 67%;
+}
+
+#gantt_gantt_index .form_box_each span.label {
+	float: none;
+	font-size: 10px;
+	text-align: right;
+	padding-top: 4px;
+	margin-right: 3px;
+}
+
+#gantt_gantt_index .form_box_each span.title {
+	float: none;
+	font-size: 12px;
+	font-weight: bold;
+	text-align: right;
+	padding-top: 4px;
+}
+
+#gantt_gantt_index .form_box_each .btnSpan {
+	float: none;
+	font-size: 10px;
+	line-height: 0;
+	padding: 0;
+}

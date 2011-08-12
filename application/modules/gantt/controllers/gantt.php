@@ -1,15 +1,14 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-//class Welcome extends CI_Controller {
-class Wbs extends MY_Controller
+class Gantt extends MY_Controller
 {
 	private $limit  = 10;
 	private $offset = 0;
 	private $order  = 0;
 	private $search = '';
 	private $search_option  = false;
+	private $program_id = 0;
 	private $project_id = 0;
-	private $edit = 0;
 	private $next_url;
 
 	function __construct()
@@ -17,22 +16,23 @@ class Wbs extends MY_Controller
 		parent::__construct();
 
 		// load models
-		$this->load->model('wbs/model_wbs');
-		$this->load->model('wbs/model_work_class');
+		$this->load->model('gantt/model_calendar');
 		$this->load->model('program/model_program');
 		$this->load->model('project/model_project');
+		$this->load->model('wbs/model_wbs');
+		$this->load->model('wbs/model_work_class');
 
 		// load config
 		$this->config->load('program', true);
 		$this->config->load('project', true);
-		$this->config->load('gantt', true);
+		$this->config->load('wbs', true);
 
 		$this->_configure();
 	}
 
 	private function _configure()
 	{
-		$this->private_config = $this->config->item('wbs');
+		$this->private_config = $this->config->item('gantt');
 		$this->_set_params();
 	}
 
@@ -44,8 +44,8 @@ class Wbs extends MY_Controller
 		if (IS_MOBILE) $this->limit = $this->private_config['article_nums']['mobile'];
 		$this->search = $this->_get_post_params('search', '', 'trim|max_length[301]');
 		$this->offset = $this->_get_post_params('from', 0, 'intval|less_than[10000000]');
+		$this->program_id = $this->_get_post_params('program_id', 0, 'intval');
 		$this->project_id = $this->_get_post_params('project_id', 0, 'intval');
-		$this->edit   = $this->_get_post_params('edit', 0, 'intval|is_natural|less_than[2]');
 
 		$options = $this->_get_form_dropdown_options_order();// select:order
 		$this->order  = $this->_get_post_params('order', 0, sprintf('intval|less_than[%d]', count($options)));
@@ -61,22 +61,21 @@ class Wbs extends MY_Controller
 
 	public function index($project_key = '')
 	{
-		if (!$project_key || !$project = $this->model_project->get_row_full(array('A.key_name' => $project_key), 'A.id, A.name, B.name as program_name, B.key_name as program_key'))
-		{
-			show_404();
-		}
 		// template
 		$view_data = $this->_get_default_view_data();
 		$view_data['page_title'] = $this->private_config['site_title'].'一覧';
-		$view_data['page_subtitle'] = $project['name'];
-		$view_data['page_subtitle_parts'] = array(
-			array('url' => site_url('project/index/'.$project['program_key']), 'subtitle' => $project['program_name']),
-			array('url' => '', 'subtitle' => $project['name']),
-		);
 
-		$this->project_id = (int)$project['id'];
-		$view_data['project_id'] = $this->project_id;
-		$view_data['project_key'] = $project_key;
+		if ($project_key && $project = $this->model_project->get_row_full(array('A.key_name' => $project_key), 'A.id, A.name, B.name as program_name, B.key_name as program_key'))
+		{
+			$view_data['page_subtitle'] = $project['name'];
+			$view_data['page_subtitle_parts'] = array(
+				array('url' => site_url('project/index/'.$project['program_key']), 'subtitle' => $project['program_name']),
+				array('url' => '', 'subtitle' => $project['name']),
+			);
+			$this->project_id = (int)$project['id'];
+			$view_data['project_id'] = $this->project_id;
+			$view_data['project_key'] = $project_key;
+		}
 
 		// request parameter
 		$view_data['search'] = $this->search;
@@ -84,7 +83,6 @@ class Wbs extends MY_Controller
 		$view_data['opt']    = $this->search_option;
 		$view_data['from']   = $this->offset;
 		$view_data['limit']  = $this->limit;
-		$view_data['edit']   = $this->edit;
 
 		// form
 		$validation_rules = $this->_validation_rules();// form
@@ -96,82 +94,27 @@ class Wbs extends MY_Controller
 		$view_data['form_dropdown_list'] = array();
 		$view_data['form_dropdown_list']['order'] = array('options' => $options);
 
-		$this->smarty_parser->parse('ci:wbs/index.tpl', $view_data);
+		$this->smarty_parser->parse('ci:gantt/index.tpl', $view_data);
 	}
 
-	public function ajax_wbs_list()
+	public function ajax_gantt_list()
 	{
 		// template
 		$view_data = $this->_get_default_view_data();
-		$view_data['list'] =  $this->model_wbs->get_main_list($this->offset, $this->limit, $this->_get_order_sql_clause(), '', $this->project_id, true, 'A.*, B.name as project_name, C.name as program_name');
+		$view_data['list'] =  $this->model_wbs->get_main_list($this->offset,
+																														$this->limit,
+																														$this->_get_order_sql_clause(),
+																														'',
+																														$this->project_id,
+																														true,
+																														'A.*, B.name as project_name, C.name as program_name');
 
 		// 記事件数を取得
 		$count_all = $this->model_wbs->get_count_all($this->search, $this->project_id, true);
-		$view_data['pagination'] = $this->_get_pagination_simple($count_all, 'wbs/ajax_wbs_list');
+		$view_data['pagination'] = $this->_get_pagination_simple($count_all, 'gantt/ajax_gantt_list');
 		$view_data['count_all']  = $count_all;
 
-		$this->smarty_parser->parse('ci:wbs/list.tpl', $view_data);
-	}
-
-	public function ajax_wbs_detail($id, $item)
-	{
-		$id = (int)str_replace($item, '', $id);
-		if (!$id) show_error('need id');
-
-		if (!$this->_check_edit_form_item($item)) show_error('item is invalid');
-
-		$row = $this->model_wbs->get_row($id);
-		echo $row[0][$item];
-	}
-
-	public function ajax_check_wbs_name()
-	{
-		$this->input->check_is_post();
-		$key_name = $this->_get_post_params('name');
-		if (!$this->_unique_check_name($key_name))
-		{
-			$this->output->set_output('false');
-			return;
-		}
-
-		$this->output->set_output('true');
-	}
-
-	public function ajax_check_wbs_key_name()
-	{
-		$this->input->check_is_post();
-		$key_name = $this->_get_post_params('key_name');
-
-		$validate_rules = $this->_validation_rules();
-		$this->form_validation->set_rules('key_name', $validate_rules['key_name']['label'], $validate_rules['key_name']['rules']);
-		$this->form_validation->set_error_delimiters('', '');
-
-		$result = $this->form_validation->run();
-		if (!$result)
-		{
-			$this->output->set_output(trim(validation_errors()));
-			return;
-		}
-
-		$this->output->set_output('true');
-	}
-
-	public function ajax_execute_update_del_flg()
-	{
-		$this->input->check_is_post();
-		$id = (int)$this->_get_post_params('id');
-		if (!$id)
-		{
-			$this->output->set_status_header('403');
-			return;
-		}
-
-		$del_flg_after = 1;
-		if ($this->model_wbs->get_del_flg4id($id)) $del_flg_after = 0;
-
-		$this->model_wbs->update4id(array('del_flg' => $del_flg_after), $id, false);
-
-		$this->output->set_output($del_flg_after);
+		$this->smarty_parser->parse('ci:gantt/list.tpl', $view_data);
 	}
 
 	public function ajax_execute_update_sort()
@@ -292,45 +235,6 @@ class Wbs extends MY_Controller
 		$this->set_output('true');
 	}
 
-	public function ajax_execute_delete()
-	{
-		$this->input->check_is_post();
-		$id = (int)$this->_get_post_params('id');
-		if (!$id)
-		{
-			$this->output->set_status_header('403');
-			return;
-		}
-
-		if (!$this->model_wbs->delete4id($id))
-		{
-			$this->output->set_status_header('403');
-			return;
-		}
-
-		$this->output->set_output('true');
-	}
-
-	public function ajax_get_wbs_key_name()
-	{
-		$this->input->check_is_post();
-		$project_id = (int)$this->_get_post_params('id');
-		if (!$project_id)
-		{
-			$this->output->set_status_header('403');
-			return;
-		}
-
-		$row = $this->model_project->get_row_common(array('id' => $project_id));
-		if (!$key_name = $row['key_name'])
-		{
-			$this->output->set_status_header('403');
-			return;
-		}
-
-		$this->output->set_output($key_name);
-	}
-
 	private function _get_pagination_simple($count_all, $uri = '')
 	{
 		$config = $this->_get_pagination_config($count_all, $uri);
@@ -369,7 +273,7 @@ class Wbs extends MY_Controller
 
 	private function _get_list_url($keys = array('search', 'opt', 'order', 'from'), $uri = '')
 	{
-		if (!$uri) $uri = 'wbs';
+		if (!$uri) $uri = 'gantt';
 		$params = array();
 		if (in_array('search', $keys)) $params['search'] = $this->search;
 		if (in_array('opt', $keys))    $params['opt']    = (int)$this->search_option;
@@ -389,66 +293,6 @@ class Wbs extends MY_Controller
 		}
 
 		return $dropdown_options[$value]['sql_clause_order'];
-	}
-
-	private function _check_edit_form_item($item)
-	{
-		$allow_items = array('body', 'name', 'key_name', 'due_date');
-		if (!$item || !in_array($item, $allow_items)) return false;
-
-		return true;
-	}
-
-	public function execute_insert()
-	{
-		$this->input->check_is_post();
-		$this->_setup_validation();
-
-		if (!$this->form_validation->run())
-		{
-			$this->output->set_status_header('403');
-			return;
-		}
-
-		// 登録
-		$values = $this->_get_form_data();
-		$this->model_wbs->insert($values);
-
-		$this->output->set_output('OK');
-	}
-
-	public function execute_update($item)
-	{
-		$this->input->check_is_post();
-		$id = $this->_get_post_params('id');
-		$id = (int)str_replace($item, '', $id);
-		if (!$id || !$this->_check_edit_form_item($item)) return;
-
-		$validate_rules = $this->_validation_rules();
-		$this->form_validation->set_rules('value', $validate_rules[$item]['label'], $validate_rules[$item]['rules']);
-
-		$result = $this->form_validation->run();
-
-		// 値に変更がない場合はそのまま
-		$row = $this->model_wbs->get_row_common(array('id' => $id));
-		if ($row[$item] == set_value('value'))
-		{
-			$this->output->set_output(set_value('value'));
-			return;
-		}
-
-		if (!$result)
-		{
-			$data = sprintf('%s<span class="validate_error">%s</span>', hsc(set_value('value')), validation_errors());
-			$this->output->set_output($data);
-			return;
-		}
-
-		// 登録
-		$values = array($item => set_value('value'));
-		$this->model_wbs->update4id($values, $id);
-
-		$this->output->set_output(nl2br(hsc(set_value('value'))));
 	}
 
 	protected function _get_form_dropdown_options_order($is_full_settings = false)
@@ -486,12 +330,6 @@ class Wbs extends MY_Controller
 	protected function _validation_rules()
 	{
 		return array(
-			'name' => array(
-				'label' => 'WBS名',
-				'type'  => 'text',
-				'rules' => 'trim|required|max_length[140]',
-				'width'  => 30,
-			),
 			'work_class_id' => array(
 				'label' => '作業分類',
 				'type'  => 'select',
@@ -536,21 +374,6 @@ class Wbs extends MY_Controller
 				'disabled_for_insert'  => true,
 				'after_label' => '%',
 			),
-			'body' => array(
-				'label' => '本文',
-				'type'  => 'textarea',
-				'rules' => 'trim',
-				'cols'  => 60,
-				'rows'  => 2,
-			),
-			'explanation' => array(
-				'label' => '補足',
-				'type'  => 'hidden',
-				'rules' => 'trim',
-				'cols'  => 60,
-				'rows'  => 2,
-				'disabled_for_insert'  => true,
-			),
 			'project_id' => array(
 				'label' => 'プロジェクト',
 				'type'  => 'hidden',
@@ -569,48 +392,6 @@ class Wbs extends MY_Controller
 		$return += $this->db_util->convert2assoc($rows);
 
 		return $return;
-	}
-
-	function _unique_check_name($str)
-	{
-		return $this->_validate_unique_check('wbs', 'name', $str);
-	}
-
-	function _unique_check_key_name($str)
-	{
-		if (!strlen($str)) return true;
-
-		return $this->_validate_unique_check_key_name_wbs($str);
-	}
-
-	protected function _validate_unique_check_key_name_wbs($value)
-	{
-		$validation_name = '_unique_check_key_name';
-		$error_message = '正しくありません';
-
-		// 形式確認
-		if (!preg_match('/^([0-9a-zA-Z]+)_[0-9a-zA-Z]{1}[0-9a-zA-Z_]+[0-9a-zA-Z]{1}$/', $value, $matches))
-		{
-			$this->form_validation->set_message($validation_name, $error_message);
-			return false;
-		}
-		$parent_key = $matches[1];
-
-		// 親側のkey確認
-		if (!$this->model_project->get_row_common(array('key_name' => $parent_key)))
-		{
-			$this->form_validation->set_message($validation_name, $error_message);
-			return false;
-		}
-
-		$error_message = 'その %s は既に登録されています';
-		if ($this->model_wbs->get_row_common(array('key_name' => $value)))
-		{
-			$this->form_validation->set_message($validation_name, $error_message);
-			return false;
-		}
-
-		return true;
 	}
 
 	public function _is_registered_project_id($value)
@@ -646,7 +427,7 @@ class Wbs extends MY_Controller
 		}
 
 		// idの存在確認
-		if (!$this->db_util->get_row4id('work_class', $value, array('id'), 'wbs', 'model'))
+		if (!$this->db_util->get_row4id('work_class', $value, array('id'), 'gantt', 'model'))
 		{
 			$this->form_validation->set_message($validation_name, $error_message);
 			return false;
@@ -656,5 +437,5 @@ class Wbs extends MY_Controller
 	}
 }
 
-/* End of file welcome.php */
-/* Location: ./application/controllers/welcome.php */
+/* End of file gantt.php */
+/* Location: ./application/controllers/gantt.php */

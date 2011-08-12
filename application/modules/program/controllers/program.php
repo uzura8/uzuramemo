@@ -18,6 +18,8 @@ class Program extends MY_Controller
 
 		// load config
 		$this->config->load('project', true);
+		$this->config->load('wbs', true);
+		$this->config->load('gantt', true);
 
 		$this->_configure();
 	}
