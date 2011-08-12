@@ -76,7 +76,6 @@
 <span class="btnTop space_left_5"><a href="{site_url uri=wbs}">{$smarty.const.UM_TOPPAGE_NAME}</a></span>
 <span class="btnTop"><a href="{site_url}">サイト{$smarty.const.UM_TOPPAGE_NAME}</a></span>
 </div>
-<div class="clearfloat"><hr></div>
 </aside>
 </article>
 
