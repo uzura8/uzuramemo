@@ -116,9 +116,6 @@ $(function(){
 </script>
 
 <!-- カレンダー対応 -->
-<script src="{site_url}js/lib/jquery-ui-1.8.14.custom.min.js" type="text/javascript"></script>
-<script src="{site_url}js/lib/jquery.ui.datepicker-ja.js" type="text/javascript"></script>
-{*<script src="{site_url}js/lib/gcalendar-holidays.js" type="text/javascript"></script>*}
 <script type="text/javascript" charset="utf-8">
 {literal}
 $(function() {
