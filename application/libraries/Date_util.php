@@ -14,4 +14,10 @@ class Date_util
 
 		return checkdate(intval($dates[1]), intval($dates[2]), intval($dates[0]));
 	}
+
+	public function get_week($w)
+	{
+		$week = array('日', '月', '火', '水', '木', '金', '土');
+		return $week[$w];
+	}
 }
