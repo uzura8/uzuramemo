@@ -10,6 +10,8 @@ class Gantt extends MY_Controller
 	private $program_id = 0;
 	private $project_id = 0;
 	private $next_url;
+	private $date_from = '';
+	private $range = 30;
 
 	function __construct()
 	{
@@ -46,6 +48,10 @@ class Gantt extends MY_Controller
 		$this->offset = $this->_get_post_params('from', 0, 'intval|less_than[10000000]');
 		$this->program_id = $this->_get_post_params('program_id', 0, 'intval');
 		$this->project_id = $this->_get_post_params('project_id', 0, 'intval');
+
+		$validate_rules = $this->_validation_rules();
+		$this->range = $this->_get_post_params('range', $validate_rules['range']['default_value'], $validate_rules['range']['rules']);
+		$this->date_from = $this->_get_post_params('date_from', $validate_rules['date_from']['default_value'], $validate_rules['date_from']['rules']);
 
 		$options = $this->_get_form_dropdown_options_order();// select:order
 		$this->order  = $this->_get_post_params('order', 0, sprintf('intval|less_than[%d]', count($options)));
@@ -101,6 +107,31 @@ class Gantt extends MY_Controller
 	{
 		// template
 		$view_data = $this->_get_default_view_data();
+		$view_data['table_title'] = array($this->config->item('site_title', 'program'), $this->config->item('site_title', 'project'), $this->config->item('site_title', 'wbs'));
+
+		$day_list = array();
+		$month = '';
+		$month_before = '';
+		for ($i = 0; $i < $this->range; $i++)
+		{
+			$key = date('Y-m-d', strtotime(sprintf('+%d days %s', $i, $this->date_from)));
+			$time = strtotime($key);
+			$values = array();
+
+			// month
+			$values['month'] = '';
+			$month = date('n', $time);
+			if (!$month || $month != $month_before) $values['month'] = $month;
+			$month_before = $month;
+			// day
+			$values['day'] = date('j', $time);
+			// week
+			$values['week'] = date('w', $time);
+
+			$day_list[$key] = $values;
+		}
+		$view_data['day_list']  = $day_list;
+
 		$view_data['list'] =  $this->model_wbs->get_main_list($this->offset,
 																														$this->limit,
 																														$this->_get_order_sql_clause(),
@@ -330,56 +361,37 @@ class Gantt extends MY_Controller
 	protected function _validation_rules()
 	{
 		return array(
+			'project_id' => array(
+				'label' => 'プロジェクト',
+				'type'  => 'text',
+				'rules' => 'trim|required|is_natural_no_zero',
+				'error_messages'  => array('min' => ''),
+				'width'  => 30,
+			),
 			'work_class_id' => array(
 				'label' => '作業分類',
 				'type'  => 'select',
-				'rules' => 'trim|is_natural_no_zero|callback__is_registered_work_class_id',
+				'rules' => 'trim|is_natural_no_zero',
 				'error_messages'  => array('min' => ''),
 				'width'  => 30,
 				'options' => $this->_get_dropdown_options_work_class_id(),
 			),
-			'start_date' => array(
-				'label' => '開始日',
+			'date_from' => array(
+				'label' => '始点',
 				'type'  => 'text',
 				'rules' => 'trim|date_format',
 				'width'  => 10,
-				'children' => array('due_date'),
+				'children' => array('range'),
+				'after_label' => 'より',
+				'default_value' => date('Y-m-d'),
 			),
-			'due_date' => array(
-				'label' => '期日',
+			'range' => array(
+				'label' => '範囲',
 				'type'  => 'text',
-				'rules' => 'trim|date_format',
-				'width'  => 10,
-			),
-			'estimated_time' => array(
-				'label' => '見積工数',
-				'type'  => 'text',
-				'rules' => 'trim|numeric',
-				'width'  => 10,
-				'after_label' => '人日',
-			),
-			'spent_time' => array(
-				'label' => '実績工数',
-				'type'  => 'text',
-				'rules' => 'trim|numeric',
-				'width'  => 10,
-				'disabled_for_insert'  => true,
-				'after_label' => '人日',
-			),
-			'percent_complete' => array(
-				'label' => '進捗率',
-				'type'  => 'text',
-				'rules' => 'trim|is_natural|max_num[100]',
-				'width'  => 10,
-				'disabled_for_insert'  => true,
-				'after_label' => '%',
-			),
-			'project_id' => array(
-				'label' => 'プロジェクト',
-				'type'  => 'hidden',
-				'rules' => 'trim|required|is_natural_no_zero|callback__is_registered_project_id',
-				'error_messages'  => array('min' => ''),
-				'width'  => 30,
+				'rules' => 'trim|is_natural_no_zero|max_num[200]',
+				'width'  => 5,
+				'after_label' => '日間',
+				'default_value' => 30,
 			),
 		);
 	}

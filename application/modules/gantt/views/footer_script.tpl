@@ -4,14 +4,8 @@
 $(document).ready(function() {
 	$('#new_form_switch').click(function() {
 		$('#main_form_box').slideToggle();
-		$('#name').focus();
 	});
 	//$('#main_form_box').hide('fast');
-{/literal}{if $edit}
-	$('#main_form_box').show('fast');
-	$('#name').focus();
-{assign var=edit value=0}
-{/if}{literal}
 
 	$(".autogrow").live("click", function(){
 		var id = $(this).attr("id");
@@ -258,56 +252,66 @@ $('#main_form').validate({
 		});
 	}
 });
+{/literal}
+</script>
 
-//// 重複確認: key_name
-//$(function() {
-//	$('#key_name_loading').hide();
-//	$('#key_name').change(function() {
-//		if ($(this).val().length == 0)
-//		{
-//			$('#key_name_result').html('');
-//			return;
-//		}
-//		$('#key_name_loading').show();
-//		$.post("{/literal}{site_url}{literal}wbs/ajax_check_wbs_key_name", {
-//			key_name: $('#key_name').val()
-//			}, function(response){
-//				$('#key_name_result').fadeOut();
-//				if (response == 'true') {
-//					var message = '<span class="validate_success">登録可能</span>';
-//				} else {
-//					var message = '<span class="validate_error">' + response + '</span>';
-//				}
-//				setTimeout("finishAjax('key_name_result', '"+escape(message)+"')", 400);
-//			});
-//			return false;
-//	});
-//});
-//function finishAjax(id, response) {
-//	var loading_parts_id = id.replace(/_result/g, "_loading");
-//	$('#'+loading_parts_id).hide();
-//	$('#'+id).html(unescape(response));
-//	$('#'+id).fadeIn();
-//}
-//
-//$(function(){
-//	$('#key_name').alphanumeric({allow:"_"});
-//});
+<script type="text/javascript" src="{site_url}js/lib/exdate.js"></script>
+<script type="text/javascript">
+{literal}
+$(function(){
+	$('#range').change(function() {
+		var range = $(this).val();
+		var date_from = $("#date_from").val();
+		var order = $("#select_order").val();
+		ajax_list({/literal}{$from}{literal}, order, date_from, range);
+	});
+	$('#date_from').change(function() {
+		var range = $("#range").val();
+		var date_from = $(this).val();
+		var order = $("#select_order").val();
+		ajax_list({/literal}{$from}{literal}, order, date_from, range);
+	});
+	$('#gntt_now').click(function() {
+		var date = $.exDate();
+		var date_from = date.toChar('yyyy-mm-dd');
+		$("#date_from").val(date_from);
+
+		var range = $("#range").val();
+		var order = $("#select_order").val();
+		ajax_list({/literal}{$from}{literal}, order, date_from, range);
+	});
+	$('#gntt_next').click(function() {       get_added_date($("#date_from").val(), 7); });
+	$('#gntt_next_lerge').click(function() { get_added_date($("#date_from").val(), 28); });
+	$('#gntt_prev').click(function() {       get_added_date($("#date_from").val(), -7); });
+	$('#gntt_prev_lerge').click(function() { get_added_date($("#date_from").val(), -28); });
+});
+
+function get_added_date(date_from, add_days)
+{
+	var date_from = add_date(date_from, add_days);
+	$("#date_from").val(date_from);
+
+	var range = $("#range").val();
+	var order = $("#select_order").val();
+	ajax_list({/literal}{$from}{literal}, order, date_from, range);
+}
 
 $(function(){
 	var order = $("#select_order").val();
-	ajax_list({/literal}{$from}{literal}, order);
+	var date_from = '';
+	var range = 0;
+	ajax_list({/literal}{$from}{literal}, order, date_from, range);
 });
 
-function ajax_list(offset, order){
+function ajax_list(offset, order, date_from, range){
 	var id  = 'list';
-	var url = '{/literal}{site_url uri=wbs/ajax_wbs_list}{literal}';
+	var url = '{/literal}{site_url uri=gantt/ajax_gantt_list}{literal}';
 
 	// Ajaxによるアクセスにキャッシュを利用しない(毎回サーバにアクセス)
 	$.ajaxSetup( { cache : false } );
 	$("#" + id).show();
 
-	$.get(url, { nochache:(new Date()).getTime(), 'project_id':{/literal}'{$project_id}'{literal}, 'search':{/literal}'{$search}'{literal}, 'order':order, 'from':offset }, function(data){
+	$.get(url, { nochache:(new Date()).getTime(), 'project_id':{/literal}'{$project_id}'{literal}, 'search':{/literal}'{$search}'{literal}, 'order':order, 'from':offset, 'date_from':date_from, 'range':range }, function(data){
 		if (data.length>0){
 			$("#" + id).html(data);
 		}
@@ -364,4 +368,4 @@ $(function() {
 </script>
 
 <!-- module専用CSSの読み込み -->
-<link rel="stylesheet" href="{site_url}css/wbs/main.css">
+<link rel="stylesheet" href="{site_url}css/{$current_module}/main.css">

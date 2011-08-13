@@ -18,9 +18,38 @@
 {else}
 
 <!-- main_list -->
-<div class="content">
+<div id="gantt">
+<table border="1" cellpadding="0" cellspacing="0">
+<tr>
+{foreach from=$table_title item=item}
+<td rowspan="3">{$item}</td>
+{/foreach}
+{foreach from=$day_list key=date item=item}
+<td>{$item.month}</td>
+{/foreach}
+</tr>
+<tr>
+{foreach from=$day_list key=date item=item}
+<td id="day_{$date}" class="{$date}">{$item.day}</td>
+{/foreach}
+</tr>
+<tr>
+{foreach from=$day_list key=date item=item}
+<td id="week_{$date}" class="{$date}">{$item.week|get_week}</td>
+{/foreach}
+</tr>
+
 {foreach from=$list item=row}
-<a name="id_{$row.id}"></a>
+<tr>
+<td>{$row.program_name}</td>
+<td>{$row.project_name}</td>
+<td>{$row.name}</td>
+{foreach from=$day_list key=date item=item}
+<td id="wbs_{$row.id}_{$date}" class="{$date} wbs_{$row.id}"> </td>
+{/foreach}
+</tr>
+
+{*
 <h2 class="box_01" id="article_title_{$row.id}" style="background-color:{'background-color'|site_get_style:$row.del_flg};">
 <div>
 <span id="name{$row.id}" class="autogrow">{$row.name}</span>{if $row.key_name}<span id="key_name{$row.id}" class="autogrow sub_info2">{$row.key_name}</span>{/if}
@@ -78,8 +107,12 @@
 </div>
 </aside>
 </article>
+*}
+
 
 {/foreach}
+
+<table>
 </div>
 {if $search}
 <section>
