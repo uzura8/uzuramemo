@@ -25,3 +25,19 @@ function util_check_integer(value) {
 	if (value != parseInt(value)) return false;
 	return true;
 }
+
+function add_date(basedate, add_days)
+{
+	var bds = basedate.split('-');
+	base_time = (new Date(bds[0], bds[1], bds[2])).getTime();
+	add_time = add_days * 1000 * 60 * 60 * 24;
+	added_date = new Date(base_time + add_time);
+
+	y = String(added_date.getFullYear());
+	m = String(added_date.getMonth());
+	d = String(added_date.getDate());
+	if (m.length == 1) var m = '0' + m;
+	if (d.length == 1) var d = '0' + d;
+
+	return y + '-' + m + '-' + d;
+}
