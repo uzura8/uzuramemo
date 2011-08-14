@@ -11,10 +11,8 @@ $(document).ready(function() {
 		var id = $(this).attr("id");
 		var item_name = $(this).attr("id").replace(/[0-9]+/g, "");
 		var text_box_width = '250px';
-		if (item_name == 'key_name') {
-			var text_box_width = '50px';
-		} else if (item_name == 'due_date') {
-			var text_box_width = '100px';
+		if (item_name == 'estimated_time') {
+			var text_box_width = '30px';
 		}
 
 		$("span#" + id).editable("{/literal}{site_url uri=wbs/execute_update}/{literal}" + item_name, {

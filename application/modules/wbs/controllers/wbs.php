@@ -393,7 +393,7 @@ class Wbs extends MY_Controller
 
 	private function _check_edit_form_item($item)
 	{
-		$allow_items = array('body', 'name', 'key_name', 'due_date');
+		$allow_items = array('body', 'name', 'key_name', 'due_date', 'estimated_time');
 		if (!$item || !in_array($item, $allow_items)) return false;
 
 		return true;

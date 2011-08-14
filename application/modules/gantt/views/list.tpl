@@ -19,20 +19,20 @@
 
 <!-- main_list -->
 <div id="gantt">
-<table border="1" cellpadding="0" cellspacing="0">
+<table id="gantt_chart" border="0" cellpadding="0" cellspacing="0">
 <tr>
-<td rowspan="3">{get_config_value key=site_title index=program}</td>
-<td rowspan="3">{get_config_value key=site_title index=project}</td>
-<td rowspan="3">{get_config_value key=site_title index=wbs}</td>
-<td rowspan="3">作業分類</td>
-<td rowspan="3">見積工数<br>(人日)</td>
+<td rowspan="3" class="title">{get_config_value key=site_title index=program}</td>
+<td rowspan="3" class="title">{get_config_value key=site_title index=project}</td>
+<td rowspan="3" class="title">{get_config_value key=site_title index=wbs}</td>
+<td rowspan="3" class="title">作業分類</td>
+<td rowspan="3" class="title" id="estimated_time">見積工数<br>(人日)</td>
 {foreach from=$day_list key=date item=item}
-<td>{$item.month}</td>
+<td class="{if $item.month}month_top{else}month{/if}">{$item.month}</td>
 {/foreach}
 </tr>
 <tr>
 {foreach from=$day_list key=date item=item}
-<td id="day_{$date}" class="{$date}">{$item.day}</td>
+<td id="day_{$date}" class="day {$date}">{$item.day}</td>
 {/foreach}
 </tr>
 <tr>
@@ -43,12 +43,13 @@
 
 {foreach from=$list item=row}
 <tr>
-<td>{$row.program_name}</td>
-<td>{$row.project_name}</td>
-<td>{$row.name}</td>
-<td class="gantt_active_{$row.work_class_id}">{$row.work_class_name}</td>
+<td class="row_title">{$row.program_name}</td>
+<td class="row_title">{$row.project_name}</td>
+<td class="row_title">{$row.name}</td>
+<td class="row_title gantt_active_{$row.work_class_id}">{$row.work_class_name}</td>
 <td>
-<input type="text" id="input_estimated_time_{$row.id}" class="input_each" name="estimated_time" value="{$row.estimated_time}" style="width:25px;">
+<span id="estimated_time{$row.id}" class="autogrow">{$row.estimated_time}</span>
+{*<input type="text" id="input_estimated_time_{$row.id}" class="input_each" name="estimated_time" value="{$row.estimated_time}" style="width:25px;">*}
 <input type="hidden" id="input_start_date_{$row.id}" class="input_each" name="start_date" value="{$row.start_date}">
 </td>
 {foreach from=$day_list key=date item=item}
