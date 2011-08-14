@@ -52,6 +52,7 @@ class Model_wbs extends CI_Model
 		$sql  = $select;
 		$sql .= " LEFT JOIN project B ON A.project_id = B.id";
 		$sql .= " LEFT JOIN program C ON B.program_id = C.id";
+		$sql .= " LEFT JOIN work_class D ON A.work_class_id = D.id";
 
 		$where  = '';
 		$wheres = array();
