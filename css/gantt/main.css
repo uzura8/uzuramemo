@@ -82,3 +82,9 @@
 div#gantt {
 	background-color: #F7F7F7;
 }
+
+.gantt_due_date { background-color: #FA3939; }
+
+#gantt_gantt_index div#list {
+	width: 2000px;
+}

@@ -21,9 +21,11 @@
 <div id="gantt">
 <table border="1" cellpadding="0" cellspacing="0">
 <tr>
-{foreach from=$table_title item=item}
-<td rowspan="3">{$item}</td>
-{/foreach}
+<td rowspan="3">{get_config_value key=site_title index=program}</td>
+<td rowspan="3">{get_config_value key=site_title index=project}</td>
+<td rowspan="3">{get_config_value key=site_title index=wbs}</td>
+<td rowspan="3">作業分類</td>
+<td rowspan="3">見積工数<br>(人日)</td>
 {foreach from=$day_list key=date item=item}
 <td>{$item.month}</td>
 {/foreach}
@@ -44,8 +46,13 @@
 <td>{$row.program_name}</td>
 <td>{$row.project_name}</td>
 <td>{$row.name}</td>
+<td class="gantt_active_{$row.work_class_id}">{$row.work_class_name}</td>
+<td>
+<input type="text" id="input_estimated_time_{$row.id}" class="input_each" name="estimated_time" value="{$row.estimated_time}" style="width:25px;">
+<input type="hidden" id="input_start_date_{$row.id}" class="input_each" name="start_date" value="{$row.start_date}">
+</td>
 {foreach from=$day_list key=date item=item}
-<td id="wbs_{$row.id}_{$date}" class="{$date} wbs_{$row.id}"> </td>
+<td id="wbs_{$row.id}_{$date}" class="gantt_cel {$date} wbs_{$row.id}{$date|get_gantt_date_class:$row.start_date:$row.estimated_time:$row.work_class_id:$row.due_date:$row.percent_complete:true}">&nbsp;</td>
 {/foreach}
 </tr>
 
@@ -109,9 +116,7 @@
 </article>
 *}
 
-
 {/foreach}
-
 <table>
 </div>
 {if $search}

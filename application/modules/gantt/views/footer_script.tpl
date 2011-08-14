@@ -17,22 +17,6 @@ $(document).ready(function() {
 			var text_box_width = '100px';
 		}
 
-		$("p#" + id).editable("{/literal}{site_url uri=wbs/execute_update}/{literal}" + item_name, {
-			indicator : "<img src='{/literal}{site_url uri=js/lib/jeditable/img/indicator.gif}{literal}'>",
-			type      : "autogrow",
-			submit    : 'OK',
-			//submit    : '<input type="submit" value="OK" class="button">',
-			cancel    : 'cancel',
-			loadurl    : '{/literal}{site_url uri=wbs/ajax_wbs_detail}{literal}/' + id + '/' + item_name,
-			tooltip   : "Click to edit...",
-			onblur    : "ignore",
-			cssclass : "editable",
-			select : true,
-			//autogrow : {
-			//	 lineHeight : 16,
-			//	 minHeight  : 32
-			//}
-		})
 		$("span#" + id).editable("{/literal}{site_url uri=wbs/execute_update}/{literal}" + item_name, {
 			indicator : "<img src='{/literal}{site_url uri=js/lib/jeditable/img/indicator.gif}{literal}'>",
 			type      : "text",
@@ -99,6 +83,65 @@ $(document).ready(function() {
 		});
 	});
 
+	$("td.gantt_cel").live("dblclick", function(){
+		var id_value = $(this).attr("id");
+		var matches =id_value.match(/^wbs_([0-9]+)_(2[0-9]{3}\-[0-9]{2}\-[0-9]{2})$/);
+		if (!matches) $.jGrowl('エラー');
+
+		var id = matches[1];
+		var value = matches[2];
+		var key = 'start_date';
+		jConfirm('No.' + id + ' の開始日を ' + value + ' に変更しますか?', '変更確認', function(r) {
+			if (r == true) {
+				// 更新
+				$.ajax({
+					url : "{/literal}{site_url}{literal}wbs/ajax_execute_update_common",
+					dataType : "text",
+					data : {"id": id, "key": key, "value": value},
+					type : "POST",
+					success: function(data){
+						ajax_get_list();
+						$.jGrowl('No.' + id + ' の' + '開始日' + 'を ' + value + ' に変更しました。');
+					},
+					error: function(data){
+						$.jGrowl('No.' + id + ' の' + '開始日' + 'を変更できませんでした。');
+					}
+				});
+			}
+		});
+	});
+
+	$("td.gantt_cel").live("dblclick", function(){
+		var id_value = $(this).attr("id");
+		var matches =id_value.match(/^wbs_([0-9]+)_(2[0-9]{3}\-[0-9]{2}\-[0-9]{2})$/);
+		if (!matches) {
+			$.jGrowl('エラー');
+			exit;
+		}
+
+		var id = matches[1];
+		var value = matches[2];
+		var key = 'due_date';
+		jConfirm('No.' + id + ' の期日を ' + value + ' に変更しますか?', '変更確認', function(r) {
+			if (r == true) {
+				// 更新
+				$.ajax({
+					url : "{/literal}{site_url}{literal}wbs/ajax_execute_update_common",
+					dataType : "text",
+					data : {"id": id, "key": key, "value": value},
+					type : "POST",
+					success: function(data){
+						ajax_get_list();
+						$.jGrowl('No.' + id + ' の' + '期日' + 'を ' + value + ' に変更しました。');
+					},
+					error: function(data){
+						$.jGrowl('No.' + id + ' の' + '期日' + 'を変更できませんでした。');
+					}
+				});
+			}
+		});
+	});
+
 	// 各値の変更
 	$(".input_each").live("change", function(){
 		var conf = {
@@ -130,8 +173,7 @@ $(document).ready(function() {
 			data : {"id": id, "key": key, "value": value},
 			type : "POST",
 			success: function(data){
-				//ajax_list(0);
-				$('#select_order').val('0');
+				ajax_get_list();
 				$.jGrowl('No.' + id + 'の' + conf[key]['name'] + 'を変更しました。');
 			},
 			error: function(data){
@@ -202,6 +244,16 @@ $(document).ready(function() {
 		});
 	});
 });
+function set_gantt_row(key, values){
+	var sdate = values.start_date;
+	var max = Math.ceil(values.estimated_time);
+	for (var i = 0; i < max; i++)
+	{
+		var date = add_date(sdate, i);
+		var id = key + '_' + date;
+		$('td#' + id).addClass('gant_active');
+	}
+}
 // ]]>
 {/literal}
 </script>
@@ -260,25 +312,16 @@ $('#main_form').validate({
 {literal}
 $(function(){
 	$('#range').change(function() {
-		var range = $(this).val();
-		var date_from = $("#date_from").val();
-		var order = $("#select_order").val();
-		ajax_list({/literal}{$from}{literal}, order, date_from, range);
+		ajax_get_list();
 	});
 	$('#date_from').change(function() {
-		var range = $("#range").val();
-		var date_from = $(this).val();
-		var order = $("#select_order").val();
-		ajax_list({/literal}{$from}{literal}, order, date_from, range);
+		ajax_get_list();
 	});
 	$('#gntt_now').click(function() {
 		var date = $.exDate();
 		var date_from = date.toChar('yyyy-mm-dd');
 		$("#date_from").val(date_from);
-
-		var range = $("#range").val();
-		var order = $("#select_order").val();
-		ajax_list({/literal}{$from}{literal}, order, date_from, range);
+		ajax_get_list();
 	});
 	$('#gntt_next').click(function() {       get_added_date($("#date_from").val(), 7); });
 	$('#gntt_next_lerge').click(function() { get_added_date($("#date_from").val(), 28); });
@@ -316,6 +359,13 @@ function ajax_list(offset, order, date_from, range){
 			$("#" + id).html(data);
 		}
 	})
+}
+
+function ajax_get_list() {
+	var range     = $("#range").val();
+	var date_from = $("#date_from").val();
+	var order     = $("#select_order").val();
+	ajax_list({/literal}{$from}{literal}, order, date_from, range);
 }
 {/literal}
 </script>

@@ -7,7 +7,7 @@
 <meta name="robots" content="{if $smarty.const.IS_ACCEPT_ROBOTS}index,follow{else}noindex,nofollow{/if}">
 {if $site_keywords}<meta name="keywords" content="{','|implode:$site_keywords}">{/if}
 <meta name="description" content="{$site_description}">
-{$head_info}
+{$head_info|smarty:nodefaults}
 <link rel="stylesheet" href="{site_url}css/{$current_module}/filter.css">
 
 {if $current_module|is_exist_favicon}<link rel="shortcut icon" href="{img_url}/favicon/{$current_module}.ico">{else}<link rel="shortcut icon" href="{img_url}/favicon/main.ico">{/if}

@@ -70,6 +70,7 @@ class Gantt extends MY_Controller
 		// template
 		$view_data = $this->_get_default_view_data();
 		$view_data['page_title'] = $this->private_config['site_title'].'一覧';
+		$view_data['head_info'] = $this->_get_work_class_style();
 
 		if ($project_key && $project = $this->model_project->get_row_full(array('A.key_name' => $project_key), 'A.id, A.name, B.name as program_name, B.key_name as program_key'))
 		{
@@ -105,10 +106,9 @@ class Gantt extends MY_Controller
 
 	public function ajax_gantt_list()
 	{
+		//$this->output->enable_profiler(TRUE);
 		// template
 		$view_data = $this->_get_default_view_data();
-		$view_data['table_title'] = array($this->config->item('site_title', 'program'), $this->config->item('site_title', 'project'), $this->config->item('site_title', 'wbs'));
-
 		$day_list = array();
 		$month = '';
 		$month_before = '';
@@ -138,8 +138,23 @@ class Gantt extends MY_Controller
 																														'',
 																														$this->project_id,
 																														true,
-																														'A.*, B.name as project_name, C.name as program_name');
-
+																														'B.name as project_name, C.name as program_name, D.name as work_class_name, A.*');
+/*
+		$gantt_list = array();
+		foreach ($view_data['list'] as $row)
+		{
+			$key = 'wbs_'.$row['id'];
+			$values = array(
+				'estimated_time' => $row['estimated_time'],
+				'spent_time' => $row['spent_time'],
+				'percent_complete' => $row['percent_complete'],
+				'start_date' => $row['start_date'],
+				'due_date' => $row['due_date'],
+			);
+			$gantt_list[$key] = $values;
+		}
+		$view_data['gantt_list'] =  $gantt_list;
+*/
 		// 記事件数を取得
 		$count_all = $this->model_wbs->get_count_all($this->search, $this->project_id, true);
 		$view_data['pagination'] = $this->_get_pagination_simple($count_all, 'gantt/ajax_gantt_list');
@@ -446,6 +461,26 @@ class Gantt extends MY_Controller
 		}
 
 		return true;
+	}
+
+	public function _get_work_class_style()
+	{
+		$list = $this->db_util->get_result_array('work_class', array(), array('id', 'color'), 'gantt', 'model');
+		$styles = array();
+		foreach ($list as $row)
+		{
+			$styles[] = sprintf('.gantt_active_%d { background-color: %s; }', $row['id'], $row['color']);
+		}
+		$style = implode(PHP_EOL, $styles);
+
+		return <<<EOT
+<style type="text/css">
+<!--
+{$style}
+-->
+</style>
+
+EOT;
 	}
 }
 
