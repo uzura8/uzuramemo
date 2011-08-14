@@ -27,7 +27,7 @@ CREATE TABLE `memo` (
   `memo_category_id` int(4) NOT NULL DEFAULT '0',
   `title` varchar(140) NOT NULL DEFAULT '',
   `explain` text,
-  `body` text NOT NULL,
+  `body` mediumtext NOT NULL,
   `sort` int(6) NOT NULL DEFAULT '999',
   `del_flg` tinyint(1) NOT NULL DEFAULT '0',
   `format` tinyint(1) NOT NULL DEFAULT '0',
