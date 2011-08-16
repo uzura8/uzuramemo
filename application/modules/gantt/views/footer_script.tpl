@@ -109,36 +109,36 @@ $(document).ready(function() {
 		});
 	});
 
-	$("td.gantt_cel").live("dblclick", function(){
-		var id_value = $(this).attr("id");
-		var matches =id_value.match(/^wbs_([0-9]+)_(2[0-9]{3}\-[0-9]{2}\-[0-9]{2})$/);
-		if (!matches) {
-			$.jGrowl('エラー');
-			exit;
-		}
-
-		var id = matches[1];
-		var value = matches[2];
-		var key = 'due_date';
-		jConfirm('No.' + id + ' の期日を ' + value + ' に変更しますか?', '変更確認', function(r) {
-			if (r == true) {
-				// 更新
-				$.ajax({
-					url : "{/literal}{site_url}{literal}wbs/ajax_execute_update_common",
-					dataType : "text",
-					data : {"id": id, "key": key, "value": value},
-					type : "POST",
-					success: function(data){
-						ajax_get_list();
-						$.jGrowl('No.' + id + ' の' + '期日' + 'を ' + value + ' に変更しました。');
-					},
-					error: function(data){
-						$.jGrowl('No.' + id + ' の' + '期日' + 'を変更できませんでした。');
-					}
-				});
-			}
-		});
-	});
+//	$("td.gantt_cel").live("dblclick", function(){
+//		var id_value = $(this).attr("id");
+//		var matches =id_value.match(/^wbs_([0-9]+)_(2[0-9]{3}\-[0-9]{2}\-[0-9]{2})$/);
+//		if (!matches) {
+//			$.jGrowl('エラー');
+//			exit;
+//		}
+//
+//		var id = matches[1];
+//		var value = matches[2];
+//		var key = 'due_date';
+//		jConfirm('No.' + id + ' の期日を ' + value + ' に変更しますか?', '変更確認', function(r) {
+//			if (r == true) {
+//				// 更新
+//				$.ajax({
+//					url : "{/literal}{site_url}{literal}wbs/ajax_execute_update_common",
+//					dataType : "text",
+//					data : {"id": id, "key": key, "value": value},
+//					type : "POST",
+//					success: function(data){
+//						ajax_get_list();
+//						$.jGrowl('No.' + id + ' の' + '期日' + 'を ' + value + ' に変更しました。');
+//					},
+//					error: function(data){
+//						$.jGrowl('No.' + id + ' の' + '期日' + 'を変更できませんでした。');
+//					}
+//				});
+//			}
+//		});
+//	});
 
 	// 各値の変更
 	$(".input_each").live("change", function(){
