@@ -3,7 +3,7 @@
 <script type="text/javascript" src="{site_url}js/lib/jquery.js"></script>
 <script type="text/javascript" src="{site_url}js/lib/jquery-ui.min.js"></script>
 
-<script src="{site_url}js/lib/jeditable/jquery.jeditable.js" type="text/javascript"></script>
+<script src="{site_url}js/lib/jeditable/jquery.jeditable-callback.js" type="text/javascript"></script>
 <script src="{site_url}js/lib/jeditable/jquery.jeditable.autogrow.js" type="text/javascript" ></script>
 <script src="{site_url}js/lib/jeditable/js/jquery.autogrow.js" type="text/javascript" ></script>
 
