@@ -114,6 +114,16 @@ table#gantt_chart td.month_top {
 table#gantt_chart td.day {
 	width: 14px;
 }
+table#gantt_chart td.holiday_title {
+	/*background-color: #FF9CCC;*/
+	background-color: #B4B4B4;
+}
+td.holiday {
+	background-color: #B4B4B4;
+}
+td.today {
+	background-color: #FFADF8;
+}
 table#gantt_chart td.row_title {
 	height: 14px;
 	padding-top: 1px;
@@ -128,4 +138,8 @@ table#gantt_chart td#estimated_time {
 table#gantt_chart td input[type=text] {
 	height: 10px;
 	padding: 2px 0;
+}
+
+table#gantt_chart td form.editable button {
+	padding: 0 3px;
 }

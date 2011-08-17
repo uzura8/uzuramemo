@@ -148,7 +148,7 @@ class Model_project extends CI_Model
 		if (!$program_id) return false;
 
 		$CI =& get_instance();
-		return $CI->db_util->get_cols('project', array('program_id' => $program_id), 'id', 'project', 'model');
+		return $CI->db_util->get_cols('project', array('program_id' => $program_id), 'id', '', 'project', 'model');
 	}
 
 	public function get_row_full($params, $columns = 'A.*', $with_logical_deleted = false)

@@ -27,6 +27,9 @@ $(document).ready(function() {
 			onblur    : "ignore",
 			cssclass : "editable",
 			select : true,
+			onfinishededit: function(value) {
+				ajax_get_list();
+			}
 		})
 	});
 

@@ -18,7 +18,7 @@ class Gantt extends MY_Controller
 		parent::__construct();
 
 		// load models
-		$this->load->model('gantt/model_calendar');
+		$this->load->model('wbs/model_holiday');
 		$this->load->model('program/model_program');
 		$this->load->model('project/model_project');
 		$this->load->model('wbs/model_wbs');
@@ -109,9 +109,14 @@ class Gantt extends MY_Controller
 		//$this->output->enable_profiler(TRUE);
 		// template
 		$view_data = $this->_get_default_view_data();
+
+		// 休日情報
+		$holidays = $this->date_util->get_holidays($this->date_from, date('Y-m-d', strtotime(sprintf('+%d days %s', $this->range - 1, $this->date_from))));
+
 		$day_list = array();
 		$month = '';
 		$month_before = '';
+		$today = date('Y-m-d');
 		for ($i = 0; $i < $this->range; $i++)
 		{
 			$key = date('Y-m-d', strtotime(sprintf('+%d days %s', $i, $this->date_from)));
@@ -128,17 +133,32 @@ class Gantt extends MY_Controller
 			// week
 			$values['week'] = date('w', $time);
 
+			// today
+			$values['is_today'] = false;
+			if ($key == $today) $values['is_today'] = true;
+
+			// holiday
+			$values['holiday'] = '';
+			if (!empty($holidays[$key])) $values['holiday'] = $holidays[$key];
+
 			$day_list[$key] = $values;
 		}
 		$view_data['day_list']  = $day_list;
+		$view_data['holidays']  = $holidays;
 
-		$view_data['list'] =  $this->model_wbs->get_main_list($this->offset,
+		$list = $this->model_wbs->get_main_list($this->offset,
 																														$this->limit,
 																														$this->_get_order_sql_clause(),
 																														'',
 																														$this->project_id,
 																														true,
 																														'B.name as project_name, C.name as program_name, D.name as work_class_name, A.*');
+		foreach ($list as $row)
+		{
+			$row['finish_date'] = $this->get_finish_date($row['start_date'], $row['estimated_time'], $holidays);
+			$view_data['list'][] = $row;
+		}
+		unset($list);
 /*
 		$gantt_list = array();
 		foreach ($view_data['list'] as $row)
@@ -159,7 +179,6 @@ class Gantt extends MY_Controller
 		$count_all = $this->model_wbs->get_count_all($this->search, $this->project_id, true);
 		$view_data['pagination'] = $this->_get_pagination_simple($count_all, 'gantt/ajax_gantt_list');
 		$view_data['count_all']  = $count_all;
-
 		$this->smarty_parser->parse('ci:gantt/list.tpl', $view_data);
 	}
 
@@ -279,6 +298,29 @@ class Gantt extends MY_Controller
 		}
 
 		$this->set_output('true');
+	}
+
+	private function get_finish_date($start_date, $estimated_time, $holidays)
+	{
+		$estimated_days = ceil($estimated_time);
+		$day = '';
+		$i = 0;
+		while (1)
+		{
+			if (!$estimated_days) break;
+
+			$day = date('Y-m-d', strtotime(sprintf('+ %d days %s', $i, $start_date)));
+			$w = date('w', strtotime($day));// 簡略化可能
+			if ($w != 0 && $w != 6 && empty($holidays[$day]))
+			{
+				$estimated_days--;
+			}
+
+			$i++;
+		}
+		if (!$day) return $start_date;
+
+		return $day;
 	}
 
 	private function _get_pagination_simple($count_all, $uri = '')
@@ -465,11 +507,11 @@ class Gantt extends MY_Controller
 
 	public function _get_work_class_style()
 	{
-		$list = $this->db_util->get_result_array('work_class', array(), array('id', 'color'), 'gantt', 'model');
+		$list = $this->db_util->get_result_array('work_class', array(), array('id', 'color'), '', 'gantt', 'model');
 		$styles = array();
 		foreach ($list as $row)
 		{
-			$styles[] = sprintf('.gantt_active_%d { background-color: %s; }', $row['id'], $row['color']);
+			$styles[] = sprintf('table#gantt_chart td.gantt_active_%d { background-color: %s; }', $row['id'], $row['color']);
 		}
 		$style = implode(PHP_EOL, $styles);
 

@@ -20,4 +20,10 @@ class Date_util
 		$week = array('日', '月', '火', '水', '木', '金', '土');
 		return $week[$w];
 	}
+
+	public function get_holidays($date_from, $date_to)
+	{
+		$CI =& get_instance();
+		return $CI->db_util->get_assoc('holiday', array('date >=' => $date_from, 'date <=' => $date_to), array('date', 'name'), 'date asc', 'wbs', 'model');
+	}
 }

@@ -32,12 +32,12 @@
 </tr>
 <tr>
 {foreach from=$day_list key=date item=item}
-<td id="day_{$date}" class="day {$date}">{$item.day}</td>
+<td id="day_{$date}" class="day {$date}{if $item.is_today} today{elseif $item.holiday || $item.week == 0 || $item.week == 6} holiday_title{/if}">{$item.day}</td>
 {/foreach}
 </tr>
 <tr>
 {foreach from=$day_list key=date item=item}
-<td id="week_{$date}" class="{$date}">{$item.week|get_week}</td>
+<td id="week_{$date}" class="week {$date}{if $item.is_today} today{elseif $item.holiday || $item.week == 0 || $item.week == 6} holiday_title{/if}">{$item.week|get_week}</td>
 {/foreach}
 </tr>
 
@@ -53,7 +53,7 @@
 <input type="hidden" id="input_start_date_{$row.id}" class="input_each" name="start_date" value="{$row.start_date}">
 </td>
 {foreach from=$day_list key=date item=item}
-<td id="wbs_{$row.id}_{$date}" class="gantt_cel {$date} wbs_{$row.id}{$date|get_gantt_date_class:$row.start_date:$row.estimated_time:$row.work_class_id:$row.due_date:$row.percent_complete:true}">&nbsp;</td>
+<td id="wbs_{$row.id}_{$date}" class="gantt_cel {$date} wbs_{$row.id}{get_gantt_date_class date=$date row=$row pre_space=true holidays=$holidays}{if $item.is_today} today{elseif $item.holiday || $item.week == 0 || $item.week == 6} holiday{/if}">&nbsp;</td>
 {/foreach}
 </tr>
 
