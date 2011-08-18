@@ -43,8 +43,8 @@
 
 {foreach from=$list item=row}
 <tr>
-<td class="row_title">{$row.program_name}</td>
-<td class="row_title">{$row.project_name}</td>
+<td class="row_title"><a href="{site_url uri=project}/index/{$row.program_key_name}">{$row.program_name}</a></td>
+<td class="row_title"><a href="{site_url uri=wbs}/index/{$row.project_key_name}">{$row.project_name}</a></td>
 <td class="row_title">{$row.name}</td>
 <td class="row_title gantt_active_{$row.work_class_id}">{$row.work_class_name}</td>
 <td>

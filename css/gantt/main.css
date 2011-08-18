@@ -79,6 +79,13 @@
 	padding: 0;
 }
 
+div#gantt_link {
+	padding: 5px 10px;
+	text-align: left;
+	margin: 10px 0 5px;
+	background-color: #F7F7F7;
+}
+
 div#gantt {
 	background-color: #F7F7F7;
 }
@@ -86,8 +93,7 @@ div#gantt {
 .gantt_due_date { background-color: #FA3939; }
 
 #gantt_gantt_index div#list {
-	width: 2000px;
-	margin-top: 10px;
+	width: 1500px;
 }
 
 div#gantt {

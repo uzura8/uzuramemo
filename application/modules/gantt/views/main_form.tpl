@@ -40,13 +40,5 @@
 	</div>
 </div>
 {/foreach}
-	<label>移動</label>
-	<div class="input">
-		<a href="javaScript:void(0);" id="gntt_prev_lerge">[&lt;&lt;]</a>
-		<a href="javaScript:void(0);" id="gntt_prev">[&lt;]</a>
-		<a href="javaScript:void(0);" id="gntt_now">now</a>
-		<a href="javaScript:void(0);" id="gntt_next">[&gt;]</a>
-		<a href="javaScript:void(0);" id="gntt_next_lerge">[&gt;&gt;]</a>
-	</div>
 {form_close}
 </div><!-- main_form_box END -->

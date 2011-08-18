@@ -26,4 +26,36 @@ class Date_util
 		$CI =& get_instance();
 		return $CI->db_util->get_assoc('holiday', array('date >=' => $date_from, 'date <=' => $date_to), array('date', 'name'), 'date asc', 'wbs', 'model');
 	}
+
+	public function conv2int($date, $delimitter = '-')
+	{
+		return (int)str_replace($delimitter, '', $date);
+	}
+
+	public function get_holidays_from_range($date_from, $range)
+	{
+		return $this->get_holidays($date_from, date('Y-m-d', strtotime(sprintf('+%d days %s', $range - 1, $date_from))));
+	}
+
+	public function get_finish_date($start_date, $range, $holidays)
+	{
+		$day = '';
+		$i = 0;
+		while (1)
+		{
+			if (!$range) break;
+
+			$day = date('Y-m-d', strtotime(sprintf('+ %d days %s', $i, $start_date)));
+			$w = date('w', strtotime($day));// 簡略化可能
+			if ($w != 0 && $w != 6 && empty($holidays[$day]))
+			{
+				$range--;
+			}
+
+			$i++;
+		}
+		if (!$day) return $start_date;
+
+		return $day;
+	}
 }

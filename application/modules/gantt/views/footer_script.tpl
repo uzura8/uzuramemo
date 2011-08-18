@@ -102,7 +102,11 @@ $(document).ready(function() {
 					type : "POST",
 					success: function(data){
 						ajax_get_list();
-						$.jGrowl('No.' + id + ' の' + '開始日' + 'を ' + value + ' に変更しました。');
+						if (data == 'true') {
+							$.jGrowl('No.' + id + ' の' + '開始日' + 'を ' + value + ' に変更しました。');
+						} else {
+							jAlert(data);
+						}
 					},
 					error: function(data){
 						$.jGrowl('No.' + id + ' の' + '開始日' + 'を変更できませんでした。');
@@ -174,7 +178,6 @@ $(document).ready(function() {
 			data : {"id": id, "key": key, "value": value},
 			type : "POST",
 			success: function(data){
-				ajax_get_list();
 				$.jGrowl('No.' + id + 'の' + conf[key]['name'] + 'を変更しました。');
 			},
 			error: function(data){

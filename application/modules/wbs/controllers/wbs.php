@@ -241,7 +241,31 @@ class Wbs extends MY_Controller
 			$this->output->set_ajax_output_error();
 			return;
 		}
+/*
+		// 期日内に収まっているか
+		if ($key == 'start_date' || $key == 'estimated_time')
+		{
+			if ($key == 'start_date')
+			{
+				$start_date     = set_value('value');
+				$estimated_time = $this->db_util->get_col4id('wbs', $id, 'estimated_time', 'wbs', 'model');
+			}
+			elseif ($key == 'estimated_time')
+			{
+				$start_date     = $this->db_util->get_col4id('wbs', $id, 'start_date', 'wbs', 'model');
+				$estimated_time = set_value('value');
+			}
 
+			$due_date    = $this->db_util->get_col4id('wbs', $id, 'due_date', 'wbs', 'model');
+			$holidays    = $this->date_util->get_holidays_from_range($start_date, $estimated_time + 30);
+			$finish_date = $this->date_util->get_finish_date($start_date, ceil($estimated_time), $holidays);
+			if ($this->date_util->conv2int($finish_date) > $this->date_util->conv2int($due_date))
+			{
+				$this->output->set_output('完了日が期日を超えています');
+				return;
+			}
+		}
+*/
 		// 登録
 		$values = array($key => set_value('value'));
 		if (!$this->model_wbs->update4id($values, $id))
@@ -250,7 +274,7 @@ class Wbs extends MY_Controller
 			return;
 		}
 
-		$this->set_output('true');
+		$this->output->set_output('true');
 	}
 
 	public function ajax_execute_update_date()

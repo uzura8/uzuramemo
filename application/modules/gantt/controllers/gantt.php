@@ -11,7 +11,7 @@ class Gantt extends MY_Controller
 	private $project_id = 0;
 	private $next_url;
 	private $date_from = '';
-	private $range = 30;
+	private $range = 60;
 
 	function __construct()
 	{
@@ -69,7 +69,7 @@ class Gantt extends MY_Controller
 	{
 		// template
 		$view_data = $this->_get_default_view_data();
-		$view_data['page_title'] = $this->private_config['site_title'].'一覧';
+		$view_data['page_title'] = $this->private_config['site_title'];
 		$view_data['head_info'] = $this->_get_work_class_style();
 
 		if ($project_key && $project = $this->model_project->get_row_full(array('A.key_name' => $project_key), 'A.id, A.name, B.name as program_name, B.key_name as program_key'))
@@ -111,7 +111,7 @@ class Gantt extends MY_Controller
 		$view_data = $this->_get_default_view_data();
 
 		// 休日情報
-		$holidays = $this->date_util->get_holidays($this->date_from, date('Y-m-d', strtotime(sprintf('+%d days %s', $this->range - 1, $this->date_from))));
+		$holidays = $this->date_util->get_holidays_from_range($this->date_from, $this->range);
 
 		$day_list = array();
 		$month = '';
@@ -147,15 +147,16 @@ class Gantt extends MY_Controller
 		$view_data['holidays']  = $holidays;
 
 		$list = $this->model_wbs->get_main_list($this->offset,
-																														$this->limit,
-																														$this->_get_order_sql_clause(),
-																														'',
-																														$this->project_id,
-																														true,
-																														'B.name as project_name, C.name as program_name, D.name as work_class_name, A.*');
+																						$this->limit,
+																						$this->_get_order_sql_clause(),
+																						'',
+																						$this->project_id,
+																						true,
+																						'B.name as project_name, B.key_name as project_key_name, '
+																					. 'C.name as program_name, C.key_name as program_key_name, D.name as work_class_name, A.*');
 		foreach ($list as $row)
 		{
-			$row['finish_date'] = $this->get_finish_date($row['start_date'], $row['estimated_time'], $holidays);
+			$row['finish_date'] = $this->date_util->get_finish_date($row['start_date'], ceil($row['estimated_time']), $holidays);
 			$view_data['list'][] = $row;
 		}
 		unset($list);
@@ -218,109 +219,6 @@ class Gantt extends MY_Controller
 		}
 
 		$this->set_output('true');
-	}
-
-	public function ajax_execute_update_common()
-	{
-		$this->input->check_is_post();
-		$id = (int)$this->_get_post_params('id');
-
-		$key = $this->_get_post_params('key');
-		$allow_keys = array('sort', 'start_date', 'due_date', 'estimated_time', 'spent_time', 'percent_complete');
-		if (!$id || !in_array($key, $allow_keys))
-		{
-			$this->output->set_ajax_output_error();
-			return;
-		}
-
-		$validate_rules = $this->_validation_rules();
-		$this->form_validation->set_rules('value', $validate_rules[$key]['label'], $validate_rules[$key]['rules']);
-		$result = $this->form_validation->run();
-
-		// 値に変更がない場合はそのまま
-		$row = $this->model_wbs->get_row_common(array('id' => $id));
-		if ($row[$key] == set_value('value'))
-		{
-			return;
-		}
-
-		if (!$result)
-		{
-			$this->output->set_ajax_output_error();
-			return;
-		}
-
-		// 登録
-		$values = array($key => set_value('value'));
-		if (!$this->model_wbs->update4id($values, $id))
-		{
-			$this->output->set_ajax_output_error();
-			return;
-		}
-
-		$this->set_output('true');
-	}
-
-	public function ajax_execute_update_date()
-	{
-		$this->input->check_is_post();
-		$id  = (int)$this->_get_post_params('id');
-		if (!$id)
-		{
-			$this->output->set_ajax_output_error();
-			return;
-		}
-
-		$validate_rules = $this->_validation_rules();
-		$this->form_validation->set_rules('start_date', $validate_rules['start_date']['label'], $validate_rules['start_date']['rules']);
-		$this->form_validation->set_rules('due_date', $validate_rules['due_date']['label'], $validate_rules['due_date']['rules']);
-		$result = $this->form_validation->run();
-
-		// 値に変更がない場合はそのまま
-		$row = $this->model_wbs->get_row_common(array('id' => $id));
-		if ($row['start_date'] == set_value('start_date') && $row['due_date'] == set_value('due_date'))
-		{
-			return;
-		}
-
-		if (!$result)
-		{
-			$this->output->set_ajax_output_error();
-			return;
-		}
-
-		// 登録
-		$values = array('start_date' => set_value('start_date'), 'due_date' => set_value('due_date'));
-		if (!$this->model_wbs->update4id($values, $id))
-		{
-			$this->output->set_ajax_output_error();
-			return;
-		}
-
-		$this->set_output('true');
-	}
-
-	private function get_finish_date($start_date, $estimated_time, $holidays)
-	{
-		$estimated_days = ceil($estimated_time);
-		$day = '';
-		$i = 0;
-		while (1)
-		{
-			if (!$estimated_days) break;
-
-			$day = date('Y-m-d', strtotime(sprintf('+ %d days %s', $i, $start_date)));
-			$w = date('w', strtotime($day));// 簡略化可能
-			if ($w != 0 && $w != 6 && empty($holidays[$day]))
-			{
-				$estimated_days--;
-			}
-
-			$i++;
-		}
-		if (!$day) return $start_date;
-
-		return $day;
 	}
 
 	private function _get_pagination_simple($count_all, $uri = '')
@@ -448,7 +346,7 @@ class Gantt extends MY_Controller
 				'rules' => 'trim|is_natural_no_zero|max_num[200]',
 				'width'  => 5,
 				'after_label' => '日間',
-				'default_value' => 30,
+				'default_value' => 45,
 			),
 		);
 	}
@@ -505,7 +403,7 @@ class Gantt extends MY_Controller
 		return true;
 	}
 
-	public function _get_work_class_style()
+	private function _get_work_class_style()
 	{
 		$list = $this->db_util->get_result_array('work_class', array(), array('id', 'color'), '', 'gantt', 'model');
 		$styles = array();
