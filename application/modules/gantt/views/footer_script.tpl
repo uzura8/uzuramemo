@@ -14,9 +14,11 @@ $(document).ready(function() {
 		if (item_name == 'estimated_time') {
 			var text_box_width = '30px';
 		}
+		var csrf_token = $.cookie('csrf_test_name');
 
 		$("span#" + id).editable("{/literal}{site_url uri=wbs/execute_update}/{literal}" + item_name, {
 			indicator : "<img src='{/literal}{site_url uri=js/lib/jeditable/img/indicator.gif}{literal}'>",
+			submitdata: { "csrf_test_name": csrf_token },
 			type      : "text",
 			width     : 'width: ' + text_box_width + ';',// js/lib/jeditable/jquery.jeditable.js : 411 を修正し style で指定できるように対応
 			submit    : 'OK',
@@ -94,11 +96,12 @@ $(document).ready(function() {
 		var key = 'start_date';
 		jConfirm('No.' + id + ' の開始日を ' + value + ' に変更しますか?', '変更確認', function(r) {
 			if (r == true) {
+				var csrf_token = $.cookie('csrf_test_name');
 				// 更新
 				$.ajax({
 					url : "{/literal}{site_url}{literal}wbs/ajax_execute_update_common",
 					dataType : "text",
-					data : {"id": id, "key": key, "value": value},
+					data : {"id": id, "key": key, "value": value, "csrf_test_name": csrf_token},
 					type : "POST",
 					success: function(data){
 						ajax_get_list();

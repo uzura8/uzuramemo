@@ -22,11 +22,13 @@ $(document).ready(function() {
 		} else if (item_name == 'due_date') {
 			var text_box_width = '100px';
 		}
+		var csrf_token = $.cookie('csrf_test_name');
 
 		$("p#" + id).editable("{/literal}{site_url uri=wbs/execute_update}/{literal}" + item_name, {
 			indicator : "<img src='{/literal}{site_url uri=js/lib/jeditable/img/indicator.gif}{literal}'>",
 			type      : "autogrow",
 			submit    : 'OK',
+			submitdata: { "csrf_test_name": csrf_token },
 			//submit    : '<input type="submit" value="OK" class="button">',
 			cancel    : 'cancel',
 			loadurl    : '{/literal}{site_url uri=wbs/ajax_wbs_detail}{literal}/' + id + '/' + item_name,
@@ -45,6 +47,7 @@ $(document).ready(function() {
 			width     : 'width: ' + text_box_width + ';',// js/lib/jeditable/jquery.jeditable.js : 455 を修正し style で指定できるように対応
 			submit    : 'OK',
 			//submit    : '<input type="submit" value="OK" class="button">',
+			submitdata: { "csrf_test_name": csrf_token },
 			cancel    : 'cancel',
 			loadurl    : '{/literal}{site_url uri=wbs/ajax_wbs_detail}{literal}/' + id + '/' + item_name,
 			tooltip   : "Click to edit...",
@@ -58,10 +61,11 @@ $(document).ready(function() {
 	$(".btn_delFlg").live("click", function(){
 		var id_value = $(this).attr("id");
 		var id = id_value.replace(/btn_delFlg_/g, "");
+		var csrf_token = $.cookie('csrf_test_name');
 		$.ajax({
 			url : "{/literal}{site_url}{literal}wbs/ajax_execute_update_del_flg",
 			dataType : "text",
-			data : {"id": id,},
+			data : {"id": id, "csrf_test_name": csrf_token},
 			type : "POST",
 			success: function(status_after){
 				if (status_after == "1") {
@@ -87,10 +91,11 @@ $(document).ready(function() {
 		var id = id_value.replace(/btn_delete_/g, "");
 		jConfirm('削除しますか?', '削除確認', function(r) {
 			if (r == true) {
+				var csrf_token = $.cookie('csrf_test_name');
 				$.ajax({
 					url : "{/literal}{site_url}{literal}wbs/ajax_execute_delete",
 					dataType : "text",
-					data : {"id": id,},
+					data : {"id": id, "csrf_test_name": csrf_token},
 					type : "POST",
 					success: function(status_after){
 						$("#article_title_" + id).css({"display" : "none"});
@@ -118,6 +123,7 @@ $(document).ready(function() {
 		var pattern = 'input_' + key + '_';
 		var id = id_value.replace(eval("/" + pattern + "/g"), "");
 		var value = $(this).val();
+		var csrf_token = $.cookie('csrf_test_name');
 
 		// 入力値確認
 		funcname = "return util_check_" + conf[key]['format'] + "(arg)";
@@ -133,7 +139,7 @@ $(document).ready(function() {
 		$.ajax({
 			url : "{/literal}{site_url}{literal}wbs/ajax_execute_update_common",
 			dataType : "text",
-			data : {"id": id, "key": key, "value": value},
+			data : {"id": id, "key": key, "value": value, "csrf_test_name": csrf_token},
 			type : "POST",
 			success: function(data){
 				//ajax_list(0);
@@ -151,6 +157,7 @@ $(document).ready(function() {
 		var id_value = $(this).attr("id");
 		var id = id_value.replace(/input_sort_/g, "");
 		var value = $(this).val();
+		var csrf_token = $.cookie('csrf_test_name');
 		// 入力値が数値であるかどうかの確認
 		if (value != parseInt(value)) {
 			$.jGrowl('整数を入力してください。');
@@ -161,7 +168,7 @@ $(document).ready(function() {
 		$.ajax({
 			url : "{/literal}{site_url}{literal}wbs/ajax_execute_update_sort",
 			dataType : "text",
-			data : {"id": id, "value": value},
+			data : {"id": id, "value": value, "csrf_test_name": csrf_token},
 			type : "POST",
 			success: function(data){
 				ajax_list(0);
@@ -180,6 +187,7 @@ $(document).ready(function() {
 		var id = id_value.replace(/btn_date_/g, "");
 		var value_start_date = $("#input_start_date_" + id).val();
 		var value_due_date = $("#input_due_date_" + id).val();
+		var csrf_token = $.cookie('csrf_test_name');
 
 		// 入力値確認
 		var ret = util_check_date_format(value_start_date);
@@ -197,7 +205,7 @@ $(document).ready(function() {
 		$.ajax({
 			url : "{/literal}{site_url}{literal}wbs/ajax_execute_update_date",
 			dataType : "text",
-			data : {"id": id, "due_date": value_due_date, "start_date": value_start_date},
+			data : {"id": id, "due_date": value_due_date, "start_date": value_start_date, "csrf_test_name": csrf_token},
 			type : "POST",
 			success: function(data){
 				$.jGrowl('No.' + id + 'の日付を変更しました。');
