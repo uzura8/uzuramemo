@@ -15,7 +15,7 @@ class Date_util
 		return checkdate(intval($dates[1]), intval($dates[2]), intval($dates[0]));
 	}
 
-	public function get_week($w)
+	public function get_week_name($w)
 	{
 		$week = array('日', '月', '火', '水', '木', '金', '土');
 		return $week[$w];
@@ -46,7 +46,17 @@ class Date_util
 			if (!$range) break;
 
 			$day = date('Y-m-d', strtotime(sprintf('+ %d days %s', $i, $start_date)));
-			$w = date('w', strtotime($day));// 簡略化可能
+
+			if (!isset($w))
+			{
+				$w = date('w', strtotime($day));
+			}
+			else
+			{
+				$w++;
+				$w = $this->correct_week_num($w);
+			}
+
 			if ($w != 0 && $w != 6 && empty($holidays[$day]))
 			{
 				$range--;
@@ -57,5 +67,19 @@ class Date_util
 		if (!$day) return $start_date;
 
 		return $day;
+	}
+
+	public function correct_week_num($week_num)
+	{
+		if ($week_num < 0)
+		{
+			return $week_num + 7;
+		}
+		if ($week_num > 6)
+		{
+			return $week_num - 7;
+		}
+
+		return $week_num;
 	}
 }

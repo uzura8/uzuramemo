@@ -29,6 +29,9 @@ class Gantt extends MY_Controller
 		$this->config->load('project', true);
 		$this->config->load('wbs', true);
 
+		// helper
+		$this->load->helper('gantt');
+
 		$this->_configure();
 	}
 
@@ -52,6 +55,7 @@ class Gantt extends MY_Controller
 		$validate_rules = $this->_validation_rules();
 		$this->range = $this->_get_post_params('range', $validate_rules['range']['default_value'], $validate_rules['range']['rules']);
 		$this->date_from = $this->_get_post_params('date_from', $validate_rules['date_from']['default_value'], $validate_rules['date_from']['rules']);
+		if (!$this->date_from) $this->date_from = date('Y-m-d');
 
 		$options = $this->_get_form_dropdown_options_order();// select:order
 		$this->order  = $this->_get_post_params('order', 0, sprintf('intval|less_than[%d]', count($options)));
@@ -106,7 +110,6 @@ class Gantt extends MY_Controller
 
 	public function ajax_gantt_list()
 	{
-		//$this->output->enable_profiler(TRUE);
 		// template
 		$view_data = $this->_get_default_view_data();
 
@@ -180,7 +183,8 @@ class Gantt extends MY_Controller
 		$count_all = $this->model_wbs->get_count_all($this->search, $this->project_id, true);
 		$view_data['pagination'] = $this->_get_pagination_simple($count_all, 'gantt/ajax_gantt_list');
 		$view_data['count_all']  = $count_all;
-		$this->smarty_parser->parse('ci:gantt/list.tpl', $view_data);
+		//$this->smarty_parser->parse('ci:gantt/list.tpl', $view_data);
+		$this->load->view('gantt/list', $view_data);
 	}
 
 	public function ajax_execute_update_sort()

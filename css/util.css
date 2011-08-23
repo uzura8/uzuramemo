@@ -110,6 +110,9 @@
 
 .line_height_15 { line-height: 15px; }
 
+.ta_r{ text-align: right; }
+.ta_l{ text-align: left; }
+
 .clearfloat { clear: both; }
 .clearfloat hr { display: none; }
 

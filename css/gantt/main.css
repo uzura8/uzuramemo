@@ -132,8 +132,7 @@ td.today {
 }
 table#gantt_chart td.row_title {
 	height: 14px;
-	padding-top: 1px;
-	padding-bottom: 1px;
+	padding: 1px 2px;
 }
 table#gantt_chart td.title {
 	padding: 0 3px;
