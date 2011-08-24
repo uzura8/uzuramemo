@@ -23,10 +23,12 @@ $(document).ready(function() {
 		} else if (item_name == 'due_date') {
 			var text_box_width = '100px';
 		}
+		var csrf_token = $.cookie('csrf_test_name');
 
 		$("p#" + id).editable("{/literal}{site_url uri=project/execute_update}/{literal}" + item_name, {
 			indicator : "<img src='{/literal}{site_url uri=js/lib/jeditable/img/indicator.gif}{literal}'>",
 			type      : "autogrow",
+			submitdata: { "csrf_test_name": csrf_token },
 			submit    : 'OK',
 			//submit    : '<input type="submit" value="OK" class="button">',
 			cancel    : 'cancel',
@@ -44,6 +46,7 @@ $(document).ready(function() {
 			indicator : "<img src='{/literal}{site_url uri=js/lib/jeditable/img/indicator.gif}{literal}'>",
 			type      : "text",
 			width     : 'width: ' + text_box_width + ';',// js/lib/jeditable/jquery.jeditable.js : 455 を修正し style で指定できるように対応
+			submitdata: { "csrf_test_name": csrf_token },
 			submit    : 'OK',
 			//submit    : '<input type="submit" value="OK" class="button">',
 			cancel    : 'cancel',
@@ -59,10 +62,11 @@ $(document).ready(function() {
 	$(".btn_delFlg").live("click", function(){
 		var id_value = $(this).attr("id");
 		var id = id_value.replace(/btn_delFlg_/g, "");
+		var csrf_token = $.cookie('csrf_test_name');
 		$.ajax({
 			url : "{/literal}{site_url}{literal}project/ajax_execute_update_del_flg",
 			dataType : "text",
-			data : {"id": id,},
+			data : {"id": id, "csrf_test_name": csrf_token},
 			type : "POST",
 			success: function(status_after){
 				if (status_after == "1") {
@@ -86,12 +90,13 @@ $(document).ready(function() {
 	$(".btn_delete").live("click", function(){
 		var id_value = $(this).attr("id");
 		var id = id_value.replace(/btn_delete_/g, "");
+		var csrf_token = $.cookie('csrf_test_name');
 		jConfirm('削除しますか?', '削除確認', function(r) {
 			if (r == true) {
 				$.ajax({
 					url : "{/literal}{site_url}{literal}project/ajax_execute_delete",
 					dataType : "text",
-					data : {"id": id,},
+					data : {"id": id, "csrf_test_name": csrf_token},
 					type : "POST",
 					success: function(status_after){
 						$("#article_title_" + id).css({"display" : "none"});
@@ -117,11 +122,12 @@ $(document).ready(function() {
 			return;
 		}
 
+		var csrf_token = $.cookie('csrf_test_name');
 		// 更新
 		$.ajax({
 			url : "{/literal}{site_url}{literal}project/ajax_execute_update_common",
 			dataType : "text",
-			data : {"id": id, "key": 'sort', "value": value},
+			data : {"id": id, "key": 'sort', "value": value, "csrf_test_name": csrf_token},
 			type : "POST",
 			success: function(data){
 				ajax_list(0);
@@ -146,11 +152,12 @@ $(document).ready(function() {
 			$.jGrowl('No.' + id + 'の日付形式が正しくありません');
 			return;
 		}
+		var csrf_token = $.cookie('csrf_test_name');
 		// 更新
 		$.ajax({
 			url : "{/literal}{site_url}{literal}project/ajax_execute_update_common",
 			dataType : "text",
-			data : {"id": id, "key": 'due_date', "value": value},
+			data : {"id": id, "key": 'due_date', "value": value, "csrf_test_name": csrf_token},
 			type : "POST",
 			success: function(data){
 				$.jGrowl('No.' + id + 'の期日を変更しました。');
@@ -252,8 +259,10 @@ $(function() {
 			return;
 		}
 		$('#key_name_loading').show();
+		var csrf_token = $.cookie('csrf_test_name');
 		$.post("{/literal}{site_url}{literal}project/ajax_check_project_key_name", {
-			key_name: $('#key_name').val()
+			"key_name": $('#key_name').val(),
+			"csrf_test_name": csrf_token
 			}, function(response){
 				$('#key_name_result').fadeOut();
 				if (response == 'true') {
@@ -300,12 +309,13 @@ function ajax_list(offset, order){
 // key名を補う
 $("select#program_id").change(function(){
 	var program_id = $(this).val();
+	var csrf_token = $.cookie('csrf_test_name');
 
 	// program のkey_nameを取得し、補う
 	$.ajax({
 		url : "{/literal}{site_url}{literal}project/ajax_get_project_key_name",
 		dataType : "text",
-		data : {"id": program_id},
+		data : {"id": program_id, "csrf_test_name": csrf_token},
 		type : "POST",
 		success: function(data) {
 			if (data.length > 0) {

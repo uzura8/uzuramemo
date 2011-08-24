@@ -15,10 +15,12 @@ $(document).ready(function() {
 		if (item_name == 'key_name') {
 			var text_box_width = '50px';
 		}
+		var csrf_token = $.cookie('csrf_test_name');
 
 		$("p#" + id).editable("{/literal}{site_url uri=program/execute_update}/{literal}" + item_name, {
 			indicator : "<img src='{/literal}{site_url uri=js/lib/jeditable/img/indicator.gif}{literal}'>",
 			type      : "autogrow",
+			submitdata: { "csrf_test_name": csrf_token },
 			submit    : 'OK',
 			//submit    : '<input type="submit" value="OK" class="button">',
 			cancel    : 'cancel',
@@ -36,6 +38,7 @@ $(document).ready(function() {
 			indicator : "<img src='{/literal}{site_url uri=js/lib/jeditable/img/indicator.gif}{literal}'>",
 			type      : "text",
 			width     : 'width: ' + text_box_width + ';',// js/lib/jeditable/jquery.jeditable.js : 455 を修正し style で指定できるように対応
+			submitdata: { "csrf_test_name": csrf_token },
 			submit    : 'OK',
 			//submit    : '<input type="submit" value="OK" class="button">',
 			cancel    : 'cancel',
@@ -51,10 +54,11 @@ $(document).ready(function() {
 	$(".btn_delFlg").live("click", function(){
 		var id_value = $(this).attr("id");
 		var id = id_value.replace(/btn_delFlg_/g, "");
+		var csrf_token = $.cookie('csrf_test_name');
 		$.ajax({
 			url : "{/literal}{site_url}{literal}program/ajax_execute_update_del_flg",
 			dataType : "text",
-			data : {"id": id,},
+			data : {"id": id, "csrf_test_name": csrf_token},
 			type : "POST",
 			success: function(status_after){
 				if (status_after == "1") {
@@ -80,10 +84,11 @@ $(document).ready(function() {
 		var id = id_value.replace(/btn_delete_/g, "");
 		jConfirm('削除しますか?', '削除確認', function(r) {
 			if (r == true) {
+				var csrf_token = $.cookie('csrf_test_name');
 				$.ajax({
 					url : "{/literal}{site_url}{literal}program/ajax_execute_delete",
 					dataType : "text",
-					data : {"id": id,},
+					data : {"id": id, "csrf_test_name": csrf_token},
 					type : "POST",
 					success: function(status_after){
 						$("#article_title_" + id).css({"display" : "none"});
@@ -109,11 +114,12 @@ $(document).ready(function() {
 			return;
 		}
 
+		var csrf_token = $.cookie('csrf_test_name');
 		// 更新
 		$.ajax({
 			url : "{/literal}{site_url}{literal}program/ajax_execute_update_sort",
 			dataType : "text",
-			data : {"id": id, "value": value},
+			data : {"id": id, "value": value, "csrf_test_name": csrf_token},
 			type : "POST",
 			success: function(data){
 				ajax_list(0);
@@ -185,8 +191,10 @@ $(function() {
 			return;
 		}
 		$('#name_loading').show();
+		var csrf_token = $.cookie('csrf_test_name');
 		$.post("{/literal}{site_url}{literal}program/ajax_check_program_name", {
-			name: $('#name').val()
+			name: $('#name').val(),
+			"csrf_test_name": csrf_token
 			}, function(response){
 				$('#name_result').fadeOut();
 				if (response == 'true') {
@@ -209,8 +217,10 @@ $(function() {
 			return;
 		}
 		$('#key_name_loading').show();
+		var csrf_token = $.cookie('csrf_test_name');
 		$.post("{/literal}{site_url}{literal}program/ajax_check_program_key_name", {
-			key_name: $('#key_name').val()
+			key_name: $('#key_name').val(),
+			"csrf_test_name": csrf_token
 			}, function(response){
 				$('#key_name_result').fadeOut();
 				if (response == 'true') {
@@ -242,6 +252,7 @@ $(function(){
 function ajax_list(offset, order){
 	var id  = 'list';
 	var url = '{/literal}{site_url uri=program/ajax_program_list}{literal}';
+	var csrf_token = $.cookie('csrf_test_name');
 
 	// Ajaxによるアクセスにキャッシュを利用しない(毎回サーバにアクセス)
 	$.ajaxSetup( { cache : false } );
