@@ -327,6 +327,23 @@ $(function(){
 	$('#work_class_id').change(function() {
 		ajax_get_list();
 	});
+	$('#program_id').change(function() {
+		$('#project_id').each(function() {
+			this.selectedIndex = 0;
+		});
+		ajax_get_list();
+
+		var program_id = $("#program_id").val();
+		if (program_id) {
+			$("#project_id option").addClass('hide');
+			$('#project_id .program_id_' + program_id).removeClass("hide");
+		} else {
+			$('#project_id').removeClass("hide");
+		}
+	});
+	$('#project_id').change(function() {
+		ajax_get_list();
+	});
 	$('#gntt_now').click(function() {
 		var date = $.exDate();
 		var date_from = date.toChar('yyyy-mm-dd');
@@ -347,7 +364,9 @@ function get_added_date(date_from, add_days)
 	var range = $("#range").val();
 	var order = $("#select_order").val();
 	var work_class_id = $("#work_class_id").val();
-	ajax_list({/literal}{$from}{literal}, order, date_from, range, work_class_id);
+	var program_id = $("#program_id").val();
+	var project_id = $("#project_id").val();
+	ajax_list({/literal}{$from}{literal}, order, date_from, range, work_class_id, program_id, project_id);
 }
 
 $(function(){
@@ -357,7 +376,7 @@ $(function(){
 	ajax_list({/literal}{$from}{literal}, order, date_from, range);
 });
 
-function ajax_list(offset, order, date_from, range, work_class_id){
+function ajax_list(offset, order, date_from, range, work_class_id, program_id, project_id){
 	var id  = 'list';
 	var url = '{/literal}{site_url uri=gantt/ajax_gantt_list}{literal}';
 
@@ -365,7 +384,7 @@ function ajax_list(offset, order, date_from, range, work_class_id){
 	$.ajaxSetup( { cache : false } );
 	$("#" + id).show();
 
-	$.get(url, { nochache:(new Date()).getTime(), 'project_id':{/literal}'{$project_id}'{literal}, 'search':{/literal}'{$search}'{literal}, 'order':order, 'from':offset, 'date_from':date_from, 'range':range, 'work_class_id':work_class_id }, function(data){
+	$.get(url, { nochache:(new Date()).getTime(), 'program_id':program_id, 'project_id':project_id, 'search':{/literal}'{$search}'{literal}, 'order':order, 'from':offset, 'date_from':date_from, 'range':range, 'work_class_id':work_class_id }, function(data){
 		if (data.length>0){
 			$("#" + id).html(data);
 		}
@@ -377,7 +396,9 @@ function ajax_get_list() {
 	var date_from = $("#date_from").val();
 	var order     = $("#select_order").val();
 	var work_class_id = $("#work_class_id").val();
-	ajax_list({/literal}{$from}{literal}, order, date_from, range, work_class_id);
+	var program_id = $("#program_id").val();
+	var project_id = $("#project_id").val();
+	ajax_list({/literal}{$from}{literal}, order, date_from, range, work_class_id, program_id, project_id);
 }
 {/literal}
 </script>

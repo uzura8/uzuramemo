@@ -118,4 +118,4 @@
 
 .float_left { float: left; }
 
-.display_none { display: none; }
+.display_none, .hide { display: none; }

@@ -51,13 +51,14 @@ class Gantt extends MY_Controller
 		$this->search = $this->_get_post_params('search', '', 'trim|max_length[301]');
 		$this->offset = $this->_get_post_params('from', 0, 'intval|less_than[10000000]');
 		$this->program_id = $this->_get_post_params('program_id', 0, 'intval');
-		$this->project_id = $this->_get_post_params('project_id', 0, 'intval');
 
 		$validate_rules = $this->_validation_rules();
 		$this->range = $this->_get_post_params('range', $validate_rules['range']['default_value'], $validate_rules['range']['rules']);
 		$this->date_from = $this->_get_post_params('date_from', $validate_rules['date_from']['default_value'], $validate_rules['date_from']['rules']);
 		if (!$this->date_from) $this->date_from = date('Y-m-d');
 		$this->work_class_id = $this->_get_post_params('work_class_id', $validate_rules['work_class_id']['default_value'], $validate_rules['work_class_id']['rules']);
+		$this->program_id = $this->_get_post_params('program_id', $validate_rules['program_id']['default_value'], $validate_rules['program_id']['rules']);
+		$this->project_id = $this->_get_post_params('project_id', $validate_rules['project_id']['default_value'], $validate_rules['project_id']['rules']);
 
 		$options = $this->_get_form_dropdown_options_order();// select:order
 		$this->order  = $this->_get_post_params('order', 0, sprintf('intval|less_than[%d]', count($options)));
@@ -151,13 +152,26 @@ class Gantt extends MY_Controller
 		$view_data['day_list']  = $day_list;
 		$view_data['holidays']  = $holidays;
 
-		$params = array();
-		if ($this->work_class_id) $params = array('sql' => array('A.work_class_id = ?'), 'values' => array($this->work_class_id));
+		$params = array('sql' => array(), 'values' => array());
+		if ($this->project_id)
+		{
+			$params['sql'][]    = 'A.project_id = ?';
+			$params['values'][] = $this->project_id;
+		}
+		if (!$this->project_id && $this->program_id)
+		{
+			$params['sql'][]    = 'B.program_id = ?';
+			$params['values'][] = $this->program_id;
+		}
+		if ($this->work_class_id)
+		{
+			$params['sql'][]    = 'A.work_class_id = ?';
+			$params['values'][] = $this->work_class_id;
+		}
 		$list = $this->model_wbs->get_main_list($this->offset,
 																						$this->limit,
 																						$this->_get_order_sql_clause(),
 																						'',
-																						$this->project_id,
 																						true,
 																						'B.name as project_name, B.key_name as project_key_name, '
 																					. 'C.name as program_name, C.key_name as program_key_name, D.name as work_class_name, A.*',
@@ -334,12 +348,24 @@ class Gantt extends MY_Controller
 	protected function _validation_rules()
 	{
 		return array(
-			'project_id' => array(
-				'label' => 'プロジェクト',
-				'type'  => 'text',
-				'rules' => 'trim|required|is_natural_no_zero',
+			'program_id' => array(
+				'label' => get_config_value('site_title', 'program'),
+				'type'  => 'select',
+				'rules' => 'trim|is_natural_no_zero',
 				'error_messages'  => array('min' => ''),
 				'width'  => 30,
+				'options' => $this->_get_dropdown_options_program_id(),
+				'default_value' => 0,
+				//'children' => array('key_name'),
+			),
+			'project_id' => array(
+				'label' => get_config_value('site_title', 'project'),
+				'type'  => 'select',
+				'rules' => 'trim|is_natural_no_zero',
+				'error_messages'  => array('min' => ''),
+				'width'  => 30,
+				'options' => $this->_get_dropdown_options_project_id(),
+				'default_value' => 0,
 			),
 			'work_class_id' => array(
 				'label' => '作業分類',
@@ -368,6 +394,29 @@ class Gantt extends MY_Controller
 				'default_value' => 45,
 			),
 		);
+	}
+
+	function _get_dropdown_options_program_id()
+	{
+		$return = array();
+		$return['0'] = '選択してください';
+		$rows = $this->model_program->get_main_list(0, 0);
+		$return += $this->db_util->convert2assoc($rows);
+
+		return $return;
+	}
+
+	function _get_dropdown_options_project_id()
+	{
+		$return = array();
+		$return['0'] = array('name' => '選択してください', 'extra' => 'class="program_id_0"');
+		$rows = $this->model_project->get_main_list(0, 0, 'B.sort, A.sort');
+		foreach ($rows as $row)
+		{
+			$return[$row['id']] = array('name' => $row['name'], 'extra' => sprintf('class="program_id_%d"', $row['program_id']));
+		}
+
+		return $return;
 	}
 
 	function _get_dropdown_options_work_class_id()

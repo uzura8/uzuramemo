@@ -103,7 +103,14 @@ class Wbs extends MY_Controller
 	{
 		// template
 		$view_data = $this->_get_default_view_data();
-		$view_data['list'] =  $this->model_wbs->get_main_list($this->offset, $this->limit, $this->_get_order_sql_clause(), '', $this->project_id, true, 'A.*, B.name as project_name, C.name as program_name');
+
+		$params = array('sql' => array(), 'values' => array());
+		if ($this->project_id)
+		{
+			$params['sql'][]    = 'A.project_id = ?';
+			$params['values'][] = $this->project_id;
+		}
+		$view_data['list'] =  $this->model_wbs->get_main_list($this->offset, $this->limit, $this->_get_order_sql_clause(), '', true, 'A.*, B.name as project_name, C.name as program_name', $params);
 
 		// 記事件数を取得
 		$count_all = $this->model_wbs->get_count_all($this->search, $this->project_id, true);

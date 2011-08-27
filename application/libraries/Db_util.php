@@ -109,14 +109,21 @@ class Db_util
 		return $sort;
 	}
 
-	public function convert2assoc($rows)
+	public function convert2assoc($rows, $key_col = '', $value_col = '')
 	{
 		$return = array();
 		foreach ($rows as $row)
 		{
-			$key = array_shift($row);
-			$value = array_shift($row);
-			$return[$key] = $value;
+			if ($key_col && $value_col)
+			{
+				$return[$row[$key_col]] = $row[$value_col];
+			}
+			else
+			{
+				$key = array_shift($row);
+				$value = array_shift($row);
+				$return[$key] = $value;
+			}
 		}
 
 		return $return;

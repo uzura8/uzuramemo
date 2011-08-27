@@ -25,24 +25,24 @@ class Model_wbs extends CI_Model
 	}
 
 //	function get_main_list($offset = 0, $limit = 10, $order = 'id desc', $search = '', $category_id_list = array(), $with_logical_deleted = false, $columns = 'A.*, B.name, B.sub_id')
-	function get_main_list($offset = 0, $limit = 10, $order = 'A.sort', $search = '', $project_id = 0, $with_logical_deleted = false, $columns = 'A.*', $params = array())
+	function get_main_list($offset = 0, $limit = 10, $order = 'A.sort', $search = '', $with_logical_deleted = false, $columns = 'A.*', $params = array())
 	{
-		list($sql, $params)  = $this->get_main_query($search, $project_id, false, $with_logical_deleted, $columns, $params);
+		list($sql, $params)  = $this->get_main_query($search, false, $with_logical_deleted, $columns, $params);
 		$sql .= sprintf(" ORDER BY %s", $order);
 		if ($limit) $sql .= sprintf(" LIMIT %d, %d", $offset, $limit);
 
 		return $this->db->query($sql, $params)->result_array();
 	}
 
-	function get_count_all($search = '', $project_id = 0, $with_logical_deleted = false, $params = array())
+	function get_count_all($search = '', $with_logical_deleted = false, $params = array())
 	{
-		list($sql, $params) = $this->get_main_query($search, $project_id, true, $with_logical_deleted, '', $params);
+		list($sql, $params) = $this->get_main_query($search, true, $with_logical_deleted, '', $params);
 		$row = $this->db->query($sql, $params)->first_row('array');
 
 		return (int)$row['count'];
 	}
 
-	private static function get_main_query($search = '', $project_id = 0, $is_count = false, $with_logical_deleted = false, $columns = 'A.*', $params = array())
+	private static function get_main_query($search = '', $is_count = false, $with_logical_deleted = false, $columns = 'A.*', $params = array())
 	{
 		if (is_array($columns)) $columns = implode(',', $columns);
 		if (!$columns) $columns = 'A.*, B.*';
@@ -63,10 +63,6 @@ class Model_wbs extends CI_Model
 		{
 			$wheres[] = $add_where;
 			unset($add_where);
-		}
-		if ($project_id)
-		{
-			$wheres[] = sprintf("A.project_id = %d", $project_id);
 		}
 		$param_values = array();
 		if ($params && !empty($params['sql']))
