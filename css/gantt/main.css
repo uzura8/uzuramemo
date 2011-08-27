@@ -92,10 +92,6 @@ div#gantt {
 
 .gantt_due_date { background-color: #FA3939; }
 
-#gantt_gantt_index div#list {
-	width: 1500px;
-}
-
 div#gantt {
 	padding: 10px;
 }

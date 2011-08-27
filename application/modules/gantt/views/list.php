@@ -2,14 +2,15 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
+<?php echo $head_info ?>
 </head>
 
 <body id="{get_current_page_id}">
 <div id="list_top"></div>
 
 <?php if (!$list): ?>
-<div style="padding:30px 10px 30px 5px;">{if $search}「{$search}」に一致する{elseif $now_category_id}このカテゴリの{else}指定した記事の{/if}登録はありません。</div>
-<?php if ($search): ?>
+<div style="padding:30px 10px 30px 5px;"><?php if (isset($search) && $search): ?>「<?php echo $search ?>」に一致する<?php elseif (isset($now_category_id) && $now_category_id): ?>このカテゴリの<?php else: ?>指定した記事の<?php endif; ?>登録はありません。</div>
+<?php if (isset($search) && $search): ?>
 <div style="margin-bottom:20px;">
 「<a href="http://www.google.co.jp/search?q={$search}" target="_blank" style="font-weight:bold;">{$search}</a>」をGoogle検索
 <span style="margin-left:20px;"><a href="http://www.google.co.jp/search?q={$search}&as_qdr=m6" target="_blank">6ヶ月以内</a></span>

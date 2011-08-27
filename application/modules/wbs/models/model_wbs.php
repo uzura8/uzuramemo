@@ -25,24 +25,24 @@ class Model_wbs extends CI_Model
 	}
 
 //	function get_main_list($offset = 0, $limit = 10, $order = 'id desc', $search = '', $category_id_list = array(), $with_logical_deleted = false, $columns = 'A.*, B.name, B.sub_id')
-	function get_main_list($offset = 0, $limit = 10, $order = 'A.sort', $search = '', $project_id = 0, $with_logical_deleted = false, $columns = 'A.*')
+	function get_main_list($offset = 0, $limit = 10, $order = 'A.sort', $search = '', $project_id = 0, $with_logical_deleted = false, $columns = 'A.*', $params = array())
 	{
-		$sql  = $this->get_main_query($search, $project_id, false, $with_logical_deleted, $columns);
+		list($sql, $params)  = $this->get_main_query($search, $project_id, false, $with_logical_deleted, $columns, $params);
 		$sql .= sprintf(" ORDER BY %s", $order);
 		if ($limit) $sql .= sprintf(" LIMIT %d, %d", $offset, $limit);
 
-		return $this->db->query($sql)->result_array();
+		return $this->db->query($sql, $params)->result_array();
 	}
 
-	function get_count_all($search = '', $project_id = 0, $with_logical_deleted = false)
+	function get_count_all($search = '', $project_id = 0, $with_logical_deleted = false, $params = array())
 	{
-		$sql  = $this->get_main_query($search, $project_id, $with_logical_deleted);
-		$row = $this->db->query($sql)->first_row('array');
+		list($sql, $params) = $this->get_main_query($search, $project_id, true, $with_logical_deleted, '', $params);
+		$row = $this->db->query($sql, $params)->first_row('array');
 
 		return (int)$row['count'];
 	}
 
-	private static function get_main_query($search = '', $project_id = 0, $is_count = false, $with_logical_deleted = false, $columns = 'A.*')
+	private static function get_main_query($search = '', $project_id = 0, $is_count = false, $with_logical_deleted = false, $columns = 'A.*', $params = array())
 	{
 		if (is_array($columns)) $columns = implode(',', $columns);
 		if (!$columns) $columns = 'A.*, B.*';
@@ -66,7 +66,15 @@ class Model_wbs extends CI_Model
 		}
 		if ($project_id)
 		{
-			$wheres[] = sprintf("project_id = %d", $project_id);
+			$wheres[] = sprintf("A.project_id = %d", $project_id);
+		}
+		$param_values = array();
+		if ($params && !empty($params['sql']))
+		{
+			$params_sql = $params['sql'];
+			if (is_array($params['sql'])) $params_sql = implode(' AND ', $params['sql']);
+			$wheres[] = $params_sql;
+			if (!empty($params['values'])) $param_values = $params['values'];
 		}
 /*
 		if ($category_id_list)
@@ -77,7 +85,7 @@ class Model_wbs extends CI_Model
 
 		if ($wheres) $where = ' WHERE '.implode(' AND ', $wheres);
 
-		return $sql.$where;
+		return array($sql.$where, $param_values);
 	}
 
 	private static function get_like_where_clause($search)

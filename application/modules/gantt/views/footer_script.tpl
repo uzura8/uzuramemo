@@ -324,6 +324,9 @@ $(function(){
 	$('#date_from').change(function() {
 		ajax_get_list();
 	});
+	$('#work_class_id').change(function() {
+		ajax_get_list();
+	});
 	$('#gntt_now').click(function() {
 		var date = $.exDate();
 		var date_from = date.toChar('yyyy-mm-dd');
@@ -343,7 +346,8 @@ function get_added_date(date_from, add_days)
 
 	var range = $("#range").val();
 	var order = $("#select_order").val();
-	ajax_list({/literal}{$from}{literal}, order, date_from, range);
+	var work_class_id = $("#work_class_id").val();
+	ajax_list({/literal}{$from}{literal}, order, date_from, range, work_class_id);
 }
 
 $(function(){
@@ -353,7 +357,7 @@ $(function(){
 	ajax_list({/literal}{$from}{literal}, order, date_from, range);
 });
 
-function ajax_list(offset, order, date_from, range){
+function ajax_list(offset, order, date_from, range, work_class_id){
 	var id  = 'list';
 	var url = '{/literal}{site_url uri=gantt/ajax_gantt_list}{literal}';
 
@@ -361,7 +365,7 @@ function ajax_list(offset, order, date_from, range){
 	$.ajaxSetup( { cache : false } );
 	$("#" + id).show();
 
-	$.get(url, { nochache:(new Date()).getTime(), 'project_id':{/literal}'{$project_id}'{literal}, 'search':{/literal}'{$search}'{literal}, 'order':order, 'from':offset, 'date_from':date_from, 'range':range }, function(data){
+	$.get(url, { nochache:(new Date()).getTime(), 'project_id':{/literal}'{$project_id}'{literal}, 'search':{/literal}'{$search}'{literal}, 'order':order, 'from':offset, 'date_from':date_from, 'range':range, 'work_class_id':work_class_id }, function(data){
 		if (data.length>0){
 			$("#" + id).html(data);
 		}
@@ -372,7 +376,8 @@ function ajax_get_list() {
 	var range     = $("#range").val();
 	var date_from = $("#date_from").val();
 	var order     = $("#select_order").val();
-	ajax_list({/literal}{$from}{literal}, order, date_from, range);
+	var work_class_id = $("#work_class_id").val();
+	ajax_list({/literal}{$from}{literal}, order, date_from, range, work_class_id);
 }
 {/literal}
 </script>

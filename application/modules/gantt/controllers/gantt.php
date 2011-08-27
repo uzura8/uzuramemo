@@ -12,6 +12,7 @@ class Gantt extends MY_Controller
 	private $next_url;
 	private $date_from = '';
 	private $range = 60;
+	private $work_class_id = 0;
 
 	function __construct()
 	{
@@ -56,6 +57,7 @@ class Gantt extends MY_Controller
 		$this->range = $this->_get_post_params('range', $validate_rules['range']['default_value'], $validate_rules['range']['rules']);
 		$this->date_from = $this->_get_post_params('date_from', $validate_rules['date_from']['default_value'], $validate_rules['date_from']['rules']);
 		if (!$this->date_from) $this->date_from = date('Y-m-d');
+		$this->work_class_id = $this->_get_post_params('work_class_id', $validate_rules['work_class_id']['default_value'], $validate_rules['work_class_id']['rules']);
 
 		$options = $this->_get_form_dropdown_options_order();// select:order
 		$this->order  = $this->_get_post_params('order', 0, sprintf('intval|less_than[%d]', count($options)));
@@ -149,6 +151,8 @@ class Gantt extends MY_Controller
 		$view_data['day_list']  = $day_list;
 		$view_data['holidays']  = $holidays;
 
+		$params = array();
+		if ($this->work_class_id) $params = array('sql' => array('A.work_class_id = ?'), 'values' => array($this->work_class_id));
 		$list = $this->model_wbs->get_main_list($this->offset,
 																						$this->limit,
 																						$this->_get_order_sql_clause(),
@@ -156,7 +160,9 @@ class Gantt extends MY_Controller
 																						$this->project_id,
 																						true,
 																						'B.name as project_name, B.key_name as project_key_name, '
-																					. 'C.name as program_name, C.key_name as program_key_name, D.name as work_class_name, A.*');
+																					. 'C.name as program_name, C.key_name as program_key_name, D.name as work_class_name, A.*',
+																						$params);
+		$view_data['list'] = array();
 		foreach ($list as $row)
 		{
 			$row['finish_date'] = $this->date_util->get_finish_date($row['start_date'], ceil($row['estimated_time']), $holidays);
@@ -180,9 +186,17 @@ class Gantt extends MY_Controller
 		$view_data['gantt_list'] =  $gantt_list;
 */
 		// 記事件数を取得
-		$count_all = $this->model_wbs->get_count_all($this->search, $this->project_id, true);
+		$count_all = $this->model_wbs->get_count_all($this->search, $this->project_id, true, $params);
 		$view_data['pagination'] = $this->_get_pagination_simple($count_all, 'gantt/ajax_gantt_list');
 		$view_data['count_all']  = $count_all;
+
+		$view_data['head_info'] = '';
+		if ($count_all)
+		{
+			$width = 420 + $this->range * 15;
+			$view_data['head_info'] = head_style(sprintf('div#gantt {width: %spx}', $width));
+		}
+
 		//$this->smarty_parser->parse('ci:gantt/list.tpl', $view_data);
 		$this->load->view('gantt/list', $view_data);
 	}
@@ -334,6 +348,7 @@ class Gantt extends MY_Controller
 				'error_messages'  => array('min' => ''),
 				'width'  => 30,
 				'options' => $this->_get_dropdown_options_work_class_id(),
+				'default_value' => 0,
 			),
 			'date_from' => array(
 				'label' => '始点',
@@ -417,14 +432,7 @@ class Gantt extends MY_Controller
 		}
 		$style = implode(PHP_EOL, $styles);
 
-		return <<<EOT
-<style type="text/css">
-<!--
-{$style}
--->
-</style>
-
-EOT;
+		return head_style($style);
 	}
 }
 
