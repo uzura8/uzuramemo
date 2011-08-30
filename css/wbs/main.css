@@ -48,12 +48,16 @@
 #wbs_wbs_index .article_meta_top .banner {
 	float: left;
 	text-align: left;
-	width: 30%;
+	width: 50%;
 }
 #wbs_wbs_index .article_meta_top .meta_info {
 	float: right;
 	text-align: right;
-	width: 67%;
+	width: 40%;
+}
+
+#wbs_wbs_index .form_box_each table td {
+	vertical-align :middle;
 }
 
 #wbs_wbs_index .form_box_each span.label {
@@ -61,7 +65,7 @@
 	font-size: 10px;
 	text-align: right;
 	padding-top: 4px;
-	margin-right: 3px;
+	margin-right: 1px;
 }
 
 #wbs_wbs_index .form_box_each span.title {

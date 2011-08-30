@@ -43,18 +43,22 @@
 <p class="autogrow" id="body{$row.id}" style="width: 300px">{if $row.body}{$row.body|nl2br|auto_link}{else}&nbsp;&nbsp;{/if}</p>
 
 <div class="form_box_each">
+<table border="0" cellspacing="0" cellpadding="0">
+<tr><td>
 	<span class="label">開始日</span><input name="input_start_date_{$row.id}" id="input_start_date_{$row.id}" class="width_10 input_date" type="text" value="{$row.start_date}">
-	<span class="label sl5">期日</span><input name="input_due_date_{$row.id}" id="input_due_date_{$row.id}" class="width_10 input_date" type="text" value="{$row.due_date}">
+	<span class="label sl2">期日</span><input name="input_due_date_{$row.id}" id="input_due_date_{$row.id}" class="width_10 input_date" type="text" value="{$row.due_date}">
 	<span class="btnSpan"><input type="button" name="btn_date_{$row.id}" value="更新" id="btn_date_{$row.id}" class="btn_date"></span>
 
-	<span class="title sl">工数:</span>
+	<span class="title sl5">工数:</span>
 	<span class="label">見積</span>
 	<input name="estimated_time" id="input_estimated_time_{$row.id}" class="width_3 input_each" type="text" value="{$row.estimated_time}"><span class="after_label">人日</span>
-	<span class="label sl5">実績</span>
+	<span class="label sl2">実績</span>
 	<input name="spent_time" id="input_spent_time_{$row.id}" class="width_3 input_each" type="text" value="{$row.spent_time}"><span class="after_label">人日</span>
 
-	<span class="title sl">進捗:</span>
+	<span class="title sl5">進捗:</span>
 	<input name="percent_complete" id="input_percent_complete_{$row.id}" class="width_3 input_each" type="text" value="{$row.percent_complete}"><span class="after_label">%</span>
+</td></tr>
+</table>
 </div>
 
 </div>
