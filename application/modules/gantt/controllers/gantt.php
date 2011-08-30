@@ -409,11 +409,11 @@ class Gantt extends MY_Controller
 	function _get_dropdown_options_project_id()
 	{
 		$return = array();
-		$return['0'] = array('name' => '選択してください', 'extra' => 'class="program_id_0"');
+		$return['0'] = array('name' => '選択してください', 'extra' => 'id="option_program_id_0"');
 		$rows = $this->model_project->get_main_list(0, 0, 'B.sort, A.sort');
 		foreach ($rows as $row)
 		{
-			$return[$row['id']] = array('name' => $row['name'], 'extra' => sprintf('class="program_id_%d"', $row['program_id']));
+			$return[$row['id']] = array('name' => $row['name'], 'extra' => sprintf('id="option_program_id_%d"', $row['program_id']));
 		}
 
 		return $return;

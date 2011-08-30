@@ -265,55 +265,6 @@ function set_gantt_row(key, values){
 {/literal}
 </script>
 
-<script type="text/javascript">
-{literal}
-$('#main_form_submit').button();
-$('#main_form').validate({
-	rules : { {/literal}{convert2jquery_validate_rules form_items=$form}{literal} },
-	messages : { {/literal}{convert2jquery_validate_messages form_items=$form}{literal} },
-	errorClass: "validate_error",
-	errorElement: "span",
-//	errorLabelContainer: "#main_form_errorList",
-//	wrapper: "li",
-	submitHandler: function(form){
-		$(form).loading({
-			img: '{/literal}{site_url}{literal}img/loading.gif',
-			align: 'center'
-		});
-		$(form).ajaxSubmit({
-			success: function(data){
-				// メッセージ入力欄をクリア
-{/literal}
-{foreach from=$form key=key item=items}
-{if $items.type == 'text'}$( 'input#{$key}' ).val( '' );
-{elseif $items.type == 'textarea'}$( '{$items.type}#{$key}' ).val( '' );
-{elseif $items.type == 'select'}$( '{$items.type}#{$key}' ).val(0);
-{/if}
-{/foreach}
-{literal}
-				$('span').removeClass('validate_success');
-				$('span').removeClass('validate_error');
-				$('#name_result').fadeOut();
-				$('#key_name_result').fadeOut();
-				//$('#name').focus();
-				$('select#project_id').focus();
-				// $('#main_form_box').hide('fast');
-				ajax_list(0, 1);
-				$('select#select_order').val('1');
-				$.jGrowl('{/literal}{$page_name}{literal}を作成しました。');
-			},
-			error: function(){
-				$.jGrowl('{/literal}{$page_name}{literal}を作成できませんでした。');
-			},
-			complete: function(){
-				$(form).loading(false);
-			}
-		});
-	}
-});
-{/literal}
-</script>
-
 <script type="text/javascript" src="{site_url}js/lib/exdate.js"></script>
 <script type="text/javascript">
 {literal}
@@ -334,11 +285,12 @@ $(function(){
 		ajax_get_list();
 
 		var program_id = $("#program_id").val();
-		if (program_id) {
+		if (program_id > 0) {
 			$("#project_id option").addClass('hide');
-			$('#project_id .program_id_' + program_id).removeClass("hide");
-		} else {
-			$('#project_id').removeClass("hide");
+			$('#option_program_id_0').removeClass("hide");
+			$('#option_program_id_' + program_id).removeClass("hide");
+		} else if (program_id == 0) {
+			$('#project_id option').removeClass("hide");
 		}
 	});
 	$('#project_id').change(function() {
