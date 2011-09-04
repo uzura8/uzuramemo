@@ -12,7 +12,7 @@ class Gantt extends MY_Controller
 	private $next_url;
 	private $date_from = '';
 	private $range = 60;
-	private $work_class_id = 0;
+	private $work_class_ids = 0;
 
 	function __construct()
 	{
@@ -56,7 +56,7 @@ class Gantt extends MY_Controller
 		$this->range = $this->_get_post_params('range', $validate_rules['range']['default_value'], $validate_rules['range']['rules']);
 		$this->date_from = $this->_get_post_params('date_from', $validate_rules['date_from']['default_value'], $validate_rules['date_from']['rules']);
 		if (!$this->date_from) $this->date_from = date('Y-m-d');
-		$this->work_class_id = $this->_get_post_params('work_class_id', $validate_rules['work_class_id']['default_value'], $validate_rules['work_class_id']['rules']);
+		$this->work_class_ids = $this->_get_post_params('work_class_id', $validate_rules['work_class_id']['default_value'], $validate_rules['work_class_id']['rules']);
 		$this->program_id = $this->_get_post_params('program_id', $validate_rules['program_id']['default_value'], $validate_rules['program_id']['rules']);
 		$this->project_id = $this->_get_post_params('project_id', $validate_rules['project_id']['default_value'], $validate_rules['project_id']['rules']);
 
@@ -163,10 +163,14 @@ class Gantt extends MY_Controller
 			$params['sql'][]    = 'B.program_id = ?';
 			$params['values'][] = $this->program_id;
 		}
-		if ($this->work_class_id)
+		if ($this->work_class_ids)
 		{
-			$params['sql'][]    = 'A.work_class_id = ?';
-			$params['values'][] = $this->work_class_id;
+			list($sql, $values) = $this->db_util->get_where_clauses('A.work_class_id', $this->work_class_ids);
+			if ($sql)
+			{
+				$params['sql'] = array_merge($params['sql'], $sql);
+				$params['values'] = array_merge($params['values'], $values);
+			}
 		}
 		$list = $this->model_wbs->get_main_list($this->offset,
 																						$this->limit,
@@ -364,12 +368,13 @@ class Gantt extends MY_Controller
 			),
 			'work_class_id' => array(
 				'label' => '作業分類',
-				'type'  => 'select',
-				'rules' => 'trim|is_natural_no_zero',
+				'type'  => 'multiselect',
+				'rules' => 'is_natural_no_zero',
 				'error_messages'  => array('min' => ''),
 				'width'  => 30,
 				'options' => $this->_get_dropdown_options_work_class_id(),
 				'default_value' => 0,
+				'size'  => 3,
 			),
 			'date_from' => array(
 				'label' => '始点',

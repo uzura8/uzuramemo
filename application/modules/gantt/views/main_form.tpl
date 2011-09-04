@@ -4,7 +4,7 @@
 {if $ignore_keys}{if $ignore_keys|strpos:$key !== false}{php}continue;{/php}{/if}{/if}
 {if $items.disabled_for_insert}{php}continue;{/php}{/if}
 <div class="form_row{if $items.type == 'hidden'} display_none{/if}">
-{if $items.type == 'text' || $items.type == 'textarea' || $items.type == 'select'}
+{if $items.type == 'text' || $items.type == 'textarea' || $items.type == 'select' || $items.type == 'multiselect'}
 	<label for="{$key}">{$items.label}</label>
 {/if}
 	<div class="input">
@@ -20,6 +20,8 @@
 	<textarea name="{$key}" id="{$key}"{if $items.cols} cols="{$items.cols}"{/if}{if $items.rows} rows="{$items.rows}"{/if}{$smarty.capture.item_class|smarty:nodefaults}{$smarty.capture.item_class|smarty:nodefaults}{if $smarty.capture.form_help} placeholder="{$smarty.capture.form_help}"{/if}>{if $items.value}{$items.value}{/if}</textarea>
 {elseif $items.type == 'select'}
 {form_dropdown name=`$key` options=`$items.options` selected='' extra=" id=\"$key\""}{if $items.after_label}<span class="after_label">{$items.after_label}</span>{/if}
+{elseif $items.type == 'multiselect'}
+{form_multiselect name=`$key` options=`$items.options` selected='' extra=" id=\"$key\" size=\"`$items.size`\""}{if $items.after_label}<span class="after_label">{$items.after_label}</span>{/if}
 {elseif $items.type == 'hidden'}
 	<input type="hidden" name="{$key}" id="{$key}"{if $items.value} value="{$items.value}"{/if}>
 {/if}

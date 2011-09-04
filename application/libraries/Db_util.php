@@ -128,4 +128,31 @@ class Db_util
 
 		return $return;
 	}
+
+	public function get_where_clauses($key, $values, $is_ignore_empty_value = true)
+	{
+		$sql = array();
+		$params = array();
+
+		if (is_array($values))
+		{
+			$prepares = array();
+			foreach ($values as $value)
+			{
+				if ($is_ignore_empty_value && empty($value)) continue;
+
+				$prepares[] = '?';
+				$params[]   = $value;
+			}
+			if ($prepares) $sql[] = sprintf('%s IN (%s)', $key, implode(',', $prepares));
+		}
+		else
+		{
+			if (!$is_ignore_empty_value || ($is_ignore_empty_value && !empty($values)))
+			$sql[]    = $key.' = ?';
+			$params[] = $values;
+		}
+
+		return array($sql, $params);
+	}
 }

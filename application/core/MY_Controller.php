@@ -176,7 +176,21 @@ class MY_Controller extends CI_Controller
 		$value = $this->input->get_post($key, $xss_clean);
 		if ($value === false) return $default;
 
-		return $valid_value = $this->site_util->simple_validation($value, $default, $rules);
+		$valid_value = '';
+		if (is_array($value))
+		{
+			$valid_value = array();
+			foreach ($value as $each)
+			{
+				$valid_value[] = $this->site_util->simple_validation($each, $default, $rules);
+			}
+		}
+		else
+		{
+			$valid_value = $this->site_util->simple_validation($value, $default, $rules);
+		}
+
+		return $valid_value;
 	}
 
 	protected function _validate_unique_check($table, $key, $value, $error_message = 'その %s は既に登録されています')
