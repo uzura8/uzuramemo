@@ -308,6 +308,13 @@ $(function(){
 	$('#gntt_prev_lerge').click(function() { get_added_date($("#date_from").val(), -28); });
 });
 
+function set_list_width()
+{
+	var range = $("#range").val();
+	var width = 480 + range * 15;
+	$("div#list").css("width", width + 'px');
+}
+
 function get_added_date(date_from, add_days)
 {
 	var date_from = add_date(date_from, add_days);
@@ -325,6 +332,7 @@ $(function(){
 	var order = $("#select_order").val();
 	var date_from = '';
 	var range = 0;
+	set_list_width();
 	ajax_list({/literal}{$from}{literal}, order, date_from, range);
 });
 
@@ -350,6 +358,7 @@ function ajax_get_list() {
 	var work_class_id = $("#work_class_id").val();
 	var program_id = $("#program_id").val();
 	var project_id = $("#project_id").val();
+	set_list_width();
 	ajax_list({/literal}{$from}{literal}, order, date_from, range, work_class_id, program_id, project_id);
 }
 {/literal}

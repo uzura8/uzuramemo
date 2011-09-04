@@ -205,11 +205,6 @@ class Gantt extends MY_Controller
 		$view_data['count_all']  = $count_all;
 
 		$view_data['head_info'] = '';
-		if ($count_all)
-		{
-			$width = 420 + $this->range * 15;
-			$view_data['head_info'] = head_style(sprintf('div#gantt {width: %spx}', $width));
-		}
 
 		//$this->smarty_parser->parse('ci:gantt/list.tpl', $view_data);
 		$this->load->view('gantt/list', $view_data);
