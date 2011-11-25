@@ -181,7 +181,7 @@
 </tr>
 <tr>
 <th>引用元</th>
-	<td class="td_w_break" colspan="5" style="padding:5px;">{$row.explain|auto_link}</td>
+	<td class="td_w_break" colspan="5" style="padding:5px;">{$row.explain|nl2br|auto_link}</td>
 </tr>
 <tr>
 	<th style="width:60px;">重要度</th>
