@@ -56,7 +56,7 @@ class MY_Controller extends CI_Controller
 	{
 		if (!empty($GLOBALS['ALLOW_IP_LIST']))
 		{
-			if (!in_array($this->input->server('REMOTE_ADDR'), $GLOBALS['AUTO_LOGIN_ACCEPT_IP_LIST'])) common_error();
+			if (!in_array($this->input->server('REMOTE_ADDR'), $GLOBALS['ALLOW_IP_LIST'])) common_error();
 		}
 	}
 
