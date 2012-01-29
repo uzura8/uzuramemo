@@ -97,7 +97,12 @@ class MY_Controller extends CI_Controller
 
 		// 以下、管理画面の処理
 		define('IS_ADMIN', true);
+
 		if (UM_SLAVE_DB_MODE) show_error('admin module is disabled.');
+		if (!empty($GLOBALS['ADMIN_ALLOW_IP_LIST']))
+		{
+			if (!in_array($this->input->server('REMOTE_ADDR'), $GLOBALS['ADMIN_ALLOW_IP_LIST'])) common_error();
+		}
 
 		if (CURRENT_ACTION)
 		{

@@ -96,6 +96,10 @@ $GLOBALS['AUTO_LOGIN_ACCEPT_IP_LIST'] = array(
 $GLOBALS['ALLOW_IP_LIST'] = array(
 );
 
+// 管理画面へのアクセスを許可するIP
+$GLOBALS['ADMIN_ALLOW_IP_LIST'] = array(
+);
+
 
 // 表示関連設定
 
