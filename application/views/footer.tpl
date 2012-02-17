@@ -3,7 +3,7 @@
 {include file='ci:util/main_menu.tpl'}
 </div><!--foot_menu-->
 <div id="footer">
-Copyright : {$smarty.const.COPYRIGHT_SINCE} - {$smarty.now|date_format:"%Y"} {$smarty.const.COPYRIGHT_URL}
+Copyright (C) {$smarty.const.COPYRIGHT_SINCE} - {$smarty.now|date_format:"%Y"} {$smarty.const.COPYRIGHT_URL}
 </div><!--footer-->
 </div><!--container-->
 {$foot_info}
