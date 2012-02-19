@@ -23,7 +23,8 @@ class MY_Controller extends CI_Controller
 		// load configs
 		$this->config->load(CURRENT_MODULE, true);
 
-		if (!defined('SITE_TITLE')) define('SITE_TITLE', $this->config->item('site_title', CURRENT_MODULE));
+		// if (!defined('SITE_TITLE')) define('SITE_TITLE', $this->config->item('site_title', CURRENT_MODULE));
+		if (!defined('SITE_TITLE')) define('SITE_TITLE', SITE_TITLE_WEBMEMO);
 	}
 
 	private function _set_current_controller_action()
