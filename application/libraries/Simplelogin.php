@@ -136,7 +136,7 @@ class Simplelogin
 	 * @param	string
 	 * @return	bool
 	 */
-	function login($user = '', $password = '') {
+	function login($user = '', $password = '', $is_save = false) {
 		//Put here for PHP 4 users
 		$this->CI =& get_instance();		
 
@@ -177,8 +177,30 @@ class Simplelogin
 		//Set logged_in to true
 		$this->CI->session->set('logged_in', true, 'admin_user');			
 
+		if ($is_save) $this->set_cookie4auto_login();
+
 		//Login was successful			
 		return true;
+	}
+
+	private function set_cookie4auto_login()
+	{
+		$expire = time() + 2592000; // 30 days
+		setcookie($this->CI->session->getName(), $this->CI->session->getID(), $expire, $this->get_cookie_path());
+	}
+
+	/**
+	 * cookie_path を OPENPNE_URLから抜き出す
+	 */
+	public function get_cookie_path()
+	{
+		$url = parse_url(BASE_URL);
+		if (substr($url['path'], -1) != '/')
+		{
+			$url['path'] .= '/';
+		}
+
+		return $url['path'];
 	}
 
 	/**
@@ -190,6 +212,13 @@ class Simplelogin
 	function logout() {
 		//Put here for PHP 4 users
 		$this->CI =& get_instance();		
+
+		// 自動ログインcookie削除
+		$session_name = $this->CI->session->getName();
+		if (isset($_COOKIE[$session_name]))
+		{
+			setcookie($session_name, '', time() - 3600, $this->get_cookie_path());
+		}
 
 		//Destroy session
 		$this->CI->session->remove(null, 'admin_user');

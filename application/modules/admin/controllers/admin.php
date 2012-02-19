@@ -79,11 +79,12 @@ class Admin extends MY_Controller
 		$this->load->library('form_validation');
 		$this->form_validation->set_rules('username', 'アカウント名', 'trim|required|min_length[5]|max_length[12]|alpha_numeric');
 		$this->form_validation->set_rules('password', 'パスワード', 'trim|required|min_length[5]|max_length[12]');
+		$this->form_validation->set_rules('is_save', '自動ログイン', 'trim|is_natural_no_zero|max_length[1]');
 
 		$message = '';
 		if ($this->form_validation->run())
 		{
-			if ($this->simplelogin->login(set_value('username'), set_value('password')))
+			if ($this->simplelogin->login(set_value('username'), set_value('password'), set_value('is_save')))
 			{
 				// ログイン成功
 				admin_redirect();
