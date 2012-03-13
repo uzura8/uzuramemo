@@ -101,7 +101,7 @@ class Session {
 	{
 		$CI   =& get_instance();
 		$path = $CI->config->item('session');
-		if ($this->setPath() != $path['save_path'])
+		if (!empty($path['save_path']) && $this->setPath() != $path['save_path'])
 		{
 			$this->setPath($path['save_path']);
 		}

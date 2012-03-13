@@ -132,6 +132,13 @@ $GLOBALS['DISABLED_MODULES'] = array(
 );
 
 
+// session 設定
+ini_set('session.gc_maxlifetime', 60 * 24 * 5);
+ini_set('session.gc_probability', 1);
+ini_set('session.gc_divisor', 10000);
+//session_save_path();
+
+
 // 動的設定項目
 
 // debugモード設定
