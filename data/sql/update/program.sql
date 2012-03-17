@@ -1,6 +1,3 @@
-DROP TABLE IF EXISTS `program`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `program` (
   `id` int(8) NOT NULL AUTO_INCREMENT,
   `name` varchar(200) NOT NULL DEFAULT '',
@@ -18,4 +15,3 @@ CREATE TABLE `program` (
   UNIQUE KEY `name` (`name`),
   UNIQUE KEY `key_name` (`key_name`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;

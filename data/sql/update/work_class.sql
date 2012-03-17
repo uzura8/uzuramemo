@@ -1,6 +1,4 @@
-DROP TABLE IF EXISTS `work_class`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+SET NAMES utf8;
 CREATE TABLE `work_class` (
   `id` tinyint(3) NOT NULL AUTO_INCREMENT,
   `name` varchar(200) NOT NULL DEFAULT '',
@@ -12,7 +10,6 @@ CREATE TABLE `work_class` (
   UNIQUE KEY `name` (`name`),
   KEY `sort` (`sort`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
 
 INSERT INTO work_class VALUES (NULL, 'é¿ëï', NULL, '#B8EEFF', '1', '0');
 INSERT INTO work_class VALUES (NULL, 'ÉåÉrÉÖÅ[', NULL, '#FFB083', '2', '0');
