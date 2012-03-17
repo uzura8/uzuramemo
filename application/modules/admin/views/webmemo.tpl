@@ -32,8 +32,8 @@
 	<span class="f_exp_s box_no_spc">※140文字以内</span></td>
 </tr>
 <tr>
-	<th width="70" rowspan="3" class="f_11">{$form.memo_category_id.label}</th>
-	<td rowspan="3">
+	<th width="70" rowspan="{if $smarty.const.UM_USE_TWITTER_NOTIFY}4{else}3{/if}" class="f_11">{$form.memo_category_id.label}</th>
+<td rowspan="{if $smarty.const.UM_USE_TWITTER_NOTIFY}4{else}3{/if}">
 {include file='ci:admin/util/form_select_category.tpl'}
 		<span class="f_exp_s box_no_spc">&gt;&gt;&nbsp;<a href="{admin_url uri=webmemo/category}" target="memo_category" onClick="window.open(this.href,this.target).focus();return false;">カテゴリ管理</a></span>
 	</td>
@@ -68,6 +68,16 @@
 	</td>
 </td>
 </tr>
+{if $smarty.const.UM_USE_TWITTER_NOTIFY}
+<tr>
+	<th width="60">通知</th>
+	<td>
+		<ul class="simple_list">
+			<li><input type="checkbox" name="is_tweet" value="1" id="is_tweet_1"{if $session.is_tweet == 1} checked="checked"{/if} /><label for="is_tweet_1" class="space_left_5">{$form.is_tweet.label}</label></li>
+		</ul>
+	</td>
+</tr>
+{/if}
 {capture name="form_button_row"}
 <tr>
 <td colspan="4"><div class="box_005">

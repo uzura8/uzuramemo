@@ -61,6 +61,13 @@ define('UM_USE_AFFILIATE_OTHER', false);
 //   https://www.google.com/support/webmasters/bin/answer.py?answer=35659&hl=ja
 define('GOOGLE_SITE_VERIFICATION_KEY', '');
 
+// use twitter notify
+define('UM_USE_TWITTER_NOTIFY', false);
+define('UM_TW_CONSUMER_KEY', '');
+define('UM_TW_CONSUMER_SECRET', '');
+define('UM_TW_ACCESS_TOKEN', '');
+define('UM_TW_ACCESS_TOKEN_SECRET', '');
+
 
 // 機能設定
 
