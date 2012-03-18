@@ -676,6 +676,7 @@ class Admin_webmemo extends MY_Controller
 			$columns['private_flg'] = '';
 			$columns['quote_flg']   = '';
 			unset($columns['private_quote_flg']);
+			unset($columns['is_tweet']);
 		}
 
 		return array_keys($columns);
