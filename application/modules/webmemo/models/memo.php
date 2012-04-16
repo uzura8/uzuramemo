@@ -176,7 +176,9 @@ class Memo extends CI_Model
 		$values = $CI->db_util->set_common_column_value($values);
 		$values['sort'] = $CI->db_util->get_sort_max_next('memo', 'webmemo');
 
-		return $this->db->insert('memo', $values);
+		if ($this->db->insert('memo', $values)) return $this->db->insert_id();
+
+		return false;
 	}
 
 	public function delete4id($id)

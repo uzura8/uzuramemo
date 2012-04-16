@@ -15,11 +15,20 @@
 <input type="text" name="username" value="{set_value name=username}" id="username" style="width: 12em; height: 1.2em;" />
 </td>
 </tr>
+<tr>
 <td style="width:90px;">パスワード</td>
 <td>
 <input type="password" name="password" id="password" style="width: 12em; height: 1.2em;" />
 </td>
 </tr>
+<tr>
+<td style="width:90px;">&nbsp;</td>
+<td>
+<input type="checkbox" name="is_save" value="1" {set_checkbox name=is_save value=1 default=true} />
+<span>次回から自動的にログイン</span>
+</td>
+</tr>
+<tr>
 <td colspan="2"><input type="submit" name="submit" value="ログイン" class="btn" /></td>
 </tr>
 </table>

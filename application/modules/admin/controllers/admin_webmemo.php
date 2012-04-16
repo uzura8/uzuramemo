@@ -118,6 +118,12 @@ class Admin_webmemo extends MY_Controller
 		$row_old = array();
 		if ($edit_id) $row_old = $this->db_util->get_row4id('memo', $edit_id, $this->_get_save_target_colums('memo'));
 
+		// tweet 可能な記事かどうかを確認
+		if (UM_USE_TWITTER_NOTIFY && !$this->_check_private_flg_for_tweet())
+		{
+			admin_redirect('webmemo/index#frm', '非公開の記事は tweeter に通知できません');
+		}
+
 		// 重複登録チェック
 		if ($this->_check_duplicate_registration_memo((bool)$edit_id))
 		{
@@ -134,8 +140,16 @@ class Admin_webmemo extends MY_Controller
 		else
 		{
 			// 新規登録時
-			$this->memo->insert($values);
+			$edit_id = $this->memo->insert($values);
 			$message = '登録しました';
+		}
+
+		if (UM_USE_TWITTER_NOTIFY)
+		{
+			ini_set('include_path', ini_get('include_path').PATH_SEPARATOR.UM_BASE_DIR.'application/libraries/vender/twitteroauth');
+			require_once('twitteroauth.php');
+			$twitter = new TwitterOAuth(UM_TW_CONSUMER_KEY,UM_TW_CONSUMER_SECRET,UM_TW_ACCESS_TOKEN,UM_TW_ACCESS_TOKEN_SECRET);
+			$req = $twitter->OAuthRequest('https://twitter.com/statuses/update.xml','POST',array('status' => $this->_get_tweet_sentence($edit_id)));
 		}
 
 		$redirect_to = '';
@@ -149,7 +163,7 @@ class Admin_webmemo extends MY_Controller
 
 	protected function _validation_rules_memo()
 	{
-		return array(
+		$rules = array(
 			'title' => array(
 				'label' => 'タイトル',
 				'rules' => 'trim|required|max_length[140]',
@@ -186,6 +200,16 @@ class Admin_webmemo extends MY_Controller
 				'rules' => 'trim',
 			),
 		);
+		if (UM_USE_TWITTER_NOTIFY)
+		{
+			$rules['is_tweet'] = array(
+				'label' => 'twitterに通知',
+				'rules' => 'trim|is_natural|less_than[2]',
+				'default' => 0,
+			);
+		}
+
+		return $rules;
 	}
 
 	public function execute_edit_memo_list()
@@ -293,6 +317,9 @@ class Admin_webmemo extends MY_Controller
 
 		if (isset($divided_private_quote_flgs['private_flg'])) $save_values['private_flg'] = $divided_private_quote_flgs['private_flg'];
 		if (isset($divided_private_quote_flgs['quote_flg']))   $save_values['quote_flg']   = $divided_private_quote_flgs['quote_flg'];
+
+		// twitter notify用データは保存対象外
+		if (isset($save_values['is_tweet'])) unset($save_values['is_tweet']);
 
 		return $save_values;
 	}
@@ -649,6 +676,7 @@ class Admin_webmemo extends MY_Controller
 			$columns['private_flg'] = '';
 			$columns['quote_flg']   = '';
 			unset($columns['private_quote_flg']);
+			unset($columns['is_tweet']);
 		}
 
 		return array_keys($columns);
@@ -673,6 +701,29 @@ class Admin_webmemo extends MY_Controller
 		$values = site_divide2private_quote_flg($private_quote_flg_new);
 
 		return array($values['private_flg'], $values['quote_flg']);
+	}
+
+	private function _check_private_flg_for_tweet()
+	{
+		if ($this->session->get('is_tweet', 'memo') == 1 && !$this->session->get('private_quote_flg', 'memo'))
+		{
+			return false;
+		}
+
+		return true;
+	}
+
+	private function _get_tweet_sentence($memo_id)
+	{
+		$article_url = site_url('article/'.$memo_id);
+		$possible_str_width = 136 - strlen($article_url);
+
+		$prefix = '';
+		if ($this->session->get('private_quote_flg', 'memo') == 1) $prefix = '【引用】';
+
+		$tweet_str = mb_strimwidth($prefix.$this->session->get('title', 'memo'), 0, $possible_str_width, '…');
+
+		return $tweet_str.' '.$article_url;
 	}
 
 	// 入力補助機能

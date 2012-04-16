@@ -61,6 +61,13 @@ define('UM_USE_AFFILIATE_OTHER', false);
 //   https://www.google.com/support/webmasters/bin/answer.py?answer=35659&hl=ja
 define('GOOGLE_SITE_VERIFICATION_KEY', '');
 
+// use twitter notify
+define('UM_USE_TWITTER_NOTIFY', false);
+define('UM_TW_CONSUMER_KEY', '');
+define('UM_TW_CONSUMER_SECRET', '');
+define('UM_TW_ACCESS_TOKEN', '');
+define('UM_TW_ACCESS_TOKEN_SECRET', '');
+
 
 // 機能設定
 
@@ -96,6 +103,10 @@ $GLOBALS['AUTO_LOGIN_ACCEPT_IP_LIST'] = array(
 $GLOBALS['ALLOW_IP_LIST'] = array(
 );
 
+// 管理画面へのアクセスを許可するIP
+$GLOBALS['ADMIN_ALLOW_IP_LIST'] = array(
+);
+
 
 // 表示関連設定
 
@@ -127,6 +138,13 @@ $GLOBALS['DISABLED_MODULES'] = array(
 	'task',
 	'welcome',
 );
+
+
+// session 設定
+ini_set('session.gc_maxlifetime', 60 * 24 * 5);
+ini_set('session.gc_probability', 1);
+ini_set('session.gc_divisor', 10000);
+//session_save_path();
 
 
 // 動的設定項目

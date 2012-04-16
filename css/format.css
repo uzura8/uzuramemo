@@ -41,6 +41,7 @@ p {
 	width: 920px;
 	margin: 0px auto 5px auto;
 	padding: 0;
+	overflow: auto;
 }
 #header{
 	background-color: #FFFFFF;
@@ -89,7 +90,7 @@ p {
 	background-color:#2F2F2F;
 	text-align: left;
 	margin: 0;
-	padding: 4px 5px 4px 10px;
+	padding: 2px 5px 2px 10px;
 }
 #top_menu ul {
 	list-style: none;
@@ -219,7 +220,7 @@ form.momo_footer_form {
 	background-color:#2F2F2F;
 	text-align: center;
 	margin: 10px 0  0;
-	padding: 4px 5px 4px 10px;
+	padding: 2px 5px 2px 10px;
 }
 #foot_menu ul {
 	list-style: none;
