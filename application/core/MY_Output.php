@@ -9,12 +9,12 @@ class MY_Output extends CI_Output
 
 	public function set_json_output($array)
 	{
-		$this->set_header('Content-Type: text/javascript; charset=utf-8');
-		$this->set_output(json_encode($array));
+		$this->output->set_header('Content-Type: text/javascript; charset=utf-8');
+		$this->output->set_output(json_encode($array));
 	}
 
 	public function set_ajax_output_error($message = '')
 	{
-		$this->set_status_header('403', $message);
+		$this->output->set_status_header('403', $message);
 	}
 }

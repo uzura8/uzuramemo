@@ -249,7 +249,7 @@ class Gantt extends MY_Controller
 			return;
 		}
 
-		$this->set_output('true');
+		$this->output->set_output('true');
 	}
 
 	private function _get_pagination_simple($count_all, $uri = '')

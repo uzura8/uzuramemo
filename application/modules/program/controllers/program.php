@@ -182,13 +182,13 @@ class Program extends MY_Controller
 
 		// 登録
 		$values = array('sort' => set_value('value'));
-		if (!$this->model_program->update4id($values, $id))
+		if (!$return = $this->model_program->update4id($values, $id))
 		{
 			$this->output->set_ajax_output_error();
 			return;
 		}
 
-		$this->set_output('true');
+		$this->output->set_output('true');
 	}
 
 	public function ajax_execute_delete()

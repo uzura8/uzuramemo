@@ -216,7 +216,7 @@ class Wbs extends MY_Controller
 			return;
 		}
 
-		$this->set_output('true');
+		$this->output->set_output('true');
 	}
 
 	public function ajax_execute_update_common()
@@ -320,7 +320,7 @@ class Wbs extends MY_Controller
 			return;
 		}
 
-		$this->set_output('true');
+		$this->output->set_output('true');
 	}
 
 	public function ajax_execute_delete()
