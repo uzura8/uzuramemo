@@ -24,6 +24,7 @@ define('ADMIN_MAIL_ADDRESS', 'admin@example.com');
 // 表示文言設定
 
 // サイト名
+define('SITE_TITLE', 'プロジェクト管理');
 define('SITE_TITLE_WEBMEMO', 'WebMemo');
 
 // サイト説明
