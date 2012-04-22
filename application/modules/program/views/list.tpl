@@ -20,7 +20,7 @@
 <!-- main_list -->
 <div class="content" id="jquery-ui-sortable">
 {foreach from=$list item=row}
-<div class="jquery-ui-sortable-item" id="{$row.id}">
+<div{if !$order} class="jquery-ui-sortable-item"{/if} id="{$row.id}">
 <a name="id_{$row.id}"></a>
 <h2 class="box_01" id="article_title_{$row.id}" style="background-color:{'background-color'|site_get_style:$row.del_flg};">
 <div>

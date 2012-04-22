@@ -114,6 +114,7 @@ class Project extends MY_Controller
 		$count_all = $this->model_project->get_count_all($this->search, $this->program_id, true);
 		$view_data['pagination'] = $this->_get_pagination_simple($count_all, 'project/ajax_project_list');
 		$view_data['count_all']  = $count_all;
+		$view_data['order']  = $this->order;
 
 		$this->smarty_parser->parse('ci:project/list.tpl', $view_data);
 	}
@@ -219,6 +220,7 @@ class Project extends MY_Controller
 
 		$this->output->set_output('true');
 	}
+
 	public function ajax_execute_update_sort_move()
 	{
 		$this->input->check_is_post();
