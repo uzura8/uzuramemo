@@ -191,6 +191,56 @@ class Program extends MY_Controller
 		$this->output->set_output('true');
 	}
 
+	public function ajax_execute_update_sort_move()
+	{
+		$this->input->check_is_post();
+		$ids_pre = explode(',', $this->_get_post_params('values'));
+		$ids = array();
+		$sorts = array();
+		foreach ($ids_pre as $id_pre)
+		{
+			$id = (int)$id_pre;
+			if (!$id) continue;
+			$ids[] = $id;
+		}
+		unset($ids_pre);
+
+		$sorts = $this->db_util->get_cols('program', array('id' => $ids), 'sort', 'sort', 'program', 'model');
+		$values = array_combine($ids, $sorts);
+
+		$result_count = 0;
+		$error = false;
+		$this->db->trans_begin();
+		foreach ($values as $id => $sort)
+		{
+			$result = $this->db_util->update('program', array('sort' => $sort), array('id' => $id), true, 'program', 'model');
+			if (!$result)
+			{
+				$error = true;
+				break;
+			}
+			$result_count++;
+		}
+
+		if ($this->db->trans_status() === FALSE || $error)
+		{
+			$this->db->trans_rollback();
+			$result_count = 0;
+		}
+		else
+		{
+			$this->db->trans_commit();
+		}
+
+		if (!$result_count)
+		{
+			$this->output->set_ajax_output_error();
+			return;
+		}
+
+		$this->output->set_output('true');
+	}
+
 	public function ajax_execute_delete()
 	{
 		$this->input->check_is_post();
