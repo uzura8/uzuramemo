@@ -18,8 +18,9 @@
 {else}
 
 <!-- main_list -->
-<div class="content">
+<div class="content" id="jquery-ui-sortable">
 {foreach from=$list item=row}
+<div class="jquery-ui-sortable-item" id="{$row.id}">
 <a name="id_{$row.id}"></a>
 <h2 class="box_01" id="article_title_{$row.id}" style="background-color:{'background-color'|site_get_style:$row.del_flg};">
 <div>
@@ -71,6 +72,7 @@
 </aside>
 </article>
 
+</div>
 {/foreach}
 </div>
 {if $search}
@@ -131,6 +133,35 @@ $(function() {
 		// 選択可能な日付の範囲を限定する場合（月は0～11）
 		// minDate: new Date(2010, 6 - 1, 16),
 		// maxDate: new Date(2010, 8 - 1, 15)
+	});
+});
+
+$(function(){
+	$('#jquery-ui-sortable').sortable({
+		items: '.jquery-ui-sortable-item',
+		handle: 'span',
+		update: function(event, ui) {
+			var updateArray = $('#jquery-ui-sortable').sortable('toArray').join(',');
+			console.log(updateArray);
+
+			// 更新
+			var csrf_token = $.cookie('csrf_test_name');
+			$.ajax({
+				url : "{/literal}{site_url}{literal}project/ajax_execute_update_sort_move",
+				dataType : "text",
+				data : {"values": updateArray, "csrf_test_name": csrf_token},
+				type : "POST",
+				success: function(data){
+					//ajax_list(0);
+					$('#select_order').val('0');
+					$.jGrowl('並び順を変更しました。');
+				},
+				error: function(data){
+					ajax_list(0);
+					$.jGrowl('並び順を変更できませんでした。');
+				}
+			});
+		}
 	});
 });
 {/literal}
