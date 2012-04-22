@@ -31,7 +31,22 @@ class Db_util
 		$CI->load->model($this->_get_model_file($table, $model_path, $model_prefix, $model_file_name));
 
 		if ($columns) $CI->db->select($columns);
-		if ($params)  $CI->db->where($params);
+
+		if ($params)
+		{
+			$row = each($params);
+			if (count($params) === 1 && is_array($row['value']))
+			{
+				$row = each($params);
+				$CI->db->where_in($row['key'], $row['value']);
+			}
+			else
+			{
+				$CI->db->where($params);
+			}
+		}
+
+
 		if ($order)   $CI->db->order_by($order);
 		$query = $CI->db->get($table);
 		if (!$query->num_rows()) return array();
@@ -154,5 +169,16 @@ class Db_util
 		}
 
 		return array($sql, $params);
+	}
+
+	public function update($table, $values, $wheres, $update_datetime = true, $model_path = '', $model_prefix = '', $model_file_name = '')
+	{
+		$CI =& get_instance();
+		$CI->load->model($this->_get_model_file($table, $model_path, $model_prefix, $model_file_name));
+
+		if ($update_datetime) $values['updated_at'] = date('Y-m-d H:i:s');
+		$CI->db->update($table, $values, $wheres);
+
+		return $CI->db->update($table, $values, $wheres);
 	}
 }
