@@ -93,6 +93,9 @@ $(function() {
 		autoLoad: false,
 		content: '.content',
 		load: function(current, next) {
+			if (current.page == {/literal}{$max_page}{literal}) {
+				$('nav#next').remove();
+			}
 			uzura_sortable("{/literal}{site_url}{literal}program/ajax_execute_update_sort_move");
 		},
 	});

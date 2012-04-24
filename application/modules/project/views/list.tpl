@@ -102,6 +102,9 @@ $(function() {
 		autoLoad: false,
 		content: '.content',
 		load: function(current, next) {
+			if (current.page == {/literal}{$max_page}{literal}) {
+				$('nav#next').remove();
+			}
 			uzura_datepicker("{/literal}{site_url}{literal}/css/images/calendar.gif");
 			uzura_sortable("{/literal}{site_url}{literal}project/ajax_execute_update_sort_move");
 		},

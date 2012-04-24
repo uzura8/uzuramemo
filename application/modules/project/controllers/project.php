@@ -115,6 +115,7 @@ class Project extends MY_Controller
 		$view_data['pagination'] = $this->_get_pagination_simple($count_all, 'project/ajax_project_list');
 		$view_data['count_all']  = $count_all;
 		$view_data['order']  = $this->order;
+		$view_data['max_page'] = ceil($count_all / $this->limit);
 
 		$this->smarty_parser->parse('ci:project/list.tpl', $view_data);
 	}
