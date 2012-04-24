@@ -4,5 +4,5 @@ $config['site_title'] = 'WBS';
 $config['is_accept_robots'] = false;
 
 $config['article_nums'] = array();
-$config['article_nums']['default'] = 30;
-$config['article_nums']['mobile']  = 30;
+$config['article_nums']['default'] = 2;
+$config['article_nums']['mobile']  = 2;

@@ -18,8 +18,10 @@
 {else}
 
 <!-- main_list -->
+<div id="jquery-ui-sortable">
 <div class="content">
 {foreach from=$list item=row}
+<div{if !$order} class="jquery-ui-sortable-item"{/if} id="{$row.id}">
 <a name="id_{$row.id}"></a>
 <h2 class="box_01" id="article_title_{$row.id}" style="background-color:{'background-color'|site_get_style:$row.del_flg};">
 <div>
@@ -73,9 +75,11 @@
 <div class="article_aside_button">
 <span class="btnSpan"><input type="button" name="update_del_flg_{$row.id}" value="{$row.del_flg|site_get_symbols_for_display}" id="btn_delFlg_{$row.id}" class="btn_delFlg"></span>
 <span class="btnSpan space_left_5"><input type="button" name="delete_{$row.id}" value="削除" id="btn_delete_{$row.id}" class="btn_delete"></span>
+{if $order}
 <span class="btnSpan space_left">
 <label for="input_sort_{$row.id}">並び順:</label>
 <input type="text" name="input_sort_{$row.id}" value="{$row.sort}" id="input_sort_{$row.id}" class="InputMini input_sort" maxlength="6" placeholder="並び順"></span>
+{/if}
 <span class="btnTop space_left_5"><a href="#top">▲</a></span>
 <span class="btnTop space_left_5"><a href="{site_url uri=wbs}">{$smarty.const.UM_TOPPAGE_NAME}</a></span>
 <span class="btnTop"><a href="{site_url}">サイト{$smarty.const.UM_TOPPAGE_NAME}</a></span>
@@ -83,7 +87,9 @@
 </aside>
 </article>
 
+</div>
 {/foreach}
+</div>
 </div>
 {if $search}
 <section>
@@ -105,7 +111,15 @@
 {literal}
 $(function() {
 	$.autopager({
-		autoLoad: false
+		autoLoad: false,
+		content: '.content',
+		load: function(current, next) {
+			if (current.page == {/literal}{$max_page}{literal}) {
+				$('nav#next').remove();
+			}
+			uzura_datepicker("{/literal}{site_url}{literal}/css/images/calendar.gif");
+			uzura_sortable("{/literal}{site_url}{literal}wbs/ajax_execute_update_sort_move");
+		},
 	});
 	$('a[rel=next]').click(function() {
 		$.autopager('load');
@@ -116,34 +130,10 @@ $(function() {
 $(function(){
   $("a[href*='#']").slideScroll();
 });
-{/literal}
-</script>
 
-<!-- カレンダー対応 -->
-<script type="text/javascript" charset="utf-8">
-{literal}
-$(function() {
-	//テキストボックスにカレンダーをバインドする（パラメータは必要に応じて）
-//	$("#due_date_27").datepicker({
-	$(".input_date").datepicker({
-		showButtonPanel: true,//「今日」「閉じる」ボタンを表示する
-		firstDay: 1,//週の先頭を月曜日にする（デフォルトは日曜日）
-
-		showOn: 'button',
-		buttonImage: '{/literal}{site_url}{literal}/css/images/calendar.gif',
-		buttonImageOnly: true,
-
-		//年月をドロップダウンリストから選択できるようにする場合
-//		changeYear: true,
-		changeMonth: true,
-
-		prevText: '&#x3c;前',
-		nextText: '次&#x3e;',
-
-		// 選択可能な日付の範囲を限定する場合（月は0～11）
-		// minDate: new Date(2010, 6 - 1, 16),
-		// maxDate: new Date(2010, 8 - 1, 15)
-	});
+$(function(){
+	uzura_datepicker("{/literal}{site_url}{literal}/css/images/calendar.gif");
+	uzura_sortable("{/literal}{site_url}{literal}wbs/ajax_execute_update_sort_move");
 });
 {/literal}
 </script>
