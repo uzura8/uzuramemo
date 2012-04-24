@@ -18,7 +18,8 @@
 {else}
 
 <!-- main_list -->
-<div class="content" id="jquery-ui-sortable">
+<div id="jquery-ui-sortable">
+<div class="content">
 {foreach from=$list item=row}
 <div{if !$order} class="jquery-ui-sortable-item"{/if} id="{$row.id}">
 <a name="id_{$row.id}"></a>
@@ -68,6 +69,7 @@
 </div>
 {/foreach}
 </div>
+</div>
 {if $search}
 <section>
 「<a href="http://www.google.co.jp/search?q={$search}" target="_blank" style="font-weight:bold;">{$search}</a>」をGoogle検索
@@ -88,7 +90,11 @@
 {literal}
 $(function() {
 	$.autopager({
-		autoLoad: false
+		autoLoad: false,
+		content: '.content',
+		load: function(current, next) {
+			uzura_sortable("{/literal}{site_url}{literal}program/ajax_execute_update_sort_move");
+		},
 	});
 	$('a[rel=next]').click(function() {
 		$.autopager('load');
@@ -101,32 +107,7 @@ $(function(){
 });
 
 $(function(){
-	$('#jquery-ui-sortable').sortable({
-		items: '.jquery-ui-sortable-item',
-		handle: 'span',
-		update: function(event, ui) {
-			var updateArray = $('#jquery-ui-sortable').sortable('toArray').join(',');
-			console.log(updateArray);
-
-			// 更新
-			var csrf_token = $.cookie('csrf_test_name');
-			$.ajax({
-				url : "{/literal}{site_url}{literal}program/ajax_execute_update_sort_move",
-				dataType : "text",
-				data : {"values": updateArray, "csrf_test_name": csrf_token},
-				type : "POST",
-				success: function(data){
-					//ajax_list(0);
-					$('#select_order').val('0');
-					$.jGrowl('並び順を変更しました。');
-				},
-				error: function(data){
-					ajax_list(0);
-					$.jGrowl('並び順を変更できませんでした。');
-				}
-			});
-		}
-	});
+	uzura_sortable("{/literal}{site_url}{literal}program/ajax_execute_update_sort_move");
 });
 {/literal}
 </script>
