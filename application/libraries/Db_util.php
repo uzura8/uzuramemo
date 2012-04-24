@@ -37,7 +37,6 @@ class Db_util
 			$row = each($params);
 			if (count($params) === 1 && is_array($row['value']))
 			{
-				$row = each($params);
 				$CI->db->where_in($row['key'], $row['value']);
 			}
 			else

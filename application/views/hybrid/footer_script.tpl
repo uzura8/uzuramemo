@@ -25,6 +25,7 @@
 <link rel="stylesheet" href="{site_url}js/lib/jQselectable/skin/selectable/style.css">
 
 <script src="{site_url}js/jquery.cookie.js" type="text/javascript"></script>
+<script src="{site_url}js/uzura_project.js" type="text/javascript"></script>
 
 <script type="text/javascript">
 {literal}
