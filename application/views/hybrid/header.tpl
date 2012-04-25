@@ -15,4 +15,4 @@
 
 {if $current_module|is_exist_favicon}<link rel="shortcut icon" href="{img_url}/favicon/{$current_module}.ico">{else}<link rel="shortcut icon" href="{img_url}/favicon/main.ico">{/if}
 </head>
-<body id="{get_current_page_id}">
+<body id="{get_current_page_id}" class="base">

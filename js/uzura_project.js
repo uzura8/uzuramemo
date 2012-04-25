@@ -1,10 +1,9 @@
 function uzura_sortable(url){
 	$('#jquery-ui-sortable').sortable({
 		items: '.jquery-ui-sortable-item',
-		handle: 'span',
+		handle: 'span.btnTop',
 		update: function(event, ui) {
 			var updateArray = $('#jquery-ui-sortable').sortable('toArray').join(',');
-			console.log(updateArray);
 
 			// 更新
 			var csrf_token = $.cookie('csrf_test_name');

@@ -17,7 +17,11 @@ class Model_wbs extends CI_Model
 	function get_row($id)
 	{
 		if (!$id) return array();
-		list($sql, $params) = $this->get_main_query('', false, false, 'A.*', array('A.id' => $id));
+
+		$params = array('sql' => array(), 'values' => array());
+		$params['sql'][]    = 'A.id = ?';
+		$params['values'][] = $id;
+		list($sql, $params) = $this->get_main_query('', false, false, 'A.*', $params);
 
 		return $this->db->query($sql, $params)->result_array();
 	}
