@@ -172,6 +172,8 @@ class MY_Controller extends CI_Controller
 		$values = array();
 		foreach ($this->validation_rules as $field => $row)
 		{
+			if (!empty($row['disabled_item_in_sql'])) continue;
+
 			$values[$field] = set_value($field);
 		}
 

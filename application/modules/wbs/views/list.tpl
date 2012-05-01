@@ -42,8 +42,15 @@
 </h2>
 <article class="box_01" id="article_{$row.id}" style="display:none;background-color:{'background-color'|site_get_style:$row.del_flg};">
 <div class="article_box">
+<h4>description</h4>
 <p class="autogrow" id="body{$row.id}" style="width: 300px">{if $row.body}{$row.body|nl2br|auto_link}{else}&nbsp;&nbsp;{/if}</p>
 
+<a href="#" id="activity_link_{$row.id}" class="activity_link">
+<h4>
+<span class="space_right f_15">Activities</span>
+</h4></a>
+<div id="activity_list_{$row.id}">
+</div>
 <div class="form_box_each">
 <table border="0" cellspacing="0" cellpadding="0">
 <tr><td>
@@ -135,7 +142,14 @@ $(function(){
 	uzura_datepicker("{/literal}{site_url}{literal}/css/images/calendar.gif");
 	uzura_sortable("{/literal}{site_url}{literal}wbs/ajax_execute_update_sort_move");
 });
+
+$("a.activity_link").click(function(){
+	var id_value = $(this).attr("id");
+	var wbs_id = id_value.replace(/activity_link_/g, "");
+	var url = '{/literal}{site_url uri=activity/ajax_activity_list_simple}{literal}';
+
+	ajax_restructure_activity_list(wbs_id, url);
+});
 {/literal}
 </script>
-
 </html>

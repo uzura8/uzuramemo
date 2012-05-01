@@ -316,10 +316,13 @@ function ajax_list(offset, order){
 	$("#" + id).show();
 
 	$.get(url, { nochache:(new Date()).getTime(), 'project_id':{/literal}'{$project_id}'{literal}, 'search':{/literal}'{$search}'{literal}, 'order':order, 'from':offset }, function(data){
+		$("#loading").fadeOut(function() {
+			$("#pics").show();
+		});
 		if (data.length>0){
 			$("#" + id).html(data);
 		}
-	})
+	});
 }
 {/literal}
 </script>
@@ -368,8 +371,20 @@ $(function() {
 		// maxDate: new Date(2010, 8 - 1, 15)
 	});
 });
+
+// edit textarea autogrow
+$(function(){
+	$('textarea').autogrow();
+});
+
+$('#select_order').change(function() {
+	var order = parseInt($(this).val());
+	ajax_list(0, order);
+});
 {/literal}
 </script>
 
 <!-- module専用CSSの読み込み -->
 <link rel="stylesheet" href="{site_url}css/wbs/main.css">
+
+<script src="{site_url}js/uzura_wbs.js" type="text/javascript"></script>

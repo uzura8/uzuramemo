@@ -147,7 +147,7 @@ h2.box_01 .sub_info2 {
 }
 
 article.box_01 {
-	padding: 20px 10px 10px;
+	padding: 10px 10px 10px;
 }
 /*
 article:not(.display) {
@@ -435,4 +435,27 @@ input, textarea	{
 #list_util select {
 	width: 150px;
 	font-size: 18px;
+}
+
+/* detail */
+article div.article_box p.autogrow {
+	margin-bottom: 10px;
+}
+article div.article_box div.form_box_each {
+	margin-top: 10px;
+}
+
+div.btnBox {
+	padding: 10px 5px 15px;
+}
+
+#loading {
+	margin-top: 20px;
+}
+#pics {
+	display: none;
+}
+
+#main_form_box h4 {
+	margin-bottom: 10px;
 }

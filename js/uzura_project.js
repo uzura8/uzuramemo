@@ -49,3 +49,4 @@ function uzura_datepicker(button_image_url){
 		// maxDate: new Date(2010, 8 - 1, 15)
 	});
 }
+

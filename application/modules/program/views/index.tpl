@@ -5,6 +5,10 @@
 <div id="mainbody">
 {include file='ci:hybrid/subtitle.tpl'}
 {include file='ci:hybrid/main_form.tpl'}
+
+<div id="loading"><img src="{site_url}img/loading.gif"></div>
+<div id="pics"></div>
+
 <div id="list"></div><!-- main contents -->
 </div><!-- mainbody END -->
 

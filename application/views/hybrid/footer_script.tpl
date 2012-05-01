@@ -27,28 +27,5 @@
 <script src="{site_url}js/jquery.cookie.js" type="text/javascript"></script>
 <script src="{site_url}js/uzura_project.js" type="text/javascript"></script>
 
-<script type="text/javascript">
-{literal}
-// edit textarea autogrow
-$(function(){
-	$('textarea').autogrow();
-});
-
-$('#select_order').change(function() {
-	var order = parseInt($(this).val());
-	ajax_list(0, order);
-});
-//$("#select_order").jQselectable({
-//	style: "simple",
-//	height: 150,
-//	opacity: .9,
-//	callback: function(){
-//		var order = $(this).val();
-//		if (order != '0' && order != '1' && order != '2') {
-//			var order = '0';
-//		}
-//		ajax_list(0, order);
-//	}
-//});
-{/literal}
-</script>
+<link rel="stylesheet" href="{site_url}css/prettyPopin.css" type="text/css" media="screen" charset="utf-8" />
+<script src="{site_url}js/jquery.prettyPopin.js" type="text/javascript" charset="utf-8"></script>

@@ -300,6 +300,9 @@ function ajax_list(offset, order){
 	$("#" + id).show();
 
 	$.get(url, { nochache:(new Date()).getTime(), 'program_id':{/literal}'{$program_id}'{literal}, 'search':{/literal}'{$search}'{literal}, 'order':order, 'from':offset }, function(data){
+		$("#loading").fadeOut(function() {
+			$("#pics").show();
+		});
 		if (data.length>0){
 			$("#" + id).html(data);
 		}
@@ -360,6 +363,15 @@ $(function() {
 	});
 });
 
+// edit textarea autogrow
+$(function(){
+	$('textarea').autogrow();
+});
+
+$('#select_order').change(function() {
+	var order = parseInt($(this).val());
+	ajax_list(0, order);
+});
 {/literal}
 </script>
 

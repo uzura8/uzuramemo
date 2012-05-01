@@ -1,14 +1,14 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-//class Welcome extends CI_Controller {
-class Wbs extends MY_Controller
+class Activity extends MY_Controller
 {
 	private $limit  = 10;
 	private $offset = 0;
 	private $order  = 0;
 	private $search = '';
 	private $search_option  = false;
-	private $project_id = 0;
+	private $wbs_id = 0;
+	private $mode = 0;
 	private $edit = 0;
 	private $next_url;
 
@@ -17,13 +17,14 @@ class Wbs extends MY_Controller
 		parent::__construct();
 
 		// load models
+		$this->load->model('activity/model_activity');
 		$this->load->model('wbs/model_wbs');
 		$this->load->model('wbs/model_work_class');
-		//$this->load->model('activity/model_activity');
 		$this->load->model('program/model_program');
 		$this->load->model('project/model_project');
 
 		// load config
+		$this->config->load('activity', true);
 		$this->config->load('program', true);
 		$this->config->load('project', true);
 		$this->config->load('gantt', true);
@@ -33,7 +34,7 @@ class Wbs extends MY_Controller
 
 	private function _configure()
 	{
-		$this->private_config = $this->config->item('wbs');
+		$this->private_config = $this->config->item('activity');
 		$this->_set_params();
 	}
 
@@ -41,6 +42,9 @@ class Wbs extends MY_Controller
 	{
 		$this->load->library('form_validation');
 
+		$this->wbs_id = $this->_get_post_params('wbs_id', 0, 'intval');
+		$this->mode   = $this->_get_post_params('mode', 0, 'intval');
+/*
 		$this->limit  = $this->private_config['article_nums']['default'];
 		if (IS_MOBILE) $this->limit = $this->private_config['article_nums']['mobile'];
 		$this->search = $this->_get_post_params('search', '', 'trim|max_length[301]');
@@ -50,6 +54,7 @@ class Wbs extends MY_Controller
 
 		$options = $this->_get_form_dropdown_options_order();// select:order
 		$this->order  = $this->_get_post_params('order', 0, sprintf('intval|less_than[%d]', count($options)));
+*/
 	}
 
 	private function _get_default_view_data()
@@ -58,6 +63,66 @@ class Wbs extends MY_Controller
 			'page_name' => $this->private_config['site_title'],
 			'selected_select_order' => 0,
 		);
+	}
+
+	public function create($wbs_id = 0, $mode = 0, $activity_id = 0)
+	{
+		if (!$wbs_id || !$row = $this->model_wbs->get_row($wbs_id))
+		{
+			show_404();
+		}
+		$wbs = $row[0];
+
+		if ($activity_id && !$activity = $this->model_activity->get_row4id($activity_id)) $activity_id = 0;
+
+		// template
+		$view_data = $this->_get_default_view_data();
+		$view_data['page_title'] = $this->private_config['site_title'].'新規作成';
+		$view_data['page_subtitle'] = $wbs['name'];
+		$view_data['page_subtitle_parts'] = array(
+//			array('url' => site_url('project/index/'.$project['program_key']), 'subtitle' => $project['program_name']),
+//			array('url' => '', 'subtitle' => $wbs['name']),
+		);
+
+		$this->wbs_id = (int)$wbs['id'];
+		$view_data['wbs_id'] = $this->wbs_id;
+
+		// request parameter
+		$view_data['form_id_suffix'] = 'activity';
+		$view_data['form_id'] = $this->wbs_id;
+
+		$mode = (int)$mode;
+		if ($mode) $view_data['is_modal'] = true;
+		if ($wbs) $view_data['main_form_title'] = sprintf('%s : %s', $wbs['name'], $view_data['page_title']);
+//		$view_data['search'] = $this->search;
+//		$view_data['order']  = $this->order;
+//		$view_data['opt']    = $this->search_option;
+//		$view_data['from']   = $this->offset;
+//		$view_data['limit']  = $this->limit;
+//		$view_data['edit']   = $this->edit;
+
+		// form
+		$validation_rules = $this->_validation_rules();// form
+		$validation_rules['wbs_id']['value'] = $this->wbs_id;
+		$validation_rules['mode']['value'] = $mode;
+		if ($activity)
+		{
+			$validation_rules['name']['value']           = $activity['name'];
+			$validation_rules['scheduled_date']['value'] = $activity['scheduled_date'];
+			$validation_rules['due_date']['value']       = $activity['due_date'];
+			$validation_rules['closed_date']['value']    = $activity['closed_date'];
+			$validation_rules['body']['value']           = $activity['body'];
+
+			$view_data['form_action'] = site_url('activity/execute_insert/'.$activity_id);
+		}
+		$view_data['form'] = $validation_rules;
+
+		// select:order
+//		$options = $this->_get_form_dropdown_options_order();// select:order
+////		$view_data['form_dropdown_list'] = array();
+		$view_data['form_dropdown_list']['order'] = array('options' => $options);
+
+		$this->smarty_parser->parse('ci:activity/create.tpl', $view_data);
 	}
 
 	public function index($project_key = '')
@@ -98,6 +163,21 @@ class Wbs extends MY_Controller
 		$view_data['form_dropdown_list']['order'] = array('options' => $options);
 
 		$this->smarty_parser->parse('ci:wbs/index.tpl', $view_data);
+	}
+
+	public function ajax_activity_list_simple()
+	{
+		$view_data = $this->_get_default_view_data();
+
+		$params = array();
+		if ($this->wbs_id)
+		{
+			$params['wbs_id'] = $this->wbs_id;
+			$view_data['wbs_id'] = $this->wbs_id;
+		}
+		$view_data['list'] =  $this->model_activity->get_rows($params);
+
+		$this->smarty_parser->parse('ci:activity/list_simple.tpl', $view_data);
 	}
 
 	public function ajax_wbs_list()
@@ -485,9 +565,15 @@ class Wbs extends MY_Controller
 		return true;
 	}
 
-	public function execute_insert()
+	public function execute_insert($activity_id = 0)
 	{
 		$this->input->check_is_post();
+		if ($activity_id && !$activity = $this->model_activity->get_row4id($activity_id))
+		{
+			$this->output->set_status_header('403');
+			return;
+		}
+
 		$this->_setup_validation();
 
 		if (!$this->form_validation->run())
@@ -498,9 +584,33 @@ class Wbs extends MY_Controller
 
 		// 登録
 		$values = $this->_get_form_data();
-		$this->model_wbs->insert($values);
+		if ($activity_id)
+		{
+			$this->model_activity->update($values, array('id' => $activity_id));
+		}
+		else
+		{
+			$this->model_activity->insert($values);
+		}
 
-		$this->output->set_output('OK');
+		if ($activity_id)
+		{
+			$this->edit_complete($activity_id);
+		}
+		elseif ($this->mode)
+		{
+			$this->create($this->wbs_id, $this->mode);
+		}
+		else
+		{
+			$this->output->set_output('OK');
+		}
+	}
+
+	public function edit_complete($id = 0)
+	{
+		$view_data = $this->_get_default_view_data();
+		$this->smarty_parser->parse('ci:activity/edit_complete.tpl', $view_data);
 	}
 
 	public function execute_update($item)
@@ -573,21 +683,13 @@ class Wbs extends MY_Controller
 	{
 		return array(
 			'name' => array(
-				'label' => 'WBS名',
+				'label' => 'name',
 				'type'  => 'text',
 				'rules' => 'trim|required|max_length[140]',
 				'width'  => 30,
 			),
-			'work_class_id' => array(
-				'label' => '作業分類',
-				'type'  => 'select',
-				'rules' => 'trim|is_natural_no_zero|callback__is_registered_work_class_id',
-				'error_messages'  => array('min' => ''),
-				'width'  => 30,
-				'options' => $this->_get_dropdown_options_work_class_id(),
-			),
-			'start_date' => array(
-				'label' => '開始日',
+			'scheduled_date' => array(
+				'label' => '実施予定日',
 				'type'  => 'text',
 				'rules' => 'trim|date_format',
 				'width'  => 10,
@@ -598,29 +700,13 @@ class Wbs extends MY_Controller
 				'type'  => 'text',
 				'rules' => 'trim|date_format',
 				'width'  => 10,
+				'id_name'  => 'due_date_activity',
 			),
-			'estimated_time' => array(
-				'label' => '見積工数',
+			'closed_date' => array(
+				'label' => '終了日',
 				'type'  => 'text',
-				'rules' => 'trim|numeric',
+				'rules' => 'trim|date_format',
 				'width'  => 10,
-				'after_label' => '人日',
-			),
-			'spent_time' => array(
-				'label' => '実績工数',
-				'type'  => 'text',
-				'rules' => 'trim|numeric',
-				'width'  => 10,
-				'disabled_for_insert'  => true,
-				'after_label' => '人日',
-			),
-			'percent_complete' => array(
-				'label' => '進捗率',
-				'type'  => 'text',
-				'rules' => 'trim|is_natural|max_num[100]',
-				'width'  => 10,
-				'disabled_for_insert'  => true,
-				'after_label' => '%',
 			),
 			'body' => array(
 				'label' => '本文',
@@ -637,12 +723,20 @@ class Wbs extends MY_Controller
 				'rows'  => 2,
 				'disabled_for_insert'  => true,
 			),
-			'project_id' => array(
-				'label' => 'プロジェクト',
+			'wbs_id' => array(
+				'label' => 'wbs_id',
 				'type'  => 'hidden',
-				'rules' => 'trim|required|is_natural_no_zero|callback__is_registered_project_id',
+				'rules' => 'trim|is_natural_no_zero|callback__is_registered_wbs_id',
 				'error_messages'  => array('min' => ''),
 				'width'  => 30,
+			),
+			'mode' => array(
+				'label' => 'mode',
+				'type'  => 'hidden',
+				'rules' => 'trim|is_natural|max_num[1]',
+				'error_messages'  => array('min' => ''),
+				'width'  => 30,
+				'disabled_item_in_sql'  => true,
 			),
 		);
 	}
@@ -699,10 +793,10 @@ class Wbs extends MY_Controller
 		return true;
 	}
 
-	public function _is_registered_project_id($value)
+	public function _is_registered_wbs_id($value)
 	{
-		$validation_name = '_is_registered_project_id';
-		$error_message = 'プロジェクトIDが正しくありません';
+		$validation_name = '_is_registered_wbs_id';
+		$error_message = 'WBS ID が正しくありません';
 
 		if (!intval($value))
 		{
@@ -711,7 +805,8 @@ class Wbs extends MY_Controller
 		}
 
 		// idの存在確認
-		if (!$this->db_util->get_row4id('project', $value, array('id'), 'project', 'model'))
+		$result = $this->db_util->get_row4id('wbs', $value, array('id'), 'wbs', 'model');
+		if (!$result)
 		{
 			$this->form_validation->set_message($validation_name, $error_message);
 			return false;
@@ -742,5 +837,5 @@ class Wbs extends MY_Controller
 	}
 }
 
-/* End of file welcome.php */
-/* Location: ./application/controllers/welcome.php */
+/* End of file activity.php */
+/* Location: ./application/modules/activity/controllers/activity.php */

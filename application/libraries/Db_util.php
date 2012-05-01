@@ -93,6 +93,19 @@ class Db_util
 		return $query->row_array(0);
 	}
 
+	public function get_rows($table, $params = array(), $columns = array(), $model_path = '', $model_prefix = '', $model_file_name = '')
+	{
+		$CI =& get_instance();
+		$CI->load->model($this->_get_model_file($table, $model_path, $model_prefix, $model_file_name));
+
+		if ($columns) $CI->db->select($columns);
+		if ($params)  $CI->db->where($params);
+		$query = $CI->db->get($table);
+		if (!$query->num_rows()) return array();
+
+		return $query->result_array();
+	}
+
 	public function get_row4id($table, $id, $columns = array(), $model_path = '', $model_prefix = '', $model_file_name = '')
 	{
 		return $this->get_row($table, array('id' => (int)$id), $columns, $model_path, $model_prefix, $model_file_name);
