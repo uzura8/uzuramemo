@@ -1,13 +1,3 @@
-<script type="text/javascript" charset="utf-8">
-{literal}
-// <![CDATA[
-$(document).ready(function() {
-	$('#name').focus();
-});
-// ]]>
-{/literal}
-</script>
-
 <script type="text/javascript">
 {literal}
 $('#main_form_activity_submit').button();
@@ -125,11 +115,6 @@ $(function() {
 		// minDate: new Date(2010, 6 - 1, 16),
 		// maxDate: new Date(2010, 8 - 1, 15)
 	});
-});
-
-// edit textarea autogrow
-$(function(){
-	$('textarea').autogrow();
 });
 
 $('#select_order').change(function() {

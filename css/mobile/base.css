@@ -5,7 +5,7 @@ body {
 	background-color: #BDBDBD;
 }
 body.base {
-	background-color: #E2E2E2;
+	background-color: #F9F9F9;
 }
 a:link {
 	color: #0E44B9;
@@ -332,7 +332,7 @@ article aside div.article_aside_button {
 	padding: 5px 0 10px;
 }
 
-.btnTop {
+.btnTop, .sortableBtn {
 	border-radius: 3px;
 	background-color: #cbcccf;
 	background: -webkit-gradient(linear, left top, left bottom, from(#cbcccf), to(#acaeb0));
@@ -340,7 +340,7 @@ article aside div.article_aside_button {
 	text-align: center;
 	float: right;
 }
-.btnTop a {
+.btnTop a, .sortableBtn a {
 	text-shadow: 1px 1px 0 #ddd;
 	display: block;
 	padding: 3px 5px;
@@ -458,4 +458,16 @@ div.btnBox {
 
 #main_form_box h4 {
 	margin-bottom: 10px;
+}
+
+div.article_box .form_box_each span.label {
+	float: none;
+	font-size: 10px;
+	text-align: right;
+	padding-top: 4px;
+	margin-right: 1px;
+}
+
+div.article_box div.form_box_each .btnSpan {
+  float: none;
 }

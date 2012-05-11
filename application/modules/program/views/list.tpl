@@ -106,10 +106,6 @@ $(function() {
 });
 
 $(function(){
-  $("a[href*='#']").slideScroll();
-});
-
-$(function(){
 	uzura_sortable("{/literal}{site_url}{literal}program/ajax_execute_update_sort_move");
 });
 {/literal}

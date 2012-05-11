@@ -2,12 +2,8 @@
 {literal}
 // <![CDATA[
 $(document).ready(function() {
-	$('#new_form_switch').click(function() {
-		$('#main_form_box').slideToggle();
-		//$('#name').focus();
-		$('#program_id').focus();
-	});
-	//$('#main_form_box').hide('fast');
+	uzura_form_switch();
+
 {/literal}{if $edit}
 	$('#main_form_box').show('fast');
 	$('#name').focus();
@@ -361,11 +357,6 @@ $(function() {
 		// minDate: new Date(2010, 6 - 1, 16),
 		// maxDate: new Date(2010, 8 - 1, 15)
 	});
-});
-
-// edit textarea autogrow
-$(function(){
-	$('textarea').autogrow();
 });
 
 $('#select_order').change(function() {

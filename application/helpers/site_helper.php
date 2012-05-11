@@ -46,6 +46,8 @@ function site_get_style($property, $type)
 {
 	if (!$styles = get_config_value('styles', 'site')) return '';
 
+	$property = str_replace('-', '', $property);
+
 	if ($type == 1)
 	{
 		$type = 'display_none';
@@ -60,6 +62,45 @@ function site_get_style($property, $type)
 	return $styles[$property][$type];
 }
 
+function site_get_activity_style($property, $del_flg, $closed_date, $scheduled_date, $status)
+{
+	if (!$styles = get_config_value('styles', 'site')) return '';
+
+	$property = str_replace('-', '', $property);
+
+	if ($del_flg == 1)
+	{
+		$type = 'display_none';
+	}
+	elseif ($closed_date && $closed_date != '0000-00-00')
+	{
+		$type = 'display_none';
+	}
+	elseif ($status)
+	{
+		$type = 'active';
+	}
+	elseif ($scheduled_date && $scheduled_date != '0000-00-00' && $scheduled_date < date('Y-m-d'))
+	{
+		$type = 'scheduled_passed';
+	}
+	elseif ($scheduled_date == date('Y-m-d'))
+	{
+		$type = 'scheduled_today';
+	}
+	elseif ($scheduled_date == date('Y-m-d', strtotime('+1 day')))
+	{
+		$type = 'scheduled_tomorrow';
+	}
+	else
+	{
+		$type = 'display';
+	}
+
+	if (empty($styles[$property][$type])) return '';
+
+	return $styles[$property][$type];
+}
 
 function site_output_private_quote_flg_views($private_flg = 0, $quote_flg = 0)
 {

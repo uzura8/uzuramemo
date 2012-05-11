@@ -93,13 +93,14 @@ class Db_util
 		return $query->row_array(0);
 	}
 
-	public function get_rows($table, $params = array(), $columns = array(), $model_path = '', $model_prefix = '', $model_file_name = '')
+	public function get_rows($table, $params = array(), $columns = array(), $order_by = '', $model_path = '', $model_prefix = '', $model_file_name = '')
 	{
 		$CI =& get_instance();
 		$CI->load->model($this->_get_model_file($table, $model_path, $model_prefix, $model_file_name));
 
-		if ($columns) $CI->db->select($columns);
-		if ($params)  $CI->db->where($params);
+		if ($columns)  $CI->db->select($columns);
+		if ($params)   $CI->db->where($params);
+		if ($order_by) $CI->db->order_by($order_by);
 		$query = $CI->db->get($table);
 		if (!$query->num_rows()) return array();
 

@@ -6,3 +6,39 @@ div#modal div#main_form_box {
 #main_form_box a.sctble_display span {
 	width: 100%;
 }
+
+#activity_activity_wbs .article_meta_top .banner {
+	float: left;
+	text-align: left;
+	width: 50%;
+}
+
+#activity_activity_wbs div.content h2.box_01 {
+	background-color: #e7e7e7;
+}
+
+#activity_activity_wbs div.content h2.subtitle {
+	border: 1px solid #8F8F8F;
+}
+
+#activity_activity_wbs div.content h2.article_title {
+	padding: 6px 10px;
+	font-size: 90%;
+}
+
+#activity_activity_wbs article aside div.article_aside_button {
+	padding-bottom: 0;
+}
+
+#activity_activity_wbs article.box_01 {
+	padding-bottom: 0;
+}
+
+#activity_activity_wbs article.box_01 aside.article_footer span.label {
+	font-size: 10px;
+	font-weight: normal;
+}
+
+#activity_activity_wbs article.box_01 aside.article_footer .btnSpan {
+	float: none;
+}

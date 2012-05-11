@@ -3,6 +3,7 @@
 class Activity extends MY_Controller
 {
 	private $limit  = 10;
+	private $limit_wbs = 1000;
 	private $offset = 0;
 	private $order  = 0;
 	private $search = '';
@@ -11,6 +12,8 @@ class Activity extends MY_Controller
 	private $mode = 0;
 	private $edit = 0;
 	private $next_url;
+	private $sdate = '';
+	private $edate = '';
 
 	function __construct()
 	{
@@ -44,6 +47,8 @@ class Activity extends MY_Controller
 
 		$this->wbs_id = $this->_get_post_params('wbs_id', 0, 'intval');
 		$this->mode   = $this->_get_post_params('mode', 0, 'intval');
+		$this->sdate = $this->_get_post_params('sdate', '');
+		$this->edate = $this->_get_post_params('edate', '');
 /*
 		$this->limit  = $this->private_config['article_nums']['default'];
 		if (IS_MOBILE) $this->limit = $this->private_config['article_nums']['mobile'];
@@ -175,44 +180,124 @@ class Activity extends MY_Controller
 			$params['wbs_id'] = $this->wbs_id;
 			$view_data['wbs_id'] = $this->wbs_id;
 		}
-		$view_data['list'] =  $this->model_activity->get_rows($params);
-
 		$this->smarty_parser->parse('ci:activity/list_simple.tpl', $view_data);
 	}
 
-	public function ajax_wbs_list()
+	public function ajax_activity_list($wbs_id = 0)
 	{
-		// template
+		if (!$wbs_id || !$row = $this->model_wbs->get_row($wbs_id))
+		{
+			show_404();
+		}
+		$wbs = $row[0];
+
 		$view_data = $this->_get_default_view_data();
 
-		$params = array('sql' => array(), 'values' => array());
-		if ($this->project_id)
-		{
-			$params['sql'][]    = 'A.project_id = ?';
-			$params['values'][] = $this->project_id;
-		}
-		$view_data['list'] =  $this->model_wbs->get_main_list($this->offset, $this->limit, $this->_get_order_sql_clause(), '', true, 'A.*, B.name as project_name, C.name as program_name', $params);
+		$params = array();
+		$params['wbs_id'] = $wbs_id;
 
+
+		$mode = (int)$this->_get_post_params('mode', '');
+		switch ($mode)
+		{
+			case 1: // active
+				$params['del_flg'] = 0;
+				break;
+			case 2: //priority
+				$params['del_flg'] = 0;
+				$params['scheduled_date < '] = date('Y-m-d', strtotime('+ 1day'));
+				break;
+			default :
+				break;
+		}
+
+		$view_data['list'] =  $this->model_activity->get_rows($params);
+
+		$view_data['list'] =  $this->model_activity->get_rows($params, array(), 'sort');
+
+		$view_data['wbs_id'] = $wbs_id;
+		$view_data['wbs'] = $wbs;
+
+		$this->smarty_parser->parse('ci:activity/list.tpl', $view_data);
+	}
+
+	public function wbs($wbs_ids_string = '')
+	{
+		$wbs_ids = array();
+		if ($wbs_ids_string)
+		{
+			$wbs_ids = $this->strings_util->convert_string2array($wbs_ids_string, '-', 'intval');
+		}
+
+		// template
+		$view_data = $this->_get_default_view_data();
+		$view_data['config_site_styles'] = get_config_value('styles', 'site');
+
+		$params = array('sql' => array(), 'values' => array());
+    $params['sql'][] = 'A.del_flg = 0';
+		if ($wbs_ids)
+		{
+			$params['sql'][]    = sprintf('A.id in (%s)', implode(',', $wbs_ids));
+		}
+/*
+		if ($this->sdate)
+		{
+			$params['sql'][]   = 'A.start_date >= ?';
+			$params['values'][] = $this->sdate;
+		}
+		if ($this->edate)
+		{
+			$params['sql'][]   = 'A.due_date <= ?';
+			$params['values'][] = $this->edate;
+		}
+*/
+		$view_data['mode'] = (int)$this->_get_post_params('mode', '');
+
+		$is_prv_dev = (int)$this->_get_post_params('pdev', '');
+		if ($is_prv_dev)
+		{
+			$params['sql'][] = 'C.id = 5';
+		}
+		else
+		{
+			$params['sql'][] = 'C.id <> 5';
+		}
+
+		$view_data['list'] =  $this->model_wbs->get_main_list(0, $this->limit_wbs, 'A.sort, C.sort', '', true, 'A.*, B.name as project_name, B.key_name as project_key_name, C.name as program_name, C.key_name as program_key_name', $params);
+//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+$isActive = 0;
+$isExit   = 0;
+$isEcho   = 0;
+$isAdd    = 1;
+$file = "/tmp/test.log";
+$a = $this->db->last_query();
+if ($isActive) {
+$_type = 'wb';if ($isAdd) $_type = 'a';$fp = fopen($file, $_type);ob_start();
+var_dump(__LINE__, $a);// !!!!!!!
+$out=ob_get_contents();fwrite( $fp, $out . "\n" );ob_end_clean();fclose( $fp );if ($isEcho) echo $out;if ($isExit) exit;
+}
+//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+/*
 		// 記事件数を取得
-		$count_all = $this->model_wbs->get_count_all($this->search, true, $params);
+		$count_all = $this->model_wbs->get_count_all('', true, $params);
 		$uri = 'wbs/ajax_wbs_list';
 		if ($this->project_id) $uri .= '?project_id='.$this->project_id;
 		$view_data['pagination'] = $this->_get_pagination_simple($count_all, $uri);
 		$view_data['count_all']  = $count_all;
 		$view_data['max_page'] = ceil($count_all / $this->limit);
-
-		$this->smarty_parser->parse('ci:wbs/list.tpl', $view_data);
+*/
+		$this->smarty_parser->parse('ci:activity/wbs.tpl', $view_data);
 	}
 
-	public function ajax_wbs_detail($id, $item)
+	public function ajax_activity_detail($id, $item)
 	{
 		$id = (int)str_replace($item, '', $id);
 		if (!$id) show_error('need id');
 
 		if (!$this->_check_edit_form_item($item)) show_error('item is invalid');
 
-		$row = $this->model_wbs->get_row($id);
-		echo $row[0][$item];
+		$row = $this->model_activity->get_row4id($id);
+		echo $row[$item];
 	}
 
 	public function ajax_check_wbs_name()
@@ -258,9 +343,9 @@ class Activity extends MY_Controller
 		}
 
 		$del_flg_after = 1;
-		if ($this->model_wbs->get_del_flg4id($id)) $del_flg_after = 0;
+		if ($this->model_activity->get_del_flg4id($id)) $del_flg_after = 0;
 
-		$this->model_wbs->update4id(array('del_flg' => $del_flg_after), $id, false);
+		$this->model_activity->update4id(array('del_flg' => $del_flg_after), $id, false);
 
 		$this->output->set_output($del_flg_after);
 	}
@@ -280,7 +365,7 @@ class Activity extends MY_Controller
 		$result = $this->form_validation->run();
 
 		// 値に変更がない場合はそのまま
-		$row = $this->model_wbs->get_row_common(array('id' => $id));
+		$row = $this->model_activity->get_row_common(array('id' => $id));
 		if ($row['sort'] == set_value('value'))
 		{
 			return;
@@ -294,7 +379,7 @@ class Activity extends MY_Controller
 
 		// 登録
 		$values = array('sort' => set_value('value'));
-		if (!$this->model_wbs->update4id($values, $id))
+		if (!$this->model_activity->update4id($values, $id))
 		{
 			$this->output->set_ajax_output_error();
 			return;
@@ -303,7 +388,7 @@ class Activity extends MY_Controller
 		$this->output->set_output('true');
 	}
 
-	public function ajax_execute_update_sort_move()
+	public function ajax_execute_update_sort_move($wbs_id = 0)
 	{
 		$this->input->check_is_post();
 		$ids_pre = explode(',', $this->_get_post_params('values'));
@@ -317,7 +402,7 @@ class Activity extends MY_Controller
 		}
 		unset($ids_pre);
 
-		$sorts = $this->db_util->get_cols('wbs', array('id' => $ids), 'sort', 'sort', 'wbs', 'model');
+		$sorts = $this->db_util->get_cols('activity', array('id' => $ids), 'sort', 'sort', 'activity', 'model');
 		$values = array_combine($ids, $sorts);
 
 		// まとめて更新
@@ -326,7 +411,7 @@ class Activity extends MY_Controller
 		$this->db->trans_begin();
 		foreach ($values as $id => $sort)
 		{
-			$result = $this->db_util->update('wbs', array('sort' => $sort), array('id' => $id), true, 'wbs', 'model');
+			$result = $this->db_util->update('activity', array('sort' => $sort), array('id' => $id), true, 'activity', 'model');
 			if (!$result)
 			{
 				$error = true;
@@ -430,13 +515,13 @@ class Activity extends MY_Controller
 		}
 
 		$validate_rules = $this->_validation_rules();
-		$this->form_validation->set_rules('start_date', $validate_rules['start_date']['label'], $validate_rules['start_date']['rules']);
+		$this->form_validation->set_rules('scheduled_date', $validate_rules['scheduled_date']['label'], $validate_rules['scheduled_date']['rules']);
 		$this->form_validation->set_rules('due_date', $validate_rules['due_date']['label'], $validate_rules['due_date']['rules']);
 		$result = $this->form_validation->run();
 
 		// 値に変更がない場合はそのまま
-		$row = $this->model_wbs->get_row_common(array('id' => $id));
-		if ($row['start_date'] == set_value('start_date') && $row['due_date'] == set_value('due_date'))
+		$row = $this->model_activity->get_row_common(array('id' => $id));
+		if ($row['scheduled_date'] == set_value('scheduled_date') && $row['due_date'] == set_value('due_date'))
 		{
 			return;
 		}
@@ -448,8 +533,8 @@ class Activity extends MY_Controller
 		}
 
 		// 登録
-		$values = array('start_date' => set_value('start_date'), 'due_date' => set_value('due_date'));
-		if (!$this->model_wbs->update4id($values, $id))
+		$values = array('scheduled_date' => set_value('scheduled_date'), 'due_date' => set_value('due_date'));
+		if (!$this->model_activity->update4id($values, $id))
 		{
 			$this->output->set_ajax_output_error();
 			return;
@@ -468,7 +553,7 @@ class Activity extends MY_Controller
 			return;
 		}
 
-		if (!$this->model_wbs->delete4id($id))
+		if (!$this->model_activity->delete4id($id))
 		{
 			$this->output->set_status_header('403');
 			return;
@@ -559,7 +644,7 @@ class Activity extends MY_Controller
 
 	private function _check_edit_form_item($item)
 	{
-		$allow_items = array('body', 'name', 'key_name', 'due_date', 'estimated_time');
+		$allow_items = array('body', 'name', 'scheduled_date', 'due_date', 'closed_date');
 		if (!$item || !in_array($item, $allow_items)) return false;
 
 		return true;
@@ -642,7 +727,7 @@ class Activity extends MY_Controller
 
 		// 登録
 		$values = array($item => set_value('value'));
-		$this->model_wbs->update4id($values, $id);
+		$this->model_activity->update4id($values, $id);
 
 		$this->output->set_output(nl2br(hsc(set_value('value'))));
 	}

@@ -78,10 +78,6 @@ $(function() {
 		return false;
 	});
 });
-
-$(function(){
-  $("a[href*='#']").slideScroll();
-});
 </script>
 
 <!-- カレンダー対応 -->

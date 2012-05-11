@@ -49,8 +49,8 @@ class Model_activity extends CI_Model
 		if (is_array($columns)) $columns = implode(',', $columns);
 		if (!$columns) $columns = 'A.*, B.*';
 
-		$select = sprintf("SELECT %s FROM wbs A", $columns);
-		if ($is_count) $select = "SELECT COUNT(A.id) as count FROM wbs A";
+		$select = sprintf("SELECT %s FROM activity A", $columns);
+		if ($is_count) $select = "SELECT COUNT(A.id) as count FROM activity A";
 		$sql  = $select;
 		$sql .= " LEFT JOIN project B ON A.project_id = B.id";
 		$sql .= " LEFT JOIN program C ON B.program_id = C.id";
@@ -135,11 +135,11 @@ class Model_activity extends CI_Model
 		return $add_where;
 	}
 
-	function get_rows($params = array(), $columns = array())
+	function get_rows($params = array(), $columns = array(), $order_by = '')
 	{
 		$CI =& get_instance();
 
-		return $CI->db_util->get_rows('activity', $params, $columns, 'wbs', 'model');
+		return $CI->db_util->get_rows('activity', $params, $columns, $order_by, 'wbs', 'model');
 	}
 
 	function get_row4id($id)
@@ -154,7 +154,7 @@ class Model_activity extends CI_Model
 	function get_del_flg4id($id)
 	{
 		$CI =& get_instance();
-		$row = $CI->db_util->get_row4id('wbs', $id, array('del_flg'), 'wbs', 'model');
+		$row = $CI->db_util->get_row4id('activity', $id, array('del_flg'), 'activity', 'model');
 		if (empty($row)) return 0;
 
 		return (int)$row['del_flg'];
@@ -224,7 +224,7 @@ class Model_activity extends CI_Model
 		if (!$id) return false;
 
 		$this->db->where('id', $id);
-		$this->db->delete('wbs');
+		$this->db->delete('activity');
 
 		return $this->db->affected_rows();
 	}

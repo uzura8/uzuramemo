@@ -15,9 +15,18 @@
 <div id="mainbody">
 <div id="modal">
 {include file='ci:hybrid/main_form.tpl'}
-{*{include file='ci:activity/main_form.tpl'}*}
 </div>
 </div>
+</body>
 {if !$is_modal}{include file='ci:hybrid/footer_script.tpl'}{/if}
 {include file='ci:activity/footer_script.tpl'}
+
+<script type="text/javascript" charset="utf-8">
+{literal}
+$(document).ready(function() {
+	$('#name').focus();
+});
+{/literal}
+</script>
+
 </html>

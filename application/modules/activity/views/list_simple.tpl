@@ -7,17 +7,17 @@
 <body id="{get_current_page_id}">
 <div id="list_top"></div>
 
-{if !$list}
-<div style="padding:30px 10px 30px 5px;">No Activities.</div>
-{else}
-
-<!-- main_list -->
 <div class="content">
 {if $wbs_id}
 <div>
 <span class="link_right"><a rel="prettyPopin" class="new_form_switch_{$wbs_id}" href="{site_url}activity/create/{$wbs_id}/1">&raquo;&nbsp;新規作成</a></span>
 </div>
 {/if}
+
+{if !$list}
+<div style="padding:5px;">No {get_config_value key=site_title index=activity}.</div>
+{else}
+<!-- main_list -->
 <ul>
 {foreach from=$list item=row}
 	<li><a rel="prettyPopin" class="new_form_switch_{$row.wbs_id}" href="{site_url}activity/create/{$row.wbs_id}/1/{$row.id}">{$row.name}</a></li>

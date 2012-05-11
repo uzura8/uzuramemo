@@ -12,6 +12,5 @@ CREATE TABLE `program` (
   `created_at` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `updated_at` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `name` (`name`),
   UNIQUE KEY `key_name` (`key_name`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;

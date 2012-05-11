@@ -509,7 +509,7 @@ class Project extends MY_Controller
 				'type'  => 'text',
 				'rules' => 'trim|required|alpha_dash|max_length[20]|callback__check_key_name_prefix_is_valid[program_id]|callback__unique_check_key_name',
 				'custom_rules' => 'key_name_child',
-				'width'  => 10,
+				'width'  => 18,
 				'realtime_validation'  => true,
 			),
 			'due_date' => array(

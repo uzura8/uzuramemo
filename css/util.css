@@ -85,6 +85,9 @@
 	margin-left: 30px;
 }
 
+.space_top_10, .st10 {margin-top: 10px;}
+.space_top_20, .st20 {margin-top: 20px;}
+
 .space_right, .sr {
 	margin-right: 10px;
 }
@@ -102,6 +105,7 @@
 .width_3 {width: 3%;}
 .width_5 {width: 5%;}
 .width_10 {width: 10%;}
+.width_15 {width: 15%;}
 .width_20 {width: 20%;}
 .width_30 {width: 30%;}
 .width_40 {width: 40%;}

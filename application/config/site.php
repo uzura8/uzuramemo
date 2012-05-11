@@ -17,9 +17,13 @@ $config['symbols'] = array(
 
 // style
 $config['styles'] = array(
-	'background-color' => array(
+	'backgroundcolor' => array(
 		'display' => '#fff',
 		'display_none' => '#c0c0c0',
-		'edit' => '#f7d9d9'
+		'edit' => '#f7d9d9',
+		'scheduled_today' => '#FFDDC9',
+		'scheduled_passed' => '#FFCB5C',
+		'scheduled_tomorrow' => '#CEFF85',
+		'active' => '#FFBDDF',
 	),
 );

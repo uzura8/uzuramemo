@@ -211,21 +211,9 @@ function send(post_url, id, get_url)  {
 
 	return false;
 }
-
-// edit textarea autogrow
-$(function(){
-	$('textarea').autogrow();
-});
 {/literal}
 </script>
 
 <script type="text/javascript" src="{site_url}js/jquery.slidescroll.js"></script>
-<script type="text/javascript">
-{literal}
-$(function(){
-  $("a[href*='#']").slideScroll();
-});
-{/literal}
-</script>
 
 </html>

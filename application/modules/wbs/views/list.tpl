@@ -26,7 +26,8 @@
 <h2 class="box_01" id="article_title_{$row.id}" style="background-color:{'background-color'|site_get_style:$row.del_flg};">
 <div>
 <span id="name{$row.id}" class="autogrow">{$row.name}</span>{if $row.key_name}<span id="key_name{$row.id}" class="autogrow sub_info2">{$row.key_name}</span>{/if}
-<span class="btnTop list_util_btn wider" id="title_btn_{$row.id}"><a href="javaScript:void(0);" onclick="$('#article_{$row.id}').slideToggle();">▼</a></span>
+<span class="btnTop list_util_btn wider space_left" id="title_btn_{$row.id}"><a href="javaScript:void(0);" onclick="$('#article_{$row.id}').slideToggle();">▼</a></span>
+<span class="link_right"><a rel="prettyPopin" class="new_form_switch_{$row.id}" href="{site_url}activity/create/{$row.id}/1">&raquo;&nbsp;{get_config_value key=site_title index=activity}新規作成</a></span>
 </div>
 <div class="article_meta_top">
 <div class="banner">
@@ -135,10 +136,6 @@ $(function() {
 });
 
 $(function(){
-  $("a[href*='#']").slideScroll();
-});
-
-$(function(){
 	uzura_datepicker("{/literal}{site_url}{literal}/css/images/calendar.gif");
 	uzura_sortable("{/literal}{site_url}{literal}wbs/ajax_execute_update_sort_move");
 });
@@ -149,6 +146,17 @@ $("a.activity_link").click(function(){
 	var url = '{/literal}{site_url uri=activity/ajax_activity_list_simple}{literal}';
 
 	ajax_restructure_activity_list(wbs_id, url);
+});
+
+$("a[rel^='prettyPopin']").bind("click", function(){
+	var id_value = $(this).attr("class");
+	var wbs_id = id_value.replace(/new_form_switch_/g, "");
+
+	$.cookie('wbs_id_modal', wbs_id);
+});
+
+$(document).ready(function(){
+	uzura_modal('{/literal}{site_url}{literal}img/loader.gif', '{/literal}{site_url uri=activity/ajax_activity_list_simple}{literal}');
 });
 {/literal}
 </script>

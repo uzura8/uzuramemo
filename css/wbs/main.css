@@ -60,25 +60,10 @@
 	vertical-align :middle;
 }
 
-#wbs_wbs_index .form_box_each span.label {
-	float: none;
-	font-size: 10px;
-	text-align: right;
-	padding-top: 4px;
-	margin-right: 1px;
-}
-
 #wbs_wbs_index .form_box_each span.title {
 	float: none;
 	font-size: 12px;
 	font-weight: bold;
 	text-align: right;
 	padding-top: 4px;
-}
-
-#wbs_wbs_index .form_box_each .btnSpan {
-	float: none;
-	font-size: 10px;
-	line-height: 0;
-	padding: 0;
 }

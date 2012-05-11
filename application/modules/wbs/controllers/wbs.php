@@ -223,7 +223,7 @@ class Wbs extends MY_Controller
 		$this->output->set_output('true');
 	}
 
-	public function ajax_execute_update_sort_move()
+	public function ajax_execute_update_sort_move($id_string = '')
 	{
 		$this->input->check_is_post();
 		$ids_pre = explode(',', $this->_get_post_params('values'));
@@ -231,6 +231,7 @@ class Wbs extends MY_Controller
 		$sorts = array();
 		foreach ($ids_pre as $id_pre)
 		{
+			if ($id_string) $id_pre = str_replace($id_string, '', $id_pre);
 			$id = (int)$id_pre;
 			if (!$id) continue;
 			$ids[] = $id;
@@ -246,7 +247,7 @@ class Wbs extends MY_Controller
 		$this->db->trans_begin();
 		foreach ($values as $id => $sort)
 		{
-			$result = $this->db_util->update('wbs', array('sort' => $sort), array('id' => $id), true, 'wbs', 'model');
+			$result = $this->db_util->update('wbs', array('sort' => $sort), array('id' => $id), false, 'wbs', 'model');
 			if (!$result)
 			{
 				$error = true;

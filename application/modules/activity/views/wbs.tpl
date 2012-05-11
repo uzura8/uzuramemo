@@ -1,14 +1,93 @@
+{assign var="current_module" value=$smarty.const.CURRENT_MODULE}
+{include file='ci:hybrid/header.tpl'}
+{include file='ci:hybrid/topmenu.tpl'}
+
+<div id="mainbody">
+{*{include file='ci:hybrid/subtitle.tpl'}*}
+
+<h4 id="main_form_title" class="box_01">
+<span class="f_11 space_right"><a id="new_form_switch" href="{site_url}activity/wbs">Normal</a></span>
+<span class="f_11 space_right"><a id="new_form_switch" href="{site_url}activity/wbs?mode=1">Active</a></span>
+<span class="f_11 space_right"><a id="new_form_switch" href="{site_url}activity/wbs?mode=2">Priority</a></span>
+</h4>
+
+{*{include file='ci:hybrid/main_form.tpl'}*}
+<div id="list">
+
+
+<div id="list_top"></div>
+
+{if !$list}
+<div style="padding:30px 10px 30px 5px;">{if $search}「{$search}」に一致する{elseif $now_category_id}このカテゴリの{else}指定した記事の{/if}登録はありません。</div>
+{else}
+
+<!-- main_list -->
+<div id="jquery-ui-sortable">
+<div class="content">
+{foreach from=$list item=row name=list}
+<div{if !$order} class="jquery-ui-sortable-item{if !$smarty.foreach.list.first} st20{/if}"{/if} id="wbs_{$row.id}">
+<a name="id_{$row.id}"></a>
+<h2 class="box_01 subtitle" id="article_title_wbs_{$row.id}">
+<div>
+<span id="name{$row.id}" class="autogrow">{$row.name}</span>{if $row.key_name}<span id="key_name{$row.id}" class="autogrow sub_info2">{$row.key_name}</span>{/if}
+<span class="btnTop list_util_btn wider space_left" id="title_btn_{$row.id}"><a href="javaScript:void(0);">▼</a></span>
+<span class="link_right_each line_height_15"><a rel="prettyPopin" class="pp_link_wbs_{$row.id}" href="{site_url}activity/create/{$row.id}/1">&raquo;&nbsp;作成</a></span>
+</div>
+<div class="article_meta_top">
+<div class="banner">
+<span class="space_left_5"><a href="{site_url}project/index/{$row.program_key_name}">{$row.program_name}</a></span>
+<span class="space_left_5"><a href="{site_url}wbs/index/{$row.project_key_name}">{$row.project_name}</a></span>
+</div>
+<div class="meta_info">
+<span>No.{$row.id}</span>
+<span class="space_left_5">update: {$row.updated_at|date_format:"%Y/%m/%d %H:%M"}</span>
+</div>
+<div style="clear: both"></div>
+</div>
+</h2>
+
+<div id="loading_activity_list_{$row.id}"><img src="{site_url}img/loading.gif"></div>
+<div id="pics_activity_list_{$row.id}"></div>
+<div id="activity_list_{$row.id}"></div>
+
+</div>
+{/foreach}
+</div>
+</div>
+{/if}
+
+</div><!-- main contents -->
+</div><!-- mainbody END -->
+
+{include file='ci:hybrid/mainmenu.tpl'}
+<div class="clearfloat"><hr></div>
+
+{include file='ci:hybrid/footer.tpl'}
+{include file='ci:hybrid/footer_script.tpl'}
+{include file='ci:activity/footer_script.tpl'}
+
+<script src="{site_url}js/uzura_activity.js" type="text/javascript"></script>
 <script type="text/javascript" charset="utf-8">
 {literal}
-// <![CDATA[
-$(document).ready(function() {
-	uzura_form_switch();
+uzura_sortable("{/literal}{site_url}{literal}wbs/ajax_execute_update_sort_move/wbs_");
 
-{/literal}{if $edit}
-	$('#main_form_box').show('fast');
-	$('#name').focus();
-{assign var=edit value=0}
-{/if}{literal}
+$("a[rel^='prettyPopin']").bind("click", function(){
+	var id_value = $(this).attr("class");
+	var wbs_id = id_value.replace(/pp_link_wbs_/g, "");
+
+	console.log(id_value, wbs_id);
+
+	$.cookie('wbs_id_modal_activity_wbs', wbs_id);
+});
+
+$(document).ready(function(){
+{/literal}
+{foreach from=$list item=row}{literal}
+	ajax_activity_list({/literal}{$row.id}{literal}, '{/literal}{site_url uri=activity/ajax_activity_list}/{$row.id}?mode={$mode}{literal}');
+{/literal}
+{/foreach}
+{literal}
+	uzura_modal('{/literal}{site_url}{literal}img/loader.gif', '{/literal}{site_url uri=activity/ajax_activity_list}{literal}');
 
 	$(".autogrow").live("click", function(){
 		var id = $(this).attr("id");
@@ -21,14 +100,14 @@ $(document).ready(function() {
 		}
 		var csrf_token = $.cookie('csrf_test_name');
 
-		$("p#" + id).editable("{/literal}{site_url uri=wbs/execute_update}/{literal}" + item_name, {
+		$("p#" + id).editable("{/literal}{site_url uri=activity/execute_update}/{literal}" + item_name, {
 			indicator : "<img src='{/literal}{site_url uri=js/lib/jeditable/img/indicator.gif}{literal}'>",
 			type      : "autogrow",
 			submit    : 'OK',
 			submitdata: { "csrf_test_name": csrf_token },
 			//submit    : '<input type="submit" value="OK" class="button">',
 			cancel    : 'cancel',
-			loadurl    : '{/literal}{site_url uri=wbs/ajax_wbs_detail}{literal}/' + id + '/' + item_name,
+			loadurl    : '{/literal}{site_url uri=activity/ajax_activity_detail}{literal}/' + id + '/' + item_name,
 			tooltip   : "Click to edit...",
 			onblur    : "ignore",
 			cssclass : "editable",
@@ -38,7 +117,7 @@ $(document).ready(function() {
 			//	 minHeight  : 32
 			//}
 		})
-		$("span#" + id).editable("{/literal}{site_url uri=wbs/execute_update}/{literal}" + item_name, {
+		$("span#" + id).editable("{/literal}{site_url uri=activity/execute_update}/{literal}" + item_name, {
 			indicator : "<img src='{/literal}{site_url uri=js/lib/jeditable/img/indicator.gif}{literal}'>",
 			type      : "text",
 			width     : 'width: ' + text_box_width + ';',// js/lib/jeditable/jquery.jeditable.js : 455 を修正し style で指定できるように対応
@@ -46,7 +125,7 @@ $(document).ready(function() {
 			//submit    : '<input type="submit" value="OK" class="button">',
 			submitdata: { "csrf_test_name": csrf_token },
 			cancel    : 'cancel',
-			loadurl    : '{/literal}{site_url uri=wbs/ajax_wbs_detail}{literal}/' + id + '/' + item_name,
+			loadurl    : '{/literal}{site_url uri=activity/ajax_activity_detail}{literal}/' + id + '/' + item_name,
 			tooltip   : "Click to edit...",
 			onblur    : "ignore",
 			cssclass : "editable",
@@ -60,7 +139,7 @@ $(document).ready(function() {
 		var id = id_value.replace(/btn_delFlg_/g, "");
 		var csrf_token = $.cookie('csrf_test_name');
 		$.ajax({
-			url : "{/literal}{site_url}{literal}wbs/ajax_execute_update_del_flg",
+			url : "{/literal}{site_url}{literal}activity/ajax_execute_update_del_flg",
 			dataType : "text",
 			data : {"id": id, "csrf_test_name": csrf_token},
 			type : "POST",
@@ -90,7 +169,7 @@ $(document).ready(function() {
 			if (r == true) {
 				var csrf_token = $.cookie('csrf_test_name');
 				$.ajax({
-					url : "{/literal}{site_url}{literal}wbs/ajax_execute_delete",
+					url : "{/literal}{site_url}{literal}activity/ajax_execute_delete",
 					dataType : "text",
 					data : {"id": id, "csrf_test_name": csrf_token},
 					type : "POST",
@@ -126,7 +205,6 @@ $(document).ready(function() {
 		funcname = "return util_check_" + conf[key]['format'] + "(arg)";
 		f = new Function('arg', funcname);
 		var ret = f(value);
-		console.log(ret);
 		if (!ret) {
 			$.jGrowl(conf[key]['error_message']);
 			return;
@@ -134,7 +212,7 @@ $(document).ready(function() {
 
 		// 更新
 		$.ajax({
-			url : "{/literal}{site_url}{literal}wbs/ajax_execute_update_common",
+			url : "{/literal}{site_url}{literal}activity/ajax_execute_update_common",
 			dataType : "text",
 			data : {"id": id, "key": key, "value": value, "csrf_test_name": csrf_token},
 			type : "POST",
@@ -163,7 +241,7 @@ $(document).ready(function() {
 
 		// 更新
 		$.ajax({
-			url : "{/literal}{site_url}{literal}wbs/ajax_execute_update_sort",
+			url : "{/literal}{site_url}{literal}activity/ajax_execute_update_sort",
 			dataType : "text",
 			data : {"id": id, "value": value, "csrf_test_name": csrf_token},
 			type : "POST",
@@ -182,13 +260,13 @@ $(document).ready(function() {
 	$(".btn_date").live("click", function(){
 		var id_value = $(this).attr("id");
 		var id = id_value.replace(/btn_date_/g, "");
-		var value_start_date = $("#input_start_date_" + id).val();
+		var value_scheduled_date = $("#input_scheduled_date_" + id).val();
 		var value_due_date = $("#input_due_date_" + id).val();
 		var csrf_token = $.cookie('csrf_test_name');
 
 		// 入力値確認
-		var ret = util_check_date_format(value_start_date);
-		if (value_start_date && ret == false) {
+		var ret = util_check_date_format(value_scheduled_date);
+		if (value_scheduled_date && ret == false) {
 			$.jGrowl('No.' + id + ': 開始日の日付形式が正しくありません');
 			return;
 		}
@@ -200,11 +278,12 @@ $(document).ready(function() {
 
 		// 更新
 		$.ajax({
-			url : "{/literal}{site_url}{literal}wbs/ajax_execute_update_date",
+			url : "{/literal}{site_url}{literal}activity/ajax_execute_update_date",
 			dataType : "text",
-			data : {"id": id, "due_date": value_due_date, "start_date": value_start_date, "csrf_test_name": csrf_token},
+			data : {"id": id, "due_date": value_due_date, "scheduled_date": value_scheduled_date, "csrf_test_name": csrf_token},
 			type : "POST",
 			success: function(data){
+				reset_article_color(id);
 				$.jGrowl('No.' + id + 'の日付を変更しました。');
 			},
 			error: function(data){
@@ -213,113 +292,70 @@ $(document).ready(function() {
 		});
 	});
 });
-// ]]>
-{/literal}
-</script>
 
-<script type="text/javascript">
-{literal}
-$('#main_form_submit').button();
-$('#main_form').validate({
-	rules : { {/literal}{convert2jquery_validate_rules form_items=$form}{literal} },
-	messages : { {/literal}{convert2jquery_validate_messages form_items=$form}{literal} },
-	errorClass: "validate_error",
-	errorElement: "span",
-//	errorLabelContainer: "#main_form_errorList",
-//	wrapper: "li",
-	submitHandler: function(form){
-		$(form).loading({
-			img: '{/literal}{site_url}{literal}img/loading.gif',
-			align: 'center'
-		});
-		$(form).ajaxSubmit({
-			success: function(data){
-				// メッセージ入力欄をクリア
-{/literal}
-{foreach from=$form key=key item=items}
-{if $items.type == 'text'}$( 'input#{$key}' ).val( '' );
-{elseif $items.type == 'textarea'}$( '{$items.type}#{$key}' ).val( '' );
-{elseif $items.type == 'select'}$( '{$items.type}#{$key}' ).val(0);
-{/if}
-{/foreach}
-{literal}
-				$('span').removeClass('validate_success');
-				$('span').removeClass('validate_error');
-				$('#name_result').fadeOut();
-				$('#key_name_result').fadeOut();
-				//$('#name').focus();
-				$('select#project_id').focus();
-				// $('#main_form_box').hide('fast');
-				ajax_list(0, 1);
-				$('select#select_order').val('1');
-				$.jGrowl('{/literal}{$page_name}{literal}を作成しました。');
-			},
-			error: function(){
-				$.jGrowl('{/literal}{$page_name}{literal}を作成できませんでした。');
-			},
-			complete: function(){
-				$(form).loading(false);
-			}
-		});
+function reset_article_color(id) {
+	var del_flg = $('#hidden_del_flg_' + id).val();
+	var status = $('#hidden_status_' + id).val();
+	var closed_date = $('#input_closed_date_' + id).val();
+	var scheduled_date = $('#input_scheduled_date_' + id).val();
+
+	var closed_date_int = closed_date.replace(/-/g, '');
+	var scheduled_date_int = scheduled_date.replace(/-/g, '');
+
+	var fullDate = new Date()
+	//console.log(fullDate);
+	//Thu May 19 2011 17:25:38 GMT+1000 {}
+	var month = fullDate.getMonth();
+	var month_str = "" + month;
+	var date = fullDate.getDate();
+	var date_str = "" + date;
+
+	//convert month to 2 digits
+	var twoDigitMonth = (month_str.length === 1) ? '0' + (month + 1) : month;
+	var twoDigitDate  = (date_str.length === 1) ? '0' + (date + 1) : date;
+	var today_int = fullDate.getFullYear() + twoDigitMonth + twoDigitDate;
+
+	var nowms = fullDate.getTime();
+	var after = 1; //何日後かを入れる
+	after = after*24*60*60*1000; //ミリ秒に変換
+	ans = new Date(nowms+after); //現在＋何日後 のミリ秒で日付オブジェクト生成
+
+	var month = ans.getMonth();
+	var month_str = "" + month;
+	var date = ans.getDate();
+	var date_str = "" + date;
+
+	//convert month to 2 digits
+	var twoDigitMonth = (month_str.length === 1) ? '0' + (month + 1) : month;
+	var twoDigitDate  = (date_str.length === 1) ? '0' + (date + 1) : date;
+	var tomorrow_int = ans.getFullYear() + twoDigitMonth + twoDigitDate;
+
+	console.log(scheduled_date_int, tomorrow_int);
+	//console.log(currentDate);
+
+	if (del_flg == 1) {
+		$('#article_title_'+id).css('background-color', {/literal}'{`$config_site_styles.backgroundcolor.display_none`}'{literal});
+		$('#article_'+id).css('background-color', {/literal}'{$config_site_styles.backgroundcolor.display_none}'{literal});
+	} else if (closed_date.length > 0 && closed_date != '0000-00-00') {
+		$('#article_title_'+id).css('background-color', {/literal}'{$config_site_styles.backgroundcolor.display_none}'{literal});
+		$('#article_'+id).css('background-color', {/literal}'{$config_site_styles.backgroundcolor.display_none}'{literal});
+	} else if (status > 0) {
+		$('#article_title_'+id).css('background-color', {/literal}'{$config_site_styles.backgroundcolor.active}'{literal});
+		$('#article_'+id).css('background-color', {/literal}'{$config_site_styles.backgroundcolor.active}'{literal});
+	} else if (scheduled_date.length > 0 && scheduled_date != '0000-00-00' && scheduled_date_int < today_int) {
+		$('#article_title_'+id).css('background-color', {/literal}'{$config_site_styles.backgroundcolor.scheduled_passed}'{literal});
+		$('#article_'+id).css('background-color', {/literal}'{$config_site_styles.backgroundcolor.scheduled_passed}'{literal});
+	} else if (scheduled_date_int == today_int) {
+		$('#article_title_'+id).css('background-color', {/literal}'{$config_site_styles.backgroundcolor.scheduled_today}'{literal});
+		$('#article_'+id).css('background-color', {/literal}'{$config_site_styles.backgroundcolor.scheduled_today}'{literal});
+	} else if (scheduled_date_int == tomorrow_int) {
+		$('#article_title_'+id).css('background-color', {/literal}'{$config_site_styles.backgroundcolor.scheduled_tomorrow}'{literal});
+		$('#article_'+id).css('background-color', {/literal}'{$config_site_styles.backgroundcolor.scheduled_tomorrow}'{literal});
+	} else {
+		$('#article_title_'+id).css('background-color', {/literal}'{$config_site_styles.backgroundcolor.display}'{literal});
+		$('#article_'+id).css('background-color', {/literal}'{$config_site_styles.backgroundcolor.display}'{literal});
+		$type = 'display';
 	}
-});
-
-//// 重複確認: key_name
-//$(function() {
-//	$('#key_name_loading').hide();
-//	$('#key_name').change(function() {
-//		if ($(this).val().length == 0)
-//		{
-//			$('#key_name_result').html('');
-//			return;
-//		}
-//		$('#key_name_loading').show();
-//		$.post("{/literal}{site_url}{literal}wbs/ajax_check_wbs_key_name", {
-//			key_name: $('#key_name').val()
-//			}, function(response){
-//				$('#key_name_result').fadeOut();
-//				if (response == 'true') {
-//					var message = '<span class="validate_success">登録可能</span>';
-//				} else {
-//					var message = '<span class="validate_error">' + response + '</span>';
-//				}
-//				setTimeout("finishAjax('key_name_result', '"+escape(message)+"')", 400);
-//			});
-//			return false;
-//	});
-//});
-//function finishAjax(id, response) {
-//	var loading_parts_id = id.replace(/_result/g, "_loading");
-//	$('#'+loading_parts_id).hide();
-//	$('#'+id).html(unescape(response));
-//	$('#'+id).fadeIn();
-//}
-//
-//$(function(){
-//	$('#key_name').alphanumeric({allow:"_"});
-//});
-
-$(function(){
-	var order = $("#select_order").val();
-	ajax_list({/literal}{$from}{literal}, order);
-});
-
-function ajax_list(offset, order){
-	var id  = 'list';
-	var url = '{/literal}{site_url uri=wbs/ajax_wbs_list}{literal}';
-
-	// Ajaxによるアクセスにキャッシュを利用しない(毎回サーバにアクセス)
-	$.ajaxSetup( { cache : false } );
-	$("#" + id).show();
-
-	$.get(url, { nochache:(new Date()).getTime(), 'project_id':{/literal}'{$project_id}'{literal}, 'search':{/literal}'{$search}'{literal}, 'order':order, 'from':offset }, function(data){
-		$("#loading").fadeOut(function() {
-			$("#pics").show();
-		});
-		if (data.length>0){
-			$("#" + id).html(data);
-		}
-	});
 }
 {/literal}
 </script>
@@ -352,7 +388,7 @@ $(function() {
 	});
 
 	//テキストボックスにカレンダーをバインドする（パラメータは必要に応じて）
-	$("#start_date").datepicker({
+	$("#scheduled_date").datepicker({
 		showButtonPanel: true,//「今日」「閉じる」ボタンを表示する
 		firstDay: 1,//週の先頭を月曜日にする（デフォルトは日曜日）
 
@@ -368,15 +404,6 @@ $(function() {
 		// maxDate: new Date(2010, 8 - 1, 15)
 	});
 });
-
-$('#select_order').change(function() {
-	var order = parseInt($(this).val());
-	ajax_list(0, order);
-});
 {/literal}
 </script>
-
-<!-- module専用CSSの読み込み -->
-<link rel="stylesheet" href="{site_url}css/wbs/main.css">
-
-<script src="{site_url}js/uzura_wbs.js" type="text/javascript"></script>
+</html>

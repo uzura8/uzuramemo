@@ -2,11 +2,7 @@
 {literal}
 // <![CDATA[
 $(document).ready(function() {
-	$('#new_form_switch').click(function() {
-		$('#main_form_box').slideToggle();
-		$('#name').focus();
-	});
-	//$('#main_form_box').hide('fast');
+	uzura_form_switch();
 
 	$(".autogrow").live("click", function(){
 		var id = $(this).attr("id");
@@ -267,11 +263,6 @@ function ajax_list(offset, order){
 		}
 	})
 }
-
-// edit textarea autogrow
-$(function(){
-	$('textarea').autogrow();
-});
 
 $('#select_order').change(function() {
 	var order = parseInt($(this).val());

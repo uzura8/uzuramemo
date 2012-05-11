@@ -147,10 +147,6 @@ $(function() {
 		return false;
 	});
 });
-
-$(function(){
-  $("a[href*='#']").slideScroll();
-});
 {/literal}
 </script>
 

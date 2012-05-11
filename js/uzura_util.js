@@ -1,9 +1,13 @@
 function uzura_sortable(url){
-	$('#jquery-ui-sortable').sortable({
-		items: '.jquery-ui-sortable-item',
-		handle: 'span.btnTop',
+	var parent_name = (arguments.length > 1) ? arguments[1] : '#jquery-ui-sortable';
+	var child_name  = (arguments.length > 2) ? arguments[2] : '.jquery-ui-sortable-item';
+	var button_name = (arguments.length > 3) ? arguments[3] : 'span.btnTop';
+
+	$(parent_name).sortable({
+		items: child_name,
+		handle: button_name,
 		update: function(event, ui) {
-			var updateArray = $('#jquery-ui-sortable').sortable('toArray').join(',');
+			var updateArray = $(parent_name).sortable('toArray').join(',');
 
 			// 更新
 			var csrf_token = $.cookie('csrf_test_name');
@@ -18,7 +22,7 @@ function uzura_sortable(url){
 					$.jGrowl('並び順を変更しました。');
 				},
 				error: function(data){
-					ajax_list(0);
+					//ajax_list(0);
 					$.jGrowl('並び順を変更できませんでした。');
 				}
 			});
@@ -50,3 +54,9 @@ function uzura_datepicker(button_image_url){
 	});
 }
 
+function uzura_form_switch(){
+	$('#new_form_switch').click(function() {
+		$('#main_form_box').slideToggle();
+		$('input#name').focus();
+	});
+}

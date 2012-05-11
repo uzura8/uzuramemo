@@ -25,7 +25,17 @@
 <link rel="stylesheet" href="{site_url}js/lib/jQselectable/skin/selectable/style.css">
 
 <script src="{site_url}js/jquery.cookie.js" type="text/javascript"></script>
-<script src="{site_url}js/uzura_project.js" type="text/javascript"></script>
+<script src="{site_url}js/uzura_util.js" type="text/javascript"></script>
 
 <link rel="stylesheet" href="{site_url}css/prettyPopin.css" type="text/css" media="screen" charset="utf-8" />
 <script src="{site_url}js/jquery.prettyPopin.js" type="text/javascript" charset="utf-8"></script>
+
+<script src="{site_url}js/jquery.slidescroll.js" type="text/javascript"></script>
+<script type="text/javascript" charset="utf-8">
+{literal}
+$(function(){
+  $("a[href*='#']").slideScroll();
+	$('textarea').autogrow();
+});
+{/literal}
+</script>
