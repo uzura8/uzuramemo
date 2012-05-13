@@ -125,7 +125,7 @@ $(function() {
 			if (current.page == {/literal}{$max_page}{literal}) {
 				$('nav#next').remove();
 			}
-			uzura_datepicker("{/literal}{site_url}{literal}/css/images/calendar.gif");
+			uzura_datepicker(".input_date", "{/literal}{site_url}{literal}/css/images/calendar.gif");
 			uzura_sortable("{/literal}{site_url}{literal}wbs/ajax_execute_update_sort_move");
 		},
 	});
@@ -136,7 +136,7 @@ $(function() {
 });
 
 $(function(){
-	uzura_datepicker("{/literal}{site_url}{literal}/css/images/calendar.gif");
+	uzura_datepicker(".input_date", "{/literal}{site_url}{literal}/css/images/calendar.gif");
 	uzura_sortable("{/literal}{site_url}{literal}wbs/ajax_execute_update_sort_move");
 });
 

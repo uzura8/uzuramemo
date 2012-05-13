@@ -120,6 +120,7 @@
 .clearfloat { clear: both; }
 .clearfloat hr { display: none; }
 
-.float_left { float: left; }
+.float_left, .fl { float: left; }
+.float_right, .fr { float: right; }
 
 .display_none, .hide { display: none; }

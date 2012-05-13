@@ -51,10 +51,20 @@ class Project extends MY_Controller
 
 	private function _get_default_view_data()
 	{
-		return array(
+		$view_data = array(
 			'page_name' => $this->private_config['site_title'],
 			'selected_select_order' => 4,
 		);
+
+		$site_url = site_url();
+		$view_data['head_info'] = <<<EOL
+<link rel="stylesheet" href="{$site_url}css/jquery-ui-1.8.14.custom.css">
+<link rel="stylesheet" href="{$site_url}css/jquery-ui-calendar.custom.css">
+<link rel="stylesheet" href="{$site_url}css/ui.theme.css">
+
+EOL;
+
+		return $view_data;
 	}
 
 	public function index($program_key = '')

@@ -19,7 +19,8 @@
 <h2 class="box_01 article_title" id="article_title_{$row.id}" style="background-color:{'background-color'|site_get_activity_style:$row.del_flg:$row.closed_date:$row.scheduled_date:$row.status};">
 <div>
 <span id="name{$row.id}" class="autogrow">{$row.name}</span>{if $row.key_name}<span id="key_name{$row.id}" class="autogrow sub_info2">{$row.key_name}</span>{/if}
-<span class="list_util_btn wider btnTop" id="title_btn_{$row.id}"><a href="javaScript:void(0);" onclick="$('#article_{$row.id}').slideToggle();">▼</a></span>
+<span class="list_util_btn wider btnTop sl5" id="title_btn_{$row.id}"><a href="javaScript:void(0);" onclick="$('#article_{$row.id}').slideToggle();">▼</a></span>
+<span class="btnSpan"><input type="button" name="update_del_flg_{$row.id}" value="{$row.del_flg|site_get_symbols_for_display}" id="btn_delFlg_{$row.id}" class="btn_delFlg"></span>
 </div>
 </h2>
 
@@ -62,7 +63,9 @@
 </div>
 {/if}
 <div class="article_aside_button">
+{*
 <span class="btnSpan"><input type="button" name="update_del_flg_{$row.id}" value="{$row.del_flg|site_get_symbols_for_display}" id="btn_delFlg_{$row.id}" class="btn_delFlg"></span>
+*}
 <span class="label sl2">終了日</span><input name="input_closed_date_{$row.id}" id="input_closed_date_{$row.id}" class="width_10 input_date" type="text" value="{$row.closed_date}">
 <span class="btnSpan space_left_5"><input type="button" name="delete_{$row.id}" value="削除" id="btn_delete_{$row.id}" class="btn_delete"></span>
 {if $order}
@@ -83,7 +86,7 @@
 {literal}
 uzura_sortable("{/literal}{site_url}{literal}activity/ajax_execute_update_sort_move/{/literal}{$wbs_id}{literal}", '#jquery-ui-sortable_wbs_{/literal}{$wbs_id}{literal}', '.jquery-ui-sortable-item_wbs_{/literal}{$wbs_id}{literal}');
 $(function(){
-	uzura_datepicker("{/literal}{site_url}{literal}/css/images/calendar.gif");
+	uzura_datepicker(".input_date", "{/literal}{site_url}{literal}/css/images/calendar.gif");
 });
 {/literal}
 </script>

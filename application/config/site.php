@@ -24,6 +24,7 @@ $config['styles'] = array(
 		'scheduled_today' => '#FFDDC9',
 		'scheduled_passed' => '#FFCB5C',
 		'scheduled_tomorrow' => '#CEFF85',
+		'scheduled_this_week' => '#E3FFB9',
 		'active' => '#FFBDDF',
 	),
 );

@@ -6,9 +6,9 @@
 {*{include file='ci:hybrid/subtitle.tpl'}*}
 
 <h4 id="main_form_title" class="box_01">
-<span class="f_11 space_right"><a id="new_form_switch" href="{site_url}activity/wbs">Normal</a></span>
-<span class="f_11 space_right"><a id="new_form_switch" href="{site_url}activity/wbs?mode=1">Active</a></span>
-<span class="f_11 space_right"><a id="new_form_switch" href="{site_url}activity/wbs?mode=2">Priority</a></span>
+<span class="f_11 space_right"><a id="new_form_switch" href="javaScript:void(0);" onclick="ajax_activity_list_all(0);">All</a></span>
+<span class="f_11 space_right"><a id="new_form_switch" href="javaScript:void(0);" onclick="ajax_activity_list_all(1);">Active</a></span>
+<span class="f_11 space_right"><a id="new_form_switch" href="javaScript:void(0);" onclick="ajax_activity_list_all(2);">Priority</a></span>
 </h4>
 
 {*{include file='ci:hybrid/main_form.tpl'}*}
@@ -81,12 +81,7 @@ $("a[rel^='prettyPopin']").bind("click", function(){
 });
 
 $(document).ready(function(){
-{/literal}
-{foreach from=$list item=row}{literal}
-	ajax_activity_list({/literal}{$row.id}{literal}, '{/literal}{site_url uri=activity/ajax_activity_list}/{$row.id}?mode={$mode}{literal}');
-{/literal}
-{/foreach}
-{literal}
+	ajax_activity_list_all({/literal}{$mode}{literal});
 	uzura_modal('{/literal}{site_url}{literal}img/loader.gif', '{/literal}{site_url uri=activity/ajax_activity_list}{literal}');
 
 	$(".autogrow").live("click", function(){
@@ -138,22 +133,28 @@ $(document).ready(function(){
 		var id_value = $(this).attr("id");
 		var id = id_value.replace(/btn_delFlg_/g, "");
 		var csrf_token = $.cookie('csrf_test_name');
+		var closed_date = $('#input_closed_date_' + id).val();
+
 		$.ajax({
 			url : "{/literal}{site_url}{literal}activity/ajax_execute_update_del_flg",
 			dataType : "text",
-			data : {"id": id, "csrf_test_name": csrf_token},
+			data : {"id": id, "closed_date" : closed_date, "csrf_test_name": csrf_token},
 			type : "POST",
 			success: function(status_after){
+
 				if (status_after == "1") {
-					var btn_val = "{/literal}{1|site_get_symbols_for_display}{literal}";
-					var bgcolor = "{/literal}{'background-color'|site_get_style:'1'}{literal}";
+					if (closed_date.length == 0) {
+						var today = get_today_for_sql_format();
+						$('#input_closed_date_' + id).val(today);
+						$('#hidden_del_flg_' + id).val(today);
+					}
 				} else {
-					var btn_val = "{/literal}{0|site_get_symbols_for_display}{literal}";
-					var bgcolor = "{/literal}{'background-color'|site_get_style:'0'}{literal}";
+					$('#input_closed_date_' + id).val('');
+					$('#hidden_del_flg_' + id).val('');
 				}
-				$("#article_title_" + id).css({"background" : bgcolor});
-				$("#article_" + id).css({"background" : bgcolor});
+				var btn_val = "{/literal}{1|site_get_symbols_for_display}{literal}";
 				$("#btn_delFlg_" + id).val(btn_val);
+				reset_article_color(id);
 			},
 			error: function(){
 				$.jGrowl('No.' + id + 'の{/literal}{$page_name}{literal}の状態を変更できませんでした。');
@@ -293,6 +294,15 @@ $(document).ready(function(){
 	});
 });
 
+function ajax_activity_list_all(mode) {
+{/literal}
+{foreach from=$list item=row}{literal}
+	ajax_activity_list({/literal}{$row.id}{literal}, '{/literal}{site_url uri=activity/ajax_activity_list}/{$row.id}?mode={literal}'+mode);
+{/literal}
+{/foreach}
+{literal}
+}
+
 function reset_article_color(id) {
 	var del_flg = $('#hidden_del_flg_' + id).val();
 	var status = $('#hidden_status_' + id).val();
@@ -302,35 +312,11 @@ function reset_article_color(id) {
 	var closed_date_int = closed_date.replace(/-/g, '');
 	var scheduled_date_int = scheduled_date.replace(/-/g, '');
 
-	var fullDate = new Date()
-	//console.log(fullDate);
-	//Thu May 19 2011 17:25:38 GMT+1000 {}
-	var month = fullDate.getMonth();
-	var month_str = "" + month;
-	var date = fullDate.getDate();
-	var date_str = "" + date;
+	var today_int = get_date_int_format();
+	var tomorrow_int = get_date_int_format(1);
+	var this_week_int = get_date_int_format(7);
 
-	//convert month to 2 digits
-	var twoDigitMonth = (month_str.length === 1) ? '0' + (month + 1) : month;
-	var twoDigitDate  = (date_str.length === 1) ? '0' + (date + 1) : date;
-	var today_int = fullDate.getFullYear() + twoDigitMonth + twoDigitDate;
-
-	var nowms = fullDate.getTime();
-	var after = 1; //何日後かを入れる
-	after = after*24*60*60*1000; //ミリ秒に変換
-	ans = new Date(nowms+after); //現在＋何日後 のミリ秒で日付オブジェクト生成
-
-	var month = ans.getMonth();
-	var month_str = "" + month;
-	var date = ans.getDate();
-	var date_str = "" + date;
-
-	//convert month to 2 digits
-	var twoDigitMonth = (month_str.length === 1) ? '0' + (month + 1) : month;
-	var twoDigitDate  = (date_str.length === 1) ? '0' + (date + 1) : date;
-	var tomorrow_int = ans.getFullYear() + twoDigitMonth + twoDigitDate;
-
-	console.log(scheduled_date_int, tomorrow_int);
+	console.log(scheduled_date_int, tomorrow_int, this_week_int);
 	//console.log(currentDate);
 
 	if (del_flg == 1) {
@@ -351,6 +337,9 @@ function reset_article_color(id) {
 	} else if (scheduled_date_int == tomorrow_int) {
 		$('#article_title_'+id).css('background-color', {/literal}'{$config_site_styles.backgroundcolor.scheduled_tomorrow}'{literal});
 		$('#article_'+id).css('background-color', {/literal}'{$config_site_styles.backgroundcolor.scheduled_tomorrow}'{literal});
+	} else if (scheduled_date.length > 0 && scheduled_date != '0000-00-00' && scheduled_date_int <= this_week_int) {
+		$('#article_title_'+id).css('background-color', {/literal}'{$config_site_styles.backgroundcolor.scheduled_this_week}'{literal});
+		$('#article_'+id).css('background-color', {/literal}'{$config_site_styles.backgroundcolor.scheduled_this_week}'{literal});
 	} else {
 		$('#article_title_'+id).css('background-color', {/literal}'{$config_site_styles.backgroundcolor.display}'{literal});
 		$('#article_'+id).css('background-color', {/literal}'{$config_site_styles.backgroundcolor.display}'{literal});
@@ -364,45 +353,11 @@ function reset_article_color(id) {
 <script src="{site_url}js/lib/jquery-ui-1.8.14.custom.min.js" type="text/javascript"></script>
 <script src="{site_url}js/lib/jquery.ui.datepicker-ja.js" type="text/javascript"></script>
 {*<script src="{site_url}js/lib/gcalendar-holidays.js" type="text/javascript"></script>*}
-<link rel="stylesheet" href="{site_url}css/jquery-ui-1.8.14.custom.css">
-<link rel="stylesheet" href="{site_url}css/jquery-ui-calendar.custom.css">
-<link rel="stylesheet" href="{site_url}css/ui.theme.css">
 <script type="text/javascript" charset="utf-8">
 {literal}
 $(function() {
-	//テキストボックスにカレンダーをバインドする（パラメータは必要に応じて）
-	$("#due_date").datepicker({
-		showButtonPanel: true,//「今日」「閉じる」ボタンを表示する
-		firstDay: 1,//週の先頭を月曜日にする（デフォルトは日曜日）
-
-		//年月をドロップダウンリストから選択できるようにする場合
-		//changeYear: true,
-		changeMonth: true,
-
-		prevText: '&#x3c;前',
-		nextText: '次&#x3e;',
-
-		// 選択可能な日付の範囲を限定する場合（月は0～11）
-		// minDate: new Date(2010, 6 - 1, 16),
-		// maxDate: new Date(2010, 8 - 1, 15)
-	});
-
-	//テキストボックスにカレンダーをバインドする（パラメータは必要に応じて）
-	$("#scheduled_date").datepicker({
-		showButtonPanel: true,//「今日」「閉じる」ボタンを表示する
-		firstDay: 1,//週の先頭を月曜日にする（デフォルトは日曜日）
-
-		//年月をドロップダウンリストから選択できるようにする場合
-		changeYear: true,
-		changeMonth: true,
-
-		prevText: '&#x3c;前',
-		nextText: '次&#x3e;',
-
-		// 選択可能な日付の範囲を限定する場合（月は0～11）
-		// minDate: new Date(2010, 6 - 1, 16),
-		// maxDate: new Date(2010, 8 - 1, 15)
-	});
+	uzura_datepicker("#due_date");
+	uzura_datepicker("#scheduled_date");
 });
 {/literal}
 </script>

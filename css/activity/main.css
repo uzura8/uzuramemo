@@ -42,3 +42,11 @@ div#modal div#main_form_box {
 #activity_activity_wbs article.box_01 aside.article_footer .btnSpan {
 	float: none;
 }
+
+#activity_activity_wbs div#list h2.box_01 span.btnSpan {
+	float: right;
+	padding: 0 5px;
+}
+#activity_activity_wbs div#list h2.box_01 span.btnSpan input {
+	font-size: 80%;
+}

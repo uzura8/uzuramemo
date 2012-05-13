@@ -92,6 +92,10 @@ function site_get_activity_style($property, $del_flg, $closed_date, $scheduled_d
 	{
 		$type = 'scheduled_tomorrow';
 	}
+	elseif ($scheduled_date && $scheduled_date <= date('Y-m-d', strtotime('+7 day')))
+	{
+		$type = 'scheduled_this_week';
+	}
 	else
 	{
 		$type = 'display';

@@ -46,5 +46,5 @@
 {/foreach}
 <button id="{$form_id}_submit" class="iPhoneButton">送信</button>
 {form_close}
-{if $is_modal}<div class="btnBox"><span class="btnTop"><a href="#" rel="close">close</a></span></div>{/if}
+{if $is_modal}<div class="btnBox"><span class="btnTop wider"><a href="#" rel="close">close</a></span></div>{/if}
 </div><!-- main_form_box END -->

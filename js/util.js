@@ -41,3 +41,40 @@ function add_date(basedate, add_days)
 
 	return y + '-' + m + '-' + d;
 }
+
+function get_today_for_sql_format() {
+	ans = new Date();
+
+	var month = ans.getMonth();
+	var month_str = "" + month;
+	var date = ans.getDate();
+	var date_str = "" + date;
+
+	//convert month to 2 digits
+	var twoDigitMonth = (month_str.length === 1) ? '0' + (month + 1) : month;
+	var twoDigitDate  = (date_str.length === 1) ? '0' + (date + 1) : date;
+
+	return ans.getFullYear() + '-' + twoDigitMonth + '-' + twoDigitDate;
+}
+
+function get_date_int_format() {
+	var after = (arguments.length > 0) ? arguments[0] : 0;
+
+	var fullDate = new Date()
+	var nowms = fullDate.getTime();
+
+	//var after = 1; //何日後かを入れる
+	after = after*24*60*60*1000; //ミリ秒に変換
+	ans = new Date(nowms+after); //現在＋何日後 のミリ秒で日付オブジェクト生成
+
+	var month = ans.getMonth();
+	var month_str = "" + month;
+	var date = ans.getDate();
+	var date_str = "" + date;
+
+	//convert month to 2 digits
+	var twoDigitMonth = (month_str.length === 1) ? '0' + (month + 1) : month;
+	var twoDigitDate  = (date_str.length === 1) ? '0' + (date + 1) : date;
+
+	return ans.getFullYear() + twoDigitMonth + twoDigitDate;
+}

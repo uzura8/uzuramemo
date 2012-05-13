@@ -8,7 +8,7 @@
 <meta name="robots" content="{if $smarty.const.IS_ACCEPT_ROBOTS}index,follow{else}noindex,nofollow{/if}">
 {if $site_keywords}<meta name="keywords" content="{','|implode:$site_keywords}">{/if}
 <meta name="description" content="{$site_description}">
-{$head_info}
+{$head_info|smarty:nodefaults}
 <link rel="stylesheet" href="{site_url}css/{$current_module}/filter.css">
 </head>
 <body id="{get_current_page_id}" class="base">

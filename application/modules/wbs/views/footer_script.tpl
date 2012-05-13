@@ -328,45 +328,13 @@ function ajax_list(offset, order){
 <script src="{site_url}js/lib/jquery-ui-1.8.14.custom.min.js" type="text/javascript"></script>
 <script src="{site_url}js/lib/jquery.ui.datepicker-ja.js" type="text/javascript"></script>
 {*<script src="{site_url}js/lib/gcalendar-holidays.js" type="text/javascript"></script>*}
-<link rel="stylesheet" href="{site_url}css/jquery-ui-1.8.14.custom.css">
-<link rel="stylesheet" href="{site_url}css/jquery-ui-calendar.custom.css">
-<link rel="stylesheet" href="{site_url}css/ui.theme.css">
 <script type="text/javascript" charset="utf-8">
 {literal}
 $(function() {
 	//テキストボックスにカレンダーをバインドする（パラメータは必要に応じて）
-	$("#due_date").datepicker({
-		showButtonPanel: true,//「今日」「閉じる」ボタンを表示する
-		firstDay: 1,//週の先頭を月曜日にする（デフォルトは日曜日）
-
-		//年月をドロップダウンリストから選択できるようにする場合
-		//changeYear: true,
-		changeMonth: true,
-
-		prevText: '&#x3c;前',
-		nextText: '次&#x3e;',
-
-		// 選択可能な日付の範囲を限定する場合（月は0～11）
-		// minDate: new Date(2010, 6 - 1, 16),
-		// maxDate: new Date(2010, 8 - 1, 15)
-	});
-
-	//テキストボックスにカレンダーをバインドする（パラメータは必要に応じて）
-	$("#start_date").datepicker({
-		showButtonPanel: true,//「今日」「閉じる」ボタンを表示する
-		firstDay: 1,//週の先頭を月曜日にする（デフォルトは日曜日）
-
-		//年月をドロップダウンリストから選択できるようにする場合
-		changeYear: true,
-		changeMonth: true,
-
-		prevText: '&#x3c;前',
-		nextText: '次&#x3e;',
-
-		// 選択可能な日付の範囲を限定する場合（月は0～11）
-		// minDate: new Date(2010, 6 - 1, 16),
-		// maxDate: new Date(2010, 8 - 1, 15)
-	});
+	uzura_datepicker("#due_date");
+	uzura_datepicker("#start_date");
+	uzura_datepicker("#closed_date");
 });
 
 $('#select_order').change(function() {
@@ -375,8 +343,4 @@ $('#select_order').change(function() {
 });
 {/literal}
 </script>
-
-<!-- module専用CSSの読み込み -->
-<link rel="stylesheet" href="{site_url}css/wbs/main.css">
-
 <script src="{site_url}js/uzura_wbs.js" type="text/javascript"></script>

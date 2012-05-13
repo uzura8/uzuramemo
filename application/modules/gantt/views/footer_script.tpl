@@ -410,6 +410,3 @@ $(function() {
 });
 {/literal}
 </script>
-
-<!-- module専用CSSの読み込み -->
-<link rel="stylesheet" href="{site_url}css/{$current_module}/main.css">

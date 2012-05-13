@@ -64,10 +64,20 @@ class Activity extends MY_Controller
 
 	private function _get_default_view_data()
 	{
-		return array(
+		$view_data = array(
 			'page_name' => $this->private_config['site_title'],
 			'selected_select_order' => 0,
 		);
+
+		$site_url = site_url();
+		$view_data['head_info'] = <<<EOL
+<link rel="stylesheet" href="{$site_url}css/jquery-ui-1.8.14.custom.css">
+<link rel="stylesheet" href="{$site_url}css/jquery-ui-calendar.custom.css">
+<link rel="stylesheet" href="{$site_url}css/ui.theme.css">
+
+EOL;
+
+		return $view_data;
 	}
 
 	public function create($wbs_id = 0, $mode = 0, $activity_id = 0)
@@ -180,6 +190,8 @@ class Activity extends MY_Controller
 			$params['wbs_id'] = $this->wbs_id;
 			$view_data['wbs_id'] = $this->wbs_id;
 		}
+		$view_data['list'] =  $this->model_activity->get_rows($params, array(), 'sort');
+
 		$this->smarty_parser->parse('ci:activity/list_simple.tpl', $view_data);
 	}
 
@@ -263,20 +275,7 @@ class Activity extends MY_Controller
 			$params['sql'][] = 'C.id <> 5';
 		}
 
-		$view_data['list'] =  $this->model_wbs->get_main_list(0, $this->limit_wbs, 'A.sort, C.sort', '', true, 'A.*, B.name as project_name, B.key_name as project_key_name, C.name as program_name, C.key_name as program_key_name', $params);
-//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-$isActive = 0;
-$isExit   = 0;
-$isEcho   = 0;
-$isAdd    = 1;
-$file = "/tmp/test.log";
-$a = $this->db->last_query();
-if ($isActive) {
-$_type = 'wb';if ($isAdd) $_type = 'a';$fp = fopen($file, $_type);ob_start();
-var_dump(__LINE__, $a);// !!!!!!!
-$out=ob_get_contents();fwrite( $fp, $out . "\n" );ob_end_clean();fclose( $fp );if ($isEcho) echo $out;if ($isExit) exit;
-}
-//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+		$view_data['list'] = $this->model_wbs->get_main_list(0, $this->limit_wbs, 'A.sort, C.sort', '', true, 'A.*, B.name as project_name, B.key_name as project_key_name, C.name as program_name, C.key_name as program_key_name', $params);
 /*
 		// 記事件数を取得
 		$count_all = $this->model_wbs->get_count_all('', true, $params);
@@ -286,6 +285,8 @@ $out=ob_get_contents();fwrite( $fp, $out . "\n" );ob_end_clean();fclose( $fp );i
 		$view_data['count_all']  = $count_all;
 		$view_data['max_page'] = ceil($count_all / $this->limit);
 */
+
+		$site_url = site_url();
 		$this->smarty_parser->parse('ci:activity/wbs.tpl', $view_data);
 	}
 
@@ -345,7 +346,13 @@ $out=ob_get_contents();fwrite( $fp, $out . "\n" );ob_end_clean();fclose( $fp );i
 		$del_flg_after = 1;
 		if ($this->model_activity->get_del_flg4id($id)) $del_flg_after = 0;
 
-		$this->model_activity->update4id(array('del_flg' => $del_flg_after), $id, false);
+		$closed_date = $this->_get_post_params('closed_date');
+		if ($del_flg_after && !$closed_date) $closed_date = date('Y-m-d');
+		if (!$del_flg_after) $closed_date = null;
+
+		$params = array('del_flg' => $del_flg_after);
+		$params['closed_date'] = $closed_date;
+		$this->model_activity->update4id($params, $id, false);
 
 		$this->output->set_output($del_flg_after);
 	}

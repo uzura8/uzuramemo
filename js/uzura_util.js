@@ -30,28 +30,46 @@ function uzura_sortable(url){
 	});
 }
 
-function uzura_datepicker(button_image_url){
-	//テキストボックスにカレンダーをバインドする（パラメータは必要に応じて）
-//	$("#due_date_27").datepicker({
-	$(".input_date").datepicker({
-		showButtonPanel: true,//「今日」「閉じる」ボタンを表示する
-		firstDay: 1,//週の先頭を月曜日にする（デフォルトは日曜日）
+function uzura_datepicker(item_name){
+	var button_image_url = (arguments.length > 1) ? arguments[1] : '';
+	if (button_image_url) {
+		//テキストボックスにカレンダーをバインドする（パラメータは必要に応じて）
+		$(item_name).datepicker({
+			showButtonPanel: true,//「今日」「閉じる」ボタンを表示する
+			firstDay: 1,//週の先頭を月曜日にする（デフォルトは日曜日）
 
-		showOn: 'button',
-		buttonImage: button_image_url,
-		buttonImageOnly: true,
+			showOn: 'button',
+			buttonImage: button_image_url,
+			buttonImageOnly: true,
 
-		//年月をドロップダウンリストから選択できるようにする場合
-//		changeYear: true,
-		changeMonth: true,
+			//年月をドロップダウンリストから選択できるようにする場合
+	//		changeYear: true,
+			changeMonth: true,
 
-		prevText: '&#x3c;前',
-		nextText: '次&#x3e;',
+			prevText: '&#x3c;前',
+			nextText: '次&#x3e;',
 
-		// 選択可能な日付の範囲を限定する場合（月は0～11）
-		// minDate: new Date(2010, 6 - 1, 16),
-		// maxDate: new Date(2010, 8 - 1, 15)
-	});
+			// 選択可能な日付の範囲を限定する場合（月は0～11）
+			// minDate: new Date(2010, 6 - 1, 16),
+			// maxDate: new Date(2010, 8 - 1, 15)
+		});
+	} else {
+		//テキストボックスにカレンダーをバインドする（パラメータは必要に応じて）
+		$(item_name).datepicker({
+			showButtonPanel: true,//「今日」「閉じる」ボタンを表示する
+			firstDay: 1,//週の先頭を月曜日にする（デフォルトは日曜日）
+			//年月をドロップダウンリストから選択できるようにする場合
+	//		changeYear: true,
+			changeMonth: true,
+
+			prevText: '&#x3c;前',
+			nextText: '次&#x3e;',
+
+			// 選択可能な日付の範囲を限定する場合（月は0～11）
+			// minDate: new Date(2010, 6 - 1, 16),
+			// maxDate: new Date(2010, 8 - 1, 15)
+		});
+	}
 }
 
 function uzura_form_switch(){
