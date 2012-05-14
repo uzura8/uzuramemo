@@ -12,7 +12,7 @@
 {else}
 
 <!-- main_list -->
-<div class="content" id="jquery-ui-sortable_wbs_{$wbs_id}">
+<div class="content activity_list" id="jquery-ui-sortable_wbs_{$wbs_id}">
 {foreach from=$list item=row}
 <div{if !$order} class="jquery-ui-sortable-item_wbs_{$wbs_id}"{/if} id="{$row.id}">
 <a name="id_{$row.id}"></a>

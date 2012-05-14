@@ -518,6 +518,8 @@ EOL;
 	{
 		$this->input->check_is_post();
 		$id = $this->_get_post_params('id');
+		$prefix = $this->_get_post_params('prefix', '');
+		if ($prefix) $id = str_replace($prefix, '', $id);
 		$id = (int)str_replace($item, '', $id);
 		if (!$id || !$this->_check_edit_form_item($item)) return;
 

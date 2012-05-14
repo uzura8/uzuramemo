@@ -235,18 +235,19 @@ EOL;
 
 	public function wbs($wbs_ids_string = '')
 	{
+		// template
+		$view_data = $this->_get_default_view_data();
+
 		$wbs_ids = array();
 		if ($wbs_ids_string)
 		{
 			$wbs_ids = $this->strings_util->convert_string2array($wbs_ids_string, '-', 'intval');
 		}
-
-		// template
-		$view_data = $this->_get_default_view_data();
+		$view_data['is_detail'] = (count($wbs_ids) === 1)? true : false;
 		$view_data['config_site_styles'] = get_config_value('styles', 'site');
 
 		$params = array('sql' => array(), 'values' => array());
-    $params['sql'][] = 'A.del_flg = 0';
+		$params['sql'][] = 'A.del_flg = 0';
 		if ($wbs_ids)
 		{
 			$params['sql'][]    = sprintf('A.id in (%s)', implode(',', $wbs_ids));

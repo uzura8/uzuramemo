@@ -17,8 +17,8 @@ div#modal div#main_form_box {
 	background-color: #e7e7e7;
 }
 
-#activity_activity_wbs div.content h2.subtitle {
-	border: 1px solid #8F8F8F;
+#activity_activity_wbs div.content div.wbs_each h2.subtitle, #activity_activity_wbs div.content div.wbs_each article {
+	border-color: #5E5E5E;
 }
 
 #activity_activity_wbs div.content h2.article_title {
@@ -49,4 +49,9 @@ div#modal div#main_form_box {
 }
 #activity_activity_wbs div#list h2.box_01 span.btnSpan input {
 	font-size: 80%;
+}
+#activity_activity_wbs div.activity_list h2.box_01 {
+	margin-top: 5px;
+}
+#activity_activity_wbs div#wbs_each h2.box_01, #activity_activity_wbs div#wbs_each article {
 }
