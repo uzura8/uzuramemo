@@ -78,3 +78,19 @@ function get_date_int_format() {
 
 	return ans.getFullYear() + twoDigitMonth + twoDigitDate;
 }
+
+function util_input_today(item) {
+	var now = new Date(); //現在＋何日後 のミリ秒で日付オブジェクト生成
+
+	var month = now.getMonth();
+	var month_str = "" + month;
+	var date = now.getDate();
+	var date_str = "" + date;
+
+	//convert month to 2 digits
+	var twoDigitMonth = (month_str.length === 1) ? '0' + (month + 1) : month;
+	var twoDigitDate  = (date_str.length === 1) ? '0' + (date + 1) : date;
+	var today = now.getFullYear() + '-' + twoDigitMonth + '-' + twoDigitDate;
+
+	$(item).val(today);
+}

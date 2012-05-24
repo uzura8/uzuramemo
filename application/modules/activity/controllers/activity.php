@@ -222,17 +222,165 @@ EOL;
 			default :
 				break;
 		}
-
-		$view_data['list'] =  $this->model_activity->get_rows($params);
-
 		$view_data['list'] =  $this->model_activity->get_rows($params, array(), 'sort');
 
 		$view_data['wbs_id'] = $wbs_id;
 		$view_data['wbs'] = $wbs;
 
-		$this->smarty_parser->parse('ci:activity/list.tpl', $view_data);
+		if ($view_data['list'])
+		{
+			$this->smarty_parser->parse('ci:activity/list.tpl', $view_data);
+		}
+		else
+		{
+			echo '';
+		}
 	}
 
+	public function ajax_activity_list_date($date = '')
+	{
+		$date = $this->site_util->simple_validation($date, '', 'date_format');
+		if (!$date) show_404();
+
+		$view_data = $this->_get_default_view_data();
+
+		$params = array();
+		$params['scheduled_date'] = $date;
+		$mode = (int)$this->_get_post_params('mode', '');
+		switch ($mode)
+		{
+			case 1: // active
+				$params['del_flg'] = 0;
+				break;
+			case 2: //priority
+/*
+				$params['del_flg'] = 0;
+				$params['scheduled_date < '] = date('Y-m-d', strtotime('+ 1day'));
+*/
+				break;
+			default :
+				break;
+		}
+		$view_data['list'] = $this->model_activity->get_rows($params, array(), 'sort');
+
+		$this->smarty_parser->parse('ci:activity/list_date.tpl', $view_data);
+	}
+
+	public function schedule($from_date = '', $to_date = '')
+	{
+		if ($from_date)
+		{
+			$from_date = $this->site_util->simple_validation($from_date, '', 'date_format');
+			if (!$from_date) show_404();
+		}
+
+		$view_data = $this->_get_default_view_data();
+
+		$view_data['is_detail'] = false;
+		if (($from_date && !$to_date) || ($from_date == $to_date))
+		{
+			$view_data['is_detail'] = true;
+		}
+
+		if (!$from_date) $from_date = date('Y-m-d');
+		$default_period = 14;
+		if (!$to_date) $to_date = date('Y-m-d', strtotime(sprintf('%s +%d days', $from_date, $default_period)));
+
+		$mode = (int)$this->_get_post_params('mode', '');
+
+		$date_list = array();
+		$i = 0;
+		while ($time = strtotime(sprintf('%s +%d days', $from_date, $i)))
+		{
+			$date = date('Y-m-d', $time);
+			if ($date > $to_date) break;
+
+			$row = array();
+			$row['week_name'] = $this->date_util->get_week_name(date('w', $time));
+
+			$params = array();
+			$params['scheduled_date'] = $date;
+			switch ($mode)
+			{
+				case 1: // active
+					$params['del_flg'] = 0;
+					break;
+				case 2: //priority
+					$params['del_flg'] = 0;
+					$params['scheduled_date < '] = date('Y-m-d', strtotime('+ 1day'));
+					break;
+				default :
+					break;
+			}
+			$view_data['list'] =  $this->model_activity->get_rows($params, array(), 'sort');
+
+			$row['list'] =  $this->model_activity->get_rows($params, array(), 'sort');
+			$date_list[$date] = $row;
+
+			$i++;
+		}
+		$view_data['list'] = $date_list;
+
+		$view_data['mode'] = (int)$this->_get_post_params('mode', '');
+
+		$this->smarty_parser->parse('ci:activity/schedule.tpl', $view_data);
+	}
+
+/*
+	public function activity_list_schedule($date = '')
+	{
+		$view_data = $this->_get_default_view_data();
+		$view_data['config_site_styles'] = get_config_value('styles', 'site');
+
+		if (($from_date && !$to_date) || ($from_date == $to_date))
+		{
+			$view_data['is_detail'] = true;
+		}
+
+		if (!$from_date) $from_date = date('Y-m-d');
+		$default_period = 14;
+		if (!$to_date) $to_date = date('Y-m-d', strtotime(sprintf('%s +%d days', $from_date, $default_period)));
+
+		$mode = (int)$this->_get_post_params('mode', '');
+
+		$date_list = array();
+		$i = 0;
+		while ($time = strtotime(sprintf('%s +%d days', $from_date, $i)))
+		{
+			$date = date('Y-m-d', $time);
+			if ($date > $to_date) break;
+
+			$row = array();
+			$row['week_name'] = $this->date_util->get_week_name(date('w', $time));
+
+			$params = array();
+			$params['scheduled_date'] = $date;
+			switch ($mode)
+			{
+				case 1: // active
+					$params['del_flg'] = 0;
+					break;
+				case 2: //priority
+					$params['del_flg'] = 0;
+					$params['scheduled_date < '] = date('Y-m-d', strtotime('+ 1day'));
+					break;
+				default :
+					break;
+			}
+			$view_data['list'] =  $this->model_activity->get_rows($params, array(), 'sort');
+
+			$row['list'] =  $this->model_activity->get_rows($params, array(), 'sort');
+			$date_list[$date] = $row;
+
+			$i++;
+		}
+		$view_data['list'] = $date_list;
+
+		$view_data['mode'] = (int)$this->_get_post_params('mode', '');
+
+		$this->smarty_parser->parse('ci:activity/schedule.tpl', $view_data);
+	}
+*/
 	public function wbs($wbs_ids_string = '')
 	{
 		// template
@@ -286,8 +434,6 @@ EOL;
 		$view_data['count_all']  = $count_all;
 		$view_data['max_page'] = ceil($count_all / $this->limit);
 */
-
-		$site_url = site_url();
 		$this->smarty_parser->parse('ci:activity/wbs.tpl', $view_data);
 	}
 
@@ -419,7 +565,7 @@ EOL;
 		$this->db->trans_begin();
 		foreach ($values as $id => $sort)
 		{
-			$result = $this->db_util->update('activity', array('sort' => $sort), array('id' => $id), true, 'activity', 'model');
+			$result = $this->db_util->update('activity', array('sort' => $sort), array('id' => $id), false, 'activity', 'model');
 			if (!$result)
 			{
 				$error = true;
@@ -445,6 +591,102 @@ EOL;
 		}
 
 		$this->output->set_output('true');
+	}
+
+	public function ajax_execute_update_sort_top()
+	{
+		$this->input->check_is_post();
+		$id = (int)$this->_get_post_params('id');
+
+		$params = array();
+		$params['del_flg'] = 0;
+		$rows = $this->db_util->get_assoc('wbs', $params, array('id', 'sort'), 'sort', 'wbs', 'model');
+
+		$wbs_ids = array($id);
+		$sorts = array();
+		foreach ($rows as $wbs_id => $sort)
+		{
+			if ($id != $wbs_id) $wbs_ids[] = $wbs_id;
+			$sorts[] = $sort;
+		}
+		$values = array_combine($wbs_ids, $sorts);
+
+		// まとめて更新
+		$result_count = 0;
+		$error = false;
+		$this->db->trans_begin();
+		foreach ($values as $id => $sort)
+		{
+			$result = $this->db_util->update('wbs', array('sort' => $sort), array('id' => $id), false, 'wbs', 'model');
+			if (!$result)
+			{
+				$error = true;
+				break;
+			}
+			$result_count++;
+		}
+
+		if ($this->db->trans_status() === FALSE || $error)
+		{
+			$this->db->trans_rollback();
+			$result_count = 0;
+		}
+		else
+		{
+			$this->db->trans_commit();
+		}
+
+		if (!$result_count)
+		{
+			$this->output->set_ajax_output_error();
+			return;
+		}
+
+		$this->output->set_output('true');
+	}
+
+	public function ajax_copy_activity()
+	{
+		$this->input->check_is_post();
+		$id = (int)$this->_get_post_params('id');
+
+		// 値に変更がない場合はそのまま
+		$row = $this->model_activity->get_row_common(array('id' => $id));
+		$unsets = array(
+			'id' => null,
+			'scheduled_date' => null,
+			'closed_date' => null,
+			'sort' => null,
+			'del_flg' => 0,
+			'created_at' => null,
+			'updated_at' => null,
+		);
+		foreach ($unsets as $key => $value) $row[$key] = $value;
+		$result = $this->model_activity->insert($row);
+		if (!$result)
+		{
+			$this->output->set_ajax_output_error();
+			return;
+		}
+
+		$this->output->set_output($row['wbs_id']);
+	}
+
+	public function ajax_update_scheduled_date_today()
+	{
+		$this->input->check_is_post();
+		$id = (int)$this->_get_post_params('id');
+
+		// 登録
+		$values = array('scheduled_date' => date('Y-m-d'));
+		if (!$this->model_activity->update4id($values, $id))
+		{
+			$this->output->set_ajax_output_error();
+			return;
+		}
+		$row = $this->model_activity->get_row_common(array('id' => $id));
+
+		$this->output->set_output($row['wbs_id']);
 	}
 
 	public function ajax_execute_update_common()
@@ -787,6 +1029,7 @@ EOL;
 				'rules' => 'trim|date_format',
 				'width'  => 10,
 				'children' => array('due_date'),
+				'input_support' => array('input_today' => true),
 			),
 			'due_date' => array(
 				'label' => '期日',

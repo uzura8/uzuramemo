@@ -20,6 +20,9 @@
 	<span id="{$key}_loading"><img src="{site_url}img/loading.gif" alt="Ajax Indicator"></span>
 	<span id="{$key}_result"></span>
 {/if}
+{if $items.input_support.input_today}
+<span class="form_input_today"><a href="javaScript:void(0);" onclick="util_input_today('#{$id_name}');">today</a></span>
+{/if}
 {elseif $items.type == 'textarea'}
 	<textarea name="{$key}" id="{$id_name}"{if $items.cols} cols="{$items.cols}"{/if}{if $items.rows} rows="{$items.rows}"{/if}{$smarty.capture.item_class|smarty:nodefaults}{$smarty.capture.item_class|smarty:nodefaults}{if $smarty.capture.form_help} placeholder="{$smarty.capture.form_help}"{/if}>{if $items.value}{$items.value}{/if}</textarea>
 {elseif $items.type == 'select'}

@@ -27,7 +27,8 @@
 <div>
 <span id="name{$row.id}" class="autogrow">{$row.name}</span>{if $row.key_name}<span id="key_name{$row.id}" class="autogrow sub_info2">{$row.key_name}</span>{/if}
 <span class="btnTop list_util_btn wider space_left" id="title_btn_{$row.id}"><a href="javaScript:void(0);" onclick="$('#article_{$row.id}').slideToggle();">▼</a></span>
-<span class="link_right"><a rel="prettyPopin" class="new_form_switch_{$row.id}" href="{site_url}activity/create/{$row.id}/1">&raquo;&nbsp;{get_config_value key=site_title index=activity}新規作成</a></span>
+<span class="link_right space_left"><a rel="prettyPopin" class="new_form_switch_{$row.id}" href="{site_url}activity/create/{$row.id}/1">&raquo;&nbsp;{get_config_value key=site_title index=activity}Activity作成</a></span>
+<span class="link_right_each line_height_15 space_left"><a href="{site_url}activity/wbs/{$row.id}/?mode=1">&raquo;&nbsp;詳細</a></span>
 </div>
 <div class="article_meta_top">
 <div class="banner">

@@ -469,5 +469,10 @@ div.article_box .form_box_each span.label {
 }
 
 div.article_box div.form_box_each .btnSpan {
-  float: none;
+	float: none;
+}
+
+#main_form_box span.form_input_today {
+	font-size: 10px;
+	margin-left: 5px;
 }

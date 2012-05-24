@@ -6,9 +6,10 @@
 {*{include file='ci:hybrid/subtitle.tpl'}*}
 
 <h4 id="main_form_title" class="box_01">
-<span class="f_11 space_right"><a id="new_form_switch" href="javaScript:void(0);" onclick="ajax_activity_list_all(0);">All</a></span>
-<span class="f_11 space_right"><a id="new_form_switch" href="javaScript:void(0);" onclick="ajax_activity_list_all(1);">Active</a></span>
-<span class="f_11 space_right"><a id="new_form_switch" href="javaScript:void(0);" onclick="ajax_activity_list_all(2);">Priority</a></span>
+<span class="f_11 space_right"><a id="list_switch_1" href="javaScript:void(0);" onclick="ajax_get_child_list_all(0);">All</a></span>
+<span class="f_11 space_right"><a id="list_switch_2" href="javaScript:void(0);" onclick="ajax_get_child_list_all(1);">Active</a></span>
+<span class="f_11 space_right"><a id="list_switch_3" href="javaScript:void(0);" onclick="ajax_get_child_list_all(2);">Priority</a></span>
+<input type="hidden" name="list_mode" id="list_mode"  value="{$mode}">
 </h4>
 
 {*{include file='ci:hybrid/main_form.tpl'}*}
@@ -34,7 +35,7 @@
 {if !$is_detail}
 <span class="link_right_each line_height_15 space_left"><a href="{site_url}activity/wbs/{$row.id}/?mode={$mode}">&raquo;&nbsp;詳細</a></span>
 {/if}
-<span class="link_right_each line_height_15"><a rel="prettyPopin" class="pp_link_wbs_{$row.id}" href="{site_url}activity/create/{$row.id}/1">&raquo;&nbsp;作成</a></span>
+<span class="link_right_each line_height_15"><a rel="prettyPopin" class="pp_link_wbs_{$row.id}" href="{site_url}activity/create/{$row.id}/1">&raquo;&nbsp;Activity作成</a></span>
 </div>
 <div class="article_meta_top">
 <div class="banner">
@@ -83,7 +84,8 @@
 </div>
 {/if}
 <div class="article_aside_button">
-<span class="btnSpan"><input type="button" name="update_del_flg_{$row.id}" value="{$row.del_flg|site_get_symbols_for_display}" id="wbs_btn_delFlg_{$row.id}" class="wbs_btn_delFlg"></span>
+<span class="btnSpan"><input type="button" name="btn_sort_top_{$row.id}" value="sort top" id="btn_sort_top_{$row.id}" class="btn_sort_top"></span>
+<span class="btnSpan space_left_5"><input type="button" name="update_del_flg_{$row.id}" value="{$row.del_flg|site_get_symbols_for_display}" id="wbs_btn_delFlg_{$row.id}" class="wbs_btn_delFlg"></span>
 <span class="btnSpan space_left_5"><input type="button" name="delete_{$row.id}" value="削除" id="wbs_btn_delete_{$row.id}" class="wbs_btn_delete"></span>
 {if $order}
 <span class="btnSpan space_left">
@@ -92,7 +94,7 @@
 {/if}
 <span class="btnTop space_left_5"><a href="#top">▲</a></span>
 <span class="btnTop space_left_5"><a href="{site_url uri=wbs}">{$smarty.const.UM_TOPPAGE_NAME}</a></span>
-<span class="btnTop"><a href="{site_url}">サイト{$smarty.const.UM_TOPPAGE_NAME}</a></span>
+<span class="btnTop space_left_5"><a href="{site_url}">サイト{$smarty.const.UM_TOPPAGE_NAME}</a></span>
 </div>
 </aside>
 </article>
@@ -126,15 +128,16 @@ uzura_sortable("{/literal}{site_url}{literal}wbs/ajax_execute_update_sort_move/w
 $("a[rel^='prettyPopin']").bind("click", function(){
 	var id_value = $(this).attr("class");
 	var wbs_id = id_value.replace(/pp_link_wbs_/g, "");
-
-	console.log(id_value, wbs_id);
+	var mode = $("#list_mode").val();
 
 	$.cookie('wbs_id_modal_activity_wbs', wbs_id);
+	$.cookie('mode_modal_activity_wbs', mode);
 });
 
 $(document).ready(function(){
-	ajax_activity_list_all({/literal}{$mode}{literal});
-	uzura_modal('{/literal}{site_url}{literal}img/loader.gif', '{/literal}{site_url uri=activity/ajax_activity_list}{literal}');
+	var mode = $("#list_mode").val();
+	ajax_activity_list_all(mode);
+	uzura_modal('{/literal}{site_url}{literal}img/loader.gif', '{/literal}{site_url uri=activity/ajax_activity_list}{literal}', mode);
 
 	// wbs(親) の更新
 	$(".autogrow_parent").click(function(){
@@ -255,7 +258,6 @@ $(document).ready(function(){
 		funcname = "return util_check_" + conf[key]['format'] + "(arg)";
 		f = new Function('arg', funcname);
 		var ret = f(value);
-		console.log(ret);
 		if (!ret) {
 			$.jGrowl(conf[key]['error_message']);
 			return;
@@ -309,6 +311,28 @@ $(document).ready(function(){
 			},
 			error: function(data){
 				$.jGrowl('No.' + id + 'の日付を変更できませんでした。');
+			}
+		});
+	});
+
+	// sort_top
+	$(".btn_sort_top").click(function(){
+		var id_value = $(this).attr("id");
+		var id = id_value.replace(/btn_sort_top_/g, "");
+		var csrf_token = $.cookie('csrf_test_name');
+		var mode = $("#list_mode").val();
+
+		$.ajax({
+			url : "{/literal}{site_url}{literal}activity/ajax_execute_update_sort_top",
+			dataType : "text",
+			data : {"id": id, "csrf_test_name": csrf_token},
+			type : "POST",
+			success: function(wbs_id){
+				var url = '{/literal}{site_url uri=activity/wbs}{literal}?mode=' + mode;
+				location.href=url;
+			},
+			error: function(data){
+				$.jGrowl('No.' + id + ' の移動に失敗しました。');
 			}
 		});
 	});
@@ -458,6 +482,51 @@ $(document).ready(function(){
 		});
 	});
 
+	// copy
+	$(".btn_copy").live("click", function(){
+		var id_value = $(this).attr("id");
+		var id = id_value.replace(/btn_copy_/g, "");
+		var csrf_token = $.cookie('csrf_test_name');
+		//var closed_date = $('#input_closed_date_' + id).val();
+		var mode = $("#list_mode").val();
+
+		$.ajax({
+			url : "{/literal}{site_url}{literal}activity/ajax_copy_activity",
+			dataType : "text",
+			data : {"id": id, "csrf_test_name": csrf_token},
+			type : "POST",
+			success: function(wbs_id){
+				$.jGrowl('No.' + id + ' をコピーしました。');
+				ajax_activity_list(wbs_id, '{/literal}{site_url uri=activity/ajax_activity_list}{literal}/' + wbs_id + '?mode=' + mode);
+			},
+			error: function(data){
+				$.jGrowl('No.' + id + ' のコピーに失敗しました。');
+			}
+		});
+	});
+
+	// update_scheduled_date_today
+	$(".btn_update_scheduled_date_today").live("click", function(){
+		var id_value = $(this).attr("id");
+		var id = id_value.replace(/btn_update_scheduled_date_today_/g, "");
+		var csrf_token = $.cookie('csrf_test_name');
+		var mode = $("#list_mode").val();
+
+		$.ajax({
+			url : "{/literal}{site_url}{literal}activity/ajax_update_scheduled_date_today",
+			dataType : "text",
+			data : {"id": id, "csrf_test_name": csrf_token},
+			type : "POST",
+			success: function(wbs_id){
+				$.jGrowl('No.' + id + ' の予定日を今日にしました。');
+				ajax_activity_list(wbs_id, '{/literal}{site_url uri=activity/ajax_activity_list}{literal}/' + wbs_id + '?mode=' + mode);
+			},
+			error: function(data){
+				$.jGrowl('No.' + id + ' の予定日の変更に失敗しました。');
+			}
+		});
+	});
+
 	// 並び順の変更
 	$(".input_sort").live("change", function(){
 		var id_value = $(this).attr("id");
@@ -524,10 +593,21 @@ $(document).ready(function(){
 	});
 });
 
+function ajax_get_child_list_all(mode) {
+	if ($("#list_mode").val() == 2 && mode != 2) {
+		$("#list_mode").val(mode);
+		var url = '{/literal}{site_url uri=activity/wbs}{literal}?mode=' + mode;
+		location.href=url;
+	} else {
+		$("#list_mode").val(mode);
+		ajax_activity_list_all(mode);
+	}
+}
+
 function ajax_activity_list_all(mode) {
 {/literal}
 {foreach from=$list item=row}{literal}
-	ajax_activity_list({/literal}{$row.id}{literal}, '{/literal}{site_url uri=activity/ajax_activity_list}/{$row.id}?mode={literal}'+mode);
+	ajax_activity_list({/literal}{$row.id}{literal}, '{/literal}{site_url uri=activity/ajax_activity_list}/{$row.id}?mode={literal}'+mode, mode);
 {/literal}
 {/foreach}
 {literal}
@@ -546,8 +626,7 @@ function reset_article_color(id) {
 	var tomorrow_int = get_date_int_format(1);
 	var this_week_int = get_date_int_format(7);
 
-	console.log(scheduled_date_int, tomorrow_int, this_week_int);
-	//console.log(currentDate);
+//	console.log(scheduled_date_int, tomorrow_int, this_week_int);
 
 	if (del_flg == 1) {
 		$('#article_title_'+id).css('background-color', {/literal}'{`$config_site_styles.backgroundcolor.display_none`}'{literal});

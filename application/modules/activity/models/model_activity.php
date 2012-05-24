@@ -163,7 +163,7 @@ class Model_activity extends CI_Model
 	function get_row_common($params)
 	{
 		$CI =& get_instance();
-		$row = $CI->db_util->get_row('wbs', $params, array(), 'wbs', 'model');
+		$row = $CI->db_util->get_row('activity', $params, array(), 'activity', 'model');
 		if (empty($row)) return array();
 
 		return $row;
