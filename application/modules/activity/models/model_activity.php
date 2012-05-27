@@ -139,7 +139,7 @@ class Model_activity extends CI_Model
 	{
 		$CI =& get_instance();
 
-		return $CI->db_util->get_rows('activity', $params, $columns, $order_by, 'wbs', 'model');
+		return $CI->db_util->get_rows('activity', $params, $columns, $order_by, 'activity', 'model');
 	}
 
 	function get_row4id($id)

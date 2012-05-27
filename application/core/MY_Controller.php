@@ -3,6 +3,7 @@
 class MY_Controller extends CI_Controller
 {
 	public $validation_rules = array();
+	protected $program_list_mainmenu = array();
 
 	function __construct()
 	{
@@ -35,6 +36,8 @@ class MY_Controller extends CI_Controller
 		}
 
 		if (!defined('SITE_TITLE')) define('SITE_TITLE', SITE_TITLE_WEBMEMO);
+
+		$this->_setup_mainmenu();
 	}
 
 	private function _set_current_controller_action()
@@ -213,6 +216,16 @@ class MY_Controller extends CI_Controller
 		}
 
 		return true;
+	}
+
+	protected function _setup_mainmenu()
+	{
+		$this->program_list_mainmenu = $this->_get_program_list_all();
+	}
+
+	protected function _get_program_list_all()
+	{
+		return $this->db_util->get_rows('program', array(), array('id', 'name', 'key_name'), 'sort', 'program', 'model');
 	}
 
 /*

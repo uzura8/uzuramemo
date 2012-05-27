@@ -67,6 +67,7 @@ class Activity extends MY_Controller
 		$view_data = array(
 			'page_name' => $this->private_config['site_title'],
 			'selected_select_order' => 0,
+			'program_list_mainmenu' => $this->program_list_mainmenu,
 		);
 
 		$site_url = site_url();

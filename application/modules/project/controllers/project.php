@@ -54,6 +54,7 @@ class Project extends MY_Controller
 		$view_data = array(
 			'page_name' => $this->private_config['site_title'],
 			'selected_select_order' => 4,
+			'program_list_mainmenu' => $this->program_list_mainmenu,
 		);
 
 		$site_url = site_url();
@@ -128,6 +129,20 @@ EOL;
 		$view_data['max_page'] = ceil($count_all / $this->limit);
 
 		$this->smarty_parser->parse('ci:project/list.tpl', $view_data);
+	}
+
+	public function ajax_project_list_mainenu($program_id = '')
+	{
+		if (!$program_id = (int)$program_id)
+		{
+			$this->output->set_ajax_output_error();
+			return;
+		}
+		// template
+		$view_data = array();
+		$view_data['list'] = $this->db_util->get_rows('project', array('program_id' => $program_id), array('id', 'name', 'key_name'), 'sort', 'project', 'model');
+
+		$this->smarty_parser->parse('ci:project/list_mainmenu.tpl', $view_data);
 	}
 
 	public function ajax_project_detail($id, $item)

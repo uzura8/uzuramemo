@@ -37,5 +37,28 @@ $(function(){
   $("a[href*='#']").slideScroll();
 	$('textarea').autogrow();
 });
+
+function mainmanu_get_project_list(program_id) {
+	var id_loading  = 'mainmenu_project_list_loading_' + program_id;
+	$("#" + id_loading).show();
+
+	var id  = 'mainmenu_project_list_' + program_id;
+	var url = '{/literal}{site_url uri=project/ajax_project_list_mainenu}{literal}/' + program_id;
+	var csrf_token = $.cookie('csrf_test_name');
+
+	// Ajaxによるアクセスにキャッシュを利用しない(毎回サーバにアクセス)
+	$.ajaxSetup( { cache : false } );
+	$("#" + id).show();
+
+	$.get(url, {nocache : (new Date()).getTime()}, function(data){
+//		$("#id_loading").fadeOut(function() {
+//			$("#pics").show();
+//		});
+		$("#" + id_loading).fadeOut();
+		if (data.length>0){
+			$("#" + id).html(data);
+		}
+	})
+}
 {/literal}
 </script>

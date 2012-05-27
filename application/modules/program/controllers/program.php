@@ -45,6 +45,7 @@ class Program extends MY_Controller
 	{
 		return array(
 			'page_name' => $this->private_config['site_title'],
+			'program_list_mainmenu' => $this->program_list_mainmenu,
 		);
 	}
 

@@ -57,6 +57,7 @@ class Wbs extends MY_Controller
 		$view_data = array(
 			'page_name' => $this->private_config['site_title'],
 			'selected_select_order' => 0,
+			'program_list_mainmenu' => $this->program_list_mainmenu,
 		);
 
 		$site_url = site_url();
@@ -72,10 +73,18 @@ EOL;
 
 	public function index($project_key = '')
 	{
-		if (!$project_key || !$project = $this->model_project->get_row_full(array('A.key_name' => $project_key), 'A.id, A.name, B.name as program_name, B.key_name as program_key'))
+		if (!$project_key) show_404();
+		if (preg_match('/[0-9]+/', $project_key))
 		{
-			show_404();
+			$project_id = (int)$project_key;
+			$project = $this->model_project->get_row_full(array('A.id' => $project_id), 'A.id, A.name, B.name as program_name, B.key_name as program_key');
 		}
+		else
+		{
+			$project = $this->model_project->get_row_full(array('A.key_name' => $project_key), 'A.id, A.name, B.name as program_name, B.key_name as program_key');
+		}
+		if (!$project) show_404();
+
 		// template
 		$view_data = $this->_get_default_view_data();
 		$view_data['page_title'] = $this->private_config['site_title'].'一覧';
@@ -132,6 +141,20 @@ EOL;
 		$view_data['max_page'] = ceil($count_all / $this->limit);
 
 		$this->smarty_parser->parse('ci:wbs/list.tpl', $view_data);
+	}
+
+	public function ajax_wbs_list_mainenu($project_id = '')
+	{
+		if (!$project_id = (int)$project_id)
+		{
+			$this->output->set_ajax_output_error();
+			return;
+		}
+		// template
+		$view_data = array();
+		$view_data['list'] = $this->db_util->get_rows('wbs', array('project_id' => $project_id), array('id', 'name'), 'sort', 'wbs', 'model');
+
+		$this->smarty_parser->parse('ci:wbs/list_mainmenu.tpl', $view_data);
 	}
 
 	public function ajax_wbs_detail($id, $item)
