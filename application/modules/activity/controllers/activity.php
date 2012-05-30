@@ -505,6 +505,25 @@ EOL;
 		$this->output->set_output($del_flg_after);
 	}
 
+	public function ajax_execute_update_importance()
+	{
+		$this->input->check_is_post();
+		$id = (int)$this->_get_post_params('id');
+		if (!$id)
+		{
+			$this->output->set_status_header('403');
+			return;
+		}
+
+		$importance_after = 1;
+		if ($this->db_util->get_col4id('activity', $id, 'importance', 'activity', 'model')) $importance_after = 0;
+
+		$values = array('importance' => $importance_after);
+		$this->model_activity->update4id($values, $id, false);
+
+		$this->output->set_output($importance_after);
+	}
+
 	public function ajax_execute_update_sort()
 	{
 		$this->input->check_is_post();

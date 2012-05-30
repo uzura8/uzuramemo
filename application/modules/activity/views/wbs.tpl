@@ -29,8 +29,9 @@
 <div{if !$order} class="wbs_each jquery-ui-sortable-item{if !$smarty.foreach.list.first} st15{/if}"{/if} id="wbs_{$row.id}">
 <a name="id_{$row.id}"></a>
 <h2 class="box_01 subtitle" id="article_title_wbs_{$row.id}">
-<div>
+<div class="subtitle_main">
 <span id="wbs_name{$row.id}" class="autogrow_parent">{$row.name}</span>{if $row.key_name}<span id="wbs_key_name{$row.id}" class="autogrow_parent sub_info2">{$row.key_name}</span>{/if}
+{if $row.due_date && $row.due_date != '0000-00-00'}<span class="due_date" style="{$row.due_date|convert_due_date:'style'}">{$row.due_date|convert_due_date:'rest_days'}</span>{/if}
 <span class="btnTop list_util_btn wider space_left" id="title_btn_{$row.id}"><a href="javaScript:void(0);" onclick="$('#article_{$row.id}').slideToggle();">▼</a></span>
 {if !$is_detail}
 <span class="link_right_each line_height_15 space_left"><a href="{site_url}activity/wbs/{$row.id}/?mode={$mode}">&raquo;&nbsp;詳細</a></span>
@@ -133,6 +134,7 @@ $("a[rel^='prettyPopin']").bind("click", function(){
 	$.cookie('wbs_id_modal_activity_wbs', wbs_id);
 	$.cookie('mode_modal_activity_wbs', mode);
 });
+
 
 $(document).ready(function(){
 	var mode = $("#list_mode").val();

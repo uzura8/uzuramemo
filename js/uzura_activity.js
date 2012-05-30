@@ -60,3 +60,30 @@ function uzura_modal(img_url, list_url){
 		}
 	});
 }
+
+function toggle_importance_star(id, url){
+	var csrf_token = $.cookie('csrf_test_name');
+	var item_id = '#importance_star_' + id;
+	$.ajax({
+		url : url,
+		dataType : "text",
+		data : {"id": id, "csrf_test_name": csrf_token},
+		type : "POST",
+		success: function(status_after){
+			if (status_after == "1") {
+				$(item_id).text('★');
+				$(item_id).css('color', '#FC0000');
+				$(item_id).css('font-size', '110%');
+				$.jGrowl('No.' + id + 'に Star をつけました。');
+			} else {
+				$(item_id).text('☆');
+				$(item_id).css('color', '#DDD');
+				$(item_id).css('font-size', '100%');
+				$.jGrowl('No.' + id + 'の Star を外しました。');
+			}
+		},
+		error: function(){
+			$.jGrowl('No.' + id + 'の Star の更新に失敗しました。');
+		}
+	});
+}

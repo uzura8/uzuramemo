@@ -82,4 +82,14 @@ class Date_util
 
 		return $week_num;
 	}
+
+	public function calc_rest_days($date, $base_date = '')
+	{
+		if (!$base_date) $base_date = date('Y-m-d');
+
+		$time = strtotime($date);
+		$base_time = strtotime($base_date);
+
+		return (int)floor(($time - $base_time) / 86400);
+	}
 }

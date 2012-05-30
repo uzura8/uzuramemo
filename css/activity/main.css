@@ -55,3 +55,18 @@ div#modal div#main_form_box {
 }
 #activity_activity_wbs div#wbs_each h2.box_01, #activity_activity_wbs div#wbs_each article {
 }
+
+#activity_activity_wbs span.due_date {
+	font-size: 10px;
+	font-weight: normal;
+	padding: 1px 2px;
+	margin-left: 3px;
+}
+
+#activity_activity_wbs h2.subtitle div.subtitle_main {
+}
+
+#activity_activity_wbs h2.subtitle span.due_date {
+	margin-left: 5px;
+	vertical-align: text-top;
+}
