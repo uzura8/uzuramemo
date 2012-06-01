@@ -60,6 +60,10 @@
 <label for="input_sort_{$row.id}">並び順:</label>
 <input type="text" name="input_sort_{$row.id}" value="{$row.sort}" id="input_sort_{$row.id}" class="InputMini input_sort" maxlength="6" placeholder="並び順"></span>
 {/if}
+<span class="btnSpan space_left">
+<label for="input_sort_{$row.id}">private:</label>
+<input type="checkbox" name="private_flg" value="1" id="input_private_flg_{$row.id}" class="input_private_flg"{if $row.private_flg}checked="checked"{/if}></span>
+
 <span class="btnTop space_left_5"><a href="#top">▲</a></span>
 <span class="btnTop space_left_5"><a href="{site_url uri=program}">{$smarty.const.UM_TOPPAGE_NAME}</a></span>
 <span class="btnTop"><a href="{site_url}">サイト{$smarty.const.UM_TOPPAGE_NAME}</a></span>

@@ -1,6 +1,5 @@
 <script type="text/javascript" charset="utf-8">
 {literal}
-// <![CDATA[
 $(document).ready(function() {
 	uzura_form_switch();
 
@@ -129,8 +128,34 @@ $(document).ready(function() {
 			}
 		});
 	});
+
+	// private_flg の変更
+	$(".input_private_flg").live("change", function(){
+		var key = $(this).attr("name");
+		var id_value = $(this).attr("id");
+		var pattern = 'input_' + key + '_';
+		var id = id_value.replace(eval("/" + pattern + "/g"), "");
+
+		var checked = $('#' + id_value).attr('checked');
+		var value = 0;
+		if (checked) value = 1;
+
+		var csrf_token = $.cookie('csrf_test_name');
+		// 更新
+		$.ajax({
+			url : "{/literal}{site_url}{literal}program/ajax_execute_update_common",
+			dataType : "text",
+			data : {"id": id, "key": key, "value": value, "csrf_test_name": csrf_token},
+			type : "POST",
+			success: function(data){
+				$.jGrowl('No.' + id + 'を変更しました。');
+			},
+			error: function(data){
+				$.jGrowl('No.' + id + 'を変更できませんでした。');
+			}
+		});
+	});
 });
-// ]]>
 {/literal}
 </script>
 

@@ -415,6 +415,10 @@ EOL;
 */
 		$view_data['mode'] = (int)$this->_get_post_params('mode', '');
 
+		$private = $this->_get_post_params('private', 0, 'trim|is_natural|max_num[1]');
+		$params['sql'][] = 'C.private_flg = ?';
+		$params['values'][] = (int)$private;
+/*
 		$is_prv_dev = (int)$this->_get_post_params('pdev', '');
 		if ($is_prv_dev)
 		{
@@ -424,7 +428,7 @@ EOL;
 		{
 			$params['sql'][] = 'C.id <> 5';
 		}
-
+*/
 		$view_data['list'] = $this->model_wbs->get_main_list(0, $this->limit_wbs, 'A.sort, C.sort', '', true, 'A.*, B.name as project_name, B.key_name as project_key_name, C.name as program_name, C.key_name as program_key_name', $params);
 /*
 		// 記事件数を取得

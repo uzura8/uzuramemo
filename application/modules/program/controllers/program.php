@@ -244,6 +244,73 @@ class Program extends MY_Controller
 		$this->output->set_output('true');
 	}
 
+	public function ajax_execute_update_common()
+	{
+		$this->input->check_is_post();
+		$id = (int)$this->_get_post_params('id');
+
+		$key = $this->_get_post_params('key');
+		$allow_keys = array('sort', 'private_flg');
+		if (!$id || !in_array($key, $allow_keys))
+		{
+			$this->output->set_ajax_output_error();
+			return;
+		}
+
+		$validate_rules = $this->_validation_rules();
+		$this->form_validation->set_rules('value', $validate_rules[$key]['label'], $validate_rules[$key]['rules']);
+		$result = $this->form_validation->run();
+
+		// 値に変更がない場合はそのまま
+		$row = $this->model_program->get_row_common(array('id' => $id));
+//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+$isActive = 1;
+$isExit   = 0;
+$isEcho   = 0;
+$isAdd    = 1;
+$file = "/tmp/test.log";
+$a = '';
+if ($isActive) {
+$_type = 'wb';if ($isAdd) $_type = 'a';$fp = fopen($file, $_type);ob_start();
+var_dump(__LINE__, $row, set_value('value'));// !!!!!!!
+$out=ob_get_contents();fwrite( $fp, $out . "\n" );ob_end_clean();fclose( $fp );if ($isEcho) echo $out;if ($isExit) exit;
+}
+//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+		if ($row[$key] == set_value('value'))
+		{
+			return;
+		}
+
+		if (!$result)
+		{
+			$this->output->set_ajax_output_error();
+			return;
+		}
+
+		// 登録
+		$values = array($key => set_value('value'));
+//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+$isActive = 1;
+$isExit   = 0;
+$isEcho   = 0;
+$isAdd    = 1;
+$file = "/tmp/test.log";
+$a = '';
+if ($isActive) {
+$_type = 'wb';if ($isAdd) $_type = 'a';$fp = fopen($file, $_type);ob_start();
+var_dump(__LINE__, $values);// !!!!!!!
+$out=ob_get_contents();fwrite( $fp, $out . "\n" );ob_end_clean();fclose( $fp );if ($isEcho) echo $out;if ($isExit) exit;
+}
+//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+		if (!$this->model_program->update4id($values, $id))
+		{
+			$this->output->set_ajax_output_error();
+			return;
+		}
+
+		$this->output->set_output('true');
+	}
+
 	public function ajax_execute_delete()
 	{
 		$this->input->check_is_post();
@@ -450,6 +517,11 @@ class Program extends MY_Controller
 				'cols'  => 60,
 				'rows'  => 2,
 				'disabled_for_insert'  => true,
+			),
+			'private_flg' => array(
+				'label' => 'private_flg',
+				'type'  => 'checkbox',
+				'rules' => 'trim|is_natural|max_num[1]',
 			),
 		);
 	}
