@@ -21,9 +21,11 @@ $(document).ready(function() {
 			submitdata: { "csrf_test_name": csrf_token },
 			type      : "text",
 			width     : 'width: ' + text_box_width + ';',// js/lib/jeditable/jquery.jeditable.js : 411 を修正し style で指定できるように対応
-			submit    : 'OK',
+			event     : "dblclick",
+			style     : "inherit",
+			//submit    : 'OK',
 			//submit    : '<input type="submit" value="OK" class="button">',
-			cancel    : 'cancel',
+			//cancel    : 'cancel',
 			loadurl    : '{/literal}{site_url uri=wbs/ajax_wbs_detail}{literal}/' + id + '/' + item_name,
 			tooltip   : "Click to edit...",
 			onblur    : "ignore",

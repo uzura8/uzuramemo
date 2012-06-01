@@ -30,8 +30,9 @@
 <a name="id_{$row.id}"></a>
 <h2 class="box_01 subtitle" id="article_title_wbs_{$row.id}">
 <div class="subtitle_main">
+<a class="importance_star" id="importance_star_parent_{$row.id}" href="javaScript:void(0);" onclick="toggle_importance_star({$row.id}, '{site_url}wbs/ajax_execute_update_importance', 'importance_star_parent_')" style="{$row.importance|site_display_importance:'style'}">{$row.importance|site_display_importance:'symbol'}</a>
 <span id="wbs_name{$row.id}" class="autogrow_parent">{$row.name}</span>{if $row.key_name}<span id="wbs_key_name{$row.id}" class="autogrow_parent sub_info2">{$row.key_name}</span>{/if}
-{if $row.due_date && $row.due_date != '0000-00-00'}<span class="due_date" style="{$row.due_date|convert_due_date:'style'}">{$row.due_date|convert_due_date:'rest_days'}</span>{/if}
+{if $row.due_date && $row.due_date != '0000-00-00'}<span class="due_date" id="due_date_parent_{$row.id}" style="{$row.due_date|convert_due_date:'style'}">{$row.due_date|convert_due_date:'rest_days'}</span>{else}<span id="due_date_parent_pre_{$row.id}"></span>{/if}
 <span class="btnTop list_util_btn wider space_left" id="title_btn_{$row.id}"><a href="javaScript:void(0);" onclick="$('#article_{$row.id}').slideToggle();">▼</a></span>
 {if !$is_detail}
 <span class="link_right_each line_height_15 space_left"><a href="{site_url}activity/wbs/{$row.id}/?mode={$mode}">&raquo;&nbsp;詳細</a></span>
@@ -176,15 +177,17 @@ $(document).ready(function(){
 			indicator : "<img src='{/literal}{site_url uri=js/lib/jeditable/img/indicator.gif}{literal}'>",
 			type      : "text",
 			width     : 'width: ' + text_box_width + ';',// js/lib/jeditable/jquery.jeditable.js : 455 を修正し style で指定できるように対応
-			submit    : 'OK',
+			event     : "dblclick",
+			style     : "inherit",
+			//submit    : 'OK',
 			//submit    : '<input type="submit" value="OK" class="button">',
 			submitdata: { "csrf_test_name": csrf_token, "prefix": 'wbs_'},
-			cancel    : 'cancel',
+			//cancel    : 'cancel',
 			loadurl    : '{/literal}{site_url uri=wbs/ajax_wbs_detail}{literal}/' + url_id + '/' + item_name,
 			tooltip   : "Click to edit...",
 			onblur    : "ignore",
 			cssclass : "editable",
-			select : true,
+			//select : true,
 		})
 	});
 
@@ -309,6 +312,24 @@ $(document).ready(function(){
 			data : {"id": id, "due_date": value_due_date, "start_date": value_start_date, "csrf_test_name": csrf_token},
 			type : "POST",
 			success: function(data){
+				var selector = 'span#due_date_parent_' + id;
+				if (value_due_date.length > 0) {
+					if (data.length > 0) {
+						var obj = $.parseJSON(data);
+						if ($(selector).length) {
+							$(selector).text(obj.rest_days);
+							$(selector).css('color', obj.styles.color);
+							$(selector).css('background-color', obj.styles.backgroundcolor);
+						} else {
+							style_value = 'color:' + obj.styles.color + ';background-color:' + obj.styles.backgroundcolor + ';';
+							$('span#due_date_parent_pre_' + id).html('<span class="due_date" id="due_date_parent_' + id + '" style="' + style_value + '">' + obj.rest_days + '</span>');
+						}
+					}
+				} else {
+					if ($(selector).length) {
+						$(selector).remove();
+					}
+				}
 				$.jGrowl('No.' + id + 'の日付を変更しました。');
 			},
 			error: function(data){
@@ -346,6 +367,8 @@ $(document).ready(function(){
 		var text_box_width = '250px';
 		if (item_name == 'key_name') {
 			var text_box_width = '50px';
+		} else if (item_name == 'estimated_time' || item_name == 'spent_time') {
+			var text_box_width = '30px';
 		} else if (item_name == 'due_date') {
 			var text_box_width = '100px';
 		}
@@ -372,10 +395,12 @@ $(document).ready(function(){
 			indicator : "<img src='{/literal}{site_url uri=js/lib/jeditable/img/indicator.gif}{literal}'>",
 			type      : "text",
 			width     : 'width: ' + text_box_width + ';',// js/lib/jeditable/jquery.jeditable.js : 455 を修正し style で指定できるように対応
-			submit    : 'OK',
+			event     : "dblclick",
+			style     : "inherit",
+			//submit    : 'OK',
 			//submit    : '<input type="submit" value="OK" class="button">',
 			submitdata: { "csrf_test_name": csrf_token },
-			cancel    : 'cancel',
+			//cancel    : 'cancel',
 			loadurl    : '{/literal}{site_url uri=activity/ajax_activity_detail}{literal}/' + id + '/' + item_name,
 			tooltip   : "Click to edit...",
 			onblur    : "ignore",
@@ -586,6 +611,25 @@ $(document).ready(function(){
 			type : "POST",
 			success: function(data){
 				reset_article_color(id);
+
+				var selector = 'span#due_date_' + id;
+				if (value_due_date.length > 0) {
+					if (data.length > 0) {
+						var obj = $.parseJSON(data);
+						if ($(selector).length) {
+							$(selector).text(obj.rest_days);
+							$(selector).css('color', obj.styles.color);
+							$(selector).css('background-color', obj.styles.backgroundcolor);
+						} else {
+							style_value = 'color:' + obj.styles.color + ';background-color:' + obj.styles.backgroundcolor + ';';
+							$('span#due_date_pre_' + id).html('<span class="due_date" id="due_date_' + id + '" style="' + style_value + '">' + obj.rest_days + '</span>');
+						}
+					}
+				} else {
+					if ($(selector).length) {
+						$(selector).remove();
+					}
+				}
 				$.jGrowl('No.' + id + 'の日付を変更しました。');
 			},
 			error: function(data){

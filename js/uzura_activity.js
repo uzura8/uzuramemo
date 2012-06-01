@@ -61,9 +61,9 @@ function uzura_modal(img_url, list_url){
 	});
 }
 
-function toggle_importance_star(id, url){
+function toggle_importance_star(id, url, id_prefix){
 	var csrf_token = $.cookie('csrf_test_name');
-	var item_id = '#importance_star_' + id;
+	var item_id = '#' + id_prefix + id;
 	$.ajax({
 		url : url,
 		dataType : "text",
@@ -73,12 +73,12 @@ function toggle_importance_star(id, url){
 			if (status_after == "1") {
 				$(item_id).text('★');
 				$(item_id).css('color', '#FC0000');
-				$(item_id).css('font-size', '110%');
+				//$(item_id).css('font-size', '110%');
 				$.jGrowl('No.' + id + 'に Star をつけました。');
 			} else {
 				$(item_id).text('☆');
 				$(item_id).css('color', '#DDD');
-				$(item_id).css('font-size', '100%');
+				$//(item_id).css('font-size', '100%');
 				$.jGrowl('No.' + id + 'の Star を外しました。');
 			}
 		},

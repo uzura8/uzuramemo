@@ -218,6 +218,25 @@ EOL;
 		$this->output->set_output($del_flg_after);
 	}
 
+	public function ajax_execute_update_importance()
+	{
+		$this->input->check_is_post();
+		$id = (int)$this->_get_post_params('id');
+		if (!$id)
+		{
+			$this->output->set_status_header('403');
+			return;
+		}
+
+		$importance_after = 1;
+		if ($this->db_util->get_col4id('wbs', $id, 'importance', 'wbs', 'model')) $importance_after = 0;
+
+		$values = array('importance' => $importance_after);
+		$this->model_wbs->update4id($values, $id, false);
+
+		$this->output->set_output($importance_after);
+	}
+
 	public function ajax_execute_update_sort()
 	{
 		$this->input->check_is_post();
@@ -403,13 +422,23 @@ EOL;
 
 		// 登録
 		$values = array('start_date' => set_value('start_date'), 'due_date' => set_value('due_date'));
-		if (!$this->model_wbs->update4id($values, $id))
+		if (!$ret = $this->model_wbs->update4id($values, $id))
 		{
 			$this->output->set_ajax_output_error();
 			return;
 		}
 
-		$this->output->set_output('true');
+		$return = '';
+		if ($values['due_date'])
+		{
+			$return = array();
+			$return['rest_days'] = site_convert_due_date($values['due_date'], 'rest_days');
+			$styles = site_convert_due_date($values['due_date'], 'style');
+			$return['styles'] = $this->strings_util->convert_style2array($styles, true);
+			$return = json_encode($return);
+		}
+
+		$this->output->set_output($return);
 	}
 
 	public function ajax_execute_delete()

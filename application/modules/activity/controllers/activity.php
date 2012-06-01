@@ -810,7 +810,17 @@ EOL;
 			return;
 		}
 
-		$this->output->set_output('true');
+		$return = '';
+		if ($values['due_date'])
+		{
+			$return = array();
+			$return['rest_days'] = site_convert_due_date($values['due_date'], 'rest_days');
+			$styles = site_convert_due_date($values['due_date'], 'style');
+			$return['styles'] = $this->strings_util->convert_style2array($styles, true);
+			$return = json_encode($return);
+		}
+
+		$this->output->set_output($return);
 	}
 
 	public function ajax_execute_delete()
@@ -914,7 +924,7 @@ EOL;
 
 	private function _check_edit_form_item($item)
 	{
-		$allow_items = array('body', 'name', 'scheduled_date', 'due_date', 'closed_date');
+		$allow_items = array('body', 'name', 'scheduled_date', 'due_date', 'closed_date', 'estimated_time', 'spent_time');
 		if (!$item || !in_array($item, $allow_items)) return false;
 
 		return true;
@@ -1093,6 +1103,21 @@ EOL;
 				'error_messages'  => array('min' => ''),
 				'width'  => 30,
 				'disabled_item_in_sql'  => true,
+			),
+			'estimated_time' => array(
+				'label' => '見積工数',
+				'type'  => 'text',
+				'rules' => 'trim|numeric',
+				'width'  => 10,
+				'after_label' => '人日',
+			),
+			'spent_time' => array(
+				'label' => '実績工数',
+				'type'  => 'text',
+				'rules' => 'trim|numeric',
+				'width'  => 10,
+				'disabled_for_insert'  => true,
+				'after_label' => '人日',
 			),
 		);
 	}

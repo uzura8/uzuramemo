@@ -30,4 +30,20 @@ class Strings_util
 
 		return $list;
 	}
+
+	public function convert_style2array($style_str, $is_remove_hyphen_in_key = false)
+	{
+		$styles = explode(';', $style_str);
+		$list = array();
+		foreach ($styles as $each)
+		{
+			$items = explode(':', $each);
+			if (count($items) != 2) continue;
+			$key   = ($is_remove_hyphen_in_key) ? str_replace('-', '', $items[0]) : $items[0];
+			$value = $items[1];
+			$list[$key] = $value;
+		}
+
+		return $list;
+	}
 }
