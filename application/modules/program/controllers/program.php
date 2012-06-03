@@ -43,10 +43,18 @@ class Program extends MY_Controller
 
 	private function _get_default_view_data()
 	{
-		return array(
+		$view_data = array(
 			'page_name' => $this->private_config['site_title'],
 			'program_list_mainmenu' => $this->program_list_mainmenu,
 		);
+
+		$site_url = site_url();
+		$view_data['head_info'] = <<<EOL
+	<link type="text/css" href="{$site_url}css/jquery.simple-color-picker.css" rel="stylesheet" />
+
+EOL;
+
+		return $view_data;
 	}
 
 	public function index()
@@ -194,6 +202,49 @@ class Program extends MY_Controller
 		$this->output->set_output('true');
 	}
 
+	public function ajax_execute_update_color()
+	{
+		$this->input->check_is_post();
+
+		$id = (int)$this->_get_post_params('id');
+		if (!$id)
+		{
+			$this->output->set_ajax_output_error();
+			return;
+		}
+
+		$value = $this->_get_post_params('value');
+		if (!$this->strings_util->check_is_hex_color_format($value))
+		{
+			$this->output->set_ajax_output_error();
+			return;
+		}
+
+		$type = $this->_get_post_params('type');
+		if (!in_array($type, array('color', 'background_color')))
+		{
+			$this->output->set_ajax_output_error();
+			return;
+		}
+
+		// 値に変更がない場合はそのまま
+		$row = $this->model_program->get_row_common(array('id' => $id));
+		if ($row[$type] == $value)
+		{
+			return;
+		}
+
+		// 登録
+		$values = array($type => $value);
+		if (!$return = $this->model_program->update4id($values, $id))
+		{
+			$this->output->set_ajax_output_error();
+			return;
+		}
+
+		$this->output->set_output('true');
+	}
+
 	public function ajax_execute_update_sort_move()
 	{
 		$this->input->check_is_post();
@@ -263,19 +314,6 @@ class Program extends MY_Controller
 
 		// 値に変更がない場合はそのまま
 		$row = $this->model_program->get_row_common(array('id' => $id));
-//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-$isActive = 1;
-$isExit   = 0;
-$isEcho   = 0;
-$isAdd    = 1;
-$file = "/tmp/test.log";
-$a = '';
-if ($isActive) {
-$_type = 'wb';if ($isAdd) $_type = 'a';$fp = fopen($file, $_type);ob_start();
-var_dump(__LINE__, $row, set_value('value'));// !!!!!!!
-$out=ob_get_contents();fwrite( $fp, $out . "\n" );ob_end_clean();fclose( $fp );if ($isEcho) echo $out;if ($isExit) exit;
-}
-//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 		if ($row[$key] == set_value('value'))
 		{
 			return;
@@ -289,19 +327,6 @@ $out=ob_get_contents();fwrite( $fp, $out . "\n" );ob_end_clean();fclose( $fp );i
 
 		// 登録
 		$values = array($key => set_value('value'));
-//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-$isActive = 1;
-$isExit   = 0;
-$isEcho   = 0;
-$isAdd    = 1;
-$file = "/tmp/test.log";
-$a = '';
-if ($isActive) {
-$_type = 'wb';if ($isAdd) $_type = 'a';$fp = fopen($file, $_type);ob_start();
-var_dump(__LINE__, $values);// !!!!!!!
-$out=ob_get_contents();fwrite( $fp, $out . "\n" );ob_end_clean();fclose( $fp );if ($isEcho) echo $out;if ($isExit) exit;
-}
-//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 		if (!$this->model_program->update4id($values, $id))
 		{
 			$this->output->set_ajax_output_error();

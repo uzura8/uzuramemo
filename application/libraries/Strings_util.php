@@ -46,4 +46,9 @@ class Strings_util
 
 		return $list;
 	}
+
+	public function check_is_hex_color_format($value)
+	{
+		return (bool)preg_match('/^#[0-9a-f]{6}$/i', $value);
+	}
 }

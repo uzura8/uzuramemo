@@ -25,10 +25,11 @@
 <a name="id_{$row.id}"></a>
 <h2 class="box_01" id="article_title_{$row.id}" style="background-color:{'background-color'|site_get_style:$row.del_flg};">
 <div>
-<span id="name{$row.id}" class="autogrow">{$row.name}</span>{if $row.key_name}<span id="key_name{$row.id}" class="autogrow sub_info2">{$row.key_name}</span>{/if}
+<span id="name{$row.id}" class="autogrow">{$row.name}</span>
+{if $row.key_name}<span id="key_name{$row.id}" class="autogrow sub_info2"{if $row.color || $row.background_color} style="{if $row.color}color:{$row.color};{/if}{if $row.background_color}background-color:{$row.background_color};{/if}"{/if}>{$row.key_name}</span>{/if}
 <span class="btnTop list_util_btn wider space_left" id="title_btn_{$row.id}"><a href="javaScript:void(0);" onclick="$('#article_{$row.id}').slideToggle();">▼</a></span>
-<span class="link_right_each line_height_15 space_left"><a id="new_form_switch" href="{site_url}wbs/index/{$row.key_name}?edit=1">&raquo;&nbsp;作成</a></span>
-<span class="link_right_each line_height_15"><a id="new_form_switch" href="{site_url}wbs/index/{$row.key_name}">&raquo;&nbsp;{get_config_value key=site_title index=wbs}一覧</a></span>
+<span class="link_right_each line_height_15 space_left"><a id="new_form_switch" href="{site_url}wbs/index/{$row.id}?edit=1">&raquo;&nbsp;作成</a></span>
+<span class="link_right_each line_height_15"><a id="new_form_switch" href="{site_url}wbs/index/{$row.id}">&raquo;&nbsp;{get_config_value key=site_title index=wbs}一覧</a></span>
 </div>
 <div class="article_meta_top">
 <div class="banner">{$row.program_name}</div>

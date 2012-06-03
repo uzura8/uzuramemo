@@ -88,7 +88,17 @@ EOL;
 		// program 指定時
 		if ($program_key)
 		{
-			if (!$program = $this->model_program->get_row_common(array('key_name' => $program_key, 'del_flg' => 0))) show_404();
+			if (preg_match('/[0-9]+/', $program_key))
+			{
+				$program_id = (int)$program_key;
+				$program = $this->model_program->get_row_common(array('id' => $program_id, 'del_flg' => 0));
+			}
+			else
+			{
+				$program = $this->model_program->get_row_common(array('key_name' => $program_key, 'del_flg' => 0));
+			}
+			if (!$program) show_404();
+
 			$this->program_id = (int)$program['id'];
 			$view_data['page_subtitle_parts'] = array(
 				array('url' => '', 'subtitle' => $program['name']),
@@ -119,7 +129,7 @@ EOL;
 	{
 		// template
 		$view_data = $this->_get_default_view_data();
-		$view_data['list'] =  $this->model_project->get_main_list($this->offset, $this->limit, $this->_get_order_sql_clause(), '', $this->program_id, true, 'A.*, B.name as program_name');
+		$view_data['list'] =  $this->model_project->get_main_list($this->offset, $this->limit, $this->_get_order_sql_clause(), '', $this->program_id, true, 'A.*, B.name as program_name, B.color, B.background_color');
 
 		// 記事件数を取得
 		$count_all = $this->model_project->get_count_all($this->search, $this->program_id, true);

@@ -429,7 +429,7 @@ EOL;
 			$params['sql'][] = 'C.id <> 5';
 		}
 */
-		$view_data['list'] = $this->model_wbs->get_main_list(0, $this->limit_wbs, 'A.sort, C.sort', '', true, 'A.*, B.name as project_name, B.key_name as project_key_name, C.name as program_name, C.key_name as program_key_name', $params);
+		$view_data['list'] = $this->model_wbs->get_main_list(0, $this->limit_wbs, 'A.sort, C.sort', '', true, 'A.*, B.name as project_name, B.key_name as project_key_name, C.name as program_name, C.key_name as program_key_name, C.color, C.background_color', $params);
 /*
 		// 記事件数を取得
 		$count_all = $this->model_wbs->get_count_all('', true, $params);

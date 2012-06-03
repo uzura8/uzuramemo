@@ -185,7 +185,6 @@ $('#main_form').validate({
 {/if}
 {/foreach}
 {literal}
-				$('span').removeClass('validate_error');
 				$('#name_result').fadeOut();
 				$('#key_name_result').fadeOut();
 				$('#name').focus();
@@ -193,6 +192,8 @@ $('#main_form').validate({
 				ajax_list(0, 1);
 				$('#select_order').val('1');
 				$.jGrowl('{/literal}{$page_name}{literal}を作成しました。');
+				$('span.validate_success').remove();
+				$('span.validate_error').remove();
 			},
 			error: function(){
 				$.jGrowl('{/literal}{$page_name}{literal}を作成できませんでした。');

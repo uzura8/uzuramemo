@@ -196,8 +196,6 @@ $('#main_form').validate({
 {/if}
 {/foreach}
 {literal}
-				$('span').removeClass('validate_success');
-				$('span').removeClass('validate_error');
 				$('#name_result').fadeOut();
 				$('#key_name_result').fadeOut();
 {/literal}
@@ -212,6 +210,8 @@ $('#main_form').validate({
 				ajax_list(0, 1);
 				$('select#select_order').val('1');
 				$.jGrowl('{/literal}{$page_name}{literal}を作成しました。');
+				$('span.validate_success').remove();
+				$('span.validate_error').remove();
 			},
 			error: function(){
 				$.jGrowl('{/literal}{$page_name}{literal}を作成できませんでした。');
@@ -268,7 +268,8 @@ $(function() {
 				} else {
 					var message = '<span class="validate_error">' + response + '</span>';
 				}
-				setTimeout("finishAjax('key_name_result', '"+escape(message)+"')", 400);
+				//setTimeout("finishAjax('key_name_result', '"+escape(message)+"')", 400);
+				finishAjax('key_name_result', escape(message));
 			});
 			return false;
 	});
