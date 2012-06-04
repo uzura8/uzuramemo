@@ -18,9 +18,12 @@
 <a name="id_{$row.id}"></a>
 <h2 class="box_01 article_title" id="article_title_{$row.id}" style="background-color:{'background-color'|site_get_activity_style:$row.del_flg:$row.closed_date:$row.scheduled_date:$row.status};">
 <div>
-<span id="name{$row.id}" class="autogrow">{$row.name}</span>{if $row.key_name}<span id="key_name{$row.id}" class="autogrow sub_info2">{$row.key_name}</span>{/if}
+<a class="importance_star" id="importance_star_{$row.id}" href="javaScript:void(0);" onclick="toggle_importance_star({$row.id}, '{site_url}activity/ajax_execute_update_importance', 'importance_star_')" style="{$row.importance|site_display_importance:'style'}">{$row.importance|site_display_importance:'symbol'}</a>
+<span id="name{$row.id}" class="autogrow">{$row.name}</span>
+{if $row.due_date && $row.due_date != '0000-00-00'}<span class="due_date" id="due_date_{$row.id}" style="{$row.due_date|convert_due_date:'style'}">{$row.due_date|convert_due_date:'rest_days'}</span>{else}<span id="due_date_pre_{$row.id}"></span>{/if}
 <span class="list_util_btn wider btnTop sl5" id="title_btn_{$row.id}"><a href="javaScript:void(0);" onclick="$('#article_{$row.id}').slideToggle();">▼</a></span>
 <span class="btnSpan"><input type="button" name="update_del_flg_{$row.id}" value="{$row.del_flg|site_get_symbols_for_display}" id="btn_delFlg_{$row.id}" class="btn_delFlg"></span>
+<span class="btnSpan"><input type="button" name="btn_update_scheduled_date_today_{$row.id}" value="today" id="btn_update_scheduled_date_today_{$row.id}" class="btn_update_scheduled_date_today"></span>
 </div>
 </h2>
 
@@ -35,6 +38,9 @@
 	<span class="label">予定日</span><input name="input_scheduled_date_{$row.id}" id="input_scheduled_date_{$row.id}" class="width_15 input_date" type="text" value="{$row.scheduled_date}">
 	<span class="label sl2">期日</span><input name="input_due_date_{$row.id}" id="input_due_date_{$row.id}" class="width_15 input_date" type="text" value="{$row.due_date}">
 	<span class="btnSpan"><input type="button" name="btn_date_{$row.id}" value="更新" id="btn_date_{$row.id}" class="btn_date"></span>
+	<span class="title sl5">工数:</span>
+	<span class="label">見積</span><span id="estimated_time{$row.id}" class="autogrow sl2">{if $row.estimated_time}{$row.estimated_time}{else}-{/if}</span><span class="sl2">h</span>
+	<span class="label sl5">実績</span><span id="spent_time{$row.id}" class="autogrow sl2">{if $row.spent_time}{$row.spent_time}{else}-{/if}</span><span class="sl2">h</span>
 {*
 	<span class="title sl5">工数:</span>
 	<span class="label">見積</span>
@@ -63,10 +69,11 @@
 </div>
 {/if}
 <div class="article_aside_button">
+<span class="btnSpan"><input type="button" name="btn_copy_{$row.id}" value="copy" id="btn_copy_{$row.id}" class="btn_copy"></span>
 {*
 <span class="btnSpan"><input type="button" name="update_del_flg_{$row.id}" value="{$row.del_flg|site_get_symbols_for_display}" id="btn_delFlg_{$row.id}" class="btn_delFlg"></span>
 *}
-<span class="label sl2">終了日</span><input name="input_closed_date_{$row.id}" id="input_closed_date_{$row.id}" class="width_10 input_date" type="text" value="{$row.closed_date}">
+<span class="label sl2 space_left_5">終了日</span><input name="input_closed_date_{$row.id}" id="input_closed_date_{$row.id}" class="width_10 input_date" type="text" value="{$row.closed_date}">
 <span class="btnSpan space_left_5"><input type="button" name="delete_{$row.id}" value="削除" id="btn_delete_{$row.id}" class="btn_delete"></span>
 {if $order}
 <span class="btnSpan space_left">
@@ -97,4 +104,8 @@ $(function(){
 {/if}
 </div>
 </body>
+<script type="text/javascript" charset="utf-8">
+{literal}
+{/literal}
+</script>
 </html>

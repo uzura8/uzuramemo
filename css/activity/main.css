@@ -13,41 +13,49 @@ div#modal div#main_form_box {
 	width: 50%;
 }
 
-#activity_activity_wbs div.content h2.box_01 {
+#activity_activity_wbs div.content h2.box_01, #activity_activity_schedule div.content h2.box_01 {
 	background-color: #e7e7e7;
 }
 
-#activity_activity_wbs div.content div.wbs_each h2.subtitle, #activity_activity_wbs div.content div.wbs_each article {
+#activity_activity_wbs div.content div.wbs_each h2.subtitle, #activity_activity_wbs div.content div.wbs_each article,
+#activity_activity_schedule div.content div.wbs_each h2.subtitle, #activity_activity_schedule div.content div.wbs_each article
+{
 	border-color: #5E5E5E;
 }
 
-#activity_activity_wbs div.content h2.article_title {
+#activity_activity_wbs div.content h2.article_title,
+#activity_activity_schedule div.content h2.article_title
+{
 	padding: 6px 10px;
 	font-size: 90%;
 }
 
-#activity_activity_wbs article aside div.article_aside_button {
+#activity_activity_wbs article aside div.article_aside_button, #activity_activity_schedule article aside div.article_aside_button {
 	padding-bottom: 0;
 }
 
-#activity_activity_wbs article.box_01 {
+#activity_activity_wbs article.box_01, #activity_activity_schedule article.box_01 {
 	padding-bottom: 0;
 }
 
-#activity_activity_wbs article.box_01 aside.article_footer span.label {
+#activity_activity_wbs article.box_01 aside.article_footer span.label,
+#activity_activity_schedule article.box_01 aside.article_footer span.label {
 	font-size: 10px;
 	font-weight: normal;
 }
 
-#activity_activity_wbs article.box_01 aside.article_footer .btnSpan {
+#activity_activity_wbs article.box_01 aside.article_footer .btnSpan,
+#activity_activity_schedule article.box_01 aside.article_footer .btnSpan {
 	float: none;
 }
 
-#activity_activity_wbs div#list h2.box_01 span.btnSpan {
+#activity_activity_wbs div#list h2.box_01 span.btnSpan,
+#activity_activity_schedule div#list h2.box_01 span.btnSpan {
 	float: right;
 	padding: 0 5px;
 }
-#activity_activity_wbs div#list h2.box_01 span.btnSpan input {
+#activity_activity_wbs div#list h2.box_01 span.btnSpan input,
+#activity_activity_schedule div#list h2.box_01 span.btnSpan input {
 	font-size: 80%;
 }
 #activity_activity_wbs div.activity_list h2.box_01 {
@@ -66,7 +74,20 @@ div#modal div#main_form_box {
 #activity_activity_wbs h2.subtitle div.subtitle_main {
 }
 
-#activity_activity_wbs h2.subtitle span.due_date {
+#activity_activity_wbs h2.subtitle span.due_date,
+#activity_activity_schedule h2.subtitle span.due_date
+{
 	margin-left: 5px;
 	vertical-align: text-top;
+}
+
+#activity_activity_wbs .article_meta_top {
+	margin-top: 2px;
+	vertical-align: bottom;
+}
+
+#activity_activity_wbs h2.box_01 .sub_info2 {
+	padding: 0 5px;
+	font-size: 10px;
+	margin-left: 5px;
 }

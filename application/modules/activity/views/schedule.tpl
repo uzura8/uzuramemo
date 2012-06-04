@@ -6,9 +6,11 @@
 {*{include file='ci:hybrid/subtitle.tpl'}*}
 
 <h4 id="main_form_title" class="box_01">
-<span class="f_11 space_right"><a id="new_form_switch" href="javaScript:void(0);" onclick="ajax_activity_list_all(0);">All</a></span>
-<span class="f_11 space_right"><a id="new_form_switch" href="javaScript:void(0);" onclick="ajax_activity_list_all(1);">Active</a></span>
-<span class="f_11 space_right"><a id="new_form_switch" href="javaScript:void(0);" onclick="ajax_activity_list_all(2);">Priority</a></span>
+<span class="f_11 space_right"><a id="new_form_switch" href="javaScript:void(0);" onclick="ajax_activity_list_date_all(0);">All</a></span>
+<span class="f_11 space_right"><a id="new_form_switch" href="javaScript:void(0);" onclick="ajax_activity_list_date_all(1);">Active</a></span>
+{*
+<span class="f_11 space_right"><a id="new_form_switch" href="javaScript:void(0);" onclick="ajax_activity_list_date_all(2);">Priority</a></span>
+*}
 </h4>
 
 {*{include file='ci:hybrid/main_form.tpl'}*}
@@ -26,12 +28,10 @@
 {foreach from=$list key=date item=row name=list}
 <div{if !$order} class="date_each jquery-ui-sortable-item{if !$smarty.foreach.list.first} st15{/if}"{/if} id="date_{$date}">
 <a name="id_{$date}"></a>
-<h2 class="box_01 subtitle" id="article_title_wbs_{$date}">
+<h2 class="box_01 subtitle" id="article_title_schedule_{$date}">
 <div>
 <span id="date_name{$date}">{$date}({$row.week_name})</span>
-{if !$is_detail}
-<span class="link_right_each line_height_15 space_left"><a href="{site_url}activity/wbs/{$row.id}/?mode={$mode}">&raquo;&nbsp;詳細</a></span>
-{/if}
+<span class="due_date sub_info2" id="due_date_{$row.id}" style="{$date|convert_due_date:'style'}">{$date|convert_due_date:'rest_days'}</span>
 </div>
 {*
 <div class="article_meta_top">
@@ -186,15 +186,16 @@ $(document).ready(function(){
 			type : "POST",
 			success: function(status_after){
 
+console.log(status_after);
 				if (status_after == "1") {
 					if (closed_date.length == 0) {
 						var today = get_today_for_sql_format();
 						$('#input_closed_date_' + id).val(today);
-						$('#hidden_del_flg_' + id).val(today);
+						$('#hidden_del_flg_' + id).val('1');
 					}
 				} else {
 					$('#input_closed_date_' + id).val('');
-					$('#hidden_del_flg_' + id).val('');
+					$('#hidden_del_flg_' + id).val('0');
 				}
 				var btn_val = "{/literal}{1|site_get_symbols_for_display}{literal}";
 				$("#btn_delFlg_" + id).val(btn_val);
@@ -338,58 +339,58 @@ $(document).ready(function(){
 	});
 });
 
-function ajax_activity_list_date_all() {
+function ajax_activity_list_date_all(mode) {
 {/literal}
 {foreach from=$list key=date item=row}{literal}
-	ajax_activity_list_date({/literal}'{$date}'{literal}, '{/literal}{site_url uri=activity/ajax_activity_list_date}/{$date}{literal}');
+	ajax_activity_list_date({/literal}'{$date}'{literal}, '{/literal}{site_url uri=activity/ajax_activity_list_date}/{$date}{literal}?mode='+mode, mode);
 {/literal}
 {/foreach}
 {literal}
 }
 
-//function reset_article_color(id) {
-//	var del_flg = $('#hidden_del_flg_' + id).val();
-//	var status = $('#hidden_status_' + id).val();
-//	var closed_date = $('#input_closed_date_' + id).val();
-//	var scheduled_date = $('#input_scheduled_date_' + id).val();
-//
-//	var closed_date_int = closed_date.replace(/-/g, '');
-//	var scheduled_date_int = scheduled_date.replace(/-/g, '');
-//
-//	var today_int = get_date_int_format();
-//	var tomorrow_int = get_date_int_format(1);
-//	var this_week_int = get_date_int_format(7);
-//
-//	console.log(scheduled_date_int, tomorrow_int, this_week_int);
-//	//console.log(currentDate);
-//
-//	if (del_flg == 1) {
-//		$('#article_title_'+id).css('background-color', {/literal}'{`$config_site_styles.backgroundcolor.display_none`}'{literal});
-//		$('#article_'+id).css('background-color', {/literal}'{$config_site_styles.backgroundcolor.display_none}'{literal});
-//	} else if (closed_date.length > 0 && closed_date != '0000-00-00') {
-//		$('#article_title_'+id).css('background-color', {/literal}'{$config_site_styles.backgroundcolor.display_none}'{literal});
-//		$('#article_'+id).css('background-color', {/literal}'{$config_site_styles.backgroundcolor.display_none}'{literal});
-//	} else if (status > 0) {
-//		$('#article_title_'+id).css('background-color', {/literal}'{$config_site_styles.backgroundcolor.active}'{literal});
-//		$('#article_'+id).css('background-color', {/literal}'{$config_site_styles.backgroundcolor.active}'{literal});
-//	} else if (scheduled_date.length > 0 && scheduled_date != '0000-00-00' && scheduled_date_int < today_int) {
-//		$('#article_title_'+id).css('background-color', {/literal}'{$config_site_styles.backgroundcolor.scheduled_passed}'{literal});
-//		$('#article_'+id).css('background-color', {/literal}'{$config_site_styles.backgroundcolor.scheduled_passed}'{literal});
-//	} else if (scheduled_date_int == today_int) {
-//		$('#article_title_'+id).css('background-color', {/literal}'{$config_site_styles.backgroundcolor.scheduled_today}'{literal});
-//		$('#article_'+id).css('background-color', {/literal}'{$config_site_styles.backgroundcolor.scheduled_today}'{literal});
-//	} else if (scheduled_date_int == tomorrow_int) {
-//		$('#article_title_'+id).css('background-color', {/literal}'{$config_site_styles.backgroundcolor.scheduled_tomorrow}'{literal});
-//		$('#article_'+id).css('background-color', {/literal}'{$config_site_styles.backgroundcolor.scheduled_tomorrow}'{literal});
-//	} else if (scheduled_date.length > 0 && scheduled_date != '0000-00-00' && scheduled_date_int <= this_week_int) {
-//		$('#article_title_'+id).css('background-color', {/literal}'{$config_site_styles.backgroundcolor.scheduled_this_week}'{literal});
-//		$('#article_'+id).css('background-color', {/literal}'{$config_site_styles.backgroundcolor.scheduled_this_week}'{literal});
-//	} else {
-//		$('#article_title_'+id).css('background-color', {/literal}'{$config_site_styles.backgroundcolor.display}'{literal});
-//		$('#article_'+id).css('background-color', {/literal}'{$config_site_styles.backgroundcolor.display}'{literal});
-//		$type = 'display';
-//	}
-//}
+function reset_article_color(id) {
+	var del_flg = $('#hidden_del_flg_' + id).val();
+	var status = $('#hidden_status_' + id).val();
+	var closed_date = $('#input_closed_date_' + id).val();
+	var scheduled_date = $('#input_scheduled_date_' + id).val();
+
+	var closed_date_int = closed_date.replace(/-/g, '');
+	var scheduled_date_int = scheduled_date.replace(/-/g, '');
+
+	var today_int = get_date_int_format();
+	var tomorrow_int = get_date_int_format(1);
+	var this_week_int = get_date_int_format(7);
+
+	console.log(scheduled_date_int, tomorrow_int, this_week_int);
+	//console.log(currentDate);
+
+	if (del_flg == 1) {
+		$('#article_title_'+id).css('background-color', {/literal}'{`$config_site_styles.backgroundcolor.display_none`}'{literal});
+		$('#article_'+id).css('background-color', {/literal}'{$config_site_styles.backgroundcolor.display_none}'{literal});
+	} else if (closed_date.length > 0 && closed_date != '0000-00-00') {
+		$('#article_title_'+id).css('background-color', {/literal}'{$config_site_styles.backgroundcolor.display_none}'{literal});
+		$('#article_'+id).css('background-color', {/literal}'{$config_site_styles.backgroundcolor.display_none}'{literal});
+	} else if (status > 0) {
+		$('#article_title_'+id).css('background-color', {/literal}'{$config_site_styles.backgroundcolor.active}'{literal});
+		$('#article_'+id).css('background-color', {/literal}'{$config_site_styles.backgroundcolor.active}'{literal});
+	} else if (scheduled_date.length > 0 && scheduled_date != '0000-00-00' && scheduled_date_int < today_int) {
+		$('#article_title_'+id).css('background-color', {/literal}'{$config_site_styles.backgroundcolor.scheduled_passed}'{literal});
+		$('#article_'+id).css('background-color', {/literal}'{$config_site_styles.backgroundcolor.scheduled_passed}'{literal});
+	} else if (scheduled_date_int == today_int) {
+		$('#article_title_'+id).css('background-color', {/literal}'{$config_site_styles.backgroundcolor.scheduled_today}'{literal});
+		$('#article_'+id).css('background-color', {/literal}'{$config_site_styles.backgroundcolor.scheduled_today}'{literal});
+	} else if (scheduled_date_int == tomorrow_int) {
+		$('#article_title_'+id).css('background-color', {/literal}'{$config_site_styles.backgroundcolor.scheduled_tomorrow}'{literal});
+		$('#article_'+id).css('background-color', {/literal}'{$config_site_styles.backgroundcolor.scheduled_tomorrow}'{literal});
+	} else if (scheduled_date.length > 0 && scheduled_date != '0000-00-00' && scheduled_date_int <= this_week_int) {
+		$('#article_title_'+id).css('background-color', {/literal}'{$config_site_styles.backgroundcolor.scheduled_this_week}'{literal});
+		$('#article_'+id).css('background-color', {/literal}'{$config_site_styles.backgroundcolor.scheduled_this_week}'{literal});
+	} else {
+		$('#article_title_'+id).css('background-color', {/literal}'{$config_site_styles.backgroundcolor.display}'{literal});
+		$('#article_'+id).css('background-color', {/literal}'{$config_site_styles.backgroundcolor.display}'{literal});
+		$type = 'display';
+	}
+}
 {/literal}
 </script>
 

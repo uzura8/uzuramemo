@@ -24,6 +24,7 @@ function ajax_activity_list(wbs_id, url){
 }
 
 function ajax_activity_list_date(date, url){
+	var mode = (arguments.length > 2) ? arguments[2] : 0;
 	var id_name  = 'activity_list_' + date;
 
 	// Ajaxによるアクセスにキャッシュを利用しない(毎回サーバにアクセス)

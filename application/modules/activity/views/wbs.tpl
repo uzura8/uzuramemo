@@ -43,12 +43,14 @@
 <div class="banner">
 <span class="space_left_5"><a href="{site_url}project/index/{$row.program_key_name}">{$row.program_name}</a></span>
 <span class="space_left_5"><a href="{site_url}wbs/index/{$row.project_key_name}">{$row.project_name}</a></span>
-{if $row.project_key_name}<span id="project_key_name{$row.id}" class="sub_info2"{if $row.color || $row.background_color} style="{if $row.color}color:{$row.color};{/if}{if $row.background_color}background-color:{$row.background_color};{/if}"{/if}>{$row.project_key_name}</span>{/if}
 
 </div>
 <div class="meta_info">
 <span>No.{$row.id}</span>
+{if $row.project_key_name}<span id="project_key_name{$row.id}" class="sub_info2"{if $row.color || $row.background_color} style="{if $row.color}color:{$row.color};{/if}{if $row.background_color}background-color:{$row.background_color};{/if}"{/if}>{$row.project_key_name}</span>{/if}
+{*
 <span class="space_left_5">update: {$row.updated_at|date_format:"%Y/%m/%d %H:%M"}</span>
+*}
 </div>
 <div style="clear: both"></div>
 </div>
@@ -207,13 +209,15 @@ $(document).ready(function(){
 				if (status_after == "1") {
 					var btn_val = "{/literal}{1|site_get_symbols_for_display}{literal}";
 					var bgcolor = "{/literal}{'background-color'|site_get_style:'1'}{literal}";
+					var bgcolor_title = bgcolor;
 				} else {
 					var btn_val = "{/literal}{0|site_get_symbols_for_display}{literal}";
 					var bgcolor = "{/literal}{'background-color'|site_get_style:'0'}{literal}";
+					var bgcolor_title = '#E7E7E7';
 				}
-				$("#article_title_" + id).css({"background" : bgcolor});
-				$("#article_" + id).css({"background" : bgcolor});
-				$("#btn_delFlg_" + id).val(btn_val);
+				$("#article_title_wbs_" + id).css({"background-color" : bgcolor_title});
+				$("#article_" + id).css({"background-color" : bgcolor});
+				$("#wbs_btn_delFlg_" + id).val(btn_val);
 			},
 			error: function(){
 				$.jGrowl('No.' + id + 'の{/literal}{$page_name}{literal}の状態を変更できませんでした。');
@@ -224,7 +228,7 @@ $(document).ready(function(){
 	// article の削除
 	$(".wbs_btn_delete").click(function(){
 		var id_value = $(this).attr("id");
-		var id = id_value.replace(/btn_delete_/g, "");
+		var id = id_value.replace(/wbs_btn_delete_/g, "");
 		jConfirm('削除しますか?', '削除確認', function(r) {
 			if (r == true) {
 				var csrf_token = $.cookie('csrf_test_name');
