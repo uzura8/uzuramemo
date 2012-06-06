@@ -55,8 +55,8 @@ function uzura_modal(img_url, list_url){
 			var wbs_id = $.cookie('wbs_id_modal_activity_wbs');
 			var mode = $.cookie('mode_modal_activity_wbs');
 
-			$.cookie('wbs_id_modal_activity_wbs', 0);
-			$.cookie('mode_modal_activity_wbs', 1);
+			$.cookie('wbs_id_modal_activity_wbs', null);
+			$.cookie('mode_modal_activity_wbs', null);
 			ajax_activity_list(wbs_id, list_url + '/' + wbs_id + '?mode=' + mode);
 		}
 	});

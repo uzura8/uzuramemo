@@ -213,14 +213,14 @@ EOL;
 		$mode = (int)$this->_get_post_params('mode', '');
 		switch ($mode)
 		{
-			case 1: // active
-				$params['del_flg'] = 0;
+			case 1: // all
 				break;
 			case 2: //priority
 				$params['del_flg'] = 0;
 				$params['scheduled_date < '] = date('Y-m-d', strtotime('+ 1day'));
 				break;
 			default :
+				$params['del_flg'] = 0;
 				break;
 		}
 		$view_data['list'] =  $this->model_activity->get_rows($params, array(), 'sort');
@@ -245,13 +245,51 @@ EOL;
 
 		$view_data = $this->_get_default_view_data();
 
+
+		$params = array('sql' => array(), 'values' => array());
+
+		// scheduled_date
+		$params['sql'][] = 'A.scheduled_date = ?';
+		$params['values'][] = $date;
+
+		// mode
+		$mode = (int)$this->_get_post_params('mode', '');
+		switch ($mode)
+		{
+			case 1: // all
+				$$with_logical_deleted = true;
+				break;
+			case 2: //priority
+				break;
+			default :
+				$$with_logical_deleted = false;
+				break;
+		}
+
+		$private = $this->_get_post_params('private', 0, 'trim|is_natural|max_num[1]');
+		$params['sql'][] = 'D.private_flg = ?';
+		$params['values'][] = (int)$private;
+
+		$view_data['list'] = $this->model_activity->get_main_list(0, 0, 'A.sort, B.sort', '', $with_logical_deleted,
+			'A.*, B.name as wbs_name, C.name as project_name, C.key_name as project_key_name, D.name as program_name, D.key_name as program_key_name, D.color, D.background_color', $params);
+
+		$this->smarty_parser->parse('ci:activity/list_date.tpl', $view_data);
+	}
+
+	public function ajax_activity_list_date_bcup($date = '')
+	{
+		$date = $this->site_util->simple_validation($date, '', 'date_format');
+		if (!$date) show_404();
+
+		$view_data = $this->_get_default_view_data();
+
 		$params = array();
 		$params['scheduled_date'] = $date;
 		$mode = (int)$this->_get_post_params('mode', '');
 		switch ($mode)
 		{
-			case 1: // active
-				$params['del_flg'] = 0;
+			case 1: // all
+				$params['private_flg'] = 0;
 				break;
 			case 2: //priority
 /*
@@ -260,6 +298,8 @@ EOL;
 */
 				break;
 			default :
+				$params['del_flg'] = 0;
+				$params['private_flg'] = 0;
 				break;
 		}
 		$view_data['list'] = $this->model_activity->get_rows($params, array(), 'sort');
@@ -276,6 +316,7 @@ EOL;
 		}
 
 		$view_data = $this->_get_default_view_data();
+		$view_data['config_site_styles'] = get_config_value('styles', 'site');
 
 		$view_data['is_detail'] = false;
 		if (($from_date && !$to_date) || ($from_date == $to_date))
@@ -304,10 +345,10 @@ EOL;
 			switch ($mode)
 			{
 				case 1: // active
-					$params['del_flg'] = 0;
+					//$params['del_flg'] = 0;
 					break;
 				case 2: //priority
-					$params['del_flg'] = 0;
+					//$params['del_flg'] = 0;
 					$params['scheduled_date < '] = date('Y-m-d', strtotime('+ 1day'));
 					break;
 				default :
@@ -673,6 +714,7 @@ EOL;
 	{
 		$this->input->check_is_post();
 		$id = (int)$this->_get_post_params('id');
+		$is_schedule = (int)$this->_get_post_params('is_schedule');
 
 		// 値に変更がない場合はそのまま
 		$row = $this->model_activity->get_row_common(array('id' => $id));
@@ -685,6 +727,8 @@ EOL;
 			'created_at' => null,
 			'updated_at' => null,
 		);
+		if ($is_schedule) unset($unsets['scheduled_date']);
+
 		foreach ($unsets as $key => $value) $row[$key] = $value;
 		$result = $this->model_activity->insert($row);
 		if (!$result)
@@ -693,13 +737,24 @@ EOL;
 			return;
 		}
 
-		$this->output->set_output($row['wbs_id']);
+		$return = $row['wbs_id'];
+		if ($is_schedule) $return = $row['scheduled_date'];
+
+		$this->output->set_output($return);
 	}
 
 	public function ajax_update_scheduled_date_today()
 	{
 		$this->input->check_is_post();
 		$id = (int)$this->_get_post_params('id');
+
+		// 値に変更がない場合はそのまま
+		$row = $this->model_activity->get_row_common(array('id' => $id));
+		$scheduled_date_before = $row['scheduled_date'];
+		if ($scheduled_date_before == date('Y-m-d'))
+		{
+			return;
+		}
 
 		// 登録
 		$values = array('scheduled_date' => date('Y-m-d'));
@@ -708,9 +763,14 @@ EOL;
 			$this->output->set_ajax_output_error();
 			return;
 		}
-		$row = $this->model_activity->get_row_common(array('id' => $id));
 
-		$this->output->set_output($row['wbs_id']);
+		$return = array();
+		$return['wbs_id'] = $row['wbs_id'];
+		$return['scheduled_date_before'] = $scheduled_date_before;
+		$return['scheduled_date'] = date('Y-m-d');
+		$return = json_encode($return);
+
+		$this->output->set_output($return);
 	}
 
 	public function ajax_execute_update_common()
@@ -795,7 +855,8 @@ EOL;
 
 		// 値に変更がない場合はそのまま
 		$row = $this->model_activity->get_row_common(array('id' => $id));
-		if ($row['scheduled_date'] == set_value('scheduled_date') && $row['due_date'] == set_value('due_date'))
+		$scheduled_date_before = $row['scheduled_date'];
+		if ($scheduled_date_before == set_value('scheduled_date') && $row['due_date'] == set_value('due_date'))
 		{
 			return;
 		}
@@ -821,8 +882,13 @@ EOL;
 			$return['rest_days'] = site_convert_due_date($values['due_date'], 'rest_days');
 			$styles = site_convert_due_date($values['due_date'], 'style');
 			$return['styles'] = $this->strings_util->convert_style2array($styles, true);
-			$return = json_encode($return);
 		}
+		if ($values['scheduled_date'] && $scheduled_date_before)
+		{
+			if ($return === '') $return = array();
+			$return['scheduled_date_before'] = $scheduled_date_before;
+		}
+		if (!empty($return)) $return = json_encode($return);
 
 		$this->output->set_output($return);
 	}

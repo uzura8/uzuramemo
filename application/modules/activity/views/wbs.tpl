@@ -6,8 +6,8 @@
 {*{include file='ci:hybrid/subtitle.tpl'}*}
 
 <h4 id="main_form_title" class="box_01">
-<span class="f_11 space_right"><a id="list_switch_1" href="javaScript:void(0);" onclick="ajax_get_child_list_all(0);">All</a></span>
-<span class="f_11 space_right"><a id="list_switch_2" href="javaScript:void(0);" onclick="ajax_get_child_list_all(1);">Active</a></span>
+<span class="f_11 space_right"><a id="list_switch_1" href="javaScript:void(0);" onclick="ajax_get_child_list_all(1);">All</a></span>
+<span class="f_11 space_right"><a id="list_switch_2" href="javaScript:void(0);" onclick="ajax_get_child_list_all(0);">Active</a></span>
 <span class="f_11 space_right"><a id="list_switch_3" href="javaScript:void(0);" onclick="ajax_get_child_list_all(2);">Priority</a></span>
 <input type="hidden" name="list_mode" id="list_mode"  value="{$mode}">
 </h4>
@@ -33,7 +33,7 @@
 <a class="importance_star" id="importance_star_parent_{$row.id}" href="javaScript:void(0);" onclick="toggle_importance_star({$row.id}, '{site_url}wbs/ajax_execute_update_importance', 'importance_star_parent_')" style="{$row.importance|site_display_importance:'style'}">{$row.importance|site_display_importance:'symbol'}</a>
 <span id="wbs_name{$row.id}" class="autogrow_parent">{$row.name}</span>{if $row.key_name}<span id="wbs_key_name{$row.id}" class="autogrow_parent sub_info2">{$row.key_name}</span>{/if}
 {if $row.due_date && $row.due_date != '0000-00-00'}<span class="due_date" id="due_date_parent_{$row.id}" style="{$row.due_date|convert_due_date:'style'}">{$row.due_date|convert_due_date:'rest_days'}</span>{else}<span id="due_date_parent_pre_{$row.id}"></span>{/if}
-<span class="btnTop list_util_btn wider space_left" id="title_btn_{$row.id}"><a href="javaScript:void(0);" onclick="$('#article_{$row.id}').slideToggle();">▼</a></span>
+<span class="btnTop list_util_btn wider space_left" id="title_btn_{$row.id}"><a href="javaScript:void(0);" onclick="$('#wbs_article_{$row.id}').slideToggle();">▼</a></span>
 {if !$is_detail}
 <span class="link_right_each line_height_15 space_left"><a href="{site_url}activity/wbs/{$row.id}/?mode={$mode}">&raquo;&nbsp;詳細</a></span>
 {/if}
@@ -56,7 +56,7 @@
 </div>
 </h2>
 
-<article class="box_01" id="article_{$row.id}" style="display:none;background-color:{'background-color'|site_get_style:$row.del_flg};">
+<article class="box_01" id="wbs_article_{$row.id}" style="display:none;background-color:{'background-color'|site_get_style:$row.del_flg};">
 <div class="article_box">
 <h4>description</h4>
 <p class="autogrow_parent" id="wbs_body{$row.id}" style="width: 300px">{if $row.body}{$row.body|nl2br|auto_link}{else}&nbsp;&nbsp;{/if}</p>
@@ -168,7 +168,7 @@ $(document).ready(function(){
 			//submit    : '<input type="submit" value="OK" class="button">',
 			cancel    : 'cancel',
 			loadurl    : '{/literal}{site_url uri=wbs/ajax_wbs_detail}{literal}/' + url_id + '/' + item_name,
-			tooltip   : "Click to edit...",
+			//tooltip   : "Click to edit...",
 			onblur    : "ignore",
 			cssclass : "editable",
 			select : true,
@@ -188,7 +188,7 @@ $(document).ready(function(){
 			submitdata: { "csrf_test_name": csrf_token, "prefix": 'wbs_'},
 			//cancel    : 'cancel',
 			loadurl    : '{/literal}{site_url uri=wbs/ajax_wbs_detail}{literal}/' + url_id + '/' + item_name,
-			tooltip   : "Click to edit...",
+			//tooltip   : "Click to edit...",
 			onblur    : "ignore",
 			cssclass : "editable",
 			//select : true,
@@ -433,13 +433,14 @@ $(document).ready(function(){
 					if (closed_date.length == 0) {
 						var today = get_today_for_sql_format();
 						$('#input_closed_date_' + id).val(today);
-						$('#hidden_del_flg_' + id).val(today);
+						$('#hidden_del_flg_' + id).val('1');
 					}
+					var btn_val = "{/literal}{1|site_get_symbols_for_display}{literal}";
 				} else {
 					$('#input_closed_date_' + id).val('');
 					$('#hidden_del_flg_' + id).val('');
+					var btn_val = "{/literal}{0|site_get_symbols_for_display}{literal}";
 				}
-				var btn_val = "{/literal}{1|site_get_symbols_for_display}{literal}";
 				$("#btn_delFlg_" + id).val(btn_val);
 				reset_article_color(id);
 			},
@@ -543,15 +544,18 @@ $(document).ready(function(){
 		var id_value = $(this).attr("id");
 		var id = id_value.replace(/btn_update_scheduled_date_today_/g, "");
 		var csrf_token = $.cookie('csrf_test_name');
-		var mode = $("#list_mode").val();
 
 		$.ajax({
 			url : "{/literal}{site_url}{literal}activity/ajax_update_scheduled_date_today",
 			dataType : "text",
 			data : {"id": id, "csrf_test_name": csrf_token},
 			type : "POST",
-			success: function(wbs_id){
+			success: function(data){
 				$.jGrowl('No.' + id + ' の予定日を今日にしました。');
+
+				var obj = $.parseJSON(data);
+				var wbs_id = obj.wbs_id;
+				var mode = $("#list_mode").val();
 				ajax_activity_list(wbs_id, '{/literal}{site_url uri=activity/ajax_activity_list}{literal}/' + wbs_id + '?mode=' + mode);
 			},
 			error: function(data){

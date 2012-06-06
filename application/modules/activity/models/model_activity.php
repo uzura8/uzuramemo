@@ -52,14 +52,16 @@ class Model_activity extends CI_Model
 		$select = sprintf("SELECT %s FROM activity A", $columns);
 		if ($is_count) $select = "SELECT COUNT(A.id) as count FROM activity A";
 		$sql  = $select;
-		$sql .= " LEFT JOIN project B ON A.project_id = B.id";
-		$sql .= " LEFT JOIN program C ON B.program_id = C.id";
-		$sql .= " LEFT JOIN work_class D ON A.work_class_id = D.id";
+		$sql .= " LEFT JOIN wbs B ON A.wbs_id = B.id";
+		$sql .= " LEFT JOIN project C ON B.project_id = C.id";
+		$sql .= " LEFT JOIN program D ON C.program_id = D.id";
+		//$sql .= " LEFT JOIN work_class E ON B.work_class_id = E.id";
 
 		$where  = '';
 		$wheres = array();
 		$wheres[] = "B.del_flg = 0";
 		$wheres[] = "C.del_flg = 0";
+		$wheres[] = "D.del_flg = 0";
 		if (!$with_logical_deleted) $wheres[] = "A.del_flg = 0";
 		if ($add_where = self::get_like_where_clause($search))
 		{

@@ -25,6 +25,23 @@
 <span class="btnSpan"><input type="button" name="update_del_flg_{$row.id}" value="{$row.del_flg|site_get_symbols_for_display}" id="btn_delFlg_{$row.id}" class="btn_delFlg"></span>
 <span class="btnSpan"><input type="button" name="btn_update_scheduled_date_today_{$row.id}" value="today" id="btn_update_scheduled_date_today_{$row.id}" class="btn_update_scheduled_date_today"></span>
 </div>
+
+<div class="article_meta_top">
+<div class="banner">
+<span class="sl3"><a href="{site_url}project/index/{$row.program_key_name}">{$row.program_name}</a></span>
+<span class="sl3">&gt;&nbsp;<a href="{site_url}wbs/index/{$row.project_key_name}">{$row.project_name}</a></span>
+<span class="sl3">&gt;&nbsp;<a href="{site_url}activity/wbs/{$row.wbs_id}">{$row.wbs_name}</a></span>
+</div>
+<div class="meta_info">
+<span>No.{$row.id}</span>
+{if $row.project_key_name}<span id="project_key_name{$row.id}" class="sub_info2"{if $row.color || $row.background_color} style="{if $row.color}color:{$row.color};{/if}{if $row.background_color}background-color:{$row.background_color};{/if}"{/if}>{$row.project_key_name}</span>{/if}
+{*
+<span class="space_left_5">update: {$row.updated_at|date_format:"%Y/%m/%d %H:%M"}</span>
+*}
+</div>
+<div style="clear: both"></div>
+</div>
+
 </h2>
 
 <article class="box_01" id="article_{$row.id}" style="display:none;background-color:{'background-color'|site_get_activity_style:$row.del_flg:$row.closed_date:$row.scheduled_date:$row.status};">

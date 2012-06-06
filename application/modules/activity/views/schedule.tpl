@@ -6,11 +6,12 @@
 {*{include file='ci:hybrid/subtitle.tpl'}*}
 
 <h4 id="main_form_title" class="box_01">
-<span class="f_11 space_right"><a id="new_form_switch" href="javaScript:void(0);" onclick="ajax_activity_list_date_all(0);">All</a></span>
-<span class="f_11 space_right"><a id="new_form_switch" href="javaScript:void(0);" onclick="ajax_activity_list_date_all(1);">Active</a></span>
+<span class="f_11 space_right"><a id="new_form_switch" href="javaScript:void(0);" onclick="ajax_activity_list_date_all(1);">All</a></span>
+<span class="f_11 space_right"><a id="new_form_switch" href="javaScript:void(0);" onclick="ajax_activity_list_date_all(0);">Active</a></span>
 {*
 <span class="f_11 space_right"><a id="new_form_switch" href="javaScript:void(0);" onclick="ajax_activity_list_date_all(2);">Priority</a></span>
 *}
+<input type="hidden" name="list_mode" id="list_mode"  value="{$mode}">
 </h4>
 
 {*{include file='ci:hybrid/main_form.tpl'}*}
@@ -134,6 +135,8 @@ $(document).ready(function(){
 		var text_box_width = '250px';
 		if (item_name == 'key_name') {
 			var text_box_width = '50px';
+		} else if (item_name == 'estimated_time' || item_name == 'spent_time') {
+			var text_box_width = '30px';
 		} else if (item_name == 'due_date') {
 			var text_box_width = '100px';
 		}
@@ -147,7 +150,7 @@ $(document).ready(function(){
 			//submit    : '<input type="submit" value="OK" class="button">',
 			cancel    : 'cancel',
 			loadurl    : '{/literal}{site_url uri=activity/ajax_activity_detail}{literal}/' + id + '/' + item_name,
-			tooltip   : "Click to edit...",
+			//tooltip   : "Click to edit...",
 			onblur    : "ignore",
 			cssclass : "editable",
 			select : true,
@@ -160,12 +163,14 @@ $(document).ready(function(){
 			indicator : "<img src='{/literal}{site_url uri=js/lib/jeditable/img/indicator.gif}{literal}'>",
 			type      : "text",
 			width     : 'width: ' + text_box_width + ';',// js/lib/jeditable/jquery.jeditable.js : 455 を修正し style で指定できるように対応
-			submit    : 'OK',
+			event     : "dblclick",
+			style     : "inherit",
+			//submit    : 'OK',
 			//submit    : '<input type="submit" value="OK" class="button">',
 			submitdata: { "csrf_test_name": csrf_token },
-			cancel    : 'cancel',
+			//cancel    : 'cancel',
 			loadurl    : '{/literal}{site_url uri=activity/ajax_activity_detail}{literal}/' + id + '/' + item_name,
-			tooltip   : "Click to edit...",
+			//tooltip   : "Click to edit...",
 			onblur    : "ignore",
 			cssclass : "editable",
 			select : true,
@@ -186,18 +191,18 @@ $(document).ready(function(){
 			type : "POST",
 			success: function(status_after){
 
-console.log(status_after);
 				if (status_after == "1") {
 					if (closed_date.length == 0) {
 						var today = get_today_for_sql_format();
 						$('#input_closed_date_' + id).val(today);
 						$('#hidden_del_flg_' + id).val('1');
 					}
+					var btn_val = "{/literal}{1|site_get_symbols_for_display}{literal}";
 				} else {
 					$('#input_closed_date_' + id).val('');
-					$('#hidden_del_flg_' + id).val('0');
+					$('#hidden_del_flg_' + id).val('');
+					var btn_val = "{/literal}{0|site_get_symbols_for_display}{literal}";
 				}
-				var btn_val = "{/literal}{1|site_get_symbols_for_display}{literal}";
 				$("#btn_delFlg_" + id).val(btn_val);
 				reset_article_color(id);
 			},
@@ -302,6 +307,58 @@ console.log(status_after);
 		});
 	});
 
+	// copy
+	$(".btn_copy").live("click", function(){
+		var id_value = $(this).attr("id");
+		var id = id_value.replace(/btn_copy_/g, "");
+		var csrf_token = $.cookie('csrf_test_name');
+		//var closed_date = $('#input_closed_date_' + id).val();
+		var mode = $("#list_mode").val();
+
+		$.ajax({
+			url : "{/literal}{site_url}{literal}activity/ajax_copy_activity",
+			dataType : "text",
+			data : {"id": id, "is_schedule": "1", "csrf_test_name": csrf_token},
+			type : "POST",
+			success: function(scheduled_date){
+				$.jGrowl('No.' + id + ' をコピーしました。');
+				var mode = $("#list_mode").val();
+				ajax_activity_list_date(scheduled_date, '{/literal}{site_url uri=activity/ajax_activity_list_date}{literal}/' + scheduled_date + '?mode='+mode, mode);
+			},
+			error: function(data){
+				$.jGrowl('No.' + id + ' のコピーに失敗しました。');
+			}
+		});
+	});
+
+	// update_scheduled_date_today
+	$(".btn_update_scheduled_date_today").live("click", function(){
+		var id_value = $(this).attr("id");
+		var id = id_value.replace(/btn_update_scheduled_date_today_/g, "");
+		var csrf_token = $.cookie('csrf_test_name');
+		var mode = $("#list_mode").val();
+
+		$.ajax({
+			url : "{/literal}{site_url}{literal}activity/ajax_update_scheduled_date_today",
+			dataType : "text",
+			data : {"id": id, "csrf_test_name": csrf_token},
+			type : "POST",
+			success: function(data){
+				$.jGrowl('No.' + id + ' の予定日を今日にしました。');
+
+				if (data.length > 0) {
+					var obj = $.parseJSON(data);
+					var mode = $("#list_mode").val();
+					ajax_activity_list_date(obj.scheduled_date, '{/literal}{site_url uri=activity/ajax_activity_list_date}{literal}/' + obj.scheduled_date + '?mode='+mode, mode);
+					ajax_activity_list_date(obj.scheduled_date_before, '{/literal}{site_url uri=activity/ajax_activity_list_date}{literal}/' + obj.scheduled_date_before + '?mode='+mode, mode);
+				}
+			},
+			error: function(data){
+				$.jGrowl('No.' + id + ' の予定日の変更に失敗しました。');
+			}
+		});
+	});
+
 	// 日付の変更
 	$(".btn_date").live("click", function(){
 		var id_value = $(this).attr("id");
@@ -329,8 +386,17 @@ console.log(status_after);
 			data : {"id": id, "due_date": value_due_date, "scheduled_date": value_scheduled_date, "csrf_test_name": csrf_token},
 			type : "POST",
 			success: function(data){
-				reset_article_color(id);
+				//reset_article_color(id);
 				$.jGrowl('No.' + id + 'の日付を変更しました。');
+
+				if (value_scheduled_date.length > 0) {
+					if (data.length > 0) {
+						var obj = $.parseJSON(data);
+						var mode = $("#list_mode").val();
+						ajax_activity_list_date(value_scheduled_date, '{/literal}{site_url uri=activity/ajax_activity_list_date}{literal}/' + value_scheduled_date + '?mode='+mode, mode);
+						ajax_activity_list_date(obj.scheduled_date_before, '{/literal}{site_url uri=activity/ajax_activity_list_date}{literal}/' + obj.scheduled_date_before + '?mode='+mode, mode);
+					}
+				}
 			},
 			error: function(data){
 				$.jGrowl('No.' + id + 'の日付を変更できませんでした。');
@@ -340,6 +406,7 @@ console.log(status_after);
 });
 
 function ajax_activity_list_date_all(mode) {
+	$("#list_mode").val(mode);
 {/literal}
 {foreach from=$list key=date item=row}{literal}
 	ajax_activity_list_date({/literal}'{$date}'{literal}, '{/literal}{site_url uri=activity/ajax_activity_list_date}/{$date}{literal}?mode='+mode, mode);
@@ -361,8 +428,7 @@ function reset_article_color(id) {
 	var tomorrow_int = get_date_int_format(1);
 	var this_week_int = get_date_int_format(7);
 
-	console.log(scheduled_date_int, tomorrow_int, this_week_int);
-	//console.log(currentDate);
+	//console.log(scheduled_date_int, tomorrow_int, this_week_int);
 
 	if (del_flg == 1) {
 		$('#article_title_'+id).css('background-color', {/literal}'{`$config_site_styles.backgroundcolor.display_none`}'{literal});

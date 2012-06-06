@@ -90,14 +90,19 @@ CREATE TABLE `activity` (
   `scheduled_date` date DEFAULT NULL COMMENT '実施予定日',
   `due_date` date DEFAULT NULL COMMENT '期日',
   `closed_date` date DEFAULT NULL COMMENT '終了日',
+  `estimated_time` float DEFAULT NULL COMMENT '見積り工数:時',
+  `spent_time` float DEFAULT NULL COMMENT '実工数:時',
   `type` tinyint(1) NOT NULL DEFAULT '0' COMMENT '0:normal, 1:milestone',
   `private_flg` tinyint(1) NOT NULL DEFAULT '0',
+  `importance` tinyint(1) NOT NULL DEFAULT '0',
   `sort` int(8) DEFAULT NULL,
   `del_flg` tinyint(1) NOT NULL DEFAULT '0',
   `created_at` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `updated_at` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=49 DEFAULT CHARSET=utf8;
+  PRIMARY KEY (`id`),
+  KEY `wbs_id_wbs_id` (`wbs_id`),
+  CONSTRAINT `wbs_id_wbs_id` FOREIGN KEY (`wbs_id`) REFERENCES `wbs` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -113,7 +118,7 @@ CREATE TABLE `admin_user` (
   `password` varchar(64) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `username` (`username`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -204,12 +209,14 @@ CREATE TABLE `program` (
   `del_flg` tinyint(1) NOT NULL DEFAULT '0',
   `html_flg` tinyint(1) NOT NULL DEFAULT '0',
   `private_flg` tinyint(1) DEFAULT '0',
+  `color` varchar(7) DEFAULT NULL,
+  `background_color` varchar(7) DEFAULT NULL,
   `created_at` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `updated_at` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`),
   UNIQUE KEY `key_name` (`key_name`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -235,8 +242,10 @@ CREATE TABLE `project` (
   `updated_at` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `due_date` date DEFAULT NULL COMMENT '期日',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `key_name` (`key_name`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
+  UNIQUE KEY `key_name` (`key_name`),
+  KEY `program_id_program_id` (`program_id`),
+  CONSTRAINT `program_id_program_id` FOREIGN KEY (`program_id`) REFERENCES `program` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 
@@ -262,12 +271,15 @@ CREATE TABLE `wbs` (
   `due_date` date DEFAULT NULL COMMENT '期日',
   `html_flg` tinyint(1) NOT NULL DEFAULT '0',
   `private_flg` tinyint(1) DEFAULT '0',
+  `importance` tinyint(1) NOT NULL DEFAULT '0',
   `sort` int(8) DEFAULT NULL,
   `del_flg` tinyint(1) NOT NULL DEFAULT '0',
   `created_at` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `updated_at` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
+  PRIMARY KEY (`id`),
+  KEY `project_id_project_id` (`project_id`),
+  CONSTRAINT `project_id_project_id` FOREIGN KEY (`project_id`) REFERENCES `project` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -287,7 +299,7 @@ CREATE TABLE `work_class` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`),
   KEY `sort` (`sort`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
