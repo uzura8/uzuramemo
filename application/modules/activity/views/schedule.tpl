@@ -26,78 +26,32 @@
 <!-- main_list -->
 <div id="jquery-ui-sortable">
 <div class="content" id="date_list">
+
+<!-- past -->
+<div{if !$order} class="date_each jquery-ui-sortable-item"{/if} id="date_past">
+<a name="id_past"></a>
+<h2 class="box_01 subtitle" id="article_title_schedule_past">
+<div>
+<span id="date_namepast">超過分</span>
+</div>
+</h2>
+
+<div id="loading_activity_list_past"><img src="{site_url}img/loading.gif"></div>
+<div id="pics_activity_list_past"></div>
+<div id="activity_list_past"></div>
+
+</div>
+<!-- past -->
+
 {foreach from=$list key=date item=row name=list}
-<div{if !$order} class="date_each jquery-ui-sortable-item{if !$smarty.foreach.list.first} st15{/if}"{/if} id="date_{$date}">
+<div{if !$order} class="date_each jquery-ui-sortable-item st15"{/if} id="date_{$date}">
 <a name="id_{$date}"></a>
 <h2 class="box_01 subtitle" id="article_title_schedule_{$date}">
 <div>
 <span id="date_name{$date}">{$date}({$row.week_name})</span>
 <span class="due_date sub_info2" id="due_date_{$row.id}" style="{$date|convert_due_date:'style'}">{$date|convert_due_date:'rest_days'}</span>
 </div>
-{*
-<div class="article_meta_top">
-<div class="banner">
-<span class="space_left_5"><a href="{site_url}project/index/{$row.program_key_name}">{$row.program_name}</a></span>
-<span class="space_left_5"><a href="{site_url}wbs/index/{$row.project_key_name}">{$row.project_name}</a></span>
-</div>
-<div class="meta_info">
-<span>No.{$row.id}</span>
-<span class="space_left_5">update: {$row.updated_at|date_format:"%Y/%m/%d %H:%M"}</span>
-</div>
-<div style="clear: both"></div>
-</div>
-*}
 </h2>
-
-{*
-<article class="box_01" id="article_{$row.id}" style="display:none;background-color:{'background-color'|site_get_style:$row.del_flg};">
-<div class="article_box">
-<h4>description</h4>
-<p class="autogrow_parent" id="wbs_body{$row.id}" style="width: 300px">{if $row.body}{$row.body|nl2br|auto_link}{else}&nbsp;&nbsp;{/if}</p>
-
-<div class="form_box_each">
-<table border="0" cellspacing="0" cellpadding="0">
-<tr><td>
-	<span class="label">開始日</span><input name="input_start_date_{$row.id}" id="wbs_input_start_date_{$row.id}" class="width_10 input_date" type="text" value="{$row.start_date}">
-	<span class="label sl2">期日</span><input name="input_due_date_{$row.id}" id="wbs_input_due_date_{$row.id}" class="width_10 input_date" type="text" value="{$row.due_date}">
-	<span class="btnSpan"><input type="button" name="btn_date_{$row.id}" value="更新" id="wbs_btn_date_{$row.id}" class="wbs_btn_date"></span>
-
-	<span class="title sl5">工数:</span>
-	<span class="label">見積</span>
-	<input name="estimated_time" id="input_estimated_time_{$row.id}" class="width_3 wbs_input_each" type="text" value="{$row.estimated_time}"><span class="after_label">人日</span>
-	<span class="label sl2">実績</span>
-	<input name="spent_time" id="input_spent_time_{$row.id}" class="width_3 wbs_input_each" type="text" value="{$row.spent_time}"><span class="after_label">人日</span>
-
-	<span class="title sl5">進捗:</span>
-	<input name="percent_complete" id="input_percent_complete_{$row.id}" class="width_3 wbs_input_each" type="text" value="{$row.percent_complete}"><span class="after_label">%</span>
-</td></tr>
-</table>
-</div>
-
-</div>
-<div class="clearfloat"><hr></div>
-
-<aside class="article_footer">
-{if $row.explanation}
-<div class="quote_box">
-<span class="title">引用元:</span><span class="space_left_5">{$row.explanation}</span>
-</div>
-{/if}
-<div class="article_aside_button">
-<span class="btnSpan"><input type="button" name="update_del_flg_{$row.id}" value="{$row.del_flg|site_get_symbols_for_display}" id="wbs_btn_delFlg_{$row.id}" class="wbs_btn_delFlg"></span>
-<span class="btnSpan space_left_5"><input type="button" name="delete_{$row.id}" value="削除" id="wbs_btn_delete_{$row.id}" class="wbs_btn_delete"></span>
-{if $order}
-<span class="btnSpan space_left">
-<label for="input_sort_{$row.id}">並び順:</label>
-<input type="text" name="input_sort_{$row.id}" value="{$row.sort}" id="input_sort_{$row.id}" class="InputMini input_sort" maxlength="6" placeholder="並び順"></span>
-{/if}
-<span class="btnTop space_left_5"><a href="#top">▲</a></span>
-<span class="btnTop space_left_5"><a href="{site_url uri=wbs}">{$smarty.const.UM_TOPPAGE_NAME}</a></span>
-<span class="btnTop"><a href="{site_url}">サイト{$smarty.const.UM_TOPPAGE_NAME}</a></span>
-</div>
-</aside>
-</article>
-*}
 
 <div id="loading_activity_list_{$date}"><img src="{site_url}img/loading.gif"></div>
 <div id="pics_activity_list_{$date}"></div>
@@ -105,6 +59,22 @@
 
 </div>
 {/foreach}
+
+<!-- undefined -->
+<div{if !$order} class="date_each jquery-ui-sortable-item"{/if} id="date_undefined">
+<a name="id_undefined"></a>
+<h2 class="box_01 subtitle" id="article_title_schedule_undefined">
+<div>
+<span id="date_nameundefined"><a href="javaScript:void(0);" onclick="ajax_activity_list_undefined();">予定日未設定</a></span>
+</div>
+</h2>
+
+<div id="pics_activity_list_undefined"></div>
+<div id="activity_list_undefined"></div>
+
+</div>
+<!-- undefined -->
+
 </div>
 </div>
 {/if}
@@ -126,6 +96,7 @@ uzura_sortable("{/literal}{site_url}{literal}wbs/ajax_execute_update_sort_move/w
 {/literal}{/if}
 {literal}
 $(document).ready(function(){
+	var mode = $("#list_mode").val();
 	ajax_activity_list_date_all();
 
 	// activity の更新
@@ -389,14 +360,24 @@ $(document).ready(function(){
 				//reset_article_color(id);
 				$.jGrowl('No.' + id + 'の日付を変更しました。');
 
+				var mode = $("#list_mode").val();
 				if (value_scheduled_date.length > 0) {
-					if (data.length > 0) {
-						var obj = $.parseJSON(data);
-						var mode = $("#list_mode").val();
-						ajax_activity_list_date(value_scheduled_date, '{/literal}{site_url uri=activity/ajax_activity_list_date}{literal}/' + value_scheduled_date + '?mode='+mode, mode);
+				}
+				if (data.length > 0) {
+					var obj = $.parseJSON(data);
+					if (obj.scheduled_date_before.length > 0) {
 						ajax_activity_list_date(obj.scheduled_date_before, '{/literal}{site_url uri=activity/ajax_activity_list_date}{literal}/' + obj.scheduled_date_before + '?mode='+mode, mode);
 					}
 				}
+
+				var scheduled_date_int = value_scheduled_date.replace(/-/g, '');
+				var today_int = get_date_int_format();
+				if (value_scheduled_date.length == 0) {
+					value_scheduled_date = 'undefined';
+				} else if (scheduled_date_int < today_int) {
+					value_scheduled_date = 'past';
+				}
+				ajax_activity_list_date(value_scheduled_date, '{/literal}{site_url uri=activity/ajax_activity_list_date}{literal}/' + value_scheduled_date + '?mode='+mode, mode);
 			},
 			error: function(data){
 				$.jGrowl('No.' + id + 'の日付を変更できませんでした。');
@@ -407,6 +388,9 @@ $(document).ready(function(){
 
 function ajax_activity_list_date_all(mode) {
 	$("#list_mode").val(mode);
+
+	ajax_activity_list_date('past', '{/literal}{site_url uri=activity/ajax_activity_list_date}{literal}/past?mode='+0, 0);
+
 {/literal}
 {foreach from=$list key=date item=row}{literal}
 	ajax_activity_list_date({/literal}'{$date}'{literal}, '{/literal}{site_url uri=activity/ajax_activity_list_date}/{$date}{literal}?mode='+mode, mode);
@@ -428,10 +412,9 @@ function reset_article_color(id) {
 	var tomorrow_int = get_date_int_format(1);
 	var this_week_int = get_date_int_format(7);
 
-	//console.log(scheduled_date_int, tomorrow_int, this_week_int);
 
 	if (del_flg == 1) {
-		$('#article_title_'+id).css('background-color', {/literal}'{`$config_site_styles.backgroundcolor.display_none`}'{literal});
+		$('#article_title_'+id).css('background-color', {/literal}'{$config_site_styles.backgroundcolor.display_none}'{literal});
 		$('#article_'+id).css('background-color', {/literal}'{$config_site_styles.backgroundcolor.display_none}'{literal});
 	} else if (closed_date.length > 0 && closed_date != '0000-00-00') {
 		$('#article_title_'+id).css('background-color', {/literal}'{$config_site_styles.backgroundcolor.display_none}'{literal});
@@ -457,6 +440,12 @@ function reset_article_color(id) {
 		$type = 'display';
 	}
 }
+
+function ajax_activity_list_undefined() {
+	var mode = $("#list_mode").val();
+	ajax_activity_list_date('undefined', '{/literal}{site_url uri=activity/ajax_activity_list_date}{literal}/undefined?mode='+mode, mode);
+}
+
 {/literal}
 </script>
 

@@ -240,29 +240,36 @@ EOL;
 
 	public function ajax_activity_list_date($date = '')
 	{
-		$date = $this->site_util->simple_validation($date, '', 'date_format');
-		if (!$date) show_404();
-
-		$view_data = $this->_get_default_view_data();
-
-
 		$params = array('sql' => array(), 'values' => array());
+		switch ($date)
+		{
+			case 'past':
+				$params['sql'][] = 'A.scheduled_date < ?';
+				$params['values'][] = date('Y-m-d');
+				break;
+			case 'undefined':
+				$params['sql'][] = 'A.scheduled_date is NULL';
+				break;
+			default :
+				$date = $this->site_util->simple_validation($date, '', 'date_format');
+				if (!$date) show_404();
 
-		// scheduled_date
-		$params['sql'][] = 'A.scheduled_date = ?';
-		$params['values'][] = $date;
+				$params['sql'][] = 'A.scheduled_date = ?';
+				$params['values'][] = $date;
+				break;
+		}
 
 		// mode
 		$mode = (int)$this->_get_post_params('mode', '');
 		switch ($mode)
 		{
 			case 1: // all
-				$$with_logical_deleted = true;
+				$with_logical_deleted = true;
 				break;
 			case 2: //priority
 				break;
 			default :
-				$$with_logical_deleted = false;
+				$with_logical_deleted = false;
 				break;
 		}
 
@@ -270,6 +277,7 @@ EOL;
 		$params['sql'][] = 'D.private_flg = ?';
 		$params['values'][] = (int)$private;
 
+		$view_data = $this->_get_default_view_data();
 		$view_data['list'] = $this->model_activity->get_main_list(0, 0, 'A.sort, B.sort', '', $with_logical_deleted,
 			'A.*, B.name as wbs_name, C.name as project_name, C.key_name as project_key_name, D.name as program_name, D.key_name as program_key_name, D.color, D.background_color', $params);
 
@@ -766,9 +774,25 @@ EOL;
 
 		$return = array();
 		$return['wbs_id'] = $row['wbs_id'];
-		$return['scheduled_date_before'] = $scheduled_date_before;
 		$return['scheduled_date'] = date('Y-m-d');
-		$return = json_encode($return);
+		$return['scheduled_date_before'] = $scheduled_date_before;
+		if (empty($scheduled_date_before))
+		{
+			$return['scheduled_date_before'] = 'undefined';
+		}
+		elseif ($this->date_util->conv2int($scheduled_date_before) < date('Ymd'))
+		{
+			$return['scheduled_date_before'] = 'past';
+		}
+
+		if (empty($return))
+		{
+			$return = '';
+		}
+		else
+		{
+			$return = json_encode($return);
+		}
 
 		$this->output->set_output($return);
 	}
@@ -875,20 +899,32 @@ EOL;
 			return;
 		}
 
-		$return = '';
+		$return = array();
 		if ($values['due_date'])
 		{
-			$return = array();
 			$return['rest_days'] = site_convert_due_date($values['due_date'], 'rest_days');
 			$styles = site_convert_due_date($values['due_date'], 'style');
 			$return['styles'] = $this->strings_util->convert_style2array($styles, true);
 		}
-		if ($values['scheduled_date'] && $scheduled_date_before)
+
+		$return['scheduled_date_before'] = $scheduled_date_before;
+		if (empty($scheduled_date_before))
 		{
-			if ($return === '') $return = array();
-			$return['scheduled_date_before'] = $scheduled_date_before;
+			$return['scheduled_date_before'] = 'undefined';
 		}
-		if (!empty($return)) $return = json_encode($return);
+		elseif ($this->date_util->conv2int($scheduled_date_before) < date('Ymd'))
+		{
+			$return['scheduled_date_before'] = 'past';
+		}
+
+		if (empty($return))
+		{
+			$return = '';
+		}
+		else
+		{
+			$return = json_encode($return);
+		}
 
 		$this->output->set_output($return);
 	}

@@ -685,7 +685,7 @@ function reset_article_color(id) {
 //	console.log(scheduled_date_int, tomorrow_int, this_week_int);
 
 	if (del_flg == 1) {
-		$('#article_title_'+id).css('background-color', {/literal}'{`$config_site_styles.backgroundcolor.display_none`}'{literal});
+		$('#article_title_'+id).css('background-color', {/literal}'{$config_site_styles.backgroundcolor.display_none}'{literal});
 		$('#article_'+id).css('background-color', {/literal}'{$config_site_styles.backgroundcolor.display_none}'{literal});
 	} else if (closed_date.length > 0 && closed_date != '0000-00-00') {
 		$('#article_title_'+id).css('background-color', {/literal}'{$config_site_styles.backgroundcolor.display_none}'{literal});

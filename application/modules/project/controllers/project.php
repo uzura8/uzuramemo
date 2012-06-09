@@ -92,6 +92,7 @@ EOL;
 			{
 				$program_id = (int)$program_key;
 				$program = $this->model_program->get_row_common(array('id' => $program_id, 'del_flg' => 0));
+				$program_key = $program['key_name'];
 			}
 			else
 			{
