@@ -1,5 +1,6 @@
+{*
 <script language="JavaScript" type="text/javascript" src="{site_url}js/focus.js"></script>
-
+*}
 <script language="JavaScript" type="text/javascript">
 {literal}function selectjump(obj) {{/literal}
 	var text = obj.options[obj.selectedIndex].value;

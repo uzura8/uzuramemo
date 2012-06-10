@@ -8,7 +8,7 @@
 <a href="{site_url uri=category}/{$row.id}">{$row.name}</a>
 {if $smarty.const.IS_AUTH && $row.key_name}<span class="f_light">({$row.key_name})</span>{/if}
 </p>
-<div id="menu_box{$row.id}">
+<div id="menu_box{$row.id}" class="menu_box">
 {foreach from=$row.sc_ary item=sub_row}
 {if $sub_row.id == $now_category_id}
 <p class="lb_04 bg_red">
