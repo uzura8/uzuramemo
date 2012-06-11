@@ -551,12 +551,36 @@ $(document).ready(function(){
 			data : {"id": id, "csrf_test_name": csrf_token},
 			type : "POST",
 			success: function(data){
-				$.jGrowl('No.' + id + ' の予定日を今日にしました。');
+				if (data.length > 0) {
+					$.jGrowl('No.' + id + ' の予定日を今日にしました。');
+				}
+				var obj = $.parseJSON(data);
+				$("#input_scheduled_date_" + id).val(obj.scheduled_date);
+				reset_article_color(id);
+			},
+			error: function(data){
+				$.jGrowl('No.' + id + ' の予定日の変更に失敗しました。');
+			}
+		});
+	});
+
+	// update_scheduled_date_plus1day
+	$(".btn_update_scheduled_date_plus1day").live("click", function(){
+		var id_value = $(this).attr("id");
+		var id = id_value.replace(/btn_update_scheduled_date_plus1day_/g, "");
+		var csrf_token = $.cookie('csrf_test_name');
+
+		$.ajax({
+			url : "{/literal}{site_url}{literal}activity/ajax_update_scheduled_date_plus1day",
+			dataType : "text",
+			data : {"id": id, "csrf_test_name": csrf_token},
+			type : "POST",
+			success: function(data){
+				$.jGrowl('No.' + id + ' の予定日を変更しました。');
 
 				var obj = $.parseJSON(data);
-				var wbs_id = obj.wbs_id;
-				var mode = $("#list_mode").val();
-				ajax_activity_list(wbs_id, '{/literal}{site_url uri=activity/ajax_activity_list}{literal}/' + wbs_id + '?mode=' + mode);
+				$("#input_scheduled_date_" + id).val(obj.scheduled_date);
+				reset_article_color(id);
 			},
 			error: function(data){
 				$.jGrowl('No.' + id + ' の予定日の変更に失敗しました。');

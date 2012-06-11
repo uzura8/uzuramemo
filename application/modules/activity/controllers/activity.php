@@ -797,6 +797,56 @@ EOL;
 		$this->output->set_output($return);
 	}
 
+	public function ajax_update_scheduled_date_plus1day()
+	{
+		$this->input->check_is_post();
+		$id = (int)$this->_get_post_params('id');
+
+		$row = $this->model_activity->get_row_common(array('id' => $id));
+		$scheduled_date_before = $row['scheduled_date'];
+		if (empty($row['scheduled_date']) || $row['scheduled_date'] == '0000-00-00')
+		{
+			// 未登録の場合は明日
+			$scheduled_date_after = date('Y-m-d', strtotime('tomorrow'));
+		}
+		else
+		{
+			$scheduled_date_after = date('Y-m-d', strtotime(sprintf('%s +1 days', $row['scheduled_date'])));
+		}
+
+		// 登録
+		$values = array('scheduled_date' => $scheduled_date_after);
+		if (!$this->model_activity->update4id($values, $id))
+		{
+			$this->output->set_ajax_output_error();
+			return;
+		}
+
+		$return = array();
+		$return['wbs_id'] = $row['wbs_id'];
+		$return['scheduled_date'] = $scheduled_date_after;
+		$return['scheduled_date_before'] = $scheduled_date_before;
+		if (empty($scheduled_date_before))
+		{
+			$return['scheduled_date_before'] = 'undefined';
+		}
+		elseif ($this->date_util->conv2int($scheduled_date_before) < date('Ymd'))
+		{
+			$return['scheduled_date_before'] = 'past';
+		}
+
+		if (empty($return))
+		{
+			$return = '';
+		}
+		else
+		{
+			$return = json_encode($return);
+		}
+
+		$this->output->set_output($return);
+	}
+
 	public function ajax_execute_update_common()
 	{
 		$this->input->check_is_post();

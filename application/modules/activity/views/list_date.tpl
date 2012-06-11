@@ -24,6 +24,7 @@
 <span class="list_util_btn wider btnTop sl5" id="title_btn_{$row.id}"><a href="javaScript:void(0);" onclick="$('#article_{$row.id}').slideToggle();">▼</a></span>
 <span class="btnSpan"><input type="button" name="update_del_flg_{$row.id}" value="{$row.del_flg|site_get_symbols_for_display}" id="btn_delFlg_{$row.id}" class="btn_delFlg"></span>
 <span class="btnSpan"><input type="button" name="btn_update_scheduled_date_today_{$row.id}" value="today" id="btn_update_scheduled_date_today_{$row.id}" class="btn_update_scheduled_date_today"></span>
+<span class="btnSpan"><input type="button" name="btn_update_scheduled_date_plus1day_{$row.id}" value="+1day" id="btn_update_scheduled_date_plus1day_{$row.id}" class="btn_update_scheduled_date_plus1day"></span>
 </div>
 
 <div class="article_meta_top">
