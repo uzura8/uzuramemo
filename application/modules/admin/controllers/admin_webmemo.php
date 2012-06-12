@@ -140,16 +140,15 @@ class Admin_webmemo extends MY_Controller
 		else
 		{
 			// 新規登録時
-			$edit_id = $this->memo->insert($values);
+			$insert_id = $this->memo->insert($values);
 			$message = '登録しました';
 		}
-
-		if (UM_USE_TWITTER_NOTIFY)
+		if (UM_USE_TWITTER_NOTIFY && !$edit_id && $this->session->get('is_tweet', 'memo'))
 		{
 			ini_set('include_path', ini_get('include_path').PATH_SEPARATOR.UM_BASE_DIR.'application/libraries/vender/twitteroauth');
 			require_once('twitteroauth.php');
 			$twitter = new TwitterOAuth(UM_TW_CONSUMER_KEY,UM_TW_CONSUMER_SECRET,UM_TW_ACCESS_TOKEN,UM_TW_ACCESS_TOKEN_SECRET);
-			$req = $twitter->OAuthRequest('https://twitter.com/statuses/update.xml','POST',array('status' => $this->_get_tweet_sentence($edit_id)));
+			$req = $twitter->OAuthRequest('https://twitter.com/statuses/update.xml','POST',array('status' => $this->_get_tweet_sentence($insert_id)));
 		}
 
 		$redirect_to = '';
