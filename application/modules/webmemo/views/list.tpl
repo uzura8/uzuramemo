@@ -71,7 +71,7 @@
 <div class="box_01">
 <!--<h3 class="main_h3">内容</h3>-->
 {if $is_quote}
-<div id="article_box">{$row.body|strip_tags|mb_strimwidth:0:$smarty.const.UM_QUOTE_TRIM_WIDTH:"..."|nl2br|smarty:nodefaults}</div>
+<div id="article_box">{$row.body|strip_tags|mb_strimwidth:0:$smarty.const.UM_QUOTE_TRIM_WIDTH:"..."|uznl2br|smarty:nodefaults}</div>
 {if $row.body|mb_strlen > $smarty.const.UM_QUOTE_TRIM_WIDTH}
 <div class="f_bld">→&nbsp;<a href="{$row.explain}" target="_blank">続きを見る</a></div>
 {/if}
