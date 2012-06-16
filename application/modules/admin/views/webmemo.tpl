@@ -22,7 +22,7 @@
 下記のフォームに内容を入力後、【{$edit_button}】ボタンをクリックしてください。<br />
 <br />
 下のボタンをツールバーにドラッグしてください。
-<div id="bmicon"><a href="javascript:location.href='{site_url}admin/clip?link='+encodeURIComponent(location.href)+'&amp;title='+encodeURIComponent(document.title);"><img title="clip!" alt="clip!" src="{site_url}img/admin/clip_s.png"/></a><span>clip!</span></div>
+<div id="bmicon"><a href="javascript:location.href='{site_url}admin/webmemo/clip?link='+encodeURIComponent(location.href)+'&amp;title='+encodeURIComponent(document.title);"><img title="clip!" alt="clip!" src="{site_url}img/admin/clip_s.png"/></a><span>clip!</span></div>
 </div>
 {/if}
 {include file='ci:admin/util/message_box.tpl'}
