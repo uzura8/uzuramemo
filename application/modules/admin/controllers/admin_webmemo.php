@@ -790,7 +790,8 @@ class Admin_webmemo extends MY_Controller
 		foreach ($lines as $line)
 		{
 			//$line = str_replace(array('&nbsp;', ' ', '　', "'"), '', $line);
-			if (strlen($line) > 1)
+			$string = trim(str_replace('&nbsp;', '', $line));
+			if (strlen($string) > 1)
 			{
 				if (mb_strlen($line) > 140) $line = mb_strimwidth($line, 0, 135, "...");
 				$title = $line;
@@ -839,6 +840,7 @@ class Admin_webmemo extends MY_Controller
 		$this->input->set_post('title', $title);
 		$this->input->set_post('body', mb_convert_encoding($body, 'UTF-8', 'auto'));
 		$this->input->set_post('explain', $url);
+		$this->input->set_post('private_quote_flg', 1);
 	}
 }
 
