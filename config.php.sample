@@ -39,6 +39,20 @@ define('COPYRIGHT_URL', 'example.com');
 // copyright since
 define('COPYRIGHT_SINCE', '2008');
 
+// URL から HTML を取得する際に削除するタグ
+//  PHP Simple HTML DOM Parser を使用( http://simplehtmldom.sourceforge.net/ )
+$GLOBALS['UM_PERSE_URL_REMOVE_TAGS'] = array(
+	'script',
+	'iframe',
+	'object',
+	'form',
+	'input',
+	'select',
+	'textarea',
+	'nav',
+	'[class=navi]',
+);
+
 
 // 外部サービス関連設定
 

@@ -816,3 +816,11 @@ tr.edit td, td.edit {
 	font-weight:bold;
 	color: #F90;
 }
+
+div#bmicon img {
+	vertical-align: middle;
+}
+
+div#bmicon span {
+	margin-left: 3px;
+}

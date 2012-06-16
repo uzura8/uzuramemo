@@ -103,4 +103,13 @@ class Site_util
 
 		return $value;
 	}
+
+	public function check_url($url, $is_encoded = false)
+	{
+		if ($is_encoded) $url = urldecode($url);
+		$url = prep_url(trim($url));
+		if (!is_url($url)) return false;
+
+		return $url;
+	}
 }

@@ -70,6 +70,21 @@ class Admin_webmemo extends MY_Controller
 		$this->smarty_parser->parse('ci:admin/webmemo.tpl', $view_data);
 	}
 
+	public function clip()
+	{
+		$url_encoded = $this->input->get_post('link');
+		if (!$url = $this->site_util->check_url($url_encoded, true))
+		{
+			admin_redirect('webmemo/index', 'URLが無効です');
+		}
+		$this->_perse_url($url);
+
+		// validate and set sessions
+		$this->_setup_validation('memo');
+		$this->_set_validation_and_sessions('memo');
+		admin_redirect('webmemo/index');
+	}
+
 	public function execute_edit_memo()
 	{
 		$this->input->check_is_post();
@@ -97,9 +112,11 @@ class Admin_webmemo extends MY_Controller
 		if (!$this->input->post('preview') && !$this->input->post('edit')) show_404();
 		// 以下、preview か edit 処理
 
-
 		// 入力補助機能
 		$this->_input_support4memo();
+
+		// perse url
+		if ($url = $this->_check_perse_url()) $this->_perse_url($url);
 
 		// validate and set sessions
 		if (!$this->_set_validation_and_sessions('memo'))
@@ -783,6 +800,45 @@ class Admin_webmemo extends MY_Controller
 		if ($title) $title = preg_replace('/^(h[1-6]{1}\.|[\*]+|[#]+|[=]{1,6}) /iu', '', $title);
 
 		return $title;
+	}
+
+	private function _check_perse_url()
+	{
+		if (!$this->input->post('preview')) return false;
+		if (!$this->input->post('explain')) return false;
+		if (trim($this->input->post('title'))) return false;
+		if (trim(strip_tags($this->input->post('body')))) return false;
+
+		$url = prep_url(trim($this->input->post('explain')));
+		if (!is_url($url)) return false;
+
+		return $url;
+	}
+
+	private function _perse_url($url)
+	{
+		$this->load->library('simple_html_dom');
+		$dom = file_get_html($url);
+		$title = '';
+		foreach($dom->find('h2') as $element) {
+			$title = $element->plaintext;
+			$find = $element->outertext;
+			break;
+		}
+		$body = $dom->find('body', 0)->innertext;
+
+		$remove_tags = $GLOBALS['UM_PERSE_URL_REMOVE_TAGS'];
+		foreach($remove_tags as $remove_tag) {
+			foreach($dom->find($remove_tag) as $element) {
+				$tag = $element->outertext;
+				$body = str_replace($tag, '', $body);
+			}
+		}
+		$dom->clear();
+
+		$this->input->set_post('title', $title);
+		$this->input->set_post('body', $body);
+		$this->input->set_post('explain', $url);
 	}
 }
 
