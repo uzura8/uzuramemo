@@ -837,7 +837,7 @@ class Admin_webmemo extends MY_Controller
 		$dom->clear();
 
 		$this->input->set_post('title', $title);
-		$this->input->set_post('body', $body);
+		$this->input->set_post('body', mb_convert_encoding($body, 'UTF-8', 'auto'));
 		$this->input->set_post('explain', $url);
 	}
 }
