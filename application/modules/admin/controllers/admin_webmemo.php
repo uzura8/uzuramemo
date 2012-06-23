@@ -810,8 +810,15 @@ class Admin_webmemo extends MY_Controller
 		if (trim($this->input->post('title'))) return false;
 		if (trim(strip_tags($this->input->post('body')))) return false;
 
-		$url = prep_url(trim($this->input->post('explain')));
-		if (!is_url($url)) return false;
+		$explains = explode("\n", trim($this->input->post('explain')));
+		$url = '';
+		foreach ($explains as $line)
+		{
+			if (empty($line)) continue;
+
+			$url = prep_url(trim($line));
+			if (!is_url($url)) continue;
+		}
 
 		return $url;
 	}
@@ -819,7 +826,8 @@ class Admin_webmemo extends MY_Controller
 	private function _perse_url($url)
 	{
 		$this->load->library('simple_html_dom');
-		$dom = file_get_html($url);
+		if (!$dom = file_get_html($url)) return;
+
 		$title = '';
 		foreach($dom->find('h2') as $element) {
 			$title = $element->plaintext;
@@ -837,9 +845,10 @@ class Admin_webmemo extends MY_Controller
 		}
 		$dom->clear();
 
+		if (empty($title) && (empty($body) || $body = '<br type="_moz" />')) return;
+
 		$this->input->set_post('title', $title);
 		$this->input->set_post('body', mb_convert_encoding($body, 'UTF-8', 'auto'));
-		$this->input->set_post('explain', $url);
 		$this->input->set_post('private_quote_flg', 1);
 	}
 }
