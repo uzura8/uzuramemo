@@ -7,4 +7,5 @@ public_data/*
 !public_data/upload
 
 config.php
+data/environment.php
 tags

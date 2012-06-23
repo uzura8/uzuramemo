@@ -18,7 +18,10 @@
  * NOTE: If you change these, also change the error_reporting() code below
  *
  */
-	define('ENVIRONMENT', 'production');
+	$env_path = './data/environment.php';
+	if (file_exists($env_path)) require_once($env_path);
+	if (!defined('ENVIRONMENT')) define('ENVIRONMENT', 'production');
+
 /*
  *---------------------------------------------------------------
  * ERROR REPORTING
