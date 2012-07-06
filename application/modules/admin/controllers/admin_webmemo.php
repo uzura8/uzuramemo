@@ -850,6 +850,7 @@ class Admin_webmemo extends MY_Controller
 		$this->input->set_post('title', $title);
 		$this->input->set_post('body', mb_convert_encoding($body, 'UTF-8', 'auto'));
 		$this->input->set_post('private_quote_flg', 1);
+		$this->input->set_post('explain', $url);
 	}
 }
 
