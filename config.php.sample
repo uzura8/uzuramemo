@@ -108,6 +108,9 @@ $GLOBALS['ALLOW_IP_LIST'] = array(
 $GLOBALS['ADMIN_ALLOW_IP_LIST'] = array(
 );
 
+// 非公開モード
+define('UM_CLOSED_MODE', false);
+
 
 // 表示関連設定
 

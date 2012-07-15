@@ -28,7 +28,7 @@ class MY_Controller extends CI_Controller
 		if (!defined('IS_ACCEPT_ROBOTS'))
 		{
 			$is_accept_robots = true;
-			if (DEV_MODE || !$this->config->item('is_accept_robots', CURRENT_MODULE))
+			if (DEV_MODE || UM_CLOSED_MODE || !$this->config->item('is_accept_robots', CURRENT_MODULE))
 			{
 				$is_accept_robots = false;
 			}
