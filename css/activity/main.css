@@ -56,7 +56,7 @@ div#modal div#main_form_box {
 #activity_activity_wbs div#list h2.box_01 span.btnSpan,
 #activity_activity_schedule div#list h2.box_01 span.btnSpan {
 	float: right;
-	padding: 0 5px;
+	padding: 0 2px;
 }
 #activity_activity_wbs div#list h2.box_01 span.btnSpan input,
 #activity_activity_schedule div#list h2.box_01 span.btnSpan input {
@@ -99,4 +99,9 @@ div#modal div#main_form_box {
 #activity_activity_schedule h2.box_01
 {
 	padding: 5px 10px;
+}
+
+#activity_activity_schedule .activity_list h2.box_01 .btnSpan input[type="button"]
+{
+	padding: 0 3px;
 }

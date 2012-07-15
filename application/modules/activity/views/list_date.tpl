@@ -25,7 +25,9 @@
 <span class="btnSpan"><input type="button" name="update_del_flg_{$row.id}" value="{$row.del_flg|site_get_symbols_for_display}" id="btn_delFlg_{$row.id}" class="btn_delFlg"></span>
 <span class="btnSpan"><input type="button" name="btn_update_scheduled_date_today_{$row.id}" value="today" id="btn_update_scheduled_date_today_{$row.id}" class="btn_update_scheduled_date_today"></span>
 <span class="btnSpan"><input type="button" name="btn_update_scheduled_date_plus1day_{$row.id}" value="+1day" id="btn_update_scheduled_date_plus1day_{$row.id}" class="btn_update_scheduled_date_plus1day"></span>
+<span class="btnSpan"><input type="button" name="btn_update_scheduled_date_plus3day_{$row.id}" value="+3day" id="btn_update_scheduled_date_plus3day_{$row.id}" class="btn_update_scheduled_date_plus3day"></span>
 <span class="btnSpan"><input type="button" name="btn_update_scheduled_date_plus1week_{$row.id}" value="+1week" id="btn_update_scheduled_date_plus1week_{$row.id}" class="btn_update_scheduled_date_plus1week"></span>
+<span class="btnSpan"><input type="button" name="btn_update_scheduled_date_plus1month_{$row.id}" value="+1month" id="btn_update_scheduled_date_plus1month_{$row.id}" class="btn_update_scheduled_date_plus1month"></span>
 </div>
 
 <div class="article_meta_top">

@@ -805,7 +805,9 @@ EOL;
 		$add = $this->_get_post_params('add_day');
 		$accept_params = array(
 			'+1 day',
+			'+3 days',
 			'+1 week',
+			'+1 month',
 		);
 		if (empty($add) || !in_array($add, $accept_params)) $this->output->set_ajax_output_error();
 
