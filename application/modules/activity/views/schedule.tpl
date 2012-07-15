@@ -337,9 +337,9 @@ $(document).ready(function(){
 		var mode = $("#list_mode").val();
 
 		$.ajax({
-			url : "{/literal}{site_url}{literal}activity/ajax_update_scheduled_date_plus1day",
+			url : "{/literal}{site_url}{literal}activity/ajax_update_scheduled_date",
 			dataType : "text",
-			data : {"id": id, "csrf_test_name": csrf_token},
+			data : {"id": id, "add_day": '+1 day', "csrf_test_name": csrf_token},
 			type : "POST",
 			success: function(data){
 				if (data.length > 0) {
@@ -349,6 +349,30 @@ $(document).ready(function(){
 					ajax_activity_list_date(obj.scheduled_date, '{/literal}{site_url uri=activity/ajax_activity_list_date}{literal}/' + obj.scheduled_date + '?mode='+mode, mode);
 					ajax_activity_list_date(obj.scheduled_date_before, '{/literal}{site_url uri=activity/ajax_activity_list_date}{literal}/' + obj.scheduled_date_before + '?mode='+mode, mode);
 				}
+			},
+			error: function(data){
+				$.jGrowl('No.' + id + ' の予定日の変更に失敗しました。');
+			}
+		});
+	});
+
+	// update_scheduled_date_plus1week
+	$(".btn_update_scheduled_date_plus1week").live("click", function(){
+		var id_value = $(this).attr("id");
+		var id = id_value.replace(/btn_update_scheduled_date_plus1week_/g, "");
+		var csrf_token = $.cookie('csrf_test_name');
+
+		$.ajax({
+			url : "{/literal}{site_url}{literal}activity/ajax_update_scheduled_date",
+			dataType : "text",
+			data : {"id": id, "add_day": '+1 week', "csrf_test_name": csrf_token},
+			type : "POST",
+			success: function(data){
+				$.jGrowl('No.' + id + ' の予定日を変更しました。');
+				var obj = $.parseJSON(data);
+				var mode = $("#list_mode").val();
+				ajax_activity_list_date(obj.scheduled_date, '{/literal}{site_url uri=activity/ajax_activity_list_date}{literal}/' + obj.scheduled_date + '?mode='+mode, mode);
+				ajax_activity_list_date(obj.scheduled_date_before, '{/literal}{site_url uri=activity/ajax_activity_list_date}{literal}/' + obj.scheduled_date_before + '?mode='+mode, mode);
 			},
 			error: function(data){
 				$.jGrowl('No.' + id + ' の予定日の変更に失敗しました。');

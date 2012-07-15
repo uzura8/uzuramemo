@@ -797,21 +797,29 @@ EOL;
 		$this->output->set_output($return);
 	}
 
-	public function ajax_update_scheduled_date_plus1day()
+	public function ajax_update_scheduled_date()
 	{
 		$this->input->check_is_post();
 		$id = (int)$this->_get_post_params('id');
 
-		$row = $this->model_activity->get_row_common(array('id' => $id));
+		$add = $this->_get_post_params('add_day');
+		$accept_params = array(
+			'+1 day',
+			'+1 week',
+		);
+		if (empty($add) || !in_array($add, $accept_params)) $this->output->set_ajax_output_error();
+
+		if (!$row = $this->model_activity->get_row_common(array('id' => $id))) $this->output->set_ajax_output_error();
+
 		$scheduled_date_before = $row['scheduled_date'];
 		if (empty($row['scheduled_date']) || $row['scheduled_date'] == '0000-00-00')
 		{
 			// 未登録の場合は明日
-			$scheduled_date_after = date('Y-m-d', strtotime('tomorrow'));
+			$scheduled_date_after = date('Y-m-d', strtotime($add));
 		}
 		else
 		{
-			$scheduled_date_after = date('Y-m-d', strtotime(sprintf('%s +1 days', $row['scheduled_date'])));
+			$scheduled_date_after = date('Y-m-d', strtotime(sprintf('%s %s', $row['scheduled_date'], $add)));
 		}
 
 		// 登録
