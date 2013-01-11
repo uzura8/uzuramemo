@@ -801,27 +801,44 @@ EOL;
 	{
 		$this->input->check_is_post();
 		$id = (int)$this->_get_post_params('id');
-
-		$add = $this->_get_post_params('add_day');
-		$accept_params = array(
-			'+1 day',
-			'+3 days',
-			'+1 week',
-			'+1 month',
-		);
-		if (empty($add) || !in_array($add, $accept_params)) $this->output->set_ajax_output_error();
-
 		if (!$row = $this->model_activity->get_row_common(array('id' => $id))) $this->output->set_ajax_output_error();
 
+		$type = $this->_get_post_params('type');
+		$accept_params_type = array('plus', 'minus');
+		if (!in_array($type, $accept_params_type)) $this->output->set_ajax_output_error();
+		$type = ($type == 'minus')? '-' : '+';
+
+		$unit = $this->_get_post_params('unit');
+		$accept_params_unit = array('day', 'week', 'month');
+		if (!in_array($unit, $accept_params_unit)) $this->output->set_ajax_output_error();
+
+		$value = (int)$this->_get_post_params('value');
+		if ($value < 0 || $value > 5) $this->output->set_ajax_output_error();
+
+		$date_option = sprintf('%s%s %s', $type, $value, $unit);
+
 		$scheduled_date_before = $row['scheduled_date'];
-		if (empty($row['scheduled_date']) || $row['scheduled_date'] == '0000-00-00')
+//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+$isActive = 1;
+$isExit   = 0;
+$isEcho   = 0;
+$isAdd    = 1;
+$file = "/tmp/test.log";
+$a = '';
+if ($isActive) {
+$_type = 'wb';if ($isAdd) $_type = 'a';$fp = fopen($file, $_type);ob_start();
+var_dump(__LINE__, $scheduled_date_before, $date_option);// !!!!!!!
+$out=ob_get_contents();fwrite( $fp, $out . "\n" );ob_end_clean();fclose( $fp );if ($isEcho) echo $out;if ($isExit) exit;
+}
+//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+		if (empty($row['scheduled_date']) || $row['scheduled_date'] == '0000-00-00' || $value == 0)
 		{
 			// 未登録の場合は明日
-			$scheduled_date_after = date('Y-m-d', strtotime($add));
+			$scheduled_date_after = date('Y-m-d', strtotime($date_option));
 		}
 		else
 		{
-			$scheduled_date_after = date('Y-m-d', strtotime(sprintf('%s %s', $row['scheduled_date'], $add)));
+			$scheduled_date_after = date('Y-m-d', strtotime(sprintf('%s %s', $row['scheduled_date'], $date_option)));
 		}
 
 		// 登録

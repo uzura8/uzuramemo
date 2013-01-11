@@ -1,7 +1,14 @@
 <script type="text/javascript" src="{site_url}js/util.js"></script>
 
+{*
 <script type="text/javascript" src="{site_url}js/lib/jquery.js"></script>
 <script type="text/javascript" src="{site_url}js/lib/jquery-ui.min.js"></script>
+*}
+<script type="text/javascript" src="{site_url}js/jquery-1.8.2.min.js"></script>
+<script type="text/javascript" src="{site_url}js/bootstrap.min.js"></script>
+<script type="text/javascript" src="{site_url}js/bootstrap-button.js"></script>
+
+<script type="text/javascript" src="{site_url}js/jquery-ui-1.8.24.custom.min.js"></script>
 
 <script src="{site_url}js/lib/jeditable/jquery.jeditable-callback.js" type="text/javascript"></script>
 <script src="{site_url}js/lib/jeditable/jquery.jeditable.autogrow.js" type="text/javascript" ></script>

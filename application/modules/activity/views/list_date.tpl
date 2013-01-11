@@ -17,17 +17,65 @@
 <div{if !$order} class="jquery-ui-sortable-item_wbs_{$wbs_id}"{/if} id="{$row.id}">
 <a name="id_{$row.id}"></a>
 <h2 class="box_01 article_title" id="article_title_{$row.id}" style="background-color:{'background-color'|site_get_activity_style:$row.del_flg:$row.closed_date:$row.scheduled_date:$row.status};">
-<div>
+<div class="title_row">
 <a class="importance_star" id="importance_star_{$row.id}" href="javaScript:void(0);" onclick="toggle_importance_star({$row.id}, '{site_url}activity/ajax_execute_update_importance', 'importance_star_')" style="{$row.importance|site_display_importance:'style'}">{$row.importance|site_display_importance:'symbol'}</a>
 <span id="name{$row.id}" class="autogrow">{$row.name}</span>
 {if $row.due_date && $row.due_date != '0000-00-00'}<span class="due_date" id="due_date_{$row.id}" style="{$row.due_date|convert_due_date:'style'}">{$row.due_date|convert_due_date:'rest_days'}</span>{else}<span id="due_date_pre_{$row.id}"></span>{/if}
+
+<!--
 <span class="list_util_btn wider btnTop sl5" id="title_btn_{$row.id}"><a href="javaScript:void(0);" onclick="$('#article_{$row.id}').slideToggle();">▼</a></span>
 <span class="btnSpan"><input type="button" name="update_del_flg_{$row.id}" value="{$row.del_flg|site_get_symbols_for_display}" id="btn_delFlg_{$row.id}" class="btn_delFlg"></span>
 <span class="btnSpan"><input type="button" name="btn_update_scheduled_date_today_{$row.id}" value="today" id="btn_update_scheduled_date_today_{$row.id}" class="btn_update_scheduled_date_today"></span>
 <span class="btnSpan"><input type="button" name="btn_update_scheduled_date_plus1day_{$row.id}" value="+1day" id="btn_update_scheduled_date_plus1day_{$row.id}" class="btn_update_scheduled_date_plus1day"></span>
+
 <span class="btnSpan"><input type="button" name="btn_update_scheduled_date_plus3day_{$row.id}" value="+3day" id="btn_update_scheduled_date_plus3day_{$row.id}" class="btn_update_scheduled_date_plus3day"></span>
 <span class="btnSpan"><input type="button" name="btn_update_scheduled_date_plus1week_{$row.id}" value="+1week" id="btn_update_scheduled_date_plus1week_{$row.id}" class="btn_update_scheduled_date_plus1week"></span>
 <span class="btnSpan"><input type="button" name="btn_update_scheduled_date_plus1month_{$row.id}" value="+1month" id="btn_update_scheduled_date_plus1month_{$row.id}" class="btn_update_scheduled_date_plus1month"></span>
+
+	<button class="btn btn-mini btn_delFlg" type="button" id="btn_delFlg_{$row.id}">{$row.del_flg|site_get_symbols_for_display}</button>
+-->
+
+	<div class="btn-group update_plus">
+		<button class="btn_update_scheduled_date btn btn-mini" id="btn_update_scheduled_date_plus_day_1_{$row.id}">+1day</button>
+		<button class="btn btn-mini dropdown-toggle" data-toggle="dropdown">
+		<span class="caret"></span>
+		</button>
+		<ul class="dropdown-menu">
+			<li><a href="javaScript:void(0);" id="btn_update_scheduled_date_plus_day_2_{$row.id}" class="btn_update_scheduled_date">+2day</a></li>
+			<li><a href="javaScript:void(0);" id="btn_update_scheduled_date_plus_day_3_{$row.id}" class="btn_update_scheduled_date">+3day</a></li>
+			<li><a href="javaScript:void(0);" id="btn_update_scheduled_date_plus_day_4_{$row.id}" class="btn_update_scheduled_date">+4day</a></li>
+			<li><a href="javaScript:void(0);" id="btn_update_scheduled_date_plus_day_5_{$row.id}" class="btn_update_scheduled_date">+5day</a></li>
+			<li><a href="javaScript:void(0);" id="btn_update_scheduled_date_plus_week_1_{$row.id}" class="btn_update_scheduled_date">+1week</a></li>
+			<li><a href="javaScript:void(0);" id="btn_update_scheduled_date_plus_week_2_{$row.id}" class="btn_update_scheduled_date">+2week</a></li>
+			<li><a href="javaScript:void(0);" id="btn_update_scheduled_date_plus_month_1_{$row.id}" class="btn_update_scheduled_date">+1month</a></li>
+		</ul>
+	</div>
+
+	<div class="btn-group update_minus">
+		<button class="btn btn-mini btn_update_scheduled_date" id="btn_update_scheduled_date_minus_day_0_{$row.id}">today</button>
+		<button class="btn btn-mini dropdown-toggle" data-toggle="dropdown">
+		<span class="caret"></span>
+		</button>
+		<ul class="dropdown-menu">
+			<li><a href="javaScript:void(0);" id="btn_update_scheduled_date_minus_day_1_{$row.id}" class="btn_update_scheduled_date">-1day</a></li>
+			<li><a href="javaScript:void(0);" id="btn_update_scheduled_date_minus_day_2_{$row.id}" class="btn_update_scheduled_date">-2day</a></li>
+			<li><a href="javaScript:void(0);" id="btn_update_scheduled_date_minus_day_3_{$row.id}" class="btn_update_scheduled_date">-3day</a></li>
+			<li><a href="javaScript:void(0);" id="btn_update_scheduled_date_minus_day_2_{$row.id}" class="btn_update_scheduled_date">-2day</a></li>
+		</ul>
+	</div>
+
+	<div class="btn-group copy_action">
+		<button class="btn btn-mini btn_copy" id="btn_copy_{$row.id}">copy</button>
+		<button class="btn btn-mini dropdown-toggle" data-toggle="dropdown">
+		<span class="caret"></span>
+		</button>
+		<ul class="dropdown-menu">
+			<li><a href="#">hoge</a></li>
+		</ul>
+	</div>
+
+	<input type="button" name="update_del_flg_{$row.id}" value="{$row.del_flg|site_get_symbols_for_display}" id="btn_delFlg_{$row.id}" class="btn btn-mini btn_delFlg wider">
+	<button type="button" class="list_util_btn wider btn btn-mini" id="title_btn_{$row.id}" data-toggle="button" onclick="$('#article_{$row.id}').slideToggle();">▼</button>
 </div>
 
 <div class="article_meta_top">
@@ -90,7 +138,6 @@
 </div>
 {/if}
 <div class="article_aside_button">
-<span class="btnSpan"><input type="button" name="btn_copy_{$row.id}" value="copy" id="btn_copy_{$row.id}" class="btn_copy"></span>
 {*
 <span class="btnSpan"><input type="button" name="update_del_flg_{$row.id}" value="{$row.del_flg|site_get_symbols_for_display}" id="btn_delFlg_{$row.id}" class="btn_delFlg"></span>
 *}

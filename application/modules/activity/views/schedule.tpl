@@ -188,23 +188,24 @@ $(document).ready(function(){
 		var id_value = $(this).attr("id");
 		var id = id_value.replace(/btn_delete_/g, "");
 		jConfirm('削除しますか?', '削除確認', function(r) {
-			if (r == true) {
-				var csrf_token = $.cookie('csrf_test_name');
-				$.ajax({
-					url : "{/literal}{site_url}{literal}activity/ajax_execute_delete",
-					dataType : "text",
-					data : {"id": id, "csrf_test_name": csrf_token},
-					type : "POST",
-					success: function(status_after){
-						$("#article_title_" + id).css({"display" : "none"});
-						$("#article_" + id).css({"display" : "none"});
-						$.jGrowl('No.' + id + 'の{/literal}{$page_name}{literal}を削除しました。');
-					},
-					error: function(){
-						$.jGrowl('No.' + id + 'の{/literal}{$page_name}{literal}を削除できませんでした。');
-					}
-				});
-			}
+console.log(r);
+	//		if (r == true) {
+	//			var csrf_token = $.cookie('csrf_test_name');
+	//			$.ajax({
+	//				url : "{/literal}{site_url}{literal}activity/ajax_execute_delete",
+	//				dataType : "text",
+	//				data : {"id": id, "csrf_test_name": csrf_token},
+	//				type : "POST",
+	//				success: function(status_after){
+	//					$("#article_title_" + id).css({"display" : "none"});
+	//					$("#article_" + id).css({"display" : "none"});
+	//					$.jGrowl('No.' + id + 'の{/literal}{$page_name}{literal}を削除しました。');
+	//				},
+	//				error: function(){
+	//					$.jGrowl('No.' + id + 'の{/literal}{$page_name}{literal}を削除できませんでした。');
+	//				}
+	//			});
+	//		}
 		});
 	});
 
@@ -356,17 +357,51 @@ $(document).ready(function(){
 		});
 	});
 
-	// update_scheduled_date_plus3day
-	$(".btn_update_scheduled_date_plus3day").live("click", function(){
+//	// update_scheduled_date_plus3day
+//	$(".btn_update_scheduled_date_plus3day").live("click", function(){
+//		var id_value = $(this).attr("id");
+//		var id = id_value.replace(/btn_update_scheduled_date_plus3day_/g, "");
+//		var csrf_token = $.cookie('csrf_test_name');
+//		var mode = $("#list_mode").val();
+//
+//		$.ajax({
+//			url : "{/literal}{site_url}{literal}activity/ajax_update_scheduled_date",
+//			dataType : "text",
+//			data : {"id": id, "add_day": '+3 days', "csrf_test_name": csrf_token},
+//			type : "POST",
+//			success: function(data){
+//				if (data.length > 0) {
+//					$.jGrowl('No.' + id + ' の予定日を変更しました。');
+//					var obj = $.parseJSON(data);
+//					var mode = $("#list_mode").val();
+//					ajax_activity_list_date(obj.scheduled_date, '{/literal}{site_url uri=activity/ajax_activity_list_date}{literal}/' + obj.scheduled_date + '?mode='+mode, mode);
+//					ajax_activity_list_date(obj.scheduled_date_before, '{/literal}{site_url uri=activity/ajax_activity_list_date}{literal}/' + obj.scheduled_date_before + '?mode='+mode, mode);
+//				}
+//			},
+//			error: function(data){
+//				$.jGrowl('No.' + id + ' の予定日の変更に失敗しました。');
+//			}
+//		});
+//	});
+
+	// update_scheduled_date
+	$(".btn_update_scheduled_date").live("click", function(){
 		var id_value = $(this).attr("id");
-		var id = id_value.replace(/btn_update_scheduled_date_plus3day_/g, "");
+		var value_str = id_value.replace(/btn_update_scheduled_date_/g, "");
+		var parts = value_str.split('_');
+		var type = parts[0];
+		var unit = parts[1];
+		var value = parts[2];
+		var id = parts[3];
+console.log(type, unit, value, id);
+
 		var csrf_token = $.cookie('csrf_test_name');
 		var mode = $("#list_mode").val();
 
 		$.ajax({
 			url : "{/literal}{site_url}{literal}activity/ajax_update_scheduled_date",
 			dataType : "text",
-			data : {"id": id, "add_day": '+3 days', "csrf_test_name": csrf_token},
+			data : {"id": id, "type": type, "unit": unit, "value": value, "csrf_test_name": csrf_token},
 			type : "POST",
 			success: function(data){
 				if (data.length > 0) {

@@ -112,6 +112,7 @@ h3.title {
 	border-bottom-color: #8F8F8F;
 
 	position: relative;
+	line-height: normal;
 }
 h3.title a {
 	display: block;
@@ -218,6 +219,7 @@ h6.title a {
 h2.box_01 {
 	margin: 7px 0 1px;
 	padding-bottom: 5px;
+	line-height: normal;
 }
 h4.box_01 {
 	margin: 5px 0 1px;
@@ -234,6 +236,8 @@ h2.box_01 .sub_info2 {
 	font-size: 11px;
 	padding: 1px 5px;
 	background-color: #EEE;
+}
+h2.box_01 div.btn-group {
 }
 
 article.box_01 {
@@ -565,4 +569,28 @@ div.article_box div.form_box_each .btnSpan {
 #main_form_box span.form_input_today {
 	font-size: 10px;
 	margin-left: 5px;
+}
+
+div.title_row {
+	position: relative;
+}
+div.title_row .list_util_btn {
+	position: absolute;
+	bottom: -2px; right: 0;
+}
+div.title_row .btn_delFlg {
+	position: absolute;
+	bottom: -2px; right: 39px;
+}
+div.title_row .copy_action {
+	position: absolute;
+	bottom: -2px; right: 74px;
+}
+div.title_row .update_minus {
+	position: absolute;
+	bottom: -2px; right: 136px;
+}
+div.title_row .update_plus {
+	position: absolute;
+	bottom: -2px; right: 202px;
 }

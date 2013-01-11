@@ -10,7 +10,7 @@ $config['admin_inseccure_actions'] = array('login', 'execute_login');
 
 // 記号類
 $config['symbols'] = array(
-	'display' => '◯',
+	'display' => '○',
 	'display_none' => '×',
 	'edit' => '⇔'
 );
