@@ -126,6 +126,44 @@ EOL;
 		$this->smarty_parser->parse('ci:project/index.tpl', $view_data);
 	}
 
+	public function all_list()
+	{
+		define('TAB', '    ');
+		define('LF', PHP_EOL);
+		$list = array();
+		$out = '';
+
+echo '<pre>';
+		$query_pg = $this->db->query('select * from program where del_flg = 0 AND private_flg = 0 order by sort');
+		foreach ($query_pg->result_array() as $row_pg)
+		{
+			echo $row_pg['name'].LF;
+			$pg_id = (int)$row_pg['id'];
+			$query_pj = $this->db->query(sprintf('select * from project where del_flg = 0 AND private_flg = 0 AND program_id = %d order by sort', $pg_id));
+
+			foreach ($query_pj->result_array() as $row_pj)
+			{
+				echo TAB;
+				echo $row_pj['name'].LF;
+				$pj_id = (int)$row_pj['id'];
+				$query_wb = $this->db->query(sprintf('select * from wbs where del_flg = 0 AND project_id = %d order by sort', $pj_id));
+				foreach ($query_wb->result_array() as $row_wb)
+				{
+					echo TAB.TAB;
+					echo $row_wb['name'].LF;
+					$wb_id = (int)$row_wb['id'];
+					$query_ac = $this->db->query(sprintf('select * from activity where del_flg = 0 AND wbs_id = %d order by sort', $wb_id));
+					foreach ($query_ac->result_array() as $row_ac)
+					{
+						echo TAB.TAB.TAB;
+						echo $row_ac['name'].LF;
+					}
+				}
+			}
+		}
+echo '</pre>';
+	}
+
 	public function ajax_project_list()
 	{
 		// template
