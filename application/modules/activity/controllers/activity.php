@@ -751,52 +751,6 @@ EOL;
 		$this->output->set_output($return);
 	}
 
-	public function ajax_update_scheduled_date_today()
-	{
-		$this->input->check_is_post();
-		$id = (int)$this->_get_post_params('id');
-
-		// 値に変更がない場合はそのまま
-		$row = $this->model_activity->get_row_common(array('id' => $id));
-		$scheduled_date_before = $row['scheduled_date'];
-		if ($scheduled_date_before == date('Y-m-d'))
-		{
-			return;
-		}
-
-		// 登録
-		$values = array('scheduled_date' => date('Y-m-d'));
-		if (!$this->model_activity->update4id($values, $id))
-		{
-			$this->output->set_ajax_output_error();
-			return;
-		}
-
-		$return = array();
-		$return['wbs_id'] = $row['wbs_id'];
-		$return['scheduled_date'] = date('Y-m-d');
-		$return['scheduled_date_before'] = $scheduled_date_before;
-		if (empty($scheduled_date_before))
-		{
-			$return['scheduled_date_before'] = 'undefined';
-		}
-		elseif ($this->date_util->conv2int($scheduled_date_before) < date('Ymd'))
-		{
-			$return['scheduled_date_before'] = 'past';
-		}
-
-		if (empty($return))
-		{
-			$return = '';
-		}
-		else
-		{
-			$return = json_encode($return);
-		}
-
-		$this->output->set_output($return);
-	}
-
 	public function ajax_update_scheduled_date()
 	{
 		$this->input->check_is_post();
@@ -818,19 +772,6 @@ EOL;
 		$date_option = sprintf('%s%s %s', $type, $value, $unit);
 
 		$scheduled_date_before = $row['scheduled_date'];
-//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-$isActive = 1;
-$isExit   = 0;
-$isEcho   = 0;
-$isAdd    = 1;
-$file = "/tmp/test.log";
-$a = '';
-if ($isActive) {
-$_type = 'wb';if ($isAdd) $_type = 'a';$fp = fopen($file, $_type);ob_start();
-var_dump(__LINE__, $scheduled_date_before, $date_option);// !!!!!!!
-$out=ob_get_contents();fwrite( $fp, $out . "\n" );ob_end_clean();fclose( $fp );if ($isEcho) echo $out;if ($isExit) exit;
-}
-//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 		if (empty($row['scheduled_date']) || $row['scheduled_date'] == '0000-00-00' || $value == 0)
 		{
 			// 未登録の場合は明日
