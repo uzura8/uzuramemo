@@ -26,6 +26,18 @@
 $(document).ready(function() {
 	$('#name').focus();
 });
+
+$('#select_scheduled_date').change(function() {
+	var value = $(this).val();
+	var parts = value.split('-');
+	var num = parts[0];
+	var unit = parts[1];
+
+	var date_obj = util_get_add_date(num, unit);
+	var date_str = util_convert_date_format(date_obj);
+
+	$('#scheduled_date').val(date_str);
+});
 {/literal}
 </script>
 

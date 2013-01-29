@@ -594,3 +594,14 @@ div.title_row .update_plus {
 	position: absolute;
 	bottom: -2px; right: 202px;
 }
+
+div.form_row span.form_input_today select
+{
+	width: 70px;
+	height: 23px;
+	margin-left: 3px;
+}
+div.form_row span.form_input_today button
+{
+	vertical-align: top;
+}

@@ -81,16 +81,39 @@ function get_date_int_format() {
 
 function util_input_today(item) {
 	var now = new Date(); //現在＋何日後 のミリ秒で日付オブジェクト生成
+	var today = util_convert_date_format(now);
+	$(item).val(today);
+}
 
-	var month = now.getMonth() + 1;
+function util_convert_date_format(date_obj) {
+	var month = date_obj.getMonth() + 1;
 	var month_str = "" + month;
-	var date = now.getDate();
+	var date = date_obj.getDate();
 	var date_str = "" + date;
 
 	//convert month to 2 digits
 	var twoDigitMonth = (month_str.length === 1) ? '0' + month : month;
 	var twoDigitDate  = (date_str.length === 1) ? '0' + date : date;
-	var today = now.getFullYear() + '-' + twoDigitMonth + '-' + twoDigitDate;
+	var date = date_obj.getFullYear() + '-' + twoDigitMonth + '-' + twoDigitDate;
 
-	$(item).val(today);
+	return date;
+}
+
+function util_get_add_date(num, unit) {
+	var now = new Date();
+	var base_time = now.getTime();
+
+	var unit_time = 0;
+	if (unit == 'day') {
+		unit_time = 1000 * 60 * 60 * 24;
+	} else if (unit == 'week') {
+		unit_time = 1000 * 60 * 60 * 24 * 7;
+	}
+	var add_time = num * unit_time;
+	var target_time = base_time + add_time;
+
+	var target = new Date();
+	target.setTime(target_time);
+
+	return target;
 }

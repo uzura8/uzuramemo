@@ -1242,7 +1242,7 @@ $out=ob_get_contents();fwrite( $fp, $out . "\n" );ob_end_clean();fclose( $fp );i
 				'rules' => 'trim|date_format',
 				'width'  => 10,
 				'children' => array('due_date'),
-				'input_support' => array('input_today' => true),
+				'input_support' => array('easy_date_picker' => true),
 			),
 			'due_date' => array(
 				'label' => '期日',

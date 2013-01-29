@@ -20,8 +20,21 @@
 	<span id="{$key}_loading"><img src="{site_url}img/loading.gif" alt="Ajax Indicator"></span>
 	<span id="{$key}_result"></span>
 {/if}
-{if $items.input_support.input_today}
-<span class="form_input_today"><a href="javaScript:void(0);" onclick="util_input_today('#{$id_name}');">today</a></span>
+{if $items.input_support.easy_date_picker}
+	<span class="form_input_today">
+	<button class="btn btn-small" type="button" onclick="util_input_today('#{$id_name}');">today</button>
+	<select id="select_scheduled_date">
+		<option value="">----</option>
+		<option value="1-day">+1day</option>
+		<option value="2-day">+2day</option>
+		<option value="3-day">+3day</option>
+		<option value="5-day">+5day</option>
+		<option value="1-week">+1week</option>
+		<option value="2-week">+2week</option>
+		<option value="4-week">+4week</option>
+	</select>
+	</span>
+
 {/if}
 {elseif $items.type == 'textarea'}
 	<textarea name="{$key}" id="{$id_name}"{if $items.cols} cols="{$items.cols}"{/if}{if $items.rows} rows="{$items.rows}"{/if}{$smarty.capture.item_class|smarty:nodefaults}{$smarty.capture.item_class|smarty:nodefaults}{if $smarty.capture.form_help} placeholder="{$smarty.capture.form_help}"{/if}>{if $items.value}{$items.value}{/if}</textarea>

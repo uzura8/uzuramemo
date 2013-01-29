@@ -22,19 +22,6 @@
 <span id="name{$row.id}" class="autogrow">{$row.name}</span>
 {if $row.due_date && $row.due_date != '0000-00-00'}<span class="due_date" id="due_date_{$row.id}" style="{$row.due_date|convert_due_date:'style'}">{$row.due_date|convert_due_date:'rest_days'}</span>{else}<span id="due_date_pre_{$row.id}"></span>{/if}
 
-<!--
-<span class="list_util_btn wider btnTop sl5" id="title_btn_{$row.id}"><a href="javaScript:void(0);" onclick="$('#article_{$row.id}').slideToggle();">▼</a></span>
-<span class="btnSpan"><input type="button" name="update_del_flg_{$row.id}" value="{$row.del_flg|site_get_symbols_for_display}" id="btn_delFlg_{$row.id}" class="btn_delFlg"></span>
-<span class="btnSpan"><input type="button" name="btn_update_scheduled_date_today_{$row.id}" value="today" id="btn_update_scheduled_date_today_{$row.id}" class="btn_update_scheduled_date_today"></span>
-<span class="btnSpan"><input type="button" name="btn_update_scheduled_date_plus1day_{$row.id}" value="+1day" id="btn_update_scheduled_date_plus1day_{$row.id}" class="btn_update_scheduled_date_plus1day"></span>
-
-<span class="btnSpan"><input type="button" name="btn_update_scheduled_date_plus3day_{$row.id}" value="+3day" id="btn_update_scheduled_date_plus3day_{$row.id}" class="btn_update_scheduled_date_plus3day"></span>
-<span class="btnSpan"><input type="button" name="btn_update_scheduled_date_plus1week_{$row.id}" value="+1week" id="btn_update_scheduled_date_plus1week_{$row.id}" class="btn_update_scheduled_date_plus1week"></span>
-<span class="btnSpan"><input type="button" name="btn_update_scheduled_date_plus1month_{$row.id}" value="+1month" id="btn_update_scheduled_date_plus1month_{$row.id}" class="btn_update_scheduled_date_plus1month"></span>
-
-	<button class="btn btn-mini btn_delFlg" type="button" id="btn_delFlg_{$row.id}">{$row.del_flg|site_get_symbols_for_display}</button>
--->
-
 	<div class="btn-group update_plus">
 		<button class="btn_update_scheduled_date btn btn-mini" id="btn_update_scheduled_date_plus_day_1_{$row.id}">+1day</button>
 		<button class="btn btn-mini dropdown-toggle" data-toggle="dropdown">
