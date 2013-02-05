@@ -25,6 +25,7 @@
 <a name="id_{$row.id}"></a>
 <h2 class="box_01" id="article_title_{$row.id}" style="background-color:{'background-color'|site_get_style:$row.del_flg};">
 <div>
+<a class="importance_star" id="importance_star_{$row.id}" href="javaScript:void(0);" onclick="toggle_importance_star({$row.id}, '{site_url}wbs/ajax_execute_update_importance', 'importance_star_')" style="{$row.importance|site_display_importance:'style'}">{$row.importance|site_display_importance:'symbol'}</a>
 <span id="name{$row.id}" class="autogrow">{$row.name}</span>{if $row.key_name}<span id="key_name{$row.id}" class="autogrow sub_info2">{$row.key_name}</span>{/if}
 <span class="btnTop list_util_btn wider space_left" id="title_btn_{$row.id}"><a href="javaScript:void(0);" onclick="$('#article_{$row.id}').slideToggle();">▼</a></span>
 <span class="link_right space_left"><a rel="prettyPopin" class="new_form_switch_{$row.id}" href="{site_url}activity/create/{$row.id}/1">&raquo;&nbsp;{get_config_value key=site_title index=activity}Activity作成</a></span>

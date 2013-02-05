@@ -80,7 +80,6 @@ class Model_wbs extends CI_Model
 			$wheres[] = sprintf("B.id IN (%s)", implode(',', $category_id_list));
 		}
 */
-
 		if ($wheres) $where = ' WHERE '.implode(' AND ', $wheres);
 
 		return array($sql.$where, $param_values);

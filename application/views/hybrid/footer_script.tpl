@@ -41,8 +41,21 @@
 <script type="text/javascript" charset="utf-8">
 {literal}
 $(function(){
-  $("a[href*='#']").slideScroll();
+	$("a[href*='#']").slideScroll();
 	$('textarea').autogrow();
+});
+
+$("a[rel^='prettyPopin']").bind("click", function(){
+	var id_value = $(this).attr("id");
+	var wbs_id = id_value.replace(/pp_link_wbs_/g, "");
+	var mode = $("#list_mode").val();
+
+	$.cookie('wbs_id_modal_activity_wbs', wbs_id);
+	$.cookie('mode_modal_activity_wbs', mode);
+});
+
+$(document).ready(function(){
+	uzura_modal('{/literal}{site_url}{literal}img/loader.gif', '{/literal}{site_url uri=activity/ajax_activity_list}{literal}', {/literal}'{$smarty.const.CURRENT_CONTROLLER}_{$smarty.const.CURRENT_ACTION}', {$segment_3}{literal});
 });
 
 function mainmanu_get_project_list(program_id) {

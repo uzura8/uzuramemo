@@ -21,7 +21,6 @@ class Activity extends MY_Controller
 
 		// load models
 		$this->load->model('activity/model_activity');
-		$this->load->model('wbs/model_wbs');
 		$this->load->model('wbs/model_work_class');
 		$this->load->model('program/model_program');
 		$this->load->model('project/model_project');
@@ -64,10 +63,10 @@ class Activity extends MY_Controller
 
 	private function _get_default_view_data()
 	{
-		$view_data = array(
+		$view_data = $this->default_view_data;
+		$view_data += array(
 			'page_name' => $this->private_config['site_title'],
 			'selected_select_order' => 0,
-			'program_list_mainmenu' => $this->program_list_mainmenu,
 		);
 
 		$site_url = site_url();

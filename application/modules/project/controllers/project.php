@@ -51,10 +51,10 @@ class Project extends MY_Controller
 
 	private function _get_default_view_data()
 	{
-		$view_data = array(
+		$view_data = $this->default_view_data;
+		$view_data += array(
 			'page_name' => $this->private_config['site_title'],
 			'selected_select_order' => 4,
-			'program_list_mainmenu' => $this->program_list_mainmenu,
 		);
 
 		$site_url = site_url();

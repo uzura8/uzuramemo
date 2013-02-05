@@ -103,4 +103,12 @@ class Site_util
 
 		return $value;
 	}
+
+	public function is_ajax_action($action_name)
+	{
+		$parts = explode('_', $action_name);
+		if ($parts[0] == 'ajax') return true;
+
+		return false;
+	}
 }

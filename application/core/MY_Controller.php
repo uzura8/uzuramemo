@@ -3,13 +3,14 @@
 class MY_Controller extends CI_Controller
 {
 	public $validation_rules = array();
-	protected $program_list_mainmenu = array();
+	protected $default_view_data = array();
 
 	function __construct()
 	{
 		parent::__construct();
 
 		$this->config->load('site', true);
+		$this->load->model('wbs/model_wbs');
 		$this->_set_current_controller_action();
 		$this->_check_user_agent();
 		$this->_check_client_ip();
@@ -17,6 +18,7 @@ class MY_Controller extends CI_Controller
 		$this->_check_admin();
 		$this->_set_current_module();
 		$this->_setup();
+		$this->_set_default_view_data();
 	}
 
 	private function _setup()
@@ -36,8 +38,18 @@ class MY_Controller extends CI_Controller
 		}
 
 		if (!defined('SITE_TITLE')) define('SITE_TITLE', SITE_TITLE_WEBMEMO);
+	}
 
-		$this->_setup_mainmenu();
+	private function _set_default_view_data()
+	{
+		$this->default_view_data['program_list_mainmenu'] = $this->db_util->get_rows('program', array(), array('id', 'name', 'key_name'), 'sort', 'program', 'model');
+		if (!$this->site_util->is_ajax_action(CURRENT_ACTION));
+		{
+			$this->default_view_data['important_wbs_list_mainmenu'] = $this->model_wbs->get_main_list(0, 0, 'A.sort', '', false,
+																																																'A.id, A.name, B.name as project_name, C.name as program_name',
+																																																array('sql' => 'importance = 1'));
+		}
+		$this->default_view_data['segment_3'] = $this->uri->rsegment(3, 0);
 	}
 
 	private function _set_current_controller_action()
@@ -217,29 +229,4 @@ class MY_Controller extends CI_Controller
 
 		return true;
 	}
-
-	protected function _setup_mainmenu()
-	{
-		$this->program_list_mainmenu = $this->_get_program_list_all();
-	}
-
-	protected function _get_program_list_all()
-	{
-		return $this->db_util->get_rows('program', array(), array('id', 'name', 'key_name'), 'sort', 'program', 'model');
-	}
-
-/*
-	public function _date_format_check($str)
-	{
-		if (!strlen($str)) return true;
-
-		if (!$this->date_util->check_date_format($str))
-		{
-			$this->form_validation->set_message('_date_format_check', '%s が正しくありません');
-			return false;
-		}
-
-		return true;
-	}
-*/
 }

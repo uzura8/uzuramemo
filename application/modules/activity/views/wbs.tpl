@@ -37,7 +37,7 @@
 {if !$is_detail}
 <span class="link_right_each line_height_15 space_left"><a href="{site_url}activity/wbs/{$row.id}/?mode={$mode}">&raquo;&nbsp;詳細</a></span>
 {/if}
-<span class="link_right_each line_height_15"><a rel="prettyPopin" class="pp_link_wbs_{$row.id}" href="{site_url}activity/create/{$row.id}/1">&raquo;&nbsp;Activity作成</a></span>
+<span class="link_right_each line_height_15"><a rel="prettyPopin" id="pp_link_wbs_{$row.id}" href="{site_url}activity/create/{$row.id}/1">&raquo;&nbsp;Activity作成</a></span>
 </div>
 <div class="article_meta_top">
 <div class="banner">
@@ -131,20 +131,10 @@
 uzura_sortable("{/literal}{site_url}{literal}wbs/ajax_execute_update_sort_move/wbs_");
 {/literal}{/if}
 {literal}
-$("a[rel^='prettyPopin']").bind("click", function(){
-	var id_value = $(this).attr("class");
-	var wbs_id = id_value.replace(/pp_link_wbs_/g, "");
-	var mode = $("#list_mode").val();
-
-	$.cookie('wbs_id_modal_activity_wbs', wbs_id);
-	$.cookie('mode_modal_activity_wbs', mode);
-});
-
 
 $(document).ready(function(){
 	var mode = $("#list_mode").val();
 	ajax_activity_list_all(mode);
-	uzura_modal('{/literal}{site_url}{literal}img/loader.gif', '{/literal}{site_url uri=activity/ajax_activity_list}{literal}', mode);
 
 	// wbs(親) の更新
 	$(".autogrow_parent").click(function(){

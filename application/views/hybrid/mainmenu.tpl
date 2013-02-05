@@ -21,4 +21,21 @@
 <h3 class="title"><a href="{site_url}activity/wbs?private=1">アクティビティ(個人)</a></h3>
 <h3 class="title"><a href="{site_url}activity/schedule">アクティビティ(日付)</a></h3>
 <h3 class="title"><a href="{site_url}">{$smarty.const.UM_TOPPAGE_NAME}</a></h3>
+
+<h3 class="title">
+	<a href="javaScript:void(0);">Links</a>
+	<span class="btnTop"><a href="javaScript:void(0);" onclick="$('#shortcuts').slideToggle();">▼</a></span>
+</h3>
+<div id="shortcuts">
+{foreach from=$important_wbs_list_mainmenu item=row}
+	<h4 class="title">
+		<div class="subtitle">{$row.program_name} {$row.project_name}</div>
+		<div class="link">
+			<a href="{site_url}activity/wbs/{$row.id}/1">{$row.name}</a>
+			<a rel="prettyPopin" id="pp_link_wbs_{$row.id}" class="sl3" href="{site_url}activity/create/{$row.id}/1">&raquo;&nbsp;作成</a>
+		</div>
+	</h4>
+{/foreach}
+</div>
+
 </div>

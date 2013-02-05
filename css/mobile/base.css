@@ -157,6 +157,18 @@ h4.title a {
 	padding-left: 5px;
 }
 
+#main_menu #shortcuts h4.title {
+	padding: 0 10px 0 5px;
+}
+#main_menu #shortcuts h4.title div.subtitle {
+	font-size: 8px;
+	font-weight: normal;
+}
+#main_menu #shortcuts h4.title div.link a {
+	font-size: 9px;
+	display: inline;
+}
+
 h5.title {
 	margin: 5px 0 0 20px;
 	background-color: #F3F3F3;

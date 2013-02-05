@@ -22,7 +22,6 @@ class Gantt extends MY_Controller
 		$this->load->model('wbs/model_holiday');
 		$this->load->model('program/model_program');
 		$this->load->model('project/model_project');
-		$this->load->model('wbs/model_wbs');
 		$this->load->model('wbs/model_work_class');
 
 		// load config
