@@ -35,6 +35,7 @@
 			<li><a href="javaScript:void(0);" id="btn_update_scheduled_date_plus_week_1_{$row.id}" class="btn_update_scheduled_date">+1week</a></li>
 			<li><a href="javaScript:void(0);" id="btn_update_scheduled_date_plus_week_2_{$row.id}" class="btn_update_scheduled_date">+2week</a></li>
 			<li><a href="javaScript:void(0);" id="btn_update_scheduled_date_plus_month_1_{$row.id}" class="btn_update_scheduled_date">+1month</a></li>
+			<li><a href="javaScript:void(0);" id="btn_update_scheduled_date_plus_month_2_{$row.id}" class="btn_update_scheduled_date">+2month</a></li>
 		</ul>
 	</div>
 
@@ -47,7 +48,7 @@
 			<li><a href="javaScript:void(0);" id="btn_update_scheduled_date_minus_day_1_{$row.id}" class="btn_update_scheduled_date">-1day</a></li>
 			<li><a href="javaScript:void(0);" id="btn_update_scheduled_date_minus_day_2_{$row.id}" class="btn_update_scheduled_date">-2day</a></li>
 			<li><a href="javaScript:void(0);" id="btn_update_scheduled_date_minus_day_3_{$row.id}" class="btn_update_scheduled_date">-3day</a></li>
-			<li><a href="javaScript:void(0);" id="btn_update_scheduled_date_minus_day_2_{$row.id}" class="btn_update_scheduled_date">-2day</a></li>
+			<li><a href="javaScript:void(0);" id="btn_update_scheduled_date_minus_day_4_{$row.id}" class="btn_update_scheduled_date">-4day</a></li>
 		</ul>
 	</div>
 
