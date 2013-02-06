@@ -55,7 +55,7 @@ $("a[rel^='prettyPopin']").bind("click", function(){
 });
 
 $(document).ready(function(){
-	uzura_modal('{/literal}{site_url}{literal}img/loader.gif', '{/literal}{site_url uri=activity/ajax_activity_list}{literal}', {/literal}'{$smarty.const.CURRENT_CONTROLLER}_{$smarty.const.CURRENT_ACTION}', {$segment_3}{literal});
+	uzura_modal('{/literal}{site_url}{literal}img/loader.gif', '{/literal}{site_url uri=activity/ajax_activity_list}{literal}', {/literal}'{$smarty.const.CURRENT_CONTROLLER}_{$smarty.const.CURRENT_ACTION}', '{$segment_3}'{literal});
 });
 
 function mainmanu_get_project_list(program_id) {
