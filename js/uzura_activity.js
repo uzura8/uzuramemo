@@ -1,6 +1,7 @@
-function ajax_activity_list_date(date, url){
-	var mode = (arguments.length > 2) ? arguments[2] : 0;
+function ajax_activity_list_date(date){
+	var mode = (arguments.length > 1) ? arguments[1] : 0;
 	var id_name  = 'activity_list_' + date;
+	var url = util_get_base_url() + 'activity/ajax_activity_list_date/' + date + '?mode='+mode;
 
 	// Ajaxによるアクセスにキャッシュを利用しない(毎回サーバにアクセス)
 	$.ajaxSetup( { cache : false } );

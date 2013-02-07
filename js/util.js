@@ -117,3 +117,7 @@ function util_get_add_date(num, unit) {
 
 	return target;
 }
+
+function util_get_base_url() {
+	return location.protocol + '//' + location.host + '/';
+}

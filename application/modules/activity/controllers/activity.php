@@ -1081,6 +1081,14 @@ EOL;
 			$this->model_activity->insert($values);
 		}
 
+		if ($values['scheduled_date'])
+		{
+			$posted_date = $this->input->cookie('scheduled_date_modal_activity_wbs');
+			if ($posted_date) $posted_date .= '_';
+			$posted_date .= $values['scheduled_date'];
+			setcookie('scheduled_date_modal_activity_wbs', $posted_date);
+		}
+
 		if ($activity_id)
 		{
 			$this->edit_complete($activity_id);

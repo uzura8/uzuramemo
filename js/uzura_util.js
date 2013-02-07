@@ -79,7 +79,10 @@ function uzura_form_switch(){
 	});
 }
 
-function uzura_modal(img_url, list_url, action, segment_3){
+function uzura_modal(action, segment_3){
+	var base_url = util_get_base_url();
+	var img_url  = base_url + 'img/loader.gif';
+
 	$("a[rel^='prettyPopin']").prettyPopin({
 		//modal : false, /* true/false */
 		width : 750, /* false/integer */
@@ -93,18 +96,24 @@ function uzura_modal(img_url, list_url, action, segment_3){
 		callback : function(){
 			var wbs_id = $.cookie('wbs_id_modal_activity_wbs');
 			var mode = $.cookie('mode_modal_activity_wbs');
-
+			var date_str = $.cookie('scheduled_date_modal_activity_wbs');
 			$.cookie('wbs_id_modal_activity_wbs', null);
 			$.cookie('mode_modal_activity_wbs', null);
+			$.cookie('scheduled_date_modal_activity_wbs', null);
 
 			switch (action){
 				case 'activity_wbs':
 					if (wbs_id == segment_3) {
+						var list_url = base_url + 'activity/ajax_activity_list';
 						ajax_activity_list(wbs_id, list_url + '/' + wbs_id + '?mode=' + mode);
 					}
 					break;
-				case 'activity_wbs':
-					ajax_activity_list_date_all();
+				case 'activity_schedule':
+					var list_url = base_url + 'activity/ajax_activity_list';
+					var date_list = date_str.split('_');
+					$.each(date_list, function(i) {
+						ajax_activity_list_date(this, mode);
+					}); 
 					break;
 			}
 		}

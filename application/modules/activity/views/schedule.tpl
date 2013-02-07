@@ -295,7 +295,7 @@ console.log(r);
 			success: function(scheduled_date){
 				$.jGrowl('No.' + id + ' をコピーしました。');
 				var mode = $("#list_mode").val();
-				ajax_activity_list_date(scheduled_date, '{/literal}{site_url uri=activity/ajax_activity_list_date}{literal}/' + scheduled_date + '?mode='+mode, mode);
+				ajax_activity_list_date(scheduled_date, mode);
 			},
 			error: function(data){
 				$.jGrowl('No.' + id + ' のコピーに失敗しました。');
@@ -326,8 +326,8 @@ console.log(r);
 					$.jGrowl('No.' + id + ' の予定日を変更しました。');
 					var obj = $.parseJSON(data);
 					var mode = $("#list_mode").val();
-					ajax_activity_list_date(obj.scheduled_date, '{/literal}{site_url uri=activity/ajax_activity_list_date}{literal}/' + obj.scheduled_date + '?mode='+mode, mode);
-					ajax_activity_list_date(obj.scheduled_date_before, '{/literal}{site_url uri=activity/ajax_activity_list_date}{literal}/' + obj.scheduled_date_before + '?mode='+mode, mode);
+					ajax_activity_list_date(obj.scheduled_date, mode);
+					ajax_activity_list_date(obj.scheduled_date_before, mode);
 				}
 			},
 			error: function(data){
@@ -372,7 +372,7 @@ console.log(r);
 				if (data.length > 0) {
 					var obj = $.parseJSON(data);
 					if (obj.scheduled_date_before.length > 0) {
-						ajax_activity_list_date(obj.scheduled_date_before, '{/literal}{site_url uri=activity/ajax_activity_list_date}{literal}/' + obj.scheduled_date_before + '?mode='+mode, mode);
+						ajax_activity_list_date(obj.scheduled_date_before, mode);
 					}
 				}
 
@@ -383,7 +383,7 @@ console.log(r);
 				} else if (scheduled_date_int < today_int) {
 					value_scheduled_date = 'past';
 				}
-				ajax_activity_list_date(value_scheduled_date, '{/literal}{site_url uri=activity/ajax_activity_list_date}{literal}/' + value_scheduled_date + '?mode='+mode, mode);
+				ajax_activity_list_date(value_scheduled_date, mode);
 			},
 			error: function(data){
 				$.jGrowl('No.' + id + 'の日付を変更できませんでした。');
@@ -395,11 +395,11 @@ console.log(r);
 function ajax_activity_list_date_all(mode) {
 	$("#list_mode").val(mode);
 
-	ajax_activity_list_date('past', '{/literal}{site_url uri=activity/ajax_activity_list_date}{literal}/past?mode='+0, 0);
+	ajax_activity_list_date('past', 0);
 
 {/literal}
 {foreach from=$list key=date item=row}{literal}
-	ajax_activity_list_date({/literal}'{$date}'{literal}, '{/literal}{site_url uri=activity/ajax_activity_list_date}/{$date}{literal}?mode='+mode, mode);
+	ajax_activity_list_date({/literal}'{$date}'{literal}, mode);
 {/literal}
 {/foreach}
 {literal}
@@ -449,7 +449,7 @@ function reset_article_color(id) {
 
 function ajax_activity_list_undefined() {
 	var mode = $("#list_mode").val();
-	ajax_activity_list_date('undefined', '{/literal}{site_url uri=activity/ajax_activity_list_date}{literal}/undefined?mode='+mode, mode);
+	ajax_activity_list_date('undefined', mode);
 }
 
 {/literal}
