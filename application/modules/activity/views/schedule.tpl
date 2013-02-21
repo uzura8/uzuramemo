@@ -188,24 +188,23 @@ $(document).ready(function(){
 		var id_value = $(this).attr("id");
 		var id = id_value.replace(/btn_delete_/g, "");
 		jConfirm('削除しますか?', '削除確認', function(r) {
-console.log(r);
-	//		if (r == true) {
-	//			var csrf_token = $.cookie('csrf_test_name');
-	//			$.ajax({
-	//				url : "{/literal}{site_url}{literal}activity/ajax_execute_delete",
-	//				dataType : "text",
-	//				data : {"id": id, "csrf_test_name": csrf_token},
-	//				type : "POST",
-	//				success: function(status_after){
-	//					$("#article_title_" + id).css({"display" : "none"});
-	//					$("#article_" + id).css({"display" : "none"});
-	//					$.jGrowl('No.' + id + 'の{/literal}{$page_name}{literal}を削除しました。');
-	//				},
-	//				error: function(){
-	//					$.jGrowl('No.' + id + 'の{/literal}{$page_name}{literal}を削除できませんでした。');
-	//				}
-	//			});
-	//		}
+			if (r == true) {
+				var csrf_token = $.cookie('csrf_test_name');
+				$.ajax({
+					url : "{/literal}{site_url}{literal}activity/ajax_execute_delete",
+					dataType : "text",
+					data : {"id": id, "csrf_test_name": csrf_token},
+					type : "POST",
+					success: function(status_after){
+						$("#article_title_" + id).css({"display" : "none"});
+						$("#article_" + id).css({"display" : "none"});
+						$.jGrowl('No.' + id + 'の{/literal}{$page_name}{literal}を削除しました。');
+					},
+					error: function(){
+						$.jGrowl('No.' + id + 'の{/literal}{$page_name}{literal}を削除できませんでした。');
+					}
+				});
+			}
 		});
 	});
 
