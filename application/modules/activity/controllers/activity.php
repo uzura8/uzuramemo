@@ -745,7 +745,11 @@ EOL;
 		}
 
 		$return = $row['wbs_id'];
-		if ($is_schedule) $return = $row['scheduled_date'];
+		if ($is_schedule)
+		{
+			$return = $row['scheduled_date'];
+			if ($this->date_util->conv2int($scheduled_date_before) < date('Ymd')) $return = 'past';
+		}
 
 		$this->output->set_output($return);
 	}
@@ -771,7 +775,8 @@ EOL;
 		$date_option = sprintf('%s%s %s', $type, $value, $unit);
 
 		$scheduled_date_before = $row['scheduled_date'];
-		if (empty($row['scheduled_date']) || $row['scheduled_date'] == '0000-00-00' || $value == 0)
+		$is_past = ($this->date_util->conv2int($scheduled_date_before) < date('Ymd'))? true : false;
+		if ($is_past || empty($row['scheduled_date']) || $row['scheduled_date'] == '0000-00-00' || $value == 0)
 		{
 			// 未登録の場合は明日
 			$scheduled_date_after = date('Y-m-d', strtotime($date_option));
