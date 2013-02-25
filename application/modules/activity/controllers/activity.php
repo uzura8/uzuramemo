@@ -722,6 +722,7 @@ EOL;
 		$this->input->check_is_post();
 		$id = (int)$this->_get_post_params('id');
 		$is_schedule = (int)$this->_get_post_params('is_schedule');
+		$is_delete   = (int)$this->_get_post_params('is_delete');
 
 		// 値に変更がない場合はそのまま
 		$row = $this->model_activity->get_row_common(array('id' => $id));
@@ -742,6 +743,15 @@ EOL;
 		{
 			$this->output->set_ajax_output_error();
 			return;
+		}
+
+		if ($is_delete)
+		{
+			$del_flg_after = 1;
+			$closed_date = date('Y-m-d');
+
+			$params = array('del_flg' => $del_flg_after, 'closed_date' => $closed_date);
+			$this->model_activity->update4id($params, $id);
 		}
 
 		$return = $row['wbs_id'];

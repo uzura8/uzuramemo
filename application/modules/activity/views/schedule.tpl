@@ -302,6 +302,29 @@ $(document).ready(function(){
 		});
 	});
 
+	// del&copy
+	$(".btn_del_copy").live("click", function(){
+		var id_value = $(this).attr("id");
+		var id = id_value.replace(/btn_del_copy_/g, "");
+		var csrf_token = $.cookie('csrf_test_name');
+		var mode = $("#list_mode").val();
+
+		$.ajax({
+			url : "{/literal}{site_url}{literal}activity/ajax_copy_activity",
+			dataType : 'text',
+			data : {'id': id, 'is_schedule': '1', 'is_delete': '1', 'csrf_test_name': csrf_token},
+			type : 'POST',
+			success: function(scheduled_date){
+				$.jGrowl('No.' + id + ' の削除&コピーを実行しました。');
+				var mode = $('#list_mode').val();
+				ajax_activity_list_date(scheduled_date, mode);
+			},
+			error: function(data){
+				$.jGrowl('No.' + id + ' のコピーに失敗しました。');
+			}
+		});
+	});
+
 	// update_scheduled_date
 	$(".btn_update_scheduled_date").live("click", function(){
 		var id_value = $(this).attr("id");
