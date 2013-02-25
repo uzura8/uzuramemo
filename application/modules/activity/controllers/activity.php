@@ -729,7 +729,7 @@ EOL;
 			'id' => null,
 			'scheduled_date' => null,
 			'closed_date' => null,
-			'sort' => null,
+			//'sort' => null,
 			'del_flg' => 0,
 			'created_at' => null,
 			'updated_at' => null,
@@ -748,7 +748,7 @@ EOL;
 		if ($is_schedule)
 		{
 			$return = $row['scheduled_date'];
-			if ($this->date_util->conv2int($scheduled_date_before) < date('Ymd')) $return = 'past';
+			if ($this->date_util->conv2int($return) < date('Ymd')) $return = 'past';
 		}
 
 		$this->output->set_output($return);
@@ -1196,6 +1196,7 @@ EOL;
 				'width'  => 10,
 				'children' => array('due_date'),
 				'input_support' => array('easy_date_picker' => true),
+				'default_value' => date('Y-m-d'),
 			),
 			'due_date' => array(
 				'label' => '期日',

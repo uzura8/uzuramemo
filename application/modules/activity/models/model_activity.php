@@ -216,7 +216,7 @@ class Model_activity extends CI_Model
 	{
 		$CI =& get_instance();
 		$values = $CI->db_util->set_common_column_value($values);
-		$values['sort'] = $CI->db_util->get_sort_max_next('activity', 'activity', 'model');
+		if (!isset($values['sort'])) $values['sort'] = $CI->db_util->get_sort_max_next('activity', 'activity', 'model');
 
 		return $this->db->insert('activity', $values);
 	}

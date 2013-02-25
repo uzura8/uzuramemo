@@ -15,7 +15,7 @@
 {capture name="item_class"} class="{if $items.children || $items.width}{if $items.width}width_{$items.width}{elseif $items.children}normal{/if}{else}width_75{/if}"{/capture}
 {if $items.type == 'text' || $items.type == 'textarea'}{capture name="form_help"}{$items.rules|form_help:$smarty.capture.help_default}{/capture}{/if}
 {if $items.type == 'text'}
-	<input type="text" name="{$key}"{if $items.value} value="{$items.value}"{/if} id="{$id_name}"{$smarty.capture.item_class|smarty:nodefaults}{if $smarty.capture.form_help} placeholder="{$smarty.capture.form_help}"{/if}>{if $items.after_label}<span class="after_label">{$items.after_label}</span>{/if}
+	<input type="text" name="{$key}"{if $items.value || $items.default_value} value="{if $items.value}{$items.value}{else}{$items.default_value}{/if}"{/if} id="{$id_name}"{$smarty.capture.item_class|smarty:nodefaults}{if $smarty.capture.form_help} placeholder="{$smarty.capture.form_help}"{/if}>{if $items.after_label}<span class="after_label">{$items.after_label}</span>{/if}
 {if $items.realtime_validation}
 	<span id="{$key}_loading"><img src="{site_url}img/loading.gif" alt="Ajax Indicator"></span>
 	<span id="{$key}_result"></span>
