@@ -292,7 +292,7 @@ $(document).ready(function(){
 			data : {"id": id, "is_schedule": "1", "csrf_test_name": csrf_token},
 			type : "POST",
 			success: function(data){
-				$.jGrowl('No.' + id + ' の削除&コピーを実行しました。');
+				$.jGrowl('No.' + id + ' のコピーを実行しました。');
 				var obj = $.parseJSON(data);
 				var mode = $('#list_mode').val();
 				ajax_activity_list_date(obj.scheduled_date_before, mode);

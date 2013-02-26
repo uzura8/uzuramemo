@@ -111,4 +111,11 @@ class Site_util
 
 		return false;
 	}
+
+	public function json_encode($list)
+	{
+		if (empty($list)) $list = '';
+
+		return json_encode($list);
+	}
 }

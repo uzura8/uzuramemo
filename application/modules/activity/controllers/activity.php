@@ -777,16 +777,7 @@ EOL;
 			if ($copy_date) $return['scheduled_date_after'] = $copy_date;
 		}
 
-		if (empty($return))
-		{
-			$return = '';
-		}
-		else
-		{
-			$return = json_encode($return);
-		}
-
-		$this->output->set_output($return);
+		$this->output->set_output($this->site_util->json_encode($return));
 	}
 
 	public function ajax_update_scheduled_date()
@@ -842,16 +833,7 @@ EOL;
 			$return['scheduled_date_before'] = 'past';
 		}
 
-		if (empty($return))
-		{
-			$return = '';
-		}
-		else
-		{
-			$return = json_encode($return);
-		}
-
-		$this->output->set_output($return);
+		$this->output->set_output($this->site_util->json_encode($return));
 	}
 
 	public function ajax_execute_update_common()
@@ -974,16 +956,7 @@ EOL;
 			$return['scheduled_date_before'] = 'past';
 		}
 
-		if (empty($return))
-		{
-			$return = '';
-		}
-		else
-		{
-			$return = json_encode($return);
-		}
-
-		$this->output->set_output($return);
+		$this->output->set_output($this->site_util->json_encode($return));
 	}
 
 	public function ajax_execute_delete()
