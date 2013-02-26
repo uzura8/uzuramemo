@@ -291,10 +291,11 @@ $(document).ready(function(){
 			dataType : "text",
 			data : {"id": id, "is_schedule": "1", "csrf_test_name": csrf_token},
 			type : "POST",
-			success: function(scheduled_date){
-				$.jGrowl('No.' + id + ' をコピーしました。');
-				var mode = $("#list_mode").val();
-				ajax_activity_list_date(scheduled_date, mode);
+			success: function(data){
+				$.jGrowl('No.' + id + ' の削除&コピーを実行しました。');
+				var obj = $.parseJSON(data);
+				var mode = $('#list_mode').val();
+				ajax_activity_list_date(obj.scheduled_date_before, mode);
 			},
 			error: function(data){
 				$.jGrowl('No.' + id + ' のコピーに失敗しました。');
@@ -314,10 +315,36 @@ $(document).ready(function(){
 			dataType : 'text',
 			data : {'id': id, 'is_schedule': '1', 'is_delete': '1', 'csrf_test_name': csrf_token},
 			type : 'POST',
-			success: function(scheduled_date){
+			success: function(data){
 				$.jGrowl('No.' + id + ' の削除&コピーを実行しました。');
+				var obj = $.parseJSON(data);
 				var mode = $('#list_mode').val();
-				ajax_activity_list_date(scheduled_date, mode);
+				ajax_activity_list_date(obj.scheduled_date_before, mode);
+			},
+			error: function(data){
+				$.jGrowl('No.' + id + ' のコピーに失敗しました。');
+			}
+		});
+	});
+
+	// del&copy today
+	$(".btn_del_copy_today").live("click", function(){
+		var id_value = $(this).attr("id");
+		var id = id_value.replace(/btn_del_copy_today_/g, "");
+		var csrf_token = $.cookie('csrf_test_name');
+		var mode = $("#list_mode").val();
+
+		$.ajax({
+			url : "{/literal}{site_url}{literal}activity/ajax_copy_activity",
+			dataType : 'text',
+			data : {'id': id, 'is_schedule': '1', 'is_delete': '1', 'copy_date': 'today', 'csrf_test_name': csrf_token},
+			type : 'POST',
+			success: function(data){
+				$.jGrowl('No.' + id + ' を削除し、今日にコピーしました。');
+				var obj = $.parseJSON(data);
+				var mode = $('#list_mode').val();
+				ajax_activity_list_date(obj.scheduled_date_before, mode);
+				ajax_activity_list_date(obj.scheduled_date_after, mode);
 			},
 			error: function(data){
 				$.jGrowl('No.' + id + ' のコピーに失敗しました。');

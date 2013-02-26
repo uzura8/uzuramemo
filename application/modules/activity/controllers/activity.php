@@ -724,6 +724,15 @@ EOL;
 		$is_schedule = (int)$this->_get_post_params('is_schedule');
 		$is_delete   = (int)$this->_get_post_params('is_delete');
 
+		if ($this->_get_post_params('copy_date') == 'today')
+		{
+			$copy_date = date('Y-m-d');
+		}
+		else
+		{
+			$copy_date = null;
+		}
+
 		// 値に変更がない場合はそのまま
 		$row = $this->model_activity->get_row_common(array('id' => $id));
 		$unsets = array(
@@ -736,8 +745,9 @@ EOL;
 			'updated_at' => null,
 		);
 		if ($is_schedule) unset($unsets['scheduled_date']);
-
 		foreach ($unsets as $key => $value) $row[$key] = $value;
+
+		if ($copy_date) $row['scheduled_date'] = $copy_date;
 		$result = $this->model_activity->insert($row);
 		if (!$result)
 		{
@@ -754,11 +764,26 @@ EOL;
 			$this->model_activity->update4id($params, $id);
 		}
 
-		$return = $row['wbs_id'];
+		$return = array();
+		$return['wbs_id'] = $row['wbs_id'];
 		if ($is_schedule)
 		{
-			$return = $row['scheduled_date'];
-			if ($this->date_util->conv2int($return) < date('Ymd')) $return = 'past';
+			$return['scheduled_date_before'] = $row['scheduled_date'];
+			if ($this->date_util->conv2int($return['scheduled_date_before']) < date('Ymd'))
+			{
+				$return['scheduled_date_before'] = 'past';
+			}
+
+			if ($copy_date) $return['scheduled_date_after'] = $copy_date;
+		}
+
+		if (empty($return))
+		{
+			$return = '';
+		}
+		else
+		{
+			$return = json_encode($return);
 		}
 
 		$this->output->set_output($return);

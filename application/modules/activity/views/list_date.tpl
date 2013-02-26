@@ -59,6 +59,7 @@
 		</button>
 		<ul class="dropdown-menu">
 			<li><a  href="javaScript:void(0);" id="btn_del_copy_{$row.id}" class="btn_del_copy">finish&amp;copy</a></li>
+			<li><a  href="javaScript:void(0);" id="btn_del_copy_today_{$row.id}" class="btn_del_copy_today">finish&amp;copy&nbsp;today</a></li>
 		</ul>
 	</div>
 
