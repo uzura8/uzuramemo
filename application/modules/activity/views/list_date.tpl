@@ -95,20 +95,10 @@
 <tr><td>
 	<span class="label">予定日</span><input name="input_scheduled_date_{$row.id}" id="input_scheduled_date_{$row.id}" class="width_15 input_date" type="text" value="{$row.scheduled_date}">
 	<span class="label sl2">期日</span><input name="input_due_date_{$row.id}" id="input_due_date_{$row.id}" class="width_15 input_date" type="text" value="{$row.due_date}">
-	<span class="btnSpan"><input type="button" name="btn_date_{$row.id}" value="更新" id="btn_date_{$row.id}" class="btn_date"></span>
+	<input type="button" name="btn_date_{$row.id}" value="更新" id="btn_date_{$row.id}" class="btn_date btn btn-mini wider sl5">
 	<span class="title sl5">工数:</span>
 	<span class="label">見積</span><span id="estimated_time{$row.id}" class="autogrow sl2">{if $row.estimated_time}{$row.estimated_time}{else}-{/if}</span><span class="sl2">h</span>
 	<span class="label sl5">実績</span><span id="spent_time{$row.id}" class="autogrow sl2">{if $row.spent_time}{$row.spent_time}{else}-{/if}</span><span class="sl2">h</span>
-{*
-	<span class="title sl5">工数:</span>
-	<span class="label">見積</span>
-	<input name="estimated_time" id="input_estimated_time_{$row.id}" class="width_3 input_each" type="text" value="{$row.estimated_time}"><span class="after_label">人日</span>
-	<span class="label sl2">実績</span>
-	<input name="spent_time" id="input_spent_time_{$row.id}" class="width_3 input_each" type="text" value="{$row.spent_time}"><span class="after_label">人日</span>
-
-	<span class="title sl5">進捗:</span>
-	<input name="percent_complete" id="input_percent_complete_{$row.id}" class="width_3 input_each" type="text" value="{$row.percent_complete}"><span class="after_label">%</span>
-*}
 	<div style="display: none;">
 		<input type="hidden" name="hidden_status_{$row.id}" id="hidden_status_{$row.id}" class="hidden_status" value="{$row.status}">
 		<input type="hidden" name="hidden_del_flg_{$row.id}" id="hidden_del_flg_{$row.id}" class="hidden_del_flg" value="{$row.del_flg}">
@@ -127,11 +117,8 @@
 </div>
 {/if}
 <div class="article_aside_button">
-{*
-<span class="btnSpan"><input type="button" name="update_del_flg_{$row.id}" value="{$row.del_flg|site_get_symbols_for_display}" id="btn_delFlg_{$row.id}" class="btn_delFlg"></span>
-*}
 <span class="label sl2 space_left_5">終了日</span><input name="input_closed_date_{$row.id}" id="input_closed_date_{$row.id}" class="width_10 input_date" type="text" value="{$row.closed_date}">
-<span class="btnSpan space_left_5"><input type="button" name="delete_{$row.id}" value="削除" id="btn_delete_{$row.id}" class="btn_delete"></span>
+<input type="button" name="delete_{$row.id}" value="削除" id="btn_delete_{$row.id}" class="btn_delete btn btn-mini wider sl5">
 {if $order}
 <span class="btnSpan space_left">
 <label for="input_sort_{$row.id}">並び順:</label>
