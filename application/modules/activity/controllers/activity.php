@@ -316,6 +316,9 @@ EOL;
 
 	public function schedule($from_date = '', $to_date = '')
 	{
+		$period = (int)$this->_get_post_params('period', 10);
+		if (!$period) $period = 10;
+
 		if ($from_date)
 		{
 			$from_date = $this->site_util->simple_validation($from_date, '', 'date_format');
@@ -332,8 +335,7 @@ EOL;
 		}
 
 		if (!$from_date) $from_date = date('Y-m-d');
-		$default_period = 14;
-		if (!$to_date) $to_date = date('Y-m-d', strtotime(sprintf('%s +%d days', $from_date, $default_period)));
+		if (!$to_date) $to_date = date('Y-m-d', strtotime(sprintf('%s +%d days', $from_date, $period)));
 
 		$mode = (int)$this->_get_post_params('mode', '');
 

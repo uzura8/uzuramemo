@@ -11,6 +11,8 @@
 {*
 <span class="f_11 space_right"><a id="new_form_switch" href="javaScript:void(0);" onclick="ajax_activity_list_date_all(2);">Priority</a></span>
 *}
+<span class="f_11 space_right"><a href="{site_url}activity/schedule?period=14">2weeks</a></span>
+<span class="f_11 space_right"><a href="{site_url}activity/schedule?period=30">1month</a></span>
 <input type="hidden" name="list_mode" id="list_mode"  value="{$mode}">
 </h4>
 
