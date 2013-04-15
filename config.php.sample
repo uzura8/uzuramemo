@@ -16,7 +16,7 @@ $GLOBALS['DSN']['default'] = array(
 define('ENCRYPTION_KEY', '');
 
 // 管理者メールアドレス
-define('ADMIN_MAIL_ADDRESS', 'uzuranoie@gmail.com');
+define('ADMIN_MAIL_ADDRESS', 'admin@example.com');
 
 // メンテナンスモード設定
 define('UM_UNDER_MAINTENANCE', false);
