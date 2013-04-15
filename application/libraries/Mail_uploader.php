@@ -67,9 +67,10 @@ class Mail_uploader
 			$values = array();
 			$values['title']   = (!empty($persed_url['title'])) ? $persed_url['title'] : '';
 			$values['body']    = mb_convert_encoding($persed_url['body'], 'UTF-8', 'auto');
-			$private_quote_flg = 0;// 要確認
+			$values['private_flg'] = 1;
+			$values['quote_flg'] = 1;
 			$values['explain'] = $url;
-			$values['memo_category_id'] = UM_UNDEFINED_MEMO_CATEGORY_ID;
+			$values['memo_category_id'] = 0;
 
 			// DBに追加
 			$CI->load->model('webmemo/memo');

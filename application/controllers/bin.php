@@ -113,9 +113,6 @@ class Bin extends BIN_Controller
 		return true;
 	}
 
-	/**
-	 * メール処理
-	 */
 	private function _check_is_mailclip_address($to_address, $from_address)
 	{
 		if (!in_array($from_address, $GLOBALS['UM_MAILCLIP_ACCEPT_ADDRESS'])) return false;

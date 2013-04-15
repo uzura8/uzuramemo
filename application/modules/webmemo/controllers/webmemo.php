@@ -301,8 +301,11 @@ class Webmemo extends MY_Controller
 
 	private function _get_category_lists($category_id)
 	{
+		$category_id = (int)$category_id;
+
 		$category = array();
 		$category_id_list = array();
+		if ($category_id === 0) return array($category, array(0));
 		if (!$category_id) return array($category, $category_id_list);
 
 		$category = $this->category->get_row4id($category_id);

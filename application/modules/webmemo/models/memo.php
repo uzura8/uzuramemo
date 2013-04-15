@@ -93,7 +93,7 @@ class Memo extends CI_Model
 		}
 		if ($category_id_list)
 		{
-			$wheres[] = sprintf("B.id IN (%s)", implode(',', $category_id_list));
+			$wheres[] = sprintf("A.memo_category_id IN (%s)", implode(',', $category_id_list));
 		}
 		if ($wheres) $where = ' WHERE '.implode(' AND ', $wheres);
 

@@ -147,8 +147,8 @@ class Site_util
 		if (empty($title) && (empty($body) || $body = '<br type="_moz" />')) return;
 
 		return array(
-			'title' => $title,
-			'body' => $body,
+			'title' => trim($title),
+			'body' => trim($body),
 		);
 	}
 }

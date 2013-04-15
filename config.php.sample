@@ -184,9 +184,6 @@ define('UM_MAIL_DEBUG_LOG', false);
 // Validatorでエラーが出る場合は false にしてください
 define('UM_TRIM_DOUBLEBYTE_SPACE', true);
 
-// 未定義のカテゴリID
-define('UM_UNDEFINED_MEMO_CATEGORY_ID', 0);
-
 
 // 動的設定項目
 

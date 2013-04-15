@@ -27,6 +27,9 @@
 {/foreach}
 </div>
 {/if}
+{if $smarty.const.IS_AUTH}
+<p class="lb_01"><a href="{site_url uri=list/category/0}">カテゴリ未登録記事</a></p>
+{/if}
 <p class="lb_01"><a href="{site_url uri=sitemap}">サイトマップ</a></p>
 {if $smarty.const.DEV_MODE}
 <p class="lb_01"><a href="{site_url uri=user_guide_ja}" target="user_guide" onClick="window.open(this.href,this.target).focus();return false;">開発者向けマニュアル</a></p>
