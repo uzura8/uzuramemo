@@ -21,10 +21,11 @@ class Site_util
 		$buffer = $body;
 		$http_URL_regex = "(s?https?:\/\/[-_.!~*'()a-zA-Z0-9;\/?:\@&=+\$,%#]+)";
 		preg_match_all("/$http_URL_regex/", $buffer, $urls);
+
+		$new_urls = array();
 		if ($urls[0])
 		{
 			$unique_urls = array_unique($urls[0], SORT_STRING);
-			$new_urls = array();
 			foreach ($unique_urls as $url)
 			{
 				$deny_regx = ".+\.(jpg)|(jpeg)|(gif)|(png)|(js)|(css)|(swf)|(rss)|(rdf)$";
@@ -111,5 +112,43 @@ class Site_util
 		if (!is_url($url)) return false;
 
 		return $url;
+	}
+
+	public function is_mailaddress($value)
+	{
+		if (preg_match('/^[^:;@,\s\x80-\xFF]+@\w[\w\-.]*\.[a-zA-Z]+$/', $value)) return true;
+
+		return false;
+	}
+
+	public function perse_url($url)
+	{
+		$CI =& get_instance();
+		$CI->load->library('simple_html_dom');
+		if (!$dom = file_get_html($url)) return;
+
+		$title = '';
+		foreach($dom->find('h2') as $element) {
+			$title = $element->plaintext;
+			$find = $element->outertext;
+			break;
+		}
+		$body = $dom->find('body', 0)->innertext;
+
+		$remove_tags = $GLOBALS['UM_PERSE_URL_REMOVE_TAGS'];
+		foreach($remove_tags as $remove_tag) {
+			foreach($dom->find($remove_tag) as $element) {
+				$tag = $element->outertext;
+				$body = str_replace($tag, '', $body);
+			}
+		}
+		$dom->clear();
+
+		if (empty($title) && (empty($body) || $body = '<br type="_moz" />')) return;
+
+		return array(
+			'title' => $title,
+			'body' => $body,
+		);
 	}
 }

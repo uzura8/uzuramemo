@@ -162,8 +162,7 @@ class Admin_webmemo extends MY_Controller
 		}
 		if (UM_USE_TWITTER_NOTIFY && !$edit_id && $this->session->get('is_tweet', 'memo'))
 		{
-			ini_set('include_path', ini_get('include_path').PATH_SEPARATOR.UM_BASE_DIR.'application/libraries/vender/twitteroauth');
-			require_once('twitteroauth.php');
+			require_once 'twitteroauth/twitteroauth.php';
 			$twitter = new TwitterOAuth(UM_TW_CONSUMER_KEY,UM_TW_CONSUMER_SECRET,UM_TW_ACCESS_TOKEN,UM_TW_ACCESS_TOKEN_SECRET);
 			$req = $twitter->OAuthRequest('https://twitter.com/statuses/update.xml','POST',array('status' => $this->_get_tweet_sentence($insert_id)));
 		}
@@ -825,30 +824,10 @@ class Admin_webmemo extends MY_Controller
 
 	private function _perse_url($url)
 	{
-		$this->load->library('simple_html_dom');
-		if (!$dom = file_get_html($url)) return;
+		$persed_url = $this->site_util->perse_url($url);
 
-		$title = '';
-		foreach($dom->find('h2') as $element) {
-			$title = $element->plaintext;
-			$find = $element->outertext;
-			break;
-		}
-		$body = $dom->find('body', 0)->innertext;
-
-		$remove_tags = $GLOBALS['UM_PERSE_URL_REMOVE_TAGS'];
-		foreach($remove_tags as $remove_tag) {
-			foreach($dom->find($remove_tag) as $element) {
-				$tag = $element->outertext;
-				$body = str_replace($tag, '', $body);
-			}
-		}
-		$dom->clear();
-
-		if (empty($title) && (empty($body) || $body = '<br type="_moz" />')) return;
-
-		$this->input->set_post('title', $title);
-		$this->input->set_post('body', mb_convert_encoding($body, 'UTF-8', 'auto'));
+		$this->input->set_post('title', $persed_url['title']);
+		$this->input->set_post('body', mb_convert_encoding($persed_url['body'], 'UTF-8', 'auto'));
 		$this->input->set_post('private_quote_flg', 1);
 		$this->input->set_post('explain', $url);
 	}

@@ -16,7 +16,10 @@ $GLOBALS['DSN']['default'] = array(
 define('ENCRYPTION_KEY', '');
 
 // 管理者メールアドレス
-define('ADMIN_MAIL_ADDRESS', 'admin@example.com');
+define('ADMIN_MAIL_ADDRESS', 'uzuranoie@gmail.com');
+
+// メンテナンスモード設定
+define('UM_UNDER_MAINTENANCE', false);
 
 
 // headr, footer 関連設定
@@ -59,20 +62,21 @@ $GLOBALS['UM_PERSE_URL_REMOVE_TAGS'] = array(
 // GoogleAnalytics使用設定
 define('UM_USE_GOOGLE_ANALYTICS', false);
 
-// GoogleAnalyticsID設定
+// GoogleAnalytics使用設定
 define('UM_GOOGLE_ANALYTICS_ID', '');
 
 // GoogleAdsense使用設定
 define('UM_USE_GOOGLE_ADSENSE', false);
 
 // GoogleAdsenseID設定
-define('UM_USE_GOOGLE_ADSENSE_ID', '4671197912383497');
+define('UM_USE_GOOGLE_ADSENSE_ID', '');
 
 // 他のアフィリエイト使用設定
 define('UM_USE_AFFILIATE_OTHER', false);
 
 // Googleウェブマスター ツール
 //   https://www.google.com/support/webmasters/bin/answer.py?answer=35659&hl=ja
+define('GOOGLE_SITE_VERIFICATION_KEY', 'UoYUXUz_oxHy1LyMKKBuK8l5QLHsdFcxGB_3gXCFCKc');
 define('GOOGLE_SITE_VERIFICATION_KEY', '');
 
 // use twitter notify
@@ -94,11 +98,8 @@ define('UM_SLAVE_DB_MODE', false);
 // 引用記事表示機能使用設定
 define('UM_USE_QUOTE_ARTICLE_VIEW', true);
 
-// スマートフォン対応設定
-define('UM_USE_MOBILE', false);
-
 // RSSフィード機能使用設定
-define('UM_USE_RSS_FEED', false);
+define('UM_USE_RSS_FEED', true);
 
 // 「メモ」名称設定
 define('UM_WEBMEMO_NAME', 'webメモ');
@@ -140,9 +141,6 @@ define('UM_DATA_DIR', UM_BASE_DIR.'/data');
 define('UM_PUBLIB_DIR', UM_BASE_DIR.'/lib');
 define('UM_PUBDATA_DIR', UM_BASE_DIR.'/public_data');
 
-// バージョン情報
-require_once(UM_DATA_DIR.'/version.php');
-
 
 // module 設定
 
@@ -158,6 +156,36 @@ ini_set('session.gc_maxlifetime', 60 * 24 * 5);
 ini_set('session.gc_probability', 1);
 ini_set('session.gc_divisor', 10000);
 //session_save_path();
+
+
+///
+// メール投稿
+///
+
+// MailClip 機能使用設定
+define('UM_USE_MAILCLIP', false);
+
+// MailClip用メールアドレス
+define('UM_MAILCLIP_ADDRESS', '');
+
+// MailClipを受け付けるFromアドレス
+$GLOBALS['UM_MAILCLIP_ACCEPT_ADDRESS'] = array(
+	'sample@example.com',
+);
+
+// 受信メールの文字コード(Content-Typeから取得できない場合に使う)
+//define('MAIL_FROM_ENCODING', 'JIS');
+define('UM_MAIL_FROM_ENCODING', 'auto');
+
+// メールログを取るかどうか(var/log/mail.log)
+define('UM_MAIL_DEBUG_LOG', false);
+
+// Validatorで全角スペースを削除するかどうか
+// Validatorでエラーが出る場合は false にしてください
+define('UM_TRIM_DOUBLEBYTE_SPACE', true);
+
+// 未定義のカテゴリID
+define('UM_UNDEFINED_MEMO_CATEGORY_ID', 0);
 
 
 // 動的設定項目

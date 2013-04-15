@@ -54,7 +54,6 @@ $autoload['packages'] = array(APPPATH.'third_party');
 
 $autoload['libraries'] = array(
 	'database',
-	'session',
 	'smarty_parser',
 	'simplelogin',
 	'site_util',

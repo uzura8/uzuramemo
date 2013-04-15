@@ -1,6 +1,7 @@
 .DS_Store
 
 application/cache/templates_c/*
+application/logs/*
 
 public_data/upload/*
 public_data/*

@@ -9,6 +9,7 @@ class MY_Controller extends CI_Controller
 		parent::__construct();
 
 		$this->config->load('site', true);
+		$this->load->library('session');
 		$this->_set_current_controller_action();
 		$this->_check_user_agent();
 		$this->_check_client_ip();

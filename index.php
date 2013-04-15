@@ -193,6 +193,7 @@
 // 独自設定ファイルの読み込み
 $config_path = BASEPATH.'../config.php';
 if (file_exists($config_path)) require_once($config_path);
+if (file_exists(APPPATH.'bootstrap.php')) require_once(APPPATH.'bootstrap.php');
 
 /*
  * --------------------------------------------------------------------
