@@ -12,7 +12,7 @@ class Webmemo extends MY_Controller
 	private $search = '';
 	private $offset = 0;
 	private $order  = 0;
-	private $category_id  = 0;
+	private $category_id = null;
 	private $search_option  = false;
 	private $next_url;
 	private $category_list_all = array();
@@ -61,7 +61,7 @@ class Webmemo extends MY_Controller
 		$page_title = 'メモ一覧';
 
 		// uriからparamsを取得
-		if ($this->uri->segment(2) == 'category') $this->category_id = $this->uri->segment(3, 0);
+		if ($this->uri->segment(2) == 'category') $this->category_id = $this->uri->segment(3);
 		if ($this->search)
 		{
 			$this->_format_search_param();
@@ -301,11 +301,9 @@ class Webmemo extends MY_Controller
 
 	private function _get_category_lists($category_id)
 	{
-		$category_id = (int)$category_id;
-
 		$category = array();
 		$category_id_list = array();
-		if ($category_id === 0) return array($category, array(0));
+		if ($category_id === '0') return array($category, array(0));
 		if (!$category_id) return array($category, $category_id_list);
 
 		$category = $this->category->get_row4id($category_id);
@@ -473,7 +471,7 @@ class Webmemo extends MY_Controller
 		$this->offset = $this->_get_post_params('from', 0, 'intval|less_than[10000000]');
 		$this->order  = $this->_get_post_params('order', 0, 'intval|less_than[3]');
 		$this->search_option = $this->_get_post_params('opt', 0, 'intval|less_than[2]');
-		$this->category_id = $this->_get_post_params('category', 0, 'intval|less_than[1000000]');
+		$this->category_id = $this->_get_post_params('category', null, 'intval|less_than[1000000]');
 	}
 }
 
