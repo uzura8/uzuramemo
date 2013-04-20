@@ -166,7 +166,13 @@ ini_set('session.gc_divisor', 10000);
 define('UM_USE_MAILCLIP', false);
 
 // MailClip用メールアドレス
-define('UM_MAILCLIP_ADDRESS', '');
+define('UM_MAILCLIP4LINK_ADDRESS', 'mc-1234abcd@example.com');
+
+// MailClip4Link用メールアドレス
+define('UM_MAILCLIP4LINK_ADDRESS', 'mc-link1234abcd@example.com');
+
+// MailClip4Link用カテゴリID
+define('UM_MAILCLIP4LINK_CATEGORY_ID', 123);
 
 // MailClipを受け付けるFromアドレス
 $GLOBALS['UM_MAILCLIP_ACCEPT_ADDRESS'] = array(

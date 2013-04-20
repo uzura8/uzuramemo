@@ -70,8 +70,8 @@ class Bin extends BIN_Controller
 
 	private function _check_use_mail_clip()
 	{
-		if (!UM_USE_MAILCLIP)    return false;
-		if (!ADMIN_MAIL_ADDRESS) return false;
+		if (!UM_USE_MAILCLIP) return false;
+		if (!ADMIN_MAIL_ADDRESS && !UM_MAILCLIP4LINK_ADDRESS) return false;
 
 		return true;
 	}
@@ -116,7 +116,7 @@ class Bin extends BIN_Controller
 	private function _check_is_mailclip_address($to_address, $from_address)
 	{
 		if (!in_array($from_address, $GLOBALS['UM_MAILCLIP_ACCEPT_ADDRESS'])) return false;
-		if ($to_address != UM_MAILCLIP_ADDRESS) return false;
+		if (!in_array($to_address, array(UM_MAILCLIP_ADDRESS, UM_MAILCLIP4LINK_ADDRESS))) return false;
 
 		return true;
 	}
