@@ -121,7 +121,7 @@ class Site_util
 		return false;
 	}
 
-	public function perse_url($url)
+	public function parse_url($url)
 	{
 		$CI =& get_instance();
 		$CI->load->library('simple_html_dom');
@@ -135,7 +135,7 @@ class Site_util
 		}
 		$body = $dom->find('body', 0)->innertext;
 
-		$remove_tags = $GLOBALS['UM_PERSE_URL_REMOVE_TAGS'];
+		$remove_tags = $GLOBALS['UM_PARSE_URL_REMOVE_TAGS'];
 		foreach($remove_tags as $remove_tag) {
 			foreach($dom->find($remove_tag) as $element) {
 				$tag = $element->outertext;

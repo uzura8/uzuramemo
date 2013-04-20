@@ -77,7 +77,7 @@ class Admin_webmemo extends MY_Controller
 		{
 			admin_redirect('webmemo/index', 'URLが無効です');
 		}
-		$this->_perse_url($url);
+		$this->_parse_url($url);
 
 		// validate and set sessions
 		$this->_setup_validation('memo');
@@ -115,8 +115,8 @@ class Admin_webmemo extends MY_Controller
 		// 入力補助機能
 		$this->_input_support4memo();
 
-		// perse url
-		if ($url = $this->_check_perse_url()) $this->_perse_url($url);
+		// parse url
+		if ($url = $this->_check_parse_url()) $this->_parse_url($url);
 
 		// validate and set sessions
 		if (!$this->_set_validation_and_sessions('memo'))
@@ -802,7 +802,7 @@ class Admin_webmemo extends MY_Controller
 		return $title;
 	}
 
-	private function _check_perse_url()
+	private function _check_parse_url()
 	{
 		if (!$this->input->post('preview')) return false;
 		if (!$this->input->post('explain')) return false;
@@ -822,12 +822,12 @@ class Admin_webmemo extends MY_Controller
 		return $url;
 	}
 
-	private function _perse_url($url)
+	private function _parse_url($url)
 	{
-		$persed_url = $this->site_util->perse_url($url);
+		$parsed_url = $this->site_util->parse_url($url);
 
-		$this->input->set_post('title', $persed_url['title']);
-		$this->input->set_post('body', mb_convert_encoding($persed_url['body'], 'UTF-8', 'auto'));
+		$this->input->set_post('title', $parsed_url['title']);
+		$this->input->set_post('body', mb_convert_encoding($parsed_url['body'], 'UTF-8', 'auto'));
 		$this->input->set_post('private_quote_flg', 1);
 		$this->input->set_post('explain', $url);
 	}

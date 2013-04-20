@@ -44,7 +44,7 @@ define('COPYRIGHT_SINCE', '2008');
 
 // URL から HTML を取得する際に削除するタグ
 //  PHP Simple HTML DOM Parser を使用( http://simplehtmldom.sourceforge.net/ )
-$GLOBALS['UM_PERSE_URL_REMOVE_TAGS'] = array(
+$GLOBALS['UM_PARSE_URL_REMOVE_TAGS'] = array(
 	'script',
 	'iframe',
 	'object',

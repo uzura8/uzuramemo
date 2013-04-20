@@ -73,7 +73,7 @@ class Mail_uploader
 		$this->CI->load->model('webmemo/memo');
 		foreach ($urls as $url)
 		{
-			$parsed_data = $this->CI->site_util->perse_url($url);
+			$parsed_data = $this->CI->site_util->parse_url($url);
 			if (empty($parsed_data)) continue;
 
 			// DBに追加
