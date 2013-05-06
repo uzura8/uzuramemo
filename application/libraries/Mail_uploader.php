@@ -87,7 +87,8 @@ class Mail_uploader
 		$values['title']       = (!empty($parsed_data['title']))? $parsed_data['title'] : $url;
 		$values['body']        = $this->get_body($url, $parsed_data['body'], $is_link);
 		$values['private_flg'] = 1;
-		$values['quote_flg']   = 1;
+		$values['format']      = ($is_link)? 0 : 1;
+		$values['quote_flg']   = ($is_link)? 0 : 1;
 		$values['explain']     = ($is_link)? '' : $url;
 		$values['memo_category_id'] = ($is_link)? UM_MAILCLIP4LINK_CATEGORY_ID : 0;
 

@@ -190,7 +190,15 @@
 </tr>
 <tr>
 	<th>内容</th>
-	<td class="td_w_break" colspan="5" style="padding:5px;">{if $row.format == 2}{$row.body|textile|smarty:nodefaults}{else}{$row.body|smarty:nodefaults}{/if}</td>
+	<td class="td_w_break" colspan="5" style="padding:5px;">
+{if $row.format == 2}
+{$row.body|textile|smarty:nodefaults}
+{elseif $row.format == 1}
+{$row.body|smarty:nodefaults}
+{else}
+{$row.body|nl2br|auto_link}
+{/if}
+	</td>
 </tr>
 <tr>
 <th>引用元</th>
