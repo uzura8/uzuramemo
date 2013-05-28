@@ -16,10 +16,11 @@ class Site_util
 	}
 
 	// 本文よりURLを抽出する
-	public function get_url_from_body($body, $is_all = false)
+	public function get_url_from_body($body, $is_all = false, $matche_no_scheme = false)
 	{
 		$buffer = $body;
 		$http_URL_regex = "(s?https?:\/\/[-_.!~*'()a-zA-Z0-9;\/?:\@&=+\$,%#]+)";
+		if ($matche_no_scheme) $http_URL_regex = "((s?https?:\/\/)?[-_.!~*'()a-zA-Z0-9;\/?:\@&=+\$,%#]+)";
 		preg_match_all("/$http_URL_regex/", $buffer, $urls);
 
 		$new_urls = array();
@@ -30,6 +31,8 @@ class Site_util
 			{
 				$deny_regx = ".+\.(jpg)|(jpeg)|(gif)|(png)|(js)|(css)|(swf)|(rss)|(rdf)$";
 				if (preg_match("/$deny_regx/", $url)) continue;
+
+				if ($matche_no_scheme && !preg_match('|^s?https?:\/\/|', $url)) $url = 'http://'.$url;
 
 				if (!$is_all) return $url;
 				$new_urls[] = $url;

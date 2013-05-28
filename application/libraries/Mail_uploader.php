@@ -56,7 +56,7 @@ class Mail_uploader
 
 	private function get_urls($method_name)
 	{
-		if (!$urls = $this->CI->site_util->get_url_from_body($this->decoder->get_text_body(), true))
+		if (!$urls = $this->CI->site_util->get_url_from_body($this->decoder->get_text_body(), true, true))
 		{
 			$this->error_mail('URLが取得できなかったため、投稿できませんでした。');
 			$this->_m_debug_log('Mail_uploader::'.$method_name.'() url is empty');
@@ -74,7 +74,7 @@ class Mail_uploader
 		foreach ($urls as $url)
 		{
 			$parsed_data = $this->CI->site_util->parse_url($url);
-			if (empty($parsed_data)) continue;
+			if (empty($parsed_data)) $parsed_data = '';
 
 			// DBに追加
 			$this->CI->memo->insert($this->get_insert_values4memo($url, $parsed_data, $is_link));
