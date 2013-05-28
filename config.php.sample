@@ -179,6 +179,12 @@ $GLOBALS['UM_MAILCLIP_ACCEPT_ADDRESS'] = array(
 	'sample@example.com',
 );
 
+// MailClip で無視するURL
+$GLOBALS['UM_MAILCLIP_IGNORE_URL'] = array(
+  'http://Twitter',
+  'http://iPhone',
+);
+
 // 受信メールの文字コード(Content-Typeから取得できない場合に使う)
 //define('MAIL_FROM_ENCODING', 'JIS');
 define('UM_MAIL_FROM_ENCODING', 'auto');
