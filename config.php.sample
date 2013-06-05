@@ -183,6 +183,7 @@ $GLOBALS['UM_MAILCLIP_ACCEPT_ADDRESS'] = array(
 $GLOBALS['UM_MAILCLIP_IGNORE_URL'] = array(
   'http://Twitter',
   'http://iPhone',
+  'http://iPad',
 );
 
 // 受信メールの文字コード(Content-Typeから取得できない場合に使う)
