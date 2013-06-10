@@ -20,7 +20,7 @@ class Site_util
 	{
 		$buffer = $body;
 		$http_URL_regex = "(s?https?:\/\/[-_.!~*'()a-zA-Z0-9;\/?:\@&=+\$,%#]+)";
-		if ($matche_no_scheme) $http_URL_regex = "((s?https?:\/\/)?[-_.!~*'()a-zA-Z0-9;\/?:\@&=+\$,%#]+)";
+		if ($matche_no_scheme) $http_URL_regex = "((s?https?:\/\/)?([a-zA-Z0-9-_]{2,}\.[a-zA-Z0-9-_]{2,})[-_.!~*'()a-zA-Z0-9;\/?:\@&=+\$,%#]+)";
 		preg_match_all("/$http_URL_regex/", $buffer, $urls);
 
 		$new_urls = array();
