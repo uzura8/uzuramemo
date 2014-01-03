@@ -42,7 +42,7 @@ class MY_Controller extends CI_Controller
 
 	private function _set_default_view_data()
 	{
-		$this->default_view_data['program_list_mainmenu'] = $this->db_util->get_rows('program', array(), array('id', 'name', 'key_name'), 'sort', 'program', 'model');
+		$this->default_view_data['program_list_mainmenu'] = $this->db_util->get_rows('program', array('del_flg' => 0), array('id', 'name', 'key_name'), 'sort', 'program', 'model');
 		if (!$this->site_util->is_ajax_action(CURRENT_ACTION));
 		{
 			$this->default_view_data['important_wbs_list_mainmenu'] = $this->model_wbs->get_main_list(0, 0, 'A.sort', '', false,

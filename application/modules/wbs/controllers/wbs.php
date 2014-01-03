@@ -150,7 +150,7 @@ EOL;
 		}
 		// template
 		$view_data = array();
-		$view_data['list'] = $this->db_util->get_rows('wbs', array('project_id' => $project_id), array('id', 'name'), 'sort', 'wbs', 'model');
+		$view_data['list'] = $this->db_util->get_rows('wbs', array('project_id' => $project_id, 'del_flg' => 0), array('id', 'name'), 'sort', 'wbs', 'model');
 
 		$this->smarty_parser->parse('ci:wbs/list_mainmenu.tpl', $view_data);
 	}

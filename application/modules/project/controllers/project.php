@@ -189,7 +189,7 @@ echo '</pre>';
 		}
 		// template
 		$view_data = array();
-		$view_data['list'] = $this->db_util->get_rows('project', array('program_id' => $program_id), array('id', 'name', 'key_name'), 'sort', 'project', 'model');
+		$view_data['list'] = $this->db_util->get_rows('project', array('program_id' => $program_id, 'del_flg' => 0), array('id', 'name', 'key_name'), 'sort', 'project', 'model');
 
 		$this->smarty_parser->parse('ci:project/list_mainmenu.tpl', $view_data);
 	}
