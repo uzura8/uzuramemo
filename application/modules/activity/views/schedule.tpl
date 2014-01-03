@@ -13,6 +13,7 @@
 *}
 <span class="f_11 space_right"><a href="{site_url}activity/schedule?period=14">2weeks</a></span>
 <span class="f_11 space_right"><a href="{site_url}activity/schedule?period=30">1month</a></span>
+<span class="f_11 space_right"><a href="{site_url}activity/schedule/{$smarty.now-60*60*24*30|date_format:"%Y-%m-%d"}?period=30">past 1month</a></span>
 <input type="hidden" name="list_mode" id="list_mode"  value="{$mode}">
 </h4>
 
