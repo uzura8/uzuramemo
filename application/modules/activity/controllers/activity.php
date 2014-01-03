@@ -1155,6 +1155,18 @@ EOL;
 		$values = array($item => set_value('value'));
 		$this->model_activity->update4id($values, $id);
 
+		if ($item == 'spent_time')
+		{
+			$del_flg_after = 1;
+			$closed_date = $this->_get_post_params('closed_date');
+			if ($del_flg_after && !$closed_date) $closed_date = date('Y-m-d');
+			if (!$del_flg_after) $closed_date = null;
+
+			$params = array('del_flg' => $del_flg_after);
+			$params['closed_date'] = $closed_date;
+			$this->model_activity->update4id($params, $id, false);
+		}
+
 		$this->output->set_output(nl2br(hsc(set_value('value'))));
 	}
 

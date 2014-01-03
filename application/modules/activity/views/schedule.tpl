@@ -147,6 +147,21 @@ $(document).ready(function(){
 			onblur    : "ignore",
 			cssclass : "editable",
 			select : true,
+			callback : function(){
+				if (item_name == 'spent_time') {
+					var id_num = id.replace(/spent_time/g, "");
+					var closed_date = $('#input_closed_date_' + id_num).val();
+
+					if (closed_date.length == 0) {
+						var today = get_today_for_sql_format();
+						$('#input_closed_date_' + id_num).val(today);
+						$('#hidden_del_flg_' + id_num).val('1');
+					}
+					var btn_val = "{/literal}{1|site_get_symbols_for_display}{literal}";
+					$("#btn_delFlg_" + id_num).val(btn_val);
+					reset_article_color(id_num);
+				}
+			}
 		})
 	});
 

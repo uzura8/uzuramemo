@@ -77,6 +77,9 @@
 </div>
 <div class="meta_info">
 <span>No.{$row.id}</span>
+<span class="title sl5">工数:</span>
+<span class="label">見積</span><span id="estimated_time{$row.id}" class="autogrow sl2">{if $row.estimated_time}{$row.estimated_time}{else} - {/if}</span><span class="sl2">h</span>
+<span class="label sl5">実績</span><span id="spent_time{$row.id}" class="autogrow sl2">{if $row.spent_time}{$row.spent_time}{else} - {/if}</span><span class="sl2">h</span>
 {if $row.project_key_name}<span id="project_key_name{$row.id}" class="sub_info2"{if $row.color || $row.background_color} style="{if $row.color}color:{$row.color};{/if}{if $row.background_color}background-color:{$row.background_color};{/if}"{/if}>{$row.project_key_name}</span>{/if}
 {*
 <span class="space_left_5">update: {$row.updated_at|date_format:"%Y/%m/%d %H:%M"}</span>
@@ -98,9 +101,6 @@
 	<span class="label">予定日</span><input name="input_scheduled_date_{$row.id}" id="input_scheduled_date_{$row.id}" class="width_15 input_date" type="text" value="{$row.scheduled_date}">
 	<span class="label sl2">期日</span><input name="input_due_date_{$row.id}" id="input_due_date_{$row.id}" class="width_15 input_date" type="text" value="{$row.due_date}">
 	<input type="button" name="btn_date_{$row.id}" value="更新" id="btn_date_{$row.id}" class="btn_date btn btn-mini wider sl5">
-	<span class="title sl5">工数:</span>
-	<span class="label">見積</span><span id="estimated_time{$row.id}" class="autogrow sl2">{if $row.estimated_time}{$row.estimated_time}{else}-{/if}</span><span class="sl2">h</span>
-	<span class="label sl5">実績</span><span id="spent_time{$row.id}" class="autogrow sl2">{if $row.spent_time}{$row.spent_time}{else}-{/if}</span><span class="sl2">h</span>
 	<div style="display: none;">
 		<input type="hidden" name="hidden_status_{$row.id}" id="hidden_status_{$row.id}" class="hidden_status" value="{$row.status}">
 		<input type="hidden" name="hidden_del_flg_{$row.id}" id="hidden_del_flg_{$row.id}" class="hidden_del_flg" value="{$row.del_flg}">
