@@ -283,6 +283,26 @@ EOL;
 		$this->smarty_parser->parse('ci:activity/list_date.tpl', $view_data);
 	}
 
+	public function ajax_activity_get_total_times($date = '')
+	{
+		$date = $this->site_util->simple_validation($date, '', 'date_format');
+		if (!$date) show_404();
+
+		$params = array('sql' => array(), 'values' => array());
+		$params['sql'][] = 'A.scheduled_date = ?';
+		$params['values'][] = $date;
+
+		$private = $this->_get_post_params('private', 0, 'trim|is_natural|max_num[1]');
+		$params['sql'][] = 'D.private_flg = ?';
+		$params['values'][] = (int)$private;
+
+		$row = $this->model_activity->get_total_times($params);
+
+		$this->output
+				->set_content_type('application/json')
+				->set_output(json_encode($row));
+	}
+
 	public function ajax_activity_list_date_bcup($date = '')
 	{
 		$date = $this->site_util->simple_validation($date, '', 'date_format');

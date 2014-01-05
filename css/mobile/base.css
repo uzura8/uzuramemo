@@ -617,3 +617,31 @@ div.form_row span.form_input_today button
 {
 	vertical-align: top;
 }
+
+.pull-left {
+  float: left !important;
+}
+.pull-right {
+  float: right !important;
+}
+.element {
+  .pull-left();
+}
+.another-element {
+  .pull-right();
+}
+
+.clearfix() {
+  &:before,
+  &:after {
+    content: " ";
+    display: table;
+  }
+  &:after {
+    clear: both;
+  }
+}
+.element {
+  .clearfix();
+}
+

@@ -15,4 +15,41 @@ function ajax_activity_list_date(date){
 			$("#" + id_name).html(data);
 		}
 	});
+
+	ajax_get_total_times(date);
+}
+
+function ajax_get_total_times(date){
+	if (date == 'past') return false;
+
+	var get_url = util_get_base_url() + 'activity/ajax_activity_get_total_times/' + date;
+	var get_data = {};
+	get_data['nochache']  = (new Date()).getTime();
+
+	$.ajax({
+		url : get_url,
+		type : 'GET',
+		dataType : 'json',
+		data : get_data,
+		timeout: 10000,
+		beforeSend: function(xhr, settings) {
+		},
+		complete: function(xhr, textStatus) {
+		},
+		success: function(result) {
+			//{"estimated_time":"1","spent_time":null}
+			//var resData = $.parseJSON(result);
+			var estimated_time = result.estimated_time;
+			if (estimated_time == null) estimated_time = 0;
+			var spent_time = result.spent_time;
+			if (spent_time == null) spent_time = 0;
+
+			$('#estimated_time_' + date).html(estimated_time);
+			$('#spent_time_' + date).html(spent_time);
+		},
+		error: function(result) {
+		}
+	});
+
+	return false;
 }

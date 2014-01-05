@@ -240,4 +240,30 @@ class Model_activity extends CI_Model
 
 		return $this->db->affected_rows();
 	}
+
+	function get_total_times($params = array())
+	{
+		//select sum(estimated_time) as estimated_time, sum(spent_time) as spent_time from activity where scheduled_date = '2014-01-05';
+		$sql  = "SELECT SUM(A.estimated_time) AS estimated_time, SUM(A.spent_time) AS spent_time FROM activity A";
+		$sql .= " LEFT JOIN wbs B ON A.wbs_id = B.id";
+		$sql .= " LEFT JOIN project C ON B.project_id = C.id";
+		$sql .= " LEFT JOIN program D ON C.program_id = D.id";
+
+		$where  = '';
+		$wheres = array();
+		$wheres[] = "B.del_flg = 0";
+		$wheres[] = "C.del_flg = 0";
+		$wheres[] = "D.del_flg = 0";
+		$param_values = array();
+		if ($params && !empty($params['sql']))
+		{
+			$params_sql = $params['sql'];
+			if (is_array($params['sql'])) $params_sql = implode(' AND ', $params['sql']);
+			$wheres[] = $params_sql;
+			if (!empty($params['values'])) $param_values = $params['values'];
+		}
+		if ($wheres) $where = ' WHERE '.implode(' AND ', $wheres);
+
+		return $this->db->query($sql.$where, $param_values)->row_array();
+	}
 }

@@ -105,3 +105,12 @@ div#modal div#main_form_box {
 {
 	padding: 0 7px;
 }
+#activity_activity_schedule h2.article_title_schedule {
+	line-height: 2;
+}
+#activity_activity_schedule h2.article_title_schedule .date_each .date,
+#activity_activity_schedule h2.article_title_schedule .date_each .times {
+	width: 50%;
+}
+
+

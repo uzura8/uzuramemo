@@ -49,10 +49,17 @@
 {foreach from=$list key=date item=row name=list}
 <div{if !$order} class="date_each jquery-ui-sortable-item st15"{/if} id="date_{$date}">
 <a name="id_{$date}"></a>
-<h2 class="box_01 subtitle" id="article_title_schedule_{$date}">
-<div>
-<span id="date_name{$date}">{$date}({$row.week_name})</span>
-<span class="due_date sub_info2" id="due_date_{$row.id}" style="{$date|convert_due_date:'style'}">{$date|convert_due_date:'rest_days'}</span>
+<h2 class="box_01 subtitle article_title_schedule" id="article_title_schedule_{$date}">
+<div class="clearfix">
+<div class="date pull-left">
+	<span id="date_name{$date}">{$date}({$row.week_name})</span>
+	<span class="due_date sub_info2" id="due_date_{$row.id}" style="{$date|convert_due_date:'style'}">{$date|convert_due_date:'rest_days'}</span>
+</div>
+<div class="times article_meta_top pull-right">
+	<span class="title sl5">工数:</span>
+	<span class="label">見積</span><span id="estimated_time_{$date}" class="sl2"> - </span><span class="sl2">h</span>
+	<span class="label sl5">実績</span><span id="spent_time_{$date}" class="sl2"> - </span><span class="sl2">h</span>
+	<button class="btn btn-mini" type="button" onclick="ajax_get_total_times('{$date}')"><i class="icon-refresh"></i></button>
 </div>
 </h2>
 
