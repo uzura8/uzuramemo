@@ -75,6 +75,9 @@ define('UM_TW_ACCESS_TOKEN_SECRET', '');
 // 非公開環境での動作モード(ログインせず書き込み可能)
 define('UM_LOCAL_MODE', false);
 
+// CSRF チェック設定
+define('UM_CHECK_CSRF', true);
+
 // レプリケーションされたDBを参照して動作する(管理画面へのログイン不可)
 define('UM_SLAVE_DB_MODE', false);
 

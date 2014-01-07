@@ -334,28 +334,23 @@ EOL;
 		$this->smarty_parser->parse('ci:activity/list_date.tpl', $view_data);
 	}
 
-	public function schedule($from_date = '', $to_date = '')
+	public function schedule()
 	{
 		$period = (int)$this->_get_post_params('period', 10);
-		if (!$period) $period = 10;
 
-		if ($from_date)
-		{
-			$from_date = $this->site_util->simple_validation($from_date, '', 'date_format');
-			if (!$from_date) show_404();
-		}
+		$from_date = $this->_get_post_params('from_date', null, 'date_format');
+		$to_date = $this->_get_post_params('to_date', null, 'date_format');
+		if (!$from_date) $from_date = date('Y-m-d');
+		if (!$to_date) $to_date = date('Y-m-d', strtotime(sprintf('%s +%d days', $from_date, $period)));
 
 		$view_data = $this->_get_default_view_data();
 		$view_data['config_site_styles'] = get_config_value('styles', 'site');
 
 		$view_data['is_detail'] = false;
-		if (($from_date && !$to_date) || ($from_date == $to_date))
+		if ($from_date == $to_date)
 		{
 			$view_data['is_detail'] = true;
 		}
-
-		if (!$from_date) $from_date = date('Y-m-d');
-		if (!$to_date) $to_date = date('Y-m-d', strtotime(sprintf('%s +%d days', $from_date, $period)));
 
 		$mode = (int)$this->_get_post_params('mode', '');
 
@@ -391,8 +386,10 @@ EOL;
 			$i++;
 		}
 		$view_data['list'] = $date_list;
-
-		$view_data['mode'] = (int)$this->_get_post_params('mode', '');
+		$view_data['mode'] = $mode;
+		$view_data['period'] = $period;
+		$view_data['from_date'] = $from_date;
+		$view_data['to_date'] = $to_date;
 
 		$this->smarty_parser->parse('ci:activity/schedule.tpl', $view_data);
 	}
@@ -520,6 +517,7 @@ EOL;
 		if (!$this->_check_edit_form_item($item)) show_error('item is invalid');
 
 		$row = $this->model_activity->get_row4id($id);
+
 		echo $row[$item];
 	}
 
@@ -1286,14 +1284,14 @@ EOL;
 			'estimated_time' => array(
 				'label' => '見積工数',
 				'type'  => 'text',
-				'rules' => 'trim|numeric',
+				'rules' => 'trim|callback__convert_kana|numeric',
 				'width'  => 10,
 				'after_label' => '人日',
 			),
 			'spent_time' => array(
 				'label' => '実績工数',
 				'type'  => 'text',
-				'rules' => 'trim|numeric',
+				'rules' => 'trim|callback__convert_kana|numeric',
 				'width'  => 10,
 				'disabled_for_insert'  => true,
 				'after_label' => '人日',
@@ -1373,6 +1371,11 @@ EOL;
 		}
 
 		return true;
+	}
+
+	public function _convert_kana($value)
+	{
+		return mb_convert_kana($value, 'a', $this->config->item('charset'));
 	}
 
 	public function _is_registered_work_class_id($value)

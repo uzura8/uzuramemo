@@ -6,14 +6,17 @@
 {*{include file='ci:hybrid/subtitle.tpl'}*}
 
 <h4 id="main_form_title" class="box_01">
+{*
 <span class="f_11 space_right"><a id="new_form_switch" href="javaScript:void(0);" onclick="ajax_activity_list_date_all(1);">All</a></span>
 <span class="f_11 space_right"><a id="new_form_switch" href="javaScript:void(0);" onclick="ajax_activity_list_date_all(0);">Active</a></span>
-{*
 <span class="f_11 space_right"><a id="new_form_switch" href="javaScript:void(0);" onclick="ajax_activity_list_date_all(2);">Priority</a></span>
 *}
-<span class="f_11 space_right"><a href="{site_url}activity/schedule?period=14">2weeks</a></span>
-<span class="f_11 space_right"><a href="{site_url}activity/schedule?period=30">1month</a></span>
-<span class="f_11 space_right"><a href="{site_url}activity/schedule/{$smarty.now-60*60*24*30|date_format:"%Y-%m-%d"}?period=30">past 1month</a></span>
+<span class="f_11 space_right"><a href="{site_url}activity/schedule">Reset</a></span>
+<span class="f_11 space_right"><a href="{site_url}activity/schedule?mode=0&period={$period}&from_date={$from_date}&to_date={$to_date}">Active</a></span>
+<span class="f_11 space_right"><a href="{site_url}activity/schedule?mode=1&period={$period}&from_date={$from_date}&to_date={$to_date}">All</a></span>
+<span class="f_11 space_right"><a href="{site_url}activity/schedule?mode={$mode}&period=14">2weeks</a></span>
+<span class="f_11 space_right"><a href="{site_url}activity/schedule?mode={$mode}&period=30">1month</a></span>
+<span class="f_11 space_right"><a href="{site_url}activity/schedule?mode={$mode}&period=30&from_date={$smarty.now-60*60*24*30|date_format:"%Y-%m-%d"}">past 1month</a></span>
 <input type="hidden" name="list_mode" id="list_mode"  value="{$mode}">
 </h4>
 
@@ -30,6 +33,7 @@
 <div id="jquery-ui-sortable">
 <div class="content" id="date_list">
 
+{if !$is_detail}
 <!-- past -->
 <div{if !$order} class="date_each jquery-ui-sortable-item"{/if} id="date_past">
 <a name="id_past"></a>
@@ -45,6 +49,7 @@
 
 </div>
 <!-- past -->
+{/if}
 
 {foreach from=$list key=date item=row name=list}
 <div{if !$order} class="date_each jquery-ui-sortable-item st15"{/if} id="date_{$date}">
@@ -52,14 +57,16 @@
 <h2 class="box_01 subtitle article_title_schedule" id="article_title_schedule_{$date}">
 <div class="clearfix">
 <div class="date pull-left">
-	<span id="date_name{$date}">{$date}({$row.week_name})</span>
+	<span id="date_name{$date}"><a href="{site_url}activity/schedule?mode={$mode}&from_date={$date}&to_date={$date}">{$date}({$row.week_name})</a></span>
 	<span class="due_date sub_info2" id="due_date_{$row.id}" style="{$date|convert_due_date:'style'}">{$date|convert_due_date:'rest_days'}</span>
 </div>
 <div class="times article_meta_top pull-right">
 	<span class="title sl5">工数:</span>
 	<span class="label">見積</span><span id="estimated_time_{$date}" class="sl2"> - </span><span class="sl2">h</span>
 	<span class="label sl5">実績</span><span id="spent_time_{$date}" class="sl2"> - </span><span class="sl2">h</span>
+{*
 	<button class="btn btn-mini" type="button" onclick="ajax_get_total_times('{$date}')"><i class="icon-refresh"></i></button>
+*}
 </div>
 </h2>
 
@@ -70,6 +77,7 @@
 </div>
 {/foreach}
 
+{if !$is_detail}
 <!-- undefined -->
 <div{if !$order} class="date_each jquery-ui-sortable-item"{/if} id="date_undefined">
 <a name="id_undefined"></a>
@@ -84,6 +92,7 @@
 
 </div>
 <!-- undefined -->
+{/if}
 
 </div>
 </div>
@@ -107,12 +116,14 @@ uzura_sortable("{/literal}{site_url}{literal}wbs/ajax_execute_update_sort_move/w
 {literal}
 $(document).ready(function(){
 	var mode = $("#list_mode").val();
-	ajax_activity_list_date_all();
+	ajax_activity_list_date_all(mode);
 
 	// activity の更新
 	$(".autogrow").live("click", function(){
 		var id = $(this).attr("id");
 		var item_name = $(this).attr("id").replace(/[0-9]+/g, "");
+		var parent_date = $(this).data('parent_date') ? $(this).data('parent_date') : '';
+
 		var text_box_width = '250px';
 		if (item_name == 'key_name') {
 			var text_box_width = '50px';
@@ -155,19 +166,25 @@ $(document).ready(function(){
 			onblur    : "ignore",
 			cssclass : "editable",
 			select : true,
-			callback : function(){
+			callback : function(result){
 				if (item_name == 'spent_time') {
-					var id_num = id.replace(/spent_time/g, "");
-					var closed_date = $('#input_closed_date_' + id_num).val();
+					var spent_time = parseInt(result);
+					if (spent_time > 0) {
+						var id_num = id.replace(/spent_time/g, "");
+						var closed_date = $('#input_closed_date_' + id_num).val();
 
-					if (closed_date.length == 0) {
-						var today = get_today_for_sql_format();
-						$('#input_closed_date_' + id_num).val(today);
-						$('#hidden_del_flg_' + id_num).val('1');
+						if (closed_date.length == 0) {
+							var today = get_today_for_sql_format();
+							$('#input_closed_date_' + id_num).val(today);
+							$('#hidden_del_flg_' + id_num).val('1');
+						}
+						var btn_val = "{/literal}{1|site_get_symbols_for_display}{literal}";
+						$("#btn_delFlg_" + id_num).val(btn_val);
+						reset_article_color(id_num);
+						if (parent_date.length) ajax_get_total_times(parent_date);
 					}
-					var btn_val = "{/literal}{1|site_get_symbols_for_display}{literal}";
-					$("#btn_delFlg_" + id_num).val(btn_val);
-					reset_article_color(id_num);
+				} else if (item_name == 'estimated_time') {
+					if (parent_date.length) ajax_get_total_times(parent_date);
 				}
 			}
 		})
@@ -236,8 +253,8 @@ $(document).ready(function(){
 	// 各値の変更
 	$(".input_each").live("change", function(){
 		var conf = {
-			'estimated_time'   : {'name' : '見積工数', 'format' : 'numeric', 'error_message' : '数値を入力してください。'},
-			'spent_time'       : {'name' : '実績工数', 'format' : 'numeric', 'error_message' : '数値を入力してください。'},
+			//'estimated_time'   : {'name' : '見積工数', 'format' : 'numeric', 'error_message' : '数値を入力してください。'},
+			//'spent_time'       : {'name' : '実績工数', 'format' : 'numeric', 'error_message' : '数値を入力してください。'},
 			'percent_complete' : {'name' : '進捗率', 'format' : 'integer', 'error_message' : '整数を入力してください。'},
 		}
 

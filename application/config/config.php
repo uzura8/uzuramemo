@@ -302,7 +302,10 @@ $config['global_xss_filtering'] = FALSE;
 | 'csrf_expire' = The number in seconds the token should expire.
 */
 $csrf_protection = TRUE;
-if (defined('UM_LOCAL_MODE') && UM_LOCAL_MODE) $csrf_protection = FALSE;
+if ((defined('UM_LOCAL_MODE') && UM_LOCAL_MODE) || defined('UM_CHECK_CSRF') && !UM_CHECK_CSRF)
+{
+	$csrf_protection = FALSE;
+}
 $config['csrf_protection'] = $csrf_protection;
 $config['csrf_token_name'] = 'csrf_test_name';
 $config['csrf_cookie_name'] = 'csrf_cookie_name';
