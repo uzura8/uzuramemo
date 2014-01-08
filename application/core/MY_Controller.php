@@ -45,7 +45,7 @@ class MY_Controller extends CI_Controller
 		$this->default_view_data['program_list_mainmenu'] = $this->db_util->get_rows('program', array('del_flg' => 0), array('id', 'name', 'key_name'), 'sort', 'program', 'model');
 		if (!$this->site_util->is_ajax_action(CURRENT_ACTION));
 		{
-			$this->default_view_data['important_wbs_list_mainmenu'] = $this->model_wbs->get_main_list(0, 0, 'A.sort', '', false,
+			$this->default_view_data['important_wbs_list_mainmenu'] = $this->model_wbs->get_main_list(0, 0, 'C.sort, B.sort, A.sort', '', false,
 																																																'A.id, A.name, B.name as project_name, C.name as program_name',
 																																																array('sql' => 'importance = 1'));
 		}

@@ -1229,6 +1229,13 @@ EOL;
 				'rules' => 'trim|required|max_length[140]',
 				'width'  => 30,
 			),
+			'estimated_time' => array(
+				'label' => '見積工数',
+				'type'  => 'text',
+				'rules' => 'trim|callback__convert_kana|numeric',
+				'width'  => 10,
+				'after_label' => '時間',
+			),
 			'scheduled_date' => array(
 				'label' => '実施予定日',
 				'type'  => 'text',
@@ -1281,20 +1288,13 @@ EOL;
 				'width'  => 30,
 				'disabled_item_in_sql'  => true,
 			),
-			'estimated_time' => array(
-				'label' => '見積工数',
-				'type'  => 'text',
-				'rules' => 'trim|callback__convert_kana|numeric',
-				'width'  => 10,
-				'after_label' => '人日',
-			),
 			'spent_time' => array(
 				'label' => '実績工数',
 				'type'  => 'text',
 				'rules' => 'trim|callback__convert_kana|numeric',
 				'width'  => 10,
 				'disabled_for_insert'  => true,
-				'after_label' => '人日',
+				'after_label' => '時間',
 			),
 		);
 	}
