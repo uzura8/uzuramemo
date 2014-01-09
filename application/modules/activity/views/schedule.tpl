@@ -5,18 +5,32 @@
 <div id="mainbody">
 {*{include file='ci:hybrid/subtitle.tpl'}*}
 
-<h4 id="main_form_title" class="box_01">
+<h4 id="main_form_title" class="box_01 clearfix">
 {*
-<span class="f_11 space_right"><a id="new_form_switch" href="javaScript:void(0);" onclick="ajax_activity_list_date_all(1);">All</a></span>
-<span class="f_11 space_right"><a id="new_form_switch" href="javaScript:void(0);" onclick="ajax_activity_list_date_all(0);">Active</a></span>
-<span class="f_11 space_right"><a id="new_form_switch" href="javaScript:void(0);" onclick="ajax_activity_list_date_all(2);">Priority</a></span>
+<span class="f_11 space_right pull-left"><a id="new_form_switch" href="javaScript:void(0);" onclick="ajax_activity_list_date_all(1);">All</a></span>
+<span class="f_11 space_right pull-left"><a id="new_form_switch" href="javaScript:void(0);" onclick="ajax_activity_list_date_all(0);">Active</a></span>
+<span class="f_11 space_right pull-left"><a id="new_form_switch" href="javaScript:void(0);" onclick="ajax_activity_list_date_all(2);">Priority</a></span>
 *}
-<span class="f_11 space_right"><a href="{site_url}activity/schedule">Reset</a></span>
-<span class="f_11 space_right"><a href="{site_url}activity/schedule?mode=0&period={$period}&from_date={$from_date}&to_date={$to_date}">Active</a></span>
-<span class="f_11 space_right"><a href="{site_url}activity/schedule?mode=1&period={$period}&from_date={$from_date}&to_date={$to_date}">All</a></span>
-<span class="f_11 space_right"><a href="{site_url}activity/schedule?mode={$mode}&period=14">2weeks</a></span>
-<span class="f_11 space_right"><a href="{site_url}activity/schedule?mode={$mode}&period=30">1month</a></span>
-<span class="f_11 space_right"><a href="{site_url}activity/schedule?mode={$mode}&period=30&from_date={$smarty.now-60*60*24*30|date_format:"%Y-%m-%d"}">past 1month</a></span>
+<span class="f_11 space_right pull-left"><a href="{site_url}activity/schedule">Reset</a></span>
+<span class="f_11 space_right pull-left"><a href="{site_url}activity/schedule?mode=0&period={$period}&from_date={$from_date}&to_date={$to_date}">Active</a></span>
+<span class="f_11 space_right pull-left"><a href="{site_url}activity/schedule?mode=1&period={$period}&from_date={$from_date}&to_date={$to_date}">All</a></span>
+<span class="f_11 space_right pull-left"><a href="{site_url}activity/schedule?mode={$mode}&period=14">2weeks</a></span>
+<span class="f_11 space_right pull-left"><a href="{site_url}activity/schedule?mode={$mode}&period=30">1month</a></span>
+
+<div class="btn-group space_right pull-left">
+	<a class="btn btn-mini" href="{site_url}activity/schedule?mode={$mode}&period={$period}">today</a>
+	<button class="btn btn-mini dropdown-toggle" data-toggle="dropdown">
+	<span class="caret"></span>
+	</button>
+	<ul class="dropdown-menu">
+		<li><a href="{site_url}activity/schedule?mode={$mode}&period={$period}&from_date={$smarty.now-60*60*24*1|date_format:"%Y-%m-%d"}">-1day</a></li>
+		<li><a href="{site_url}activity/schedule?mode={$mode}&period={$period}&from_date={$smarty.now-60*60*24*3|date_format:"%Y-%m-%d"}">-3day</a></li>
+		<li><a href="{site_url}activity/schedule?mode={$mode}&period={$period}&from_date={$smarty.now-60*60*24*5|date_format:"%Y-%m-%d"}">-5day</a></li>
+		<li><a href="{site_url}activity/schedule?mode={$mode}&period={$period}&from_date={$smarty.now-60*60*24*7|date_format:"%Y-%m-%d"}">-1week</a></li>
+		<li><a href="{site_url}activity/schedule?mode={$mode}&period={$period}&from_date={$smarty.now-60*60*24*14|date_format:"%Y-%m-%d"}">-2week</a></li>
+		<li><a href="{site_url}activity/schedule?mode={$mode}&period={$period}&from_date={$smarty.now-60*60*24*30|date_format:"%Y-%m-%d"}">-1month</a></li>
+	</ul>
+</div>
 <input type="hidden" name="list_mode" id="list_mode"  value="{$mode}">
 </h4>
 
@@ -33,7 +47,7 @@
 <div id="jquery-ui-sortable">
 <div class="content" id="date_list">
 
-{if !$from_date}
+{if !$is_set_from_date}
 <!-- past -->
 <div{if !$order} class="date_each jquery-ui-sortable-item"{/if} id="date_past">
 <a name="id_past"></a>

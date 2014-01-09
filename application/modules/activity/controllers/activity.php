@@ -339,6 +339,7 @@ EOL;
 		$period = (int)$this->_get_post_params('period', 10);
 
 		$from_date = $this->_get_post_params('from_date', null, 'date_format');
+		$is_set_from_date = (bool)$from_date;
 		$to_date = $this->_get_post_params('to_date', null, 'date_format');
 		if (!$from_date) $from_date = date('Y-m-d');
 		if (!$to_date) $to_date = date('Y-m-d', strtotime(sprintf('%s +%d days', $from_date, $period)));
@@ -390,6 +391,7 @@ EOL;
 		$view_data['period'] = $period;
 		$view_data['from_date'] = $from_date;
 		$view_data['to_date'] = $to_date;
+		$view_data['is_set_from_date'] = $is_set_from_date;
 
 		$this->smarty_parser->parse('ci:activity/schedule.tpl', $view_data);
 	}
