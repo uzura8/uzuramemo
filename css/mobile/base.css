@@ -618,6 +618,10 @@ div.form_row span.form_input_today button
 	vertical-align: top;
 }
 
+.meta_info .autogrow {
+	padding: 0 3px 0 5px;
+}
+
 .pull-left {
   float: left !important;
 }

@@ -562,19 +562,39 @@ EOL;
 			$this->output->set_status_header('403');
 			return;
 		}
-
+		if (!$activity = $this->model_activity->get_row4id($id))
+		{
+			$this->output->set_status_header('404');
+			return;
+		}
 		$del_flg_after = 1;
-		if ($this->model_activity->get_del_flg4id($id)) $del_flg_after = 0;
+		if ($activity['del_flg']) $del_flg_after = 0;
+		$params = array('del_flg' => $del_flg_after);
 
 		$closed_date = $this->_get_post_params('closed_date');
 		if ($del_flg_after && !$closed_date) $closed_date = date('Y-m-d');
 		if (!$del_flg_after) $closed_date = null;
-
-		$params = array('del_flg' => $del_flg_after);
 		$params['closed_date'] = $closed_date;
+
+		$spent_time = (float)$activity['spent_time'];
+		$spent_time_before = $spent_time;
+		$estimated_time = (float)$activity['estimated_time'];
+		if ($del_flg_after && $estimated_time && !$spent_time)
+		{
+			$spent_time = $estimated_time;
+			$params['spent_time'] = $spent_time;
+		}
+
 		$this->model_activity->update4id($params, $id, false);
 
-		$this->output->set_output($del_flg_after);
+		$return = array(
+			'estimated_time' => $estimated_time,
+			'spent_time' => $spent_time,
+			'spent_time_before' => $spent_time_before,
+			'del_flg' => $del_flg_after,
+		);
+		$this->output->set_output($this->site_util->json_encode($return));
+		//$this->output->set_output($del_flg_after);
 	}
 
 	public function ajax_execute_update_importance()

@@ -33,7 +33,7 @@
 <div id="jquery-ui-sortable">
 <div class="content" id="date_list">
 
-{if !$is_detail}
+{if !$from_date}
 <!-- past -->
 <div{if !$order} class="date_each jquery-ui-sortable-item"{/if} id="date_past">
 <a name="id_past"></a>
@@ -181,9 +181,9 @@ $(document).ready(function(){
 						var btn_val = "{/literal}{1|site_get_symbols_for_display}{literal}";
 						$("#btn_delFlg_" + id_num).val(btn_val);
 						reset_article_color(id_num);
-						if (parent_date.length) ajax_get_total_times(parent_date);
 					}
-				} else if (item_name == 'estimated_time') {
+				}
+				if (item_name == 'estimated_time' || item_name == 'spent_time') {
 					if (parent_date.length) ajax_get_total_times(parent_date);
 				}
 			}
@@ -196,19 +196,28 @@ $(document).ready(function(){
 		var id = id_value.replace(/btn_delFlg_/g, "");
 		var csrf_token = $.cookie('csrf_test_name');
 		var closed_date = $('#input_closed_date_' + id).val();
+		var parent_date = $(this).data('parent_date');
 
 		$.ajax({
 			url : "{/literal}{site_url}{literal}activity/ajax_execute_update_del_flg",
 			dataType : "text",
 			data : {"id": id, "closed_date" : closed_date, "csrf_test_name": csrf_token},
 			type : "POST",
-			success: function(status_after){
-
-				if (status_after == "1") {
+			success: function(result){
+				var obj = $.parseJSON(result);
+				var spent_time = parseFloat(obj.spent_time);
+				var spent_time_before = parseFloat(obj.spent_time_before);
+				var estimated_time = parseFloat(obj.estimated_time);
+				var del_flg_after = obj.del_flg;
+				if (del_flg_after == "1") {
 					if (closed_date.length == 0) {
 						var today = get_today_for_sql_format();
 						$('#input_closed_date_' + id).val(today);
 						$('#hidden_del_flg_' + id).val('1');
+					}
+					if (estimated_time > 0 && spent_time_before == 0) {
+						$('#spent_time'+id).html(estimated_time);
+						ajax_get_total_times(parent_date);
 					}
 					var btn_val = "{/literal}{1|site_get_symbols_for_display}{literal}";
 				} else {

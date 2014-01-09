@@ -65,7 +65,7 @@
 		</ul>
 	</div>
 
-	<input type="button" name="update_del_flg_{$row.id}" value="{$row.del_flg|site_get_symbols_for_display}" id="btn_delFlg_{$row.id}" class="btn btn-mini btn_delFlg wider">
+	<input type="button" name="update_del_flg_{$row.id}" value="{$row.del_flg|site_get_symbols_for_display}" id="btn_delFlg_{$row.id}" class="btn btn-mini btn_delFlg wider" data-parent_date="{$row.scheduled_date}">
 	<button type="button" class="list_util_btn wider btn btn-mini" id="title_btn_{$row.id}" data-toggle="button" onclick="$('#article_{$row.id}').slideToggle();">▼</button>
 </div>
 
@@ -79,8 +79,8 @@
 {if $row.project_key_name}<span id="project_key_name{$row.id}" class="sub_info2"{if $row.color || $row.background_color} style="{if $row.color}color:{$row.color};{/if}{if $row.background_color}background-color:{$row.background_color};{/if}"{/if}>{$row.project_key_name}</span>{/if}
 <span class="sl5">No.{$row.id}</span>
 <span class="title sl5">工数:</span>
-<span class="label">見積</span><span id="estimated_time{$row.id}" class="autogrow sl2" data-parent_date="{$row.scheduled_date}">{if $row.estimated_time}{$row.estimated_time}{else} - {/if}</span><span class="sl2">h</span>
-<span class="label sl5">実績</span><span id="spent_time{$row.id}" class="autogrow sl2" data-parent_date="{$row.scheduled_date}">{if $row.spent_time}{$row.spent_time}{else} - {/if}</span><span class="sl2">h</span>
+<span class="label">見積</span><span id="estimated_time{$row.id}" class="autogrow" data-parent_date="{$row.scheduled_date}">{if $row.estimated_time}{$row.estimated_time}{else} - {/if}</span><span class="sl2">h</span>
+<span class="label sl5">実績</span><span id="spent_time{$row.id}" class="autogrow" data-parent_date="{$row.scheduled_date}">{if $row.spent_time}{$row.spent_time}{else} - {/if}</span><span class="sl2">h</span>
 {*
 <span class="space_left_5">update: {$row.updated_at|date_format:"%Y/%m/%d %H:%M"}</span>
 *}
