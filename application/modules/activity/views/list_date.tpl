@@ -67,7 +67,6 @@
 
 	<input type="button" name="update_del_flg_{$row.id}" value="{$row.del_flg|site_get_symbols_for_display}" id="btn_delFlg_{$row.id}" class="btn btn-mini btn_delFlg wider" data-parent_date="{$row.scheduled_date}">
 	<button type="button" class="list_util_btn wider btn btn-mini" id="title_btn_{$row.id}" data-toggle="button" onclick="$('#article_{$row.id}').slideToggle();">▼</button>
-	<button class="btn btn-mini" id="sort_btn_{$date}" type="button"><i class="icon-resize-vertical"></i></button>
 </div>
 
 <div class="article_meta_top">
