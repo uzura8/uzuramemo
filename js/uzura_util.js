@@ -2,10 +2,8 @@ function uzura_sortable(url){
 	var parent_name = (arguments.length > 1) ? arguments[1] : '#jquery-ui-sortable';
 	var child_name  = (arguments.length > 2) ? arguments[2] : '.jquery-ui-sortable-item';
 	var button_name = (arguments.length > 3) ? arguments[3] : 'span.btnTop';
-
 	$(parent_name).sortable({
 		items: child_name,
-		handle: button_name,
 		update: function(event, ui) {
 			var updateArray = $(parent_name).sortable('toArray').join(',');
 

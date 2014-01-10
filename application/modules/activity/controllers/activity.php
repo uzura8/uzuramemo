@@ -277,6 +277,7 @@ EOL;
 		$params['values'][] = (int)$private;
 
 		$view_data = $this->_get_default_view_data();
+		$view_data['date'] = $date;
 		$view_data['list'] = $this->model_activity->get_main_list(0, 0, 'A.sort, B.sort', '', $with_logical_deleted,
 			'A.*, B.name as wbs_name, C.name as project_name, C.key_name as project_key_name, D.name as program_name, D.key_name as program_key_name, D.color, D.background_color', $params);
 
@@ -656,7 +657,7 @@ EOL;
 		$this->output->set_output('true');
 	}
 
-	public function ajax_execute_update_sort_move($wbs_id = 0)
+	public function ajax_execute_update_sort_move($date)
 	{
 		$this->input->check_is_post();
 		$ids_pre = explode(',', $this->_get_post_params('values'));

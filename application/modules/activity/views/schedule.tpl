@@ -44,12 +44,12 @@
 {else}
 
 <!-- main_list -->
-<div id="jquery-ui-sortable">
+<div>
 <div class="content" id="date_list">
 
 {if !$is_set_from_date}
 <!-- past -->
-<div{if !$order} class="date_each jquery-ui-sortable-item"{/if} id="date_past">
+<div{if !$order} class="date_each"{/if} id="date_past">
 <a name="id_past"></a>
 <h2 class="box_01 subtitle" id="article_title_schedule_past">
 <div>
@@ -66,7 +66,7 @@
 {/if}
 
 {foreach from=$list key=date item=row name=list}
-<div{if !$order} class="date_each jquery-ui-sortable-item st15"{/if} id="date_{$date}">
+<div{if !$order} class="date_each st15"{/if} id="date_{$date}">
 <a name="id_{$date}"></a>
 <h2 class="box_01 subtitle article_title_schedule" id="article_title_schedule_{$date}">
 <div class="clearfix">
@@ -93,7 +93,7 @@
 
 {if !$is_detail}
 <!-- undefined -->
-<div{if !$order} class="date_each jquery-ui-sortable-item"{/if} id="date_undefined">
+<div{if !$order} class="date_each"{/if} id="date_undefined">
 <a name="id_undefined"></a>
 <h2 class="box_01 subtitle" id="article_title_schedule_undefined">
 <div>
@@ -125,7 +125,7 @@
 <script src="{site_url}js/uzura_activity.js" type="text/javascript"></script>
 <script type="text/javascript" charset="utf-8">
 {if !$is_detail}{literal}
-uzura_sortable("{/literal}{site_url}{literal}wbs/ajax_execute_update_sort_move/wbs_");
+//uzura_sortable("{/literal}{site_url}{literal}wbs/ajax_execute_update_sort_move/wbs_");
 {/literal}{/if}
 {literal}
 $(document).ready(function(){

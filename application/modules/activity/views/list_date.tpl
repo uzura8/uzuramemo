@@ -12,9 +12,9 @@
 {else}
 
 <!-- main_list -->
-<div class="content activity_list" id="jquery-ui-sortable_wbs_{$wbs_id}">
+<div class="content activity_list" id="jquery-ui-sortable_{$date}">
 {foreach from=$list item=row}
-<div{if !$order} class="jquery-ui-sortable-item_wbs_{$wbs_id}"{/if} id="{$row.id}">
+<div{if !$order} class="jquery-ui-sortable-item_{$date}"{/if} id="{$row.id}">
 <a name="id_{$row.id}"></a>
 <h2 class="box_01 article_title" id="article_title_{$row.id}" style="background-color:{'background-color'|site_get_activity_style:$row.del_flg:$row.closed_date:$row.scheduled_date:$row.status};">
 <div class="title_row">
@@ -67,6 +67,7 @@
 
 	<input type="button" name="update_del_flg_{$row.id}" value="{$row.del_flg|site_get_symbols_for_display}" id="btn_delFlg_{$row.id}" class="btn btn-mini btn_delFlg wider" data-parent_date="{$row.scheduled_date}">
 	<button type="button" class="list_util_btn wider btn btn-mini" id="title_btn_{$row.id}" data-toggle="button" onclick="$('#article_{$row.id}').slideToggle();">▼</button>
+	<button class="btn btn-mini" id="sort_btn_{$date}" type="button"><i class="icon-resize-vertical"></i></button>
 </div>
 
 <div class="article_meta_top">
@@ -137,7 +138,6 @@
 
 <script type="text/javascript" charset="utf-8">
 {literal}
-uzura_sortable("{/literal}{site_url}{literal}activity/ajax_execute_update_sort_move/{/literal}{$wbs_id}{literal}", '#jquery-ui-sortable_wbs_{/literal}{$wbs_id}{literal}', '.jquery-ui-sortable-item_wbs_{/literal}{$wbs_id}{literal}');
 $(function(){
 	uzura_datepicker(".input_date", "{/literal}{site_url}{literal}/css/images/calendar.gif");
 });
@@ -152,6 +152,7 @@ $(function(){
 </body>
 <script type="text/javascript" charset="utf-8">
 {literal}
+uzura_sortable("{/literal}{site_url}{literal}activity/ajax_execute_update_sort_move/{/literal}{$date}{literal}", '#jquery-ui-sortable_{/literal}{$date}{literal}', '.jquery-ui-sortable-item_{/literal}{$date}{literal}');
 {/literal}
 </script>
 </html>
