@@ -76,6 +76,7 @@
 <span class="sl3">&gt;&nbsp;<a href="{site_url}activity/wbs/{$row.wbs_id}">{$row.wbs_name}</a></span>
 </div>
 <div class="meta_info">
+{if $row.body}<i class="icon-comment"></i>{/if}
 {if $row.project_key_name}<span id="project_key_name{$row.id}" class="sub_info2"{if $row.color || $row.background_color} style="{if $row.color}color:{$row.color};{/if}{if $row.background_color}background-color:{$row.background_color};{/if}"{/if}>{$row.project_key_name}</span>{/if}
 <span class="sl5">No.{$row.id}</span>
 <span class="title sl5">工数:</span>

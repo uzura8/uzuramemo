@@ -46,10 +46,10 @@
 <tr>
 <td class="row_title"><a href="<?php echo site_url('project/index').'/'.$row['program_key_name'] ?>"><?php echo mb_strimwidth($row['program_name'], 0, 18, '...', 'UTF-8') ?></a></td>
 <td class="row_title"><a href="<?php echo site_url('wbs/index').'/'.$row['project_key_name'] ?>"><?php echo mb_strimwidth($row['project_name'], 0, 18, '...', 'UTF-8') ?></a></td>
-<td class="row_title ta_l"><?php echo mb_strimwidth($row['name'], 0, 25, '...', 'UTF-8') ?></td>
+<td class="row_title ta_l"><a href="<?php echo site_url('activity/wbs').'/'.$row['id'] ?>?mode=1"><?php echo mb_strimwidth($row['name'], 0, 25, '...', 'UTF-8') ?></a></td>
 <td class="row_title gantt_active_<?php echo $row['work_class_id'] ?>"><?php echo $row['work_class_name'] ?></td>
 <td>
-<span id="estimated_time<?php echo $row['id'] ?>" class="autogrow"><?php echo $row['estimated_time'] ?></span>
+<span id="estimated_time<?php echo $row['id'] ?>" class="autogrow"><?php echo (float)$row['estimated_time'] ?></span>
 <input type="hidden" id="input_start_date_<?php echo $row['id'] ?>" class="input_each" name="start_date" value="<?php echo $row['start_date'] ?>">
 </td>
 <?php foreach ($day_list as $date => $item): ?>

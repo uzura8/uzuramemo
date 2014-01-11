@@ -152,6 +152,15 @@ class Gantt extends MY_Controller
 		$view_data['holidays']  = $holidays;
 
 		$params = array('sql' => array(), 'values' => array());
+		$params['sql'][]    = 'C.private_flg = ?';
+		$params['values'][] = 0;
+		$params['sql'][]    = 'A.del_flg = ?';
+		$params['values'][] = 0;
+		$params['sql'][]    = 'B.del_flg = ?';
+		$params['values'][] = 0;
+		$params['sql'][]    = 'C.del_flg = ?';
+		$params['values'][] = 0;
+		//$params['sql'][]    = 'A.due_date is not NULL';
 		if ($this->project_id)
 		{
 			$params['sql'][]    = 'A.project_id = ?';
@@ -173,7 +182,8 @@ class Gantt extends MY_Controller
 		}
 		$list = $this->model_wbs->get_main_list($this->offset,
 																						$this->limit,
-																						$this->_get_order_sql_clause(),
+																						'C.sort, B.sort, A.due_date, A.sort',
+																						//$this->_get_order_sql_clause(),
 																						'',
 																						true,
 																						'B.name as project_name, B.key_name as project_key_name, '
