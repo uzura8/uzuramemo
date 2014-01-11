@@ -12,7 +12,7 @@
 <span class="f_11 space_right pull-left"><a id="new_form_switch" href="javaScript:void(0);" onclick="ajax_activity_list_date_all(2);">Priority</a></span>
 *}
 <span class="f_11 space_right pull-left"><a href="{site_url}activity/schedule">Reset</a></span>
-<span class="f_11 space_right pull-left"><a href="{site_url}activity/schedule?mode=0&period={$period}&from_date={$from_date}&to_date={$to_date}">Active</a></span>
+<span class="f_11 space_right pull-left"><a href="{site_url}activity/schedule?mode=0&period={$period}{if $is_set_from_date}&from_date={$from_date}{/if}&to_date={$to_date}">Active</a></span>
 <span class="f_11 space_right pull-left"><a href="{site_url}activity/schedule?mode=1&period={$period}&from_date={$from_date}&to_date={$to_date}">All</a></span>
 <span class="f_11 space_right pull-left"><a href="{site_url}activity/schedule?mode={$mode}&period=14">2weeks</a></span>
 <span class="f_11 space_right pull-left"><a href="{site_url}activity/schedule?mode={$mode}&period=30">1month</a></span>
@@ -360,7 +360,9 @@ $(document).ready(function(){
 				$.jGrowl('No.' + id + ' のコピーを実行しました。');
 				var obj = $.parseJSON(data);
 				var mode = $('#list_mode').val();
+				var is_past = $.parseJSON(is_past);
 				ajax_activity_list_date(obj.scheduled_date_before, mode);
+				if (obj.is_past) ajax_activity_list_date('past', mode);
 			},
 			error: function(data){
 				$.jGrowl('No.' + id + ' のコピーに失敗しました。');

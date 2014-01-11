@@ -812,9 +812,10 @@ EOL;
 		if ($is_schedule)
 		{
 			$return['scheduled_date_before'] = $row['scheduled_date'];
+			$return['is_past'] = false;
 			if ($this->date_util->conv2int($return['scheduled_date_before']) < date('Ymd'))
 			{
-				$return['scheduled_date_before'] = 'past';
+				$return['is_past'] = true;
 			}
 
 			if ($copy_date) $return['scheduled_date_after'] = $copy_date;
