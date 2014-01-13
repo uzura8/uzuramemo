@@ -156,7 +156,6 @@ echo form_dropdown('period', $options, $period);
 	<th>project</th>
 	<th>wbs</th>
 	<th>タスク</th>
-	<th>予定日</th>
 	<th>見積(h)</th>
 	<th>実績(h)</th>
 	<th>完了</th>
