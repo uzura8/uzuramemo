@@ -198,8 +198,6 @@ $date_sum_spent_time += (float)$row['spent_time'];
 	<strong><?php echo $date_sum_estimated_time; ?> h</strong>
 </li>
 </ul>
-
-</div>
 <?php endforeach; ?>
 
             </div><!--/span-->
