@@ -198,6 +198,149 @@ if ($is_html) echo '</pre>';$out=ob_get_contents();fwrite( $fp, $out . "\n" );ob
 		$this->load->view('report/index', $view_data);
 	}
 
+	public function plan()
+	{
+		$period = (int)$this->_get_post_params('period', 7);
+		$from_date = $this->_get_post_params('from_date', null, 'date_format');
+		$to_date = $this->_get_post_params('to_date', null, 'date_format');
+		if (!$from_date) $from_date = site_get_beginning_week_date(date('Y-m-d'));
+		if (!$to_date) $to_date = date('Y-m-d', strtotime(sprintf('%s +%d days', $from_date, $period - 1)));
+
+		$params = array('sql' => array(), 'values' => array());
+		$params['sql'][] = 'A.scheduled_date >= ?';
+		$params['values'][] = $from_date;
+		$params['sql'][] = 'A.scheduled_date <= ?';
+		$params['values'][] = $to_date;
+
+		$list = $this->model_activity->get_main_list(0, 0, 'D.sort, C.sort, B.sort, A.scheduled_date', '', true,
+			'A.*, B.name as wbs_name, C.name as project_name, C.key_name as project_key_name, C.id as project_id, D.name as program_name, D.key_name as program_key_name, D.color, D.background_color, D.id as program_id', $params);
+		$res = array();
+		$program_names = array();
+		$project_names = array();
+		$program_project_names = array();
+		$wbs_names = array();
+		$project_estimated_times = array();
+		$project_spent_times = array();
+		$scheduled_dates = array();
+		foreach ($list as $row)
+		{
+			$program_id = $row['program_id'];
+			$project_id = $row['project_id'];
+			$wbs_id = $row['wbs_id'];
+			$id = $row['id'];
+			if (!isset($program_id_before) || $program_id_before != $program_id)
+			{
+				$res[$program_id] = array();
+				$program_names[$program_id] = $row['program_name'];
+			}
+			if (!isset($project_id_before) || $project_id_before != $project_id)
+			{
+				$res[$program_id][$project_id] = array();
+				$project_names[$project_id] = $row['project_name'];
+				$program_project_names[$project_id] = sprintf('%s %s', $row['program_name'], $row['project_name']);
+				$project_estimated_times[$project_id] = 0;
+				$project_spent_times[$project_id] = 0;
+			}
+			if (!isset($wbs_id_before) || $wbs_id_before != $wbs_id)
+			{
+				$res[$program_id][$project_id][$wbs_id] = array();
+				$wbs_names[$wbs_id] = $row['wbs_name'];
+			}
+			//$res[$program_id][$project_id][$wbs_id][$id] = $row;
+			$project_estimated_times[$project_id] += $row['estimated_time'];
+			$project_spent_times[$project_id] += $row['spent_time'];
+
+			$scheduled_date = $row['scheduled_date'];
+			$scheduled_dates[$scheduled_date] = 1;
+
+			$wbs_id_before = $wbs_id;
+			$project_id_before = $project_id;
+			$program_id_before = $program_id;
+		}
+		arsort($project_estimated_times);
+
+
+		$list = $this->model_activity->get_main_list(0, 0, 'A.scheduled_date, D.sort, C.sort, B.sort', '', true,
+			'A.*, B.name as wbs_name, C.name as project_name, C.key_name as project_key_name, C.id as project_id, D.name as program_name, D.key_name as program_key_name, D.color, D.background_color, D.id as program_id', $params);
+		$plans = array();
+		foreach ($list as $row)
+		{
+			$date = $row['scheduled_date'];
+			$id = $row['id'];
+			if (!isset($date_before) || $date_before != $date)
+			{
+				$plans[$date] = array();
+			}
+			$plans[$date][$id] = $row;
+			$date_before = $date;
+		}
+
+//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+$isActive = 0;
+$isExit   = 1;
+$isEcho   = 1;
+$is_html  = 1;
+$isAdd    = 1;
+$a = '';
+if ($isActive) {$fhoge = "/tmp/test.log";$_type = 'wb';if ($isAdd) $_type = 'a';$fp = fopen($fhoge, $_type);ob_start();if ($is_html) echo '<pre>';
+//if () var_dump(__LINE__, $a);// !!!!!!!
+//var_dump(__LINE__, $e->getMessage());// !!!!!!!
+//var_dump(__LINE__, $res, $program_names, $project_names, $wbs_names);// !!!!!!!
+var_dump(__LINE__, $project_spent_times, $project_spent_times);// !!!!!!!
+if ($is_html) echo '</pre>';$out=ob_get_contents();fwrite( $fp, $out . "\n" );ob_end_clean();fclose( $fp );if ($isEcho) echo $out;if ($isExit) exit;}
+//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+		// template
+		$view_data = $this->_get_default_view_data();
+		$view_data['period'] = $period;
+		$view_data['from_date'] = $from_date;
+		$view_data['to_date'] = $to_date;
+		$view_data['project_estimated_times'] = $project_estimated_times;
+		$view_data['project_spent_times'] = $project_spent_times;
+		$view_data['project_estimated_times_sum'] = array_sum($project_estimated_times);
+		$view_data['project_spent_times_sum'] = array_sum($project_spent_times);
+		$view_data['list'] = $plans;
+		$view_data['program_names'] = $program_names;
+		$view_data['project_names'] = $project_names;
+		$view_data['program_project_names'] = $program_project_names;
+		$view_data['wbs_names'] = $wbs_names;
+		$view_data['scheduled_dates'] = $scheduled_dates;
+		////$view_data['page_title'] = $this->private_config['site_title'];
+		////$view_data['head_info'] = $this->_get_work_class_style();
+
+		//if ($project_key && $project = $this->model_project->get_row_full(array('A.key_name' => $project_key), 'A.id, A.name, B.name as program_name, B.key_name as program_key'))
+		//{
+		//	$view_data['page_subtitle'] = $project['name'];
+		//	$view_data['page_subtitle_parts'] = array(
+		//		array('url' => site_url('project/index/'.$project['program_key']), 'subtitle' => $project['program_name']),
+		//		array('url' => '', 'subtitle' => $project['name']),
+		//	);
+		//	$this->project_id = (int)$project['id'];
+		//	$view_data['project_id'] = $this->project_id;
+		//	$view_data['project_key'] = $project_key;
+		//}
+
+		//// request parameter
+		//$view_data['search'] = $this->search;
+		//$view_data['order']  = $this->order;
+		//$view_data['opt']    = $this->search_option;
+		//$view_data['from']   = $this->offset;
+		//$view_data['limit']  = $this->limit;
+
+		//// form
+		//$validation_rules = $this->_validation_rules();// form
+		//$validation_rules['project_id']['value'] = $this->project_id;
+		//$view_data['form'] = $validation_rules;
+
+		//// select:order
+		//$options = $this->_get_form_dropdown_options_order();// select:order
+		//$view_data['form_dropdown_list'] = array();
+		//$view_data['form_dropdown_list']['order'] = array('options' => $options);
+
+		////$this->smarty_parser->parse('ci:gantt/index.tpl', $view_data);
+		$this->load->view('report/plan', $view_data);
+	}
+
 	public function ajax_gantt_list()
 	{
 		// template

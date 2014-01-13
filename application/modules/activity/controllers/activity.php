@@ -1180,7 +1180,7 @@ EOL;
 
 		// 値に変更がない場合はそのまま
 		$row = $this->model_wbs->get_row_common(array('id' => $id));
-		if ($row[$item] == set_value('value'))
+		if (isset($row[$item]) && $row[$item] == set_value('value'))
 		{
 			$this->output->set_output(set_value('value'));
 			return;

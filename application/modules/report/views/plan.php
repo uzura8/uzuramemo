@@ -80,7 +80,7 @@
       <div class="row-fluid">
         <div class="span12">
 
-<form class="form-inline" method="get" action="<?php echo site_url('report'); ?>">
+<form class="form-inline" method="get" action="<?php echo site_url('report/plan'); ?>">
 	<input type="text" class="input-small" name="from_date" id="from_date" placeholder="from_date" value="<?php echo $from_date; ?>">
 <?php
 $options = array(
@@ -97,14 +97,15 @@ echo form_dropdown('period', $options, $period);
 	<button type="submit" class="btn">update</button>
 
 	<div class="btn-group pull-right">
-		<a class="btn" href="./report?from_date=<?php echo date('Y-m-d', strtotime(sprintf('%s - %d day', $from_date, $period))); ?>&period=<?php echo $period; ?>"><i class=" icon-step-backward"></i></a>
-		<a class="btn" href="./report"><i class=" icon-stop"></i> reset</a>
-		<a class="btn" href="./report?from_date=<?php echo date('Y-m-d', strtotime(sprintf('%s + %d day', $from_date, $period))); ?>&period=<?php echo $period; ?>"><i class=" icon-step-forward"></i></a>
+		<a class="btn" href="./report/plan?from_date=<?php echo date('Y-m-d', strtotime(sprintf('%s - %d day', $from_date, $period))); ?>&period=<?php echo $period; ?>"><i class=" icon-step-backward"></i></a>
+		<a class="btn" href="./report/plan"><i class=" icon-stop"></i> reset</a>
+		<a class="btn" href="./report/plan?from_date=<?php echo date('Y-m-d', strtotime(sprintf('%s + %d day', $from_date, $period))); ?>&period=<?php echo $period; ?>"><i class=" icon-step-forward"></i></a>
 	</div>
 </form>
 
-<h1>実績工数</h1>
+<h1>予定工数</h1>
 <h2><?php echo $from_date; ?> 〜 <?php echo $to_date; ?></h2>
+
 
 <div class="container-fluid">
 	<div class="row-fluid">
@@ -113,23 +114,23 @@ echo form_dropdown('period', $options, $period);
 <table class="table table-striped">
 <tr>
 	<th>project</th>
-	<th>見積(h)</th>
 	<th>実績(h)</th>
+	<th>見積(h)</th>
 	<th>実績(%)</th>
 </tr>
-<?php foreach ($project_spent_times as $project_id => $projects): ?>
+<?php foreach ($project_estimated_times as $project_id => $projects): ?>
 <?php if (!$project_estimated_times[$project_id] && !$project_spent_times[$project_id]) continue; ?>
 <tr>
-	<td><a href="#project_<?php echo $project_id; ?>"><?php echo $program_project_names[$project_id]; ?></a></td>
-	<td><?php echo (float)$project_estimated_times[$project_id]; ?></td>
+	<td><?php echo $program_project_names[$project_id]; ?></td>
 	<td><?php echo (float)$project_spent_times[$project_id]; ?></td>
-	<td><?php echo round($project_spent_times[$project_id]/$project_spent_times_sum*100); ?></td>
+	<td><?php echo (float)$project_estimated_times[$project_id]; ?></td>
+	<td><?php echo round($project_estimated_times[$project_id]/$project_estimated_times_sum*100); ?></td>
 </tr>
 <?php endforeach; ?>
 <tr>
 	<th>合計</th>
-	<th><?php echo $project_estimated_times_sum; ?> h</th>
 	<th><?php echo $project_spent_times_sum; ?> h</th>
+	<th><?php echo $project_estimated_times_sum; ?> h</th>
 	<th>100 %</th>
 </tr>
 </table>
@@ -146,51 +147,60 @@ echo form_dropdown('period', $options, $period);
 	</div>
 </div>
 
-<h3>実施項目一覧</h3>
+<?php foreach ($list as $date => $rows): ?>
+<?php $is_new_date = true; ?>
+<?php $date_sum_estimated_time = 0; ?>
+<?php $date_sum_spent_time = 0; ?>
+<h3><?php echo $date; ?></h3>
 <table class="table table-striped">
 <tr>
 	<th>project</th>
 	<th>wbs</th>
 	<th>タスク</th>
 	<th>予定日</th>
-	<th>実施日</th>
 	<th>見積(h)</th>
 	<th>実績(h)</th>
 	<th>完了</th>
 </tr>
-<?php foreach ($list as $program_id => $programs): ?>
-<?php foreach ($programs as $project_id => $projects): ?>
-<?php $is_new_project = true; ?>
-<?php foreach ($projects as $wbs_id => $wbses): ?>
-<?php foreach ($wbses as $id => $row): ?>
-<tr<?php if ($is_new_project): ?> id="project_<?php echo $project_id; ?>"<?php endif; ?>>
+<?php foreach ($rows as $row): ?>
+<?php
+$program_id = $row['program_id'];
+$project_id = $row['project_id'];
+$wbs_id = $row['wbs_id'];
+$date_sum_estimated_time += (float)$row['estimated_time'];
+$date_sum_spent_time += (float)$row['spent_time'];
+?>
+<tr<?php if ($is_new_date): ?> id="date_<?php echo $date; ?>"<?php endif; ?>>
 	<td>
 		<a href="<?php echo site_url('wbs/index/'.$row['project_key_name']); ?>"><?php echo sprintf('%s %s',$program_names[$program_id], $project_names[$project_id]); ?></a>
 	</td>
 	<td><a href="<?php echo site_url('activity/wbs/'.$wbs_id); ?>"><?php echo mb_substr($wbs_names[$wbs_id], 0, 10); ?></a></td>
 	<td><?php echo mb_substr($row['name'], 0, 20); ?></td>
-	<td><?php echo substr($row['scheduled_date'], 5); ?></td>
 	<td><?php echo substr($row['closed_date'], 5); ?></td>
 	<td><?php echo (float)$row['estimated_time']; ?></td>
 	<td><?php echo (float)$row['spent_time']; ?></td>
 	<td><?php if ($row['del_flg']): ?>完了<?php else: ?>未完了<?php endif; ?></td>
 </tr>
-<?php $is_new_project = false; ?>
+<?php $is_new_date = false; ?>
 <?php endforeach; ?>
-<?php endforeach; ?>
-<?php endforeach; ?>
-<?php endforeach; ?>
-<tr>
-	<th>project</th>
-	<th>wbs</th>
-	<th>タスク</th>
-	<th>予定日</th>
-	<th>完了日</th>
-	<th>見積(h)</th>
-	<th>実績(h)</th>
-	<th>完了</th>
-</tr>
 </table>
+<ul class="unstyled clearfix">
+<li class="pull-right" style="padding:0 5px;">
+	<span>消化率: </span>
+	<strong><?php if ($date_sum_estimated_time): ?><?php echo round($date_sum_spent_time / $date_sum_estimated_time * 100); ?><?php else: ?>-<?php endif; ?> %</strong>
+</li>
+<li class="pull-right" style="padding:0 5px;">
+	<span>実績合計: </span>
+	<strong><?php echo $date_sum_spent_time; ?> h</strong>
+</li>
+<li class="pull-right">
+	<span>見積合計: </span>
+	<strong><?php echo $date_sum_estimated_time; ?> h</strong>
+</li>
+</ul>
+
+</div>
+<?php endforeach; ?>
 
             </div><!--/span-->
           </div><!--/row-->
@@ -262,9 +272,9 @@ $(function () {
 		'jqPlot-sample',
 		[
 			[
-<?php foreach ($project_spent_times as $project_id => $projects): ?>
-<?php if (!$project_spent_times[$project_id]) continue; ?>
-				['<?php echo $program_project_names[$project_id]; ?>',<?php echo (float)$project_spent_times[$project_id]; ?>],
+<?php foreach ($project_estimated_times as $project_id => $projects): ?>
+<?php if (!$project_estimated_times[$project_id]) continue; ?>
+				['<?php echo $program_project_names[$project_id]; ?>',<?php echo (float)$project_estimated_times[$project_id]; ?>],
 <?php endforeach; ?>
 			]
 		],
