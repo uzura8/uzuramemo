@@ -10,6 +10,8 @@
     <!-- Le styles -->
 		<link rel="stylesheet" href="<?php echo site_url('css/bootstrap.min.css'); ?>">
 		<link rel="stylesheet" href="<?php echo site_url('css/bootstrap-responsive.min.css'); ?>">
+		<link rel="stylesheet" href="<?php echo site_url('css/jquery.jqplot.css'); ?>">
+		<link rel="stylesheet" href="<?php echo site_url('css/base.css'); ?>">
     <style type="text/css">
       body {
         padding-top: 60px;
@@ -74,6 +76,50 @@
         <div class="span12">
 <h2><?php echo $from_date; ?> 〜 <?php echo $to_date; ?></h2>
 
+<h3 class="clearfix">
+工数
+<span class="pull-right normal">稼働日数: <?php echo count($scheduled_dates); ?></span>
+</h3>
+<div class="container-fluid">
+	<div class="row-fluid">
+		<div class="span4">
+
+<table class="table table-striped">
+<tr>
+	<th>project</th>
+	<th>見積(h)</th>
+	<th>実績(h)</th>
+	<th>実績(%)</th>
+</tr>
+<?php foreach ($project_spent_times as $project_id => $projects): ?>
+<?php if (!$project_estimated_times[$project_id] && !$project_spent_times[$project_id]) continue; ?>
+<tr>
+	<td><?php echo $program_project_names[$project_id]; ?></td>
+	<td><?php echo (float)$project_estimated_times[$project_id]; ?></td>
+	<td><?php echo (float)$project_spent_times[$project_id]; ?></td>
+	<td><?php echo round($project_spent_times[$project_id]/$project_spent_times_sum*100); ?></td>
+</tr>
+<?php endforeach; ?>
+<tr>
+	<th>合計</th>
+	<th><?php echo $project_estimated_times_sum; ?> h</th>
+	<th><?php echo $project_spent_times_sum; ?> h</th>
+	<th>100 %</th>
+</tr>
+</table>
+<div class="clearfix">
+<span class="pull-right normal">稼働日数: <?php echo count($scheduled_dates); ?></span>
+</div>
+
+		</div>
+		<div class="span8">
+
+<div id="jqPlot-sample"></div>
+
+		</div>
+	</div>
+</div>
+
 <h3>実施項目一覧</h3>
 <table class="table table-striped">
 <tr>
@@ -113,30 +159,6 @@
 	<th>見積(h)</th>
 	<th>実績(h)</th>
 	<th>完了</th>
-</tr>
-</table>
-
-<h3>工数</h3>
-<table class="table table-striped">
-<tr>
-	<th>project</th>
-	<th>見積(h)</th>
-	<th>実績(h)</th>
-	<th>実績(%)</th>
-</tr>
-<?php foreach ($project_spent_times as $project_id => $projects): ?>
-<tr>
-	<td><?php echo $program_project_names[$project_id]; ?></td>
-	<td><?php echo (float)$project_estimated_times[$project_id]; ?></td>
-	<td><?php echo (float)$project_spent_times[$project_id]; ?></td>
-	<td><?php echo round($project_spent_times[$project_id]/$project_spent_times_sum*100, 2); ?></td>
-</tr>
-<?php endforeach; ?>
-<tr>
-	<th>合計</th>
-	<th><?php echo $project_estimated_times_sum; ?> h</th>
-	<th><?php echo $project_spent_times_sum; ?> h</th>
-	<th>100 %</th>
 </tr>
 </table>
 
@@ -182,6 +204,8 @@
     <!-- Placed at the end of the document so the pages load faster -->
 		<script type="text/javascript" src="<?php echo site_url('js/lib/jquery.js'); ?>"></script>
 		<script type="text/javascript" src="<?php echo site_url('js/bootstrap.min.js'); ?>"></script>
+		<script type="text/javascript" src="<?php echo site_url('js/jquery.jqplot.min.js'); ?>"></script>
+		<script type="text/javascript" src="<?php echo site_url('js/plugins/jqplot.pieRenderer.min.js'); ?>"></script>
 <!--
     <script src="../assets/js/jquery.js"></script>
     <script src="../assets/js/bootstrap-transition.js"></script>
@@ -197,6 +221,39 @@
     <script src="../assets/js/bootstrap-carousel.js"></script>
     <script src="../assets/js/bootstrap-typeahead.js"></script>
 -->
+<script>
+
+$(function () {
+	$ . jqplot(
+		'jqPlot-sample',
+		[
+			[
+<?php foreach ($project_spent_times as $project_id => $projects): ?>
+<?php if (!$project_spent_times[$project_id]) continue; ?>
+				['<?php echo $program_project_names[$project_id]; ?>',<?php echo (float)$project_spent_times[$project_id]; ?>],
+<?php endforeach; ?>
+			]
+		],
+		{
+			seriesDefaults: {
+				renderer: jQuery . jqplot . PieRenderer,
+				rendererOptions: {
+					padding: 5,
+					showDataLabels: true,
+					startAngle: -90
+				},
+			},
+			legend: {
+				show: true,
+				location: 'e',
+				//rendererOptions: {
+				//	numberRows: 1
+				//},
+			}
+		}
+	);
+});
+</script>
   </body>
 </html>
 

@@ -95,6 +95,7 @@ class Report extends MY_Controller
 		$wbs_names = array();
 		$project_estimated_times = array();
 		$project_spent_times = array();
+		$scheduled_dates = array();
 		foreach ($list as $row)
 		{
 			$program_id = $row['program_id'];
@@ -122,6 +123,9 @@ class Report extends MY_Controller
 			$res[$program_id][$project_id][$wbs_id][$id] = $row;
 			$project_estimated_times[$project_id] += $row['estimated_time'];
 			$project_spent_times[$project_id] += $row['spent_time'];
+
+			$scheduled_date = $row['scheduled_date'];
+			$scheduled_dates[$scheduled_date] = 1;
 
 			$wbs_id_before = $wbs_id;
 			$project_id_before = $project_id;
@@ -156,6 +160,7 @@ if ($is_html) echo '</pre>';$out=ob_get_contents();fwrite( $fp, $out . "\n" );ob
 		$view_data['project_names'] = $project_names;
 		$view_data['program_project_names'] = $program_project_names;
 		$view_data['wbs_names'] = $wbs_names;
+		$view_data['scheduled_dates'] = $scheduled_dates;
 		////$view_data['page_title'] = $this->private_config['site_title'];
 		////$view_data['head_info'] = $this->_get_work_class_style();
 
