@@ -91,6 +91,7 @@ class Report extends MY_Controller
 		$res = array();
 		$program_names = array();
 		$project_names = array();
+		$program_project_names = array();
 		$wbs_names = array();
 		$project_estimated_times = array();
 		$project_spent_times = array();
@@ -109,6 +110,7 @@ class Report extends MY_Controller
 			{
 				$res[$program_id][$project_id] = array();
 				$project_names[$project_id] = $row['project_name'];
+				$program_project_names[$project_id] = sprintf('%s %s', $row['program_name'], $row['project_name']);
 				$project_estimated_times[$project_id] = 0;
 				$project_spent_times[$project_id] = 0;
 			}
@@ -152,6 +154,7 @@ if ($is_html) echo '</pre>';$out=ob_get_contents();fwrite( $fp, $out . "\n" );ob
 		$view_data['list'] = $res;
 		$view_data['program_names'] = $program_names;
 		$view_data['project_names'] = $project_names;
+		$view_data['program_project_names'] = $program_project_names;
 		$view_data['wbs_names'] = $wbs_names;
 		////$view_data['page_title'] = $this->private_config['site_title'];
 		////$view_data['head_info'] = $this->_get_work_class_style();

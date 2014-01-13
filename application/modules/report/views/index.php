@@ -126,7 +126,7 @@
 </tr>
 <?php foreach ($project_spent_times as $project_id => $projects): ?>
 <tr>
-	<td><?php echo $project_names[$project_id]; ?></td>
+	<td><?php echo $program_project_names[$project_id]; ?></td>
 	<td><?php echo (float)$project_estimated_times[$project_id]; ?></td>
 	<td><?php echo (float)$project_spent_times[$project_id]; ?></td>
 	<td><?php echo round($project_spent_times[$project_id]/$project_spent_times_sum*100, 2); ?></td>
