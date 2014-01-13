@@ -120,7 +120,7 @@ EOL;
 		$validation_rules = $this->_validation_rules();// form
 		$validation_rules['wbs_id']['value'] = $this->wbs_id;
 		$validation_rules['mode']['value'] = $mode;
-		if ($activity)
+		if (!empty($activity))
 		{
 			$validation_rules['name']['value']           = $activity['name'];
 			$validation_rules['scheduled_date']['value'] = $activity['scheduled_date'];
@@ -135,7 +135,7 @@ EOL;
 		// select:order
 //		$options = $this->_get_form_dropdown_options_order();// select:order
 ////		$view_data['form_dropdown_list'] = array();
-		$view_data['form_dropdown_list']['order'] = array('options' => $options);
+	$view_data['form_dropdown_list']['order'] = array('options' => isset($options) ? $options : array());
 
 		$this->smarty_parser->parse('ci:activity/create.tpl', $view_data);
 	}
