@@ -97,9 +97,9 @@ echo form_dropdown('period', $options, $period);
 	<button type="submit" class="btn">update</button>
 
 	<div class="btn-group pull-right">
-		<a class="btn" href="./report/plan?from_date=<?php echo date('Y-m-d', strtotime(sprintf('%s - %d day', $from_date, $period))); ?>&period=<?php echo $period; ?>"><i class=" icon-step-backward"></i></a>
-		<a class="btn" href="./report/plan"><i class=" icon-stop"></i> reset</a>
-		<a class="btn" href="./report/plan?from_date=<?php echo date('Y-m-d', strtotime(sprintf('%s + %d day', $from_date, $period))); ?>&period=<?php echo $period; ?>"><i class=" icon-step-forward"></i></a>
+		<a class="btn" href="<?php echo site_url('report/plan'); ?>?from_date=<?php echo date('Y-m-d', strtotime(sprintf('%s - %d day', $from_date, $period))); ?>&period=<?php echo $period; ?>"><i class=" icon-step-backward"></i></a>
+		<a class="btn" href="<?php echo site_url('report/plan'); ?>"><i class=" icon-stop"></i> reset</a>
+		<a class="btn" href="<?php echo site_url('report/plan'); ?>?from_date=<?php echo date('Y-m-d', strtotime(sprintf('%s + %d day', $from_date, $period))); ?>&period=<?php echo $period; ?>"><i class=" icon-step-forward"></i></a>
 	</div>
 </form>
 
@@ -148,10 +148,9 @@ echo form_dropdown('period', $options, $period);
 </div>
 
 <?php foreach ($list as $date => $rows): ?>
-<?php $is_new_date = true; ?>
 <?php $date_sum_estimated_time = 0; ?>
 <?php $date_sum_spent_time = 0; ?>
-<h3><?php echo $date; ?></h3>
+<h3 id="date_<?php echo $date; ?>"><a href="<?php echo site_url('activity/schedule'); ?>?mode=1&from_date=<?php echo $date; ?>&to_date=<?php echo $date; ?>"><?php echo $date; ?></a></h3>
 <table class="table table-striped">
 <tr>
 	<th>project</th>
@@ -170,7 +169,7 @@ $wbs_id = $row['wbs_id'];
 $date_sum_estimated_time += (float)$row['estimated_time'];
 $date_sum_spent_time += (float)$row['spent_time'];
 ?>
-<tr<?php if ($is_new_date): ?> id="date_<?php echo $date; ?>"<?php endif; ?>>
+<tr>
 	<td>
 		<a href="<?php echo site_url('wbs/index/'.$row['project_key_name']); ?>"><?php echo sprintf('%s %s',$program_names[$program_id], $project_names[$project_id]); ?></a>
 	</td>
@@ -181,7 +180,6 @@ $date_sum_spent_time += (float)$row['spent_time'];
 	<td><?php echo (float)$row['spent_time']; ?></td>
 	<td><?php if ($row['del_flg']): ?>完了<?php else: ?>未完了<?php endif; ?></td>
 </tr>
-<?php $is_new_date = false; ?>
 <?php endforeach; ?>
 </table>
 <ul class="unstyled clearfix">

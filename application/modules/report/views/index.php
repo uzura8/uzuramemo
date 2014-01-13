@@ -97,9 +97,9 @@ echo form_dropdown('period', $options, $period);
 	<button type="submit" class="btn">update</button>
 
 	<div class="btn-group pull-right">
-		<a class="btn" href="./report?from_date=<?php echo date('Y-m-d', strtotime(sprintf('%s - %d day', $from_date, $period))); ?>&period=<?php echo $period; ?>"><i class=" icon-step-backward"></i></a>
-		<a class="btn" href="./report"><i class=" icon-stop"></i> reset</a>
-		<a class="btn" href="./report?from_date=<?php echo date('Y-m-d', strtotime(sprintf('%s + %d day', $from_date, $period))); ?>&period=<?php echo $period; ?>"><i class=" icon-step-forward"></i></a>
+		<a class="btn" href="<?php echo site_url('report'); ?>?from_date=<?php echo date('Y-m-d', strtotime(sprintf('%s - %d day', $from_date, $period))); ?>&period=<?php echo $period; ?>"><i class=" icon-step-backward"></i></a>
+		<a class="btn" href="<?php echo site_url('report'); ?>"><i class=" icon-stop"></i> reset</a>
+		<a class="btn" href="<?php echo site_url('report'); ?>?from_date=<?php echo date('Y-m-d', strtotime(sprintf('%s + %d day', $from_date, $period))); ?>&period=<?php echo $period; ?>"><i class=" icon-step-forward"></i></a>
 	</div>
 </form>
 
