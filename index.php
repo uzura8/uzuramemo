@@ -19,7 +19,7 @@
  *
  */
 	date_default_timezone_set('Asia/Tokyo');
-	define('ENVIRONMENT', 'production');
+	define('ENVIRONMENT', 'development');
 /*
  *---------------------------------------------------------------
  * ERROR REPORTING
