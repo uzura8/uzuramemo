@@ -77,8 +77,8 @@ class Report extends MY_Controller
 		$period = (int)$this->_get_post_params('period', 14);
 		$from_date = $this->_get_post_params('from_date', null, 'date_format');
 		$to_date = $this->_get_post_params('to_date', null, 'date_format');
-		if (!$from_date) $from_date = date('Y-m-d', strtotime('- 14 days'));
-		if (!$to_date) $to_date = date('Y-m-d', strtotime(sprintf('%s +%d days', $from_date, $period)));
+		if (!$from_date) $from_date = site_get_beginning_week_date(date('Y-m-d', strtotime('- 14 days')));
+		if (!$to_date) $to_date = date('Y-m-d', strtotime(sprintf('%s +%d days', $from_date, $period - 1)));
 
 		$params = array('sql' => array(), 'values' => array());
 		$params['sql'][] = 'A.scheduled_date >= ?';
@@ -149,6 +149,7 @@ if ($is_html) echo '</pre>';$out=ob_get_contents();fwrite( $fp, $out . "\n" );ob
 
 		// template
 		$view_data = $this->_get_default_view_data();
+		$view_data['period'] = $period;
 		$view_data['from_date'] = $from_date;
 		$view_data['to_date'] = $to_date;
 		$view_data['project_estimated_times'] = $project_estimated_times;

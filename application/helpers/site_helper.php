@@ -234,5 +234,13 @@ function site_convert_due_date($due_date, $type = 'rest_days')
 	return sprintf("color:%s;background-color:%s;", $config[$key]['color'], $config[$key]['background-color']);
 }
 
+function site_get_beginning_week_date($ymd)
+{
+	$w = date('w',strtotime($ymd)) - 1;
+	$beginning_week_date =
+			date('Y-m-d', strtotime("-{$w} day", strtotime($ymd)));
+	return $beginning_week_date;
+}
+
 /* End of file site_helper.php */
 /* Location: ./application/helpers/site_helper.php */

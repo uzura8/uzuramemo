@@ -10,8 +10,12 @@
     <!-- Le styles -->
 		<link rel="stylesheet" href="<?php echo site_url('css/bootstrap.min.css'); ?>">
 		<link rel="stylesheet" href="<?php echo site_url('css/bootstrap-responsive.min.css'); ?>">
+		<link rel="stylesheet" href="<?php echo site_url('css/jquery-ui-1.8.14.custom.css'); ?>">
+		<link rel="stylesheet" href="<?php echo site_url('css/jquery-ui-calendar.custom.css'); ?>">
+		<link rel="stylesheet" href="<?php echo site_url('css/ui.theme.css'); ?>">
 		<link rel="stylesheet" href="<?php echo site_url('css/jquery.jqplot.css'); ?>">
 		<link rel="stylesheet" href="<?php echo site_url('css/base.css'); ?>">
+<?php /*
     <style type="text/css">
       body {
         padding-top: 60px;
@@ -22,7 +26,6 @@
       }
 
       @media (max-width: 980px) {
-        /* Enable use of floated navbar text */
         .navbar-text.pull-right {
           float: none;
           padding-left: 5px;
@@ -30,6 +33,7 @@
         }
       }
     </style>
+*/ ?>
 
     <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>
@@ -48,7 +52,7 @@
 
   <body>
 
-    <div class="navbar navbar-inverse navbar-fixed-top">
+    <div class="navbar navbar-inverse">
       <div class="navbar-inner">
         <div class="container-fluid">
           <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
@@ -74,6 +78,30 @@
     <div class="container-fluid">
       <div class="row-fluid">
         <div class="span12">
+
+<form class="form-inline" method="get" action="./report">
+	<input type="text" class="input-small" name="from_date" id="from_date" placeholder="from_date" value="<?php echo $from_date; ?>">
+<?php
+$options = array(
+	'7'  => '1week',
+	'14' => '2week',
+	'28' => '3week',
+	'30' => '1month',
+	'60' => '2month',
+	'3'  => '3day',
+	'5'  => '5day',
+);
+echo form_dropdown('period', $options, $period);
+?>
+	<button type="submit" class="btn">update</button>
+
+	<div class="btn-group pull-right">
+		<a class="btn" href="./report?from_date=<?php echo date('Y-m-d', strtotime(sprintf('%s - %d day', $from_date, $period))); ?>&period=<?php echo $period; ?>"><i class=" icon-step-backward"></i></a>
+		<a class="btn" href="./report"><i class=" icon-stop"></i> reset</a>
+		<a class="btn" href="./report?from_date=<?php echo date('Y-m-d', strtotime(sprintf('%s + %d day', $from_date, $period))); ?>&period=<?php echo $period; ?>"><i class=" icon-step-forward"></i></a>
+	</div>
+</form>
+
 <h2><?php echo $from_date; ?> 〜 <?php echo $to_date; ?></h2>
 
 <h3 class="clearfix">
@@ -82,7 +110,7 @@
 </h3>
 <div class="container-fluid">
 	<div class="row-fluid">
-		<div class="span4">
+		<div class="span5">
 
 <table class="table table-striped">
 <tr>
@@ -94,7 +122,7 @@
 <?php foreach ($project_spent_times as $project_id => $projects): ?>
 <?php if (!$project_estimated_times[$project_id] && !$project_spent_times[$project_id]) continue; ?>
 <tr>
-	<td><?php echo $program_project_names[$project_id]; ?></td>
+	<td><a href="#project_<?php echo $project_id; ?>"><?php echo $program_project_names[$project_id]; ?></a></td>
 	<td><?php echo (float)$project_estimated_times[$project_id]; ?></td>
 	<td><?php echo (float)$project_spent_times[$project_id]; ?></td>
 	<td><?php echo round($project_spent_times[$project_id]/$project_spent_times_sum*100); ?></td>
@@ -112,7 +140,7 @@
 </div>
 
 		</div>
-		<div class="span8">
+		<div class="span7">
 
 <div id="jqPlot-sample"></div>
 
@@ -134,10 +162,13 @@
 </tr>
 <?php foreach ($list as $program_id => $programs): ?>
 <?php foreach ($programs as $project_id => $projects): ?>
+<?php $is_new_project = true; ?>
 <?php foreach ($projects as $wbs_id => $wbses): ?>
 <?php foreach ($wbses as $id => $row): ?>
-<tr>
-	<td><a href="<?php echo site_url('wbs/index/'.$row['project_key_name']); ?>"><?php echo sprintf('%s %s',$program_names[$program_id], $project_names[$project_id]); ?></a></td>
+<tr<?php if ($is_new_project): ?> id="project_<?php echo $project_id; ?>"<?php endif; ?>>
+	<td>
+		<a href="<?php echo site_url('wbs/index/'.$row['project_key_name']); ?>"><?php echo sprintf('%s %s',$program_names[$program_id], $project_names[$project_id]); ?></a>
+	</td>
 	<td><a href="<?php echo site_url('activity/wbs/'.$wbs_id); ?>"><?php echo mb_substr($wbs_names[$wbs_id], 0, 10); ?></a></td>
 	<td><?php echo mb_substr($row['name'], 0, 20); ?></td>
 	<td><?php echo substr($row['scheduled_date'], 5); ?></td>
@@ -146,6 +177,7 @@
 	<td><?php echo (float)$row['spent_time']; ?></td>
 	<td><?php if ($row['del_flg']): ?>完了<?php else: ?>未完了<?php endif; ?></td>
 </tr>
+<?php $is_new_project = false; ?>
 <?php endforeach; ?>
 <?php endforeach; ?>
 <?php endforeach; ?>
@@ -204,8 +236,11 @@
     <!-- Placed at the end of the document so the pages load faster -->
 		<script type="text/javascript" src="<?php echo site_url('js/lib/jquery.js'); ?>"></script>
 		<script type="text/javascript" src="<?php echo site_url('js/bootstrap.min.js'); ?>"></script>
+		<script type="text/javascript" src="<?php echo site_url('js/lib/jquery-ui-1.8.14.custom.min.js'); ?>"></script>
+		<script type="text/javascript" src="<?php echo site_url('js/lib/jquery.ui.datepicker-ja.js'); ?>"></script>
 		<script type="text/javascript" src="<?php echo site_url('js/jquery.jqplot.min.js'); ?>"></script>
 		<script type="text/javascript" src="<?php echo site_url('js/plugins/jqplot.pieRenderer.min.js'); ?>"></script>
+		<script type="text/javascript" src="<?php echo site_url('js/uzura_util.js'); ?>"></script>
 <!--
     <script src="../assets/js/jquery.js"></script>
     <script src="../assets/js/bootstrap-transition.js"></script>
@@ -224,6 +259,7 @@
 <script>
 
 $(function () {
+	uzura_datepicker("#from_date");
 	$ . jqplot(
 		'jqPlot-sample',
 		[
