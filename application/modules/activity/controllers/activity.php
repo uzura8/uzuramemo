@@ -337,7 +337,7 @@ EOL;
 
 	public function schedule()
 	{
-		$period = (int)$this->_get_post_params('period', 10);
+		$period = (int)$this->_get_post_params('period', 7);
 
 		$from_date = $this->_get_post_params('from_date', null, 'date_format');
 		$is_set_from_date = (bool)$from_date;
