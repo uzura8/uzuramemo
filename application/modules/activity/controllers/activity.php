@@ -354,7 +354,7 @@ EOL;
 			$view_data['is_detail'] = true;
 		}
 
-		$mode = (int)$this->_get_post_params('mode', '');
+		$mode = (int)$this->_get_post_params('mode', 1);
 
 		$date_list = array();
 		$i = 0;
