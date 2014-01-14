@@ -22,7 +22,7 @@
 <span id="name{$row.id}" class="autogrow">{$row.name}</span>
 {if $row.due_date && $row.due_date != '0000-00-00'}<span class="due_date" id="due_date_{$row.id}" style="{$row.due_date|convert_due_date:'style'}">{$row.due_date|convert_due_date:'rest_days'}</span>{else}<span id="due_date_pre_{$row.id}"></span>{/if}
 
-	<i class="sort_handle icon-resize-vertical pull-right sl5"></i>
+	<i class="sort_handle icon-resize-vertical pull-right"></i>
 	<button type="button" class="list_util_btn wider btn btn-mini pull-right sl5" id="title_btn_{$row.id}" data-toggle="button" onclick="$('#article_{$row.id}').slideToggle();">▼</button>
 	<input type="button" name="update_del_flg_{$row.id}" value="{$row.del_flg|site_get_symbols_for_display}" id="btn_delFlg_{$row.id}" class="btn btn-mini btn_delFlg wider pull-right sl5" data-parent_date="{$row.scheduled_date}">
 

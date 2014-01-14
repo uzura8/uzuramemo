@@ -11,7 +11,7 @@
 <span class="f_11 space_right pull-left"><a id="new_form_switch" href="javaScript:void(0);" onclick="ajax_activity_list_date_all(0);">Active</a></span>
 <span class="f_11 space_right pull-left"><a id="new_form_switch" href="javaScript:void(0);" onclick="ajax_activity_list_date_all(2);">Priority</a></span>
 *}
-<span class="f_11 space_right pull-left"><a href="{site_url}activity/schedule">Reset</a></span>
+<span class="f_11 space_right pull-left"><a href="{site_url}activity/schedule?mode=1">Reset</a></span>
 <span class="f_11 space_right pull-left"><a href="{site_url}activity/schedule?mode=0&period={$period}{if $is_set_from_date}&from_date={$from_date}{/if}&to_date={$to_date}">Active</a></span>
 <span class="f_11 space_right pull-left"><a href="{site_url}activity/schedule?mode=1&period={$period}&from_date={$from_date}&to_date={$to_date}">All</a></span>
 <span class="f_11 space_right pull-left"><a href="{site_url}activity/schedule?mode={$mode}&period=14">2weeks</a></span>

@@ -784,6 +784,8 @@ EOL;
 			'closed_date' => null,
 			//'sort' => null,
 			'del_flg' => 0,
+			'spent_time' => 0,
+			'estimated_time' => 0,
 			'created_at' => null,
 			'updated_at' => null,
 		);
