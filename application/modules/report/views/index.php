@@ -167,8 +167,8 @@ echo form_dropdown('period', $options, $period);
 	<td>
 		<a href="<?php echo site_url('wbs/index/'.$row['project_key_name']); ?>"><?php echo sprintf('%s %s',$program_names[$program_id], $project_names[$project_id]); ?></a>
 	</td>
-	<td><a href="<?php echo site_url('activity/wbs/'.$wbs_id); ?>"><?php echo mb_substr($wbs_names[$wbs_id], 0, 10); ?></a></td>
-	<td><?php echo mb_substr($row['name'], 0, 20); ?></td>
+	<td><a href="<?php echo site_url('activity/wbs/'.$wbs_id); ?>"><?php echo mb_substr($wbs_names[$wbs_id], 0, 20); ?></a></td>
+	<td><?php echo mb_substr($row['name'], 0, 35); ?></td>
 	<td><?php echo substr($row['scheduled_date'], 5); ?></td>
 	<td><?php echo substr($row['closed_date'], 5); ?></td>
 	<td><?php echo (float)$row['estimated_time']; ?></td>
