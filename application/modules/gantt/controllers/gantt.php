@@ -160,6 +160,7 @@ class Gantt extends MY_Controller
 		$params['values'][] = 0;
 		$params['sql'][]    = 'C.del_flg = ?';
 		$params['values'][] = 0;
+		$params['sql'][]    = 'D.id NOT IN (8,9)';// 期限を持たない雑務を除く
 		//$params['sql'][]    = 'A.due_date is not NULL';
 		if ($this->project_id)
 		{
