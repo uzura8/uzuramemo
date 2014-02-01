@@ -19,7 +19,7 @@
 <h3 class="title"><a href="{site_url}gantt">{get_config_value key=site_title index=gantt}</a></h3>
 <h3 class="title"><a href="{site_url}report">Report</a></h3>
 <h3 class="title"><a href="{site_url}report/plan">Plan</a></h3>
-<h3 class="title"><a href="{site_url}activity/schedule?mode=1">Tasks(Date)</a></h3>
+<h3 class="title"><a href="{site_url}activity/schedule">Tasks(Date)</a></h3>
 <h3 class="title"><a href="{site_url}activity/wbs">Tasks(Project)</a></h3>
 {*
 <h3 class="title"><a href="{site_url}activity/wbs?private=1">アクティビティ(個人)</a></h3>

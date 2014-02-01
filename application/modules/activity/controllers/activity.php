@@ -260,6 +260,7 @@ EOL;
 
 		// mode
 		$mode = (int)$this->_get_post_params('mode', '');
+		if ($date == 'past' && $mode == 1) $mode = 0;
 		switch ($mode)
 		{
 			case 1: // all
@@ -337,7 +338,7 @@ EOL;
 
 	public function schedule()
 	{
-		$period = (int)$this->_get_post_params('period', 7);
+		$period = (int)$this->_get_post_params('period', 3);
 
 		$from_date = $this->_get_post_params('from_date', null, 'date_format');
 		$is_set_from_date = (bool)$from_date;
@@ -356,6 +357,8 @@ EOL;
 
 		$mode = (int)$this->_get_post_params('mode', 1);
 
+		$is_include_today = false;
+		$today = date('Y-m-d');
 		$date_list = array();
 		$i = 0;
 		while ($time = strtotime(sprintf('%s +%d days', $from_date, $i)))
@@ -363,6 +366,7 @@ EOL;
 			$date = date('Y-m-d', $time);
 			if ($date > $to_date) break;
 
+			if ($date == $today) $is_include_today = true;
 			$row = array();
 			$row['week_name'] = $this->date_util->get_week_name(date('w', $time));
 
@@ -393,6 +397,8 @@ EOL;
 		$view_data['from_date'] = $from_date;
 		$view_data['to_date'] = $to_date;
 		$view_data['is_set_from_date'] = $is_set_from_date;
+		$view_data['is_set_today'] = $is_include_today;
+		$view_data['today'] = $today;
 
 		$this->smarty_parser->parse('ci:activity/schedule.tpl', $view_data);
 	}

@@ -11,11 +11,21 @@
 <span class="f_11 space_right pull-left"><a id="new_form_switch" href="javaScript:void(0);" onclick="ajax_activity_list_date_all(0);">Active</a></span>
 <span class="f_11 space_right pull-left"><a id="new_form_switch" href="javaScript:void(0);" onclick="ajax_activity_list_date_all(2);">Priority</a></span>
 *}
-<span class="f_11 space_right pull-left"><a href="{site_url}activity/schedule?mode=1">Reset</a></span>
+<span class="f_11 space_right pull-left"><a href="{site_url}activity/schedule">Reset</a></span>
 <span class="f_11 space_right pull-left"><a href="{site_url}activity/schedule?mode=0&period={$period}{if $is_set_from_date}&from_date={$from_date}{/if}&to_date={$to_date}">Active</a></span>
 <span class="f_11 space_right pull-left"><a href="{site_url}activity/schedule?mode=1&period={$period}&from_date={$from_date}&to_date={$to_date}">All</a></span>
-<span class="f_11 space_right pull-left"><a href="{site_url}activity/schedule?mode={$mode}&period=14">2weeks</a></span>
-<span class="f_11 space_right pull-left"><a href="{site_url}activity/schedule?mode={$mode}&period=30">1month</a></span>
+
+<div class="btn-group space_right pull-left">
+	<a class="btn btn-mini" href="{site_url}activity/schedule?mode={$mode}&period=7">1week</a>
+	<button class="btn btn-mini dropdown-toggle" data-toggle="dropdown">
+	<span class="caret"></span>
+	</button>
+	<ul class="dropdown-menu">
+		<li><a href="{site_url}activity/schedule?mode={$mode}">3days</a></li>
+		<li><a href="{site_url}activity/schedule?mode={$mode}&period=14">2weeks</a></li>
+		<li><a href="{site_url}activity/schedule?mode={$mode}&period=30">1month</a></li>
+	</ul>
+</div>
 
 <div class="btn-group space_right pull-left">
 	<a class="btn btn-mini" href="{site_url}activity/schedule?mode={$mode}&period={$period}">today</a>
@@ -124,12 +134,14 @@
 
 <script src="{site_url}js/uzura_activity.js" type="text/javascript"></script>
 <script type="text/javascript" charset="utf-8">
-{if !$is_detail}{literal}
-//uzura_sortable("{/literal}{site_url}{literal}wbs/ajax_execute_update_sort_move/wbs_");
-{/literal}{/if}
 {literal}
 $(document).ready(function(){
 	var mode = $("#list_mode").val();
+{/literal}
+{if $is_set_today}
+{literal}ajax_activity_list_date('{/literal}{$today}{literal}', mode);{/literal}
+{/if}
+{literal}
 	ajax_activity_list_date_all(mode);
 
 	// activity の更新
