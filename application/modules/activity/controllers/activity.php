@@ -1137,6 +1137,7 @@ EOL;
 
 		// 登録
 		$values = $this->_get_form_data();
+		if (strlen($values['estimated_time']) == 0) $values['estimated_time'] = 0.25;
 		if ($activity_id)
 		{
 			$this->model_activity->update($values, array('id' => $activity_id));
