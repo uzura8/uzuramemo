@@ -163,6 +163,7 @@ class Model_program extends CI_Model
 	{
 		$CI =& get_instance();
 		$values = $CI->db_util->set_common_column_value($values);
+		if (empty($values['private_flg'])) $values['private_flg'] = 0;
 		$values['sort'] = $CI->db_util->get_sort_max_next('program', 'program', 'model');
 
 		return $this->db->insert('program', $values);

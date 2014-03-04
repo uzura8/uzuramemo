@@ -208,7 +208,7 @@ CREATE TABLE `program` (
   `sort` int(8) DEFAULT NULL,
   `del_flg` tinyint(1) NOT NULL DEFAULT '0',
   `html_flg` tinyint(1) NOT NULL DEFAULT '0',
-  `private_flg` tinyint(1) DEFAULT '0',
+  `private_flg` tinyint(1) NOT NULL DEFAULT '0',
   `color` varchar(7) DEFAULT NULL,
   `background_color` varchar(7) DEFAULT NULL,
   `created_at` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
