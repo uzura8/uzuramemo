@@ -16,6 +16,7 @@ class MY_Controller extends CI_Controller
 		$this->_check_client_ip();
 		$this->_check_module_enabled();
 		$this->_check_admin();
+		$this->_check_site_auth();
 		$this->_set_current_module();
 		$this->_setup();
 		$this->_set_default_view_data();
@@ -106,7 +107,6 @@ class MY_Controller extends CI_Controller
 			if (in_array($this->input->server('REMOTE_ADDR'), $GLOBALS['AUTO_LOGIN_ACCEPT_IP_LIST'])) $is_auth = true;
 		}
 
-
 		define('IS_AUTH', $is_auth);
 	}
 
@@ -139,6 +139,22 @@ class MY_Controller extends CI_Controller
 			}
 		}
 		if (IS_AUTH) return;
+
+		redirect($admin_path.'/login');
+	}	
+
+	private function _check_site_auth()
+	{
+		if (!UM_CLOSED_MODE) return;
+		if (IS_AUTH) return;
+		if (IS_ADMIN) return;
+
+		if ($this->input->is_ajax_request())
+		{
+			$this->output->set_status_header(401);
+			exit;
+		}
+		$admin_path = $this->config->item('admin_path', 'site');
 
 		redirect($admin_path.'/login');
 	}	

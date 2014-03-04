@@ -87,7 +87,8 @@ class Admin extends MY_Controller
 			if ($this->simplelogin->login(set_value('username'), set_value('password'), set_value('is_save')))
 			{
 				// ログイン成功
-				admin_redirect();
+				//admin_redirect();
+				site_redirect();
 			}
 
 			$message = 'アカウント名、パスワードが正しくありません';

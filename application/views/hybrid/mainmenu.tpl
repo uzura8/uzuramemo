@@ -25,6 +25,7 @@
 <h3 class="title"><a href="{site_url}activity/wbs?private=1">アクティビティ(個人)</a></h3>
 *}
 <h3 class="title"><a href="{site_url}">{$smarty.const.UM_TOPPAGE_NAME}</a></h3>
+<h3 class="title"><a href="{site_url}/admin">管理画面</a></h3>
 
 <h3 class="title">
 	<a href="javaScript:void(0);">Links</a>

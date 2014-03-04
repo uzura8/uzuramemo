@@ -37,7 +37,7 @@
 | in the URL cannot be matched to a valid route.
 |
 */
-$route['default_controller'] = 'webmemo';
+$route['default_controller'] = 'activity/schedule';
 $route['404_override'] = '';
 
 // admin module
