@@ -194,7 +194,7 @@ $(document).ready(function(){
 			select : true,
 			callback : function(result){
 				if (item_name == 'spent_time') {
-					var spent_time = parseInt(result);
+					var spent_time = parseFloat(result);
 					if (spent_time > 0) {
 						var id_num = id.replace(/spent_time/g, "");
 						var closed_date = $('#input_closed_date_' + id_num).val();

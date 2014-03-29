@@ -32,7 +32,9 @@ $('#select_scheduled_date').change(function() {
 	var parts = value.split('-');
 	var num = parts[0];
 	var unit = parts[1];
+	var is_before = (parts[2].length > 0 && parts[2] == 'before') ? true : false;
 
+	if (is_before) num = -1 * num;
 	var date_obj = util_get_add_date(num, unit);
 	var date_str = util_convert_date_format(date_obj);
 

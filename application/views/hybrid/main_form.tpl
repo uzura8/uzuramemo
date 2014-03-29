@@ -25,6 +25,7 @@
 	<button class="btn btn-small" type="button" onclick="util_input_today('#{$id_name}');">today</button>
 	<select id="select_scheduled_date">
 		<option value="">----</option>
+		<option value="1-day-before">-1day</option>
 		<option value="1-day">+1day</option>
 		<option value="2-day">+2day</option>
 		<option value="3-day">+3day</option>
