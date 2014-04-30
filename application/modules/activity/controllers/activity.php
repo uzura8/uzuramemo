@@ -518,6 +518,18 @@ EOL;
 		$this->smarty_parser->parse('ci:activity/wbs.tpl', $view_data);
 	}
 
+	public function pre_registered()
+	{
+		$wbs_id = (int)UM_TASK_PRE_REGISTERED_ACTIVITY_WBS_ID;
+		$view_data = $this->_get_default_view_data();
+
+		$params = array();
+		$params['wbs_id'] = $wbs_id;
+		$view_data['list'] = $this->model_activity->get_rows($params, array(), 'created_at');
+
+		$this->load->view('activity/pre_registered', $view_data);
+	}
+
 	public function ajax_activity_detail($id, $item)
 	{
 		$id = (int)str_replace($item, '', $id);
@@ -1167,6 +1179,37 @@ EOL;
 		{
 			$this->output->set_output('OK');
 		}
+	}
+
+	public function execute_register_wbs_id()
+	{
+		$this->input->check_is_post();
+
+		$posted_wbs_ids = $this->input->post('wbs_id');
+		$posted_add_dates = $this->input->post('add_date');
+
+		$wbs_id = (int)UM_TASK_PRE_REGISTERED_ACTIVITY_WBS_ID;
+		$params = array();
+		$params['wbs_id'] = $wbs_id;
+		$list = $this->model_activity->get_rows($params, array(), 'created_at');
+
+		foreach ($list as $activity)
+		{
+			$id = $activity['id'];
+			$posted_wbs_id = (int)$posted_wbs_ids[$id];
+			$posted_add_date = (int)$posted_add_dates[$id];
+			if (!$posted_wbs_id) continue;
+
+			$scheduled_date = date('Y-m-d');
+			if ($posted_add_date) $scheduled_date = date('Y-m-d', strtotime($posted_add_date.' day'));
+			$values = array(
+				'wbs_id' => $posted_wbs_id,
+				'scheduled_date' => $scheduled_date,
+			);
+			$this->model_activity->update($values, array('id' => $id));
+		}
+
+		redirect('activity/pre_registered');
 	}
 
 	public function edit_complete($id = 0)

@@ -96,6 +96,9 @@ define('UM_WEBMEMO_NAME', 'webメモ');
 // 検索機能使用設定
 define('UM_USE_SEARCH_MEMO', true);
 
+// wbs 未設定 activity の wbs_id
+define('UM_TASK_PRE_REGISTERED_ACTIVITY_WBS_ID', 83);
+
 //// お問い合わせ機能使用設定
 // define('UM_USE_CONTACT', false);
 

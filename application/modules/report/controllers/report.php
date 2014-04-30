@@ -132,20 +132,6 @@ class Report extends MY_Controller
 			$program_id_before = $program_id;
 		}
 		arsort($project_spent_times);
-//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-$isActive = 0;
-$isExit   = 1;
-$isEcho   = 1;
-$is_html  = 1;
-$isAdd    = 1;
-$a = '';
-if ($isActive) {$fhoge = "/tmp/test.log";$_type = 'wb';if ($isAdd) $_type = 'a';$fp = fopen($fhoge, $_type);ob_start();if ($is_html) echo '<pre>';
-//if () var_dump(__LINE__, $a);// !!!!!!!
-//var_dump(__LINE__, $e->getMessage());// !!!!!!!
-//var_dump(__LINE__, $res, $program_names, $project_names, $wbs_names);// !!!!!!!
-var_dump(__LINE__, $project_spent_times, $project_spent_times);// !!!!!!!
-if ($is_html) echo '</pre>';$out=ob_get_contents();fwrite( $fp, $out . "\n" );ob_end_clean();fclose( $fp );if ($isEcho) echo $out;if ($isExit) exit;}
-//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 		// template
 		$view_data = $this->_get_default_view_data();
