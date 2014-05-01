@@ -527,6 +527,21 @@ EOL;
 		$params['wbs_id'] = $wbs_id;
 		$view_data['list'] = $this->model_activity->get_rows($params, array(), 'created_at');
 
+		$options_wbs = array('0' => '未設定');
+		foreach ($this->default_view_data['important_wbs_list_mainmenu'] as $wbs)
+		{
+			$wbs_id = $wbs['id'];
+			$options_wbs[$wbs_id] = sprintf('%s > %s > %s', $wbs['program_name'], $wbs['project_name'], $wbs['name']);
+		}
+		$options_wbs['00'] = '-------';
+		$wbs_list = $this->model_wbs->get_main_list(0, 0, 'C.sort, B.sort, A.sort', '', false, 'A.id, A.name, B.name as project_name, C.name as program_name');
+		foreach ($wbs_list as $wbs)
+		{
+			$wbs_id = $wbs['id'];
+			$options_wbs[$wbs_id] = sprintf('%s > %s > %s', $wbs['program_name'], $wbs['project_name'], $wbs['name']);
+		}
+		$view_data['options_wbs'] = $options_wbs;
+
 		$this->load->view('activity/pre_registered', $view_data);
 	}
 
@@ -1200,12 +1215,9 @@ EOL;
 			$posted_add_date = (int)$posted_add_dates[$id];
 			if (!$posted_wbs_id) continue;
 
+			$values = array('wbs_id' => $posted_wbs_id);
 			$scheduled_date = date('Y-m-d');
-			if ($posted_add_date) $scheduled_date = date('Y-m-d', strtotime($posted_add_date.' day'));
-			$values = array(
-				'wbs_id' => $posted_wbs_id,
-				'scheduled_date' => $scheduled_date,
-			);
+			if ($posted_add_date) $values['scheduled_date'] = date('Y-m-d', strtotime($posted_add_date.' day'));
 			$this->model_activity->update($values, array('id' => $id));
 		}
 

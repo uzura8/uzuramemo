@@ -15,25 +15,6 @@
 		<link rel="stylesheet" href="<?php echo site_url('css/ui.theme.css'); ?>">
 		<link rel="stylesheet" href="<?php echo site_url('css/jquery.jqplot.css'); ?>">
 		<link rel="stylesheet" href="<?php echo site_url('css/base.css'); ?>">
-<?php /*
-    <style type="text/css">
-      body {
-        padding-top: 60px;
-        padding-bottom: 40px;
-      }
-      .sidebar-nav {
-        padding: 9px 0;
-      }
-
-      @media (max-width: 980px) {
-        .navbar-text.pull-right {
-          float: none;
-          padding-left: 5px;
-          padding-right: 5px;
-        }
-      }
-    </style>
-*/ ?>
 
     <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>
@@ -49,7 +30,6 @@
     <link rel="shortcut icon" href="../assets/ico/favicon.png">
 -->
   </head>
-
   <body>
 
     <div class="navbar navbar-inverse">
@@ -90,17 +70,9 @@
 	<th>wbs</th>
 	<th>date</th>
 </tr>
-<?php
-$options_wbs = array('0' => '未設定');
-foreach ($important_wbs_list_mainmenu as $wbs)
-{
-	$wbs_id = $wbs['id'];
-	$options_wbs[$wbs_id] = sprintf('%s > %s > %s', $wbs['program_name'], $wbs['project_name'], $wbs['name']);
-}
-?>
 <?php foreach ($list as $id => $activity): ?>
 <tr class="activity_<?php echo $activity['id']; ?>">
-	<td><?php echo mb_substr($activity['name'], 0, 35); ?></td>
+	<td><?php echo mb_substr($activity['name'], 0, 70); ?></td>
 	<td>
 <?php
 echo form_dropdown('wbs_id['.$activity['id'].']', $options_wbs);
@@ -109,20 +81,21 @@ echo form_dropdown('wbs_id['.$activity['id'].']', $options_wbs);
 	<td>
 <?php
 $options = array(
-	'0'  => 'today',
-	'-3'  => '-3day',
-	'-2'  => '-2day',
+	''  => '変更しない',
+	'+0'  => 'today',
 	'-1'  => '-1day',
-	'+1'  => '1day',
-	'+2'  => '2day',
-	'+3'  => '3day',
-	'+4'  => '4day',
-	'+5'  => '5day',
-	'+7'  => '1week',
-	'+14' => '2week',
-	'+28' => '3week',
-	'+30' => '1month',
-	'+60' => '2month',
+	'+1'  => '+1day',
+	'+2'  => '+2day',
+	'+3'  => '+3day',
+	'+4'  => '+4day',
+	'+5'  => '+5day',
+	'-2'  => '-2day',
+	'-3'  => '-3day',
+	'+7'  => '+1week',
+	'+14' => '+2week',
+	'+28' => '+3week',
+	'+30' => '+1month',
+	'+60' => '+2month',
 );
 echo form_dropdown('add_date['.$activity['id'].']', $options);
 ?>
