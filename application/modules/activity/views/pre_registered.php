@@ -120,7 +120,7 @@ $options_spent_time = array(
 <?php foreach ($list as $id => $activity): ?>
 <tr class="activity_<?php echo $activity['id']; ?>">
 	<td><?php echo mb_substr($activity['name'], 0, 70); ?></td>
-	<td><?php echo form_dropdown('wbs_id['.$activity['id'].']', $options_wbs, null, ' class="input-xxlarge"'); ?></td>
+	<td><?php echo form_dropdown('wbs_id['.$activity['id'].']', $options_wbs, null, ' class="input-xlarge"'); ?></td>
 	<td><?php echo form_dropdown('spent_time['.$activity['id'].']', $options_spent_time, $activity['spent_time'], ' class="input-small"'); ?></td>
 	<td><?php echo form_dropdown('add_date['.$activity['id'].']', $options_add_date, null, ' class="input-small"'); ?></td>
 </tr>
