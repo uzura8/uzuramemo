@@ -1202,6 +1202,7 @@ EOL;
 
 		$posted_wbs_ids = $this->input->post('wbs_id');
 		$posted_add_dates = $this->input->post('add_date');
+		$posted_spent_times = $this->input->post('spent_time');
 
 		$wbs_id = (int)UM_TASK_PRE_REGISTERED_ACTIVITY_WBS_ID;
 		$params = array();
@@ -1212,12 +1213,21 @@ EOL;
 		{
 			$id = $activity['id'];
 			$posted_wbs_id = (int)$posted_wbs_ids[$id];
-			$posted_add_date = (int)$posted_add_dates[$id];
+			$posted_add_date = $posted_add_dates[$id];
+			$posted_spent_time = (float)$posted_spent_times[$id];
 			if (!$posted_wbs_id) continue;
 
-			$values = array('wbs_id' => $posted_wbs_id);
+			$values = array();
+			if ($posted_wbs_id) $values['wbs_id'] = $posted_wbs_id;
+
 			$scheduled_date = date('Y-m-d');
 			if ($posted_add_date) $values['scheduled_date'] = date('Y-m-d', strtotime($posted_add_date.' day'));
+
+			if ($posted_spent_time)
+			{
+				$values['spent_time'] = $posted_spent_time;
+				$values['del_flg'] = 1;
+			}
 			$this->model_activity->update($values, array('id' => $id));
 		}
 

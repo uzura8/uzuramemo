@@ -68,19 +68,11 @@
 <tr>
 	<th>タスク</th>
 	<th>wbs</th>
+	<th>spent_time</th>
 	<th>date</th>
 </tr>
-<?php foreach ($list as $id => $activity): ?>
-<tr class="activity_<?php echo $activity['id']; ?>">
-	<td><?php echo mb_substr($activity['name'], 0, 70); ?></td>
-	<td>
 <?php
-echo form_dropdown('wbs_id['.$activity['id'].']', $options_wbs);
-?>
-	</td>
-	<td>
-<?php
-$options = array(
+$options_add_date = array(
 	''  => '変更しない',
 	'+0'  => 'today',
 	'-1'  => '-1day',
@@ -97,9 +89,40 @@ $options = array(
 	'+30' => '+1month',
 	'+60' => '+2month',
 );
-echo form_dropdown('add_date['.$activity['id'].']', $options);
+$options_spent_time = array(
+	''  => '変更しない',
+	'0.25'  => '0.25',
+	'0.50'  => '0.50',
+	'0.75'  => '0.75',
+	'1.00'  => '1.00',
+	'1.25'  => '1.25',
+	'1.50'  => '1.50',
+	'1.75'  => '1.75',
+	'2.00'  => '2.00',
+	'2.25'  => '2.25',
+	'2.50'  => '2.50',
+	'2.75'  => '2.75',
+	'3.00'  => '3.00',
+	'3.25'  => '3.25',
+	'3.50'  => '3.50',
+	'3.75'  => '3.75',
+	'4.00'  => '4.00',
+	'4.25'  => '4.25',
+	'4.50'  => '4.50',
+	'4.75'  => '4.75',
+	'5.00'  => '5.00',
+	'6.25'  => '6.25',
+	'6.50'  => '6.50',
+	'6.75'  => '6.75',
+	'7.00'  => '7.00',
+);
 ?>
-	</td>
+<?php foreach ($list as $id => $activity): ?>
+<tr class="activity_<?php echo $activity['id']; ?>">
+	<td><?php echo mb_substr($activity['name'], 0, 70); ?></td>
+	<td><?php echo form_dropdown('wbs_id['.$activity['id'].']', $options_wbs, null, ' class="input-xxlarge"'); ?></td>
+	<td><?php echo form_dropdown('spent_time['.$activity['id'].']', $options_spent_time, $activity['spent_time'], ' class="input-small"'); ?></td>
+	<td><?php echo form_dropdown('add_date['.$activity['id'].']', $options_add_date, null, ' class="input-small"'); ?></td>
 </tr>
 <?php endforeach; ?>
 <tr>
