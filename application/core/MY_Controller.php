@@ -101,9 +101,9 @@ class MY_Controller extends CI_Controller
 		define('IS_ADMIN', true);
 
 		if (UM_SLAVE_DB_MODE) show_error('admin module is disabled.');
-		if (!empty($GLOBALS['ADMIN_ALLOW_IP_LIST']))
+		if (!$this->_check_allow_ips($this->input->server('REMOTE_ADDR'), $GLOBALS['ADMIN_ALLOW_IP_LIST']))
 		{
-			if (!in_array($this->input->server('REMOTE_ADDR'), $GLOBALS['ADMIN_ALLOW_IP_LIST'])) common_error();
+			common_error();
 		}
 
 		if (CURRENT_ACTION)
@@ -118,6 +118,24 @@ class MY_Controller extends CI_Controller
 
 		redirect($admin_path.'/login');
 	}	
+
+	protected function _check_allow_ips($request_ip, $accepted_ips = array())
+	{
+		if (!is_array($accepted_ips)) $accepted_ips = (array)$accepted_ips;
+		if (!$accepted_ips) return true;
+		if (in_array($request_ip, $accepted_ips)) return true;
+
+		require_once 'Net/IPv4.php';
+
+		foreach ($accepted_ips as $accepted_ip)
+		{
+			if (strpos($accepted_ip, '/') === false) continue;
+
+			if (Net_IPv4::ipInNetwork($request_ip, $accepted_ip)) return true;
+		}
+
+		return false;
+	}
 
 	protected function _get_template_name($filename)
 	{
