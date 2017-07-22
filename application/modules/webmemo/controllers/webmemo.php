@@ -16,6 +16,7 @@ class Webmemo extends MY_Controller
 	private $search_option  = false;
 	private $next_url;
 	private $category_list_all = array();
+	private $is_display_unregisterd_category_article = false;
 
 	function __construct()
 	{
@@ -96,7 +97,10 @@ class Webmemo extends MY_Controller
 																													$search_category_id_list,
 																													$this->_get_order_column_name($this->order),
 																													$this->offset,
-																													$this->limit);
+																													$this->limit,
+																													false,
+																													'A.*, B.name, B.sub_id',
+																													$this->is_display_unregisterd_category_article);
 		$view_data['cate_name_list'] = $this->site_util->convert_category_name_list($this->category_list_all);
 		$view_data['search'] = $this->search;
 		$view_data['order'] = $this->order;
@@ -303,7 +307,11 @@ class Webmemo extends MY_Controller
 	{
 		$category = array();
 		$category_id_list = array();
-		if ($category_id === '0') return array($category, array(0));
+		if ($category_id === '0' && IS_AUTH)
+		{
+			$this->is_display_unregisterd_category_article = true;
+			return array($category, array(0));
+		}
 		if (!$category_id) return array($category, $category_id_list);
 
 		$category = $this->category->get_row4id($category_id);

@@ -45,6 +45,8 @@
 </div>
 {/if}
 {/if}
+<p class="lb_01"><a href="http://blog.uzuralife.com/" target="_blank">うずら技術ブログ</a></p>
+<p class="lb_01"><a href="https://tamacen.com/" target="_blank">たませんSNS</a></p>
 {if $smarty.const.UM_USE_RSS_FEED}
 <div class="rss_btn"><a href="{site_url uri=feed}" target="_blank">{img src=img/rss02.gif alt=rss2.0}</a></div>
 {/if}

@@ -35,6 +35,16 @@ class Mail_uploader
 			$this->_m_debug_log('Mail_uploader::execute() ERROR code 2', 'debug');
 			return $this->add_link();
 		}
+		elseif ($this->to == UM_MAILCLIP4TASK_ADDRESS)
+		{
+			$this->_m_debug_log('Mail_uploader::execute() ERROR code 2', 'debug');
+			return $this->add_task($matches[1], $this->from);
+		}
+		elseif (preg_match('/([0-9a-z]+)@uzuralife.com/', $this->to, $matches))
+		{
+			$this->_m_debug_log('Mail_uploader::execute() ERROR code 2', 'debug');
+			return $this->update_pal_user_pre($matches[1], $this->from);
+		}
 
 		$this->_m_debug_log('Mail_uploader::execute() unmach mail address for clip');
 		return false;
@@ -125,5 +135,91 @@ class Mail_uploader
 		mb_convert_encoding($msg, 'JIS', 'auto');
 		//$file->log($msg, $priority);
 		log_message($priority, $msg);
+	}
+
+	private function add_task()
+	{
+    $subject = str_replace('Fwd: ', '', $this->decoder->get_subject());
+    $body = trim($this->decoder->get_text_body());
+    list($spent_time, $scheduled_date, $subject_add_info) = self::get_task_info_from_body($body);
+    $del_flg = ($spent_time > 0) ? 1 : 0;
+    if ($subject_add_info) $subject .= $subject_add_info;
+
+    $user = 'root';
+    $pass = 'sy7008';
+    try {
+       $dbh = new PDO('mysql:host=localhost;dbname=task_uzuralife_com;charset=utf8', $user, $pass);
+    } catch (PDOException $e) {
+       print "エラー!: " . $e->getMessage() . "
+    ";
+       die();
+    }
+    //$sql = "update pal_user_pre set email = ? where token = ? and tel = ?";
+    $sql = "select MAX(sort) from activity";
+    $sth = $dbh->prepare($sql);
+    $sth->execute();
+    $sort = (int)$sth->fetchColumn();
+
+    $sql = "insert into activity values (NULL, 278, ?, ?, '', 0, ?, NULL, NULL, 0.25, ?, 0, 0, 0, ?, ?, NOW(), NOW())";
+    $sth = $dbh->prepare($sql);
+    $sth->execute(array($subject, $body, $scheduled_date, $spent_time, $sort, $del_flg));
+	}
+
+	private static function get_task_info_from_body($body)
+	{
+    $spent_time = 0;
+    $scheduled_date = date('Y-m-d');
+    $subject_add_info = '';
+
+    $body = str_replace("\r\n", "\n", $body);
+    $body = str_replace("\r", "\n", $body);
+    $body = str_replace("\n\n", "\n", $body);
+    $lines = explode("\n", $body);
+    $i = 0;
+    foreach ($lines as $line)
+    {
+      $i++;
+      $line = trim($line);
+      if ($i == 1 && (is_numeric($line) || in_array($line, array('def', 'd', 'short', 's'))))
+      {
+        if (in_array($line, array('def', 'd', 'short', 's'))) $line = 0.25;
+        $spent_time = (float)$line;
+      }
+      elseif ($i == 2 && preg_match('/([\+\-]{1})?([0-9]+)/i', $line, $matches))
+      {
+        $prefix = $matches[1] ?: '+';
+        $add_date = $prefix.intval($matches[2]).' day';
+        $scheduled_date = date('Y-m-d', strtotime($add_date));
+      }
+      elseif ($i == 3 && strlen($line))
+      {
+        $subject_add_info = trim($line);
+        if ($subject_add_info) $subject_add_info = ' ->'.$subject_add_info;
+      }
+
+      if ($i > 3) break;
+    }
+
+    return array($spent_time, $scheduled_date, $subject_add_info);
+  }
+
+	private function update_pal_user_pre($token, $email)
+	{
+    $body = $this->decoder->get_text_body();
+    if (!preg_match('/([0-9]{10,11})/', $body, $matches)) return false;
+    $tel = $matches[1];
+
+    $user = 'root';
+    $pass = 'sy7008';
+    try {
+       $dbh = new PDO('mysql:host=localhost;dbname=smstest_uzuralife_com', $user, $pass);
+    } catch (PDOException $e) {
+       print "エラー!: " . $e->getMessage() . "
+    ";
+       die();
+    }
+    $sql = "update pal_user_pre set email = ? where token = ? and tel = ?";
+    $sth = $dbh->prepare($sql);
+    $sth->execute(array($email, $token, $tel));
 	}
 }

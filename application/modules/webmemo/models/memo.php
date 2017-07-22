@@ -36,19 +36,20 @@ class Memo extends CI_Model
 		return (int)$this->db->count_all_results();
 	}
 
-	function get_each_article($id, $is_private = false)
+	function get_each_article($id, $is_private = false, $is_display_unregisterd_category_article = false)
 	{
 		if (!$id) return array();
 
 		$sql  = $this->get_main_query($is_private);
 		$sql .= " AND A.id = ?";
+		if (!$is_display_unregisterd_category_article) $wheres[] = " A.memo_category_id <> 0";
 
 		return $this->db->query($sql, array((int)$id))->result_array();
 	}
 
-	function get_main_list($is_private = false, $search = '', $category_id_list = array(), $order = 'updated_at desc', $offset = 0, $limit = 10, $with_logical_deleted = false, $columns = 'A.*, B.name, B.sub_id')
+	function get_main_list($is_private = false, $search = '', $category_id_list = array(), $order = 'updated_at desc', $offset = 0, $limit = 10, $with_logical_deleted = false, $columns = 'A.*, B.name, B.sub_id', $is_display_unregisterd_category_article = false)
 	{
-		$sql  = $this->get_main_query($is_private, $search, $category_id_list, false, $with_logical_deleted, $columns);
+		$sql  = $this->get_main_query($is_private, $search, $category_id_list, false, $with_logical_deleted, $columns, $is_display_unregisterd_category_article);
 		$sql .= sprintf(" ORDER BY A.%s", $order);
 		if ($limit) $sql .= sprintf(" LIMIT %d, %d", $offset, $limit);
 
@@ -63,7 +64,7 @@ class Memo extends CI_Model
 		return (int)$row['count'];
 	}
 
-	private static function get_main_query($is_private = false, $search = '', $category_id_list = array(), $is_count = false, $with_logical_deleted = false, $columns = 'A.*, B.name, B.sub_id')
+	private static function get_main_query($is_private = false, $search = '', $category_id_list = array(), $is_count = false, $with_logical_deleted = false, $columns = 'A.*, B.name, B.sub_id', $is_display_unregisterd_category_article = false)
 	{
 		if (is_array($columns)) $columns = implode(',', $columns);
 		if (!$columns) $columns = 'A.*, B.*';
@@ -75,6 +76,7 @@ class Memo extends CI_Model
 
 		$where  = '';
 		$wheres = array();
+		if (!$is_display_unregisterd_category_article) $wheres[] = "A.memo_category_id <> 0";
 		if (!$with_logical_deleted) $wheres[] = "A.del_flg = 0";
 		if (!$is_private)
 		{

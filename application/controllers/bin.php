@@ -71,7 +71,7 @@ class Bin extends BIN_Controller
 	private function _check_use_mail_clip()
 	{
 		if (!UM_USE_MAILCLIP) return false;
-		if (!ADMIN_MAIL_ADDRESS && !UM_MAILCLIP4LINK_ADDRESS) return false;
+		if (!ADMIN_MAIL_ADDRESS && !UM_MAILCLIP4LINK_ADDRESS && !UM_MAILCLIP4TASK_ADDRESS) return false;
 
 		return true;
 	}
@@ -97,11 +97,11 @@ class Bin extends BIN_Controller
 			return false;
 		}
 
-		if (!$this->_check_is_mailclip_address($to, $from))
-		{
-			$this->mail_uploader->_m_debug_log('bin::_m_process_mail() ERROR code 4');
-			return false;
-		}
+		//if (!$this->_check_is_mailclip_address($to, $from))
+		//{
+		//	$this->mail_uploader->_m_debug_log('bin::_m_process_mail() ERROR code 4');
+		//	return false;
+		//}
 
 		$this->mail_uploader->configure($decoder);
 
